@@ -131,6 +131,18 @@ for nr, roh in enumerate(S, 1):
             n, _, v = arg.partition(':'); it.update(typ='chat', sprecher=n.strip(), text=v.strip(), e=True)
         elif cmd == 'tippe':
             it.update(typ='tippe', text=arg, e=True)
+        elif cmd in ('entwurf', 'eingabe'):
+            it.update(typ='tippe', text=arg, e=True)
+        elif cmd == 'zettel':
+            if arg.strip() == 'aus': continue
+            it.update(typ='benachr', app='Zettel', titel='', text=arg, e=True)
+        elif cmd == 'wohlbefinden':
+            it.update(typ='benachr', app='Digitales Wohlbefinden', titel='', text=arg, e=True)
+        elif cmd == 'handy' and (arg.startswith('notizneu') or arg.startswith('notizzeile')):
+            w = arg.split(None, 1); it.update(typ='benachr', app='Notizen', titel='', text=w[1] if len(w) > 1 else '', e=True)
+        elif cmd == 'handy' and arg.startswith('hinweis'):
+            pp = [x.strip() for x in arg[len('hinweis'):].split('|')]
+            it.update(typ='benachr', app=pp[0], titel=pp[1] if len(pp) > 1 else '', text=pp[2] if len(pp) > 2 else '', e=True)
         elif cmd == 'verlauf':
             p = [x.strip() for x in arg.split('|')]
             it.update(typ='verlauf', text=' · '.join(p), e=True)
