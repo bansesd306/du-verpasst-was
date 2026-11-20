@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Du verpasst was – Story</title>
+<style>
+:root{--bg:#0f1117;--karte:#171a23;--karte2:#1e2230;--rand:#2a2f3f;--text:#e9e9f0;--blass:#9aa0b2;--blau:#8ab4ff;--gelb:#ffd166;--gruen:#7ed69a;--rot:#ff8a8a}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;color:inherit}
+#kopf{position:sticky;top:0;z-index:10;background:rgba(15,17,23,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--rand);padding:10px 14px}
+#kopf h1{font-size:17px;margin:0 0 6px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+#kopf h1 small{font-weight:400;color:var(--blass);font-size:13px}
+.leiste{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.leiste input[type=search]{flex:1;min-width:150px;background:var(--karte2);border:1px solid var(--rand);border-radius:8px;color:var(--text);padding:7px 10px;font:inherit}
+.knopf{background:var(--karte2);border:1px solid var(--rand);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:14px;white-space:nowrap}
+.knopf.an{background:#2b3557;border-color:var(--blau)}
+#zaehler b{color:var(--gelb)}
+#hinweis{color:var(--blass);font-size:12px;margin-top:6px}
+#status{font-size:12px}
+#status.warn{color:var(--rot)}
+main{max-width:860px;margin:0 auto;padding:12px 12px 120px}
+.kapitel>h2{font-size:22px;margin:28px 4px 10px;color:var(--gelb)}
+.szene{background:var(--karte);border:1px solid var(--rand);border-radius:12px;margin:12px 0;padding:12px 14px;scroll-margin-top:130px}
+.szene>header h3{margin:0;font-size:17px}
+.szene>header .id{font:12px ui-monospace,monospace;color:var(--blass)}
+.von{font-size:12.5px;color:var(--blass);margin:4px 0 8px}
+.von a,.ziel{color:var(--blau);cursor:pointer;text-decoration:none}
+.it{position:relative;margin:6px 0;padding:2px 0 2px calc(var(--t,0)*14px);display:flex;gap:8px;align-items:flex-start}
+.it .inh{flex:1;min-width:0}
+.ed{border-radius:5px;padding:1px 3px;margin:-1px -3px;outline:none;white-space:pre-wrap;word-break:break-word}
+.ed:hover{background:#ffffff0d}
+.ed[contenteditable=true],.ed[contenteditable=plaintext-only]{background:#fff1;box-shadow:0 0 0 2px var(--blau)}
+.name{display:inline-block;font-size:12px;font-weight:700;padding:1px 7px;border-radius:9px;background:#2d3550;margin-right:6px;vertical-align:1px}
+.name.Lynn{background:#46557a}.name.Jonas{background:#b5652a}.name.Lena{background:#b03f6e}.name.Tim{background:#1f857e}.name.Mia{background:#7a4fb8}.name.Ich{background:#3a4250}
+.gedanke .ed{font-style:italic;color:#c9cbe0}
+.gedanke.leise .ed{font-size:14px;color:var(--blass)}
+.sek{font-size:11.5px;color:var(--blass);margin-left:6px;white-space:nowrap}
+.wahl .inh{background:#232a3d;border:1px solid #33405f;border-radius:9px;padding:6px 10px}
+.wahl .pfeil{color:var(--blass);font-size:13px}
+.tag{display:inline-block;font-size:11px;padding:0 6px;border-radius:7px;background:#333a4f;color:#cfd3e6;margin-left:4px}
+.bed{font-size:12.5px;color:var(--gelb);margin-top:2px}
+.wenn .inh{font-size:13.5px;color:var(--gelb);font-weight:600;border-left:3px solid var(--gelb);padding-left:8px}
+.sprung .inh{font-size:13.5px;color:var(--blass)}
+.bild .inh{display:flex;gap:10px;align-items:center;font-size:13px;color:var(--blass)}
+.bild img{width:132px;height:74px;object-fit:cover;border-radius:6px;flex:none;background:#222;cursor:zoom-in}
+.bild .leer{width:132px;height:74px;border-radius:6px;flex:none;display:grid;place-items:center;font-size:11px;background:repeating-linear-gradient(45deg,#1d2029 0 8px,#2a1f25 8px 16px)}
+.bild code{color:var(--text)}
+.chat .inh,.tippe .inh{max-width:88%;padding:6px 10px;border-radius:12px;font-size:15px}
+.chat .inh{background:#202c33}
+.chat .absender{font-size:12px;font-weight:700;color:#ffd166}
+.tippe{justify-content:flex-end}
+.tippe .inh{background:#144d37}
+.tippe .vor{font-size:11.5px;color:#a7d8bf}
+.benachr .inh{background:#1d2333;border:1px solid #2c3550;border-radius:10px;padding:6px 10px;font-size:14px}
+.benachr .app{font-size:11.5px;color:var(--blass)}
+.abzeichen .inh{font-size:14px;color:#ffd78a}
+.uhr .inh{font:600 13px ui-monospace,monospace;color:#c8d0ff;background:#232a40;flex:0 1 auto;padding:1px 8px;border-radius:7px}
+.pause .inh,.status .inh,.technik .inh{font-size:12.5px;color:var(--blass)}
+.verlauf .inh,.umfrage .inh,.uitext .inh{font-size:14px}
+.uitext .schl{font:11.5px ui-monospace,monospace;color:var(--blass);display:block}
+body:not(.technik) .it.technik{display:none}
+.it.geaendert .inh{box-shadow:inset 3px 0 0 var(--gelb)}
+.it.geaendert>.inh{padding-left:8px}
+.it.geloescht .ed{text-decoration:line-through;opacity:.55}
+.vorher{font-size:12px;color:var(--blass);margin-top:2px}
+.vorher s{color:#b8a07a}
+.uebernommen{font-size:11.5px;color:var(--gruen)}
+.danach{margin:4px 0 0;background:#16301f;border:1px dashed #3d7a52;border-radius:8px;padding:4px 8px;font-size:15px}
+.danach .lbl{font-size:11.5px;color:var(--gruen);display:block}
+.mehr{flex:none;background:none;border:0;color:var(--blass);cursor:pointer;padding:0 4px;font-size:18px;line-height:1.2;opacity:.6}
+.it:hover .mehr{opacity:1}
+.menue{position:absolute;right:0;top:100%;z-index:5;background:#262c3d;border:1px solid #3a4360;border-radius:10px;padding:4px;display:flex;flex-direction:column;min-width:190px;box-shadow:0 8px 24px #0008}
+.menue button{background:none;border:0;text-align:left;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:14px}
+.menue button:hover{background:#ffffff12}
+.notiz{margin-top:10px}
+.notiz textarea{width:100%;min-height:42px;background:var(--karte2);border:1px solid var(--rand);border-radius:8px;color:var(--text);padding:7px 9px;font:14px/1.4 inherit;resize:vertical}
+.notiz textarea.voll{border-color:var(--gelb)}
+.notiz label{font-size:12px;color:var(--blass)}
+#seite{position:fixed;inset:0;z-index:20;display:none;background:#000a}
+#seite.an{display:block}
+#seite .fl{position:absolute;right:0;top:0;bottom:0;width:min(420px,92vw);background:var(--karte);border-left:1px solid var(--rand);overflow:auto;padding:14px}
+#seite h2{font-size:16px;margin:4px 0 10px;display:flex;justify-content:space-between;align-items:center}
+#seite .k{font-weight:700;color:var(--gelb);margin:14px 0 4px;font-size:14px}
+#seite a{display:block;color:var(--text);text-decoration:none;padding:4px 6px;border-radius:6px;font-size:14px}
+#seite a:hover{background:#ffffff10}
+#seite a small{color:var(--blass);font:11px ui-monospace,monospace;margin-left:6px}
+#seite .ae{border-bottom:1px solid var(--rand);padding:8px 2px;font-size:14px}
+#seite .ae .wo{font-size:12px;color:var(--blau);cursor:pointer}
+#gross{position:fixed;inset:0;z-index:30;background:#000d;display:none;place-items:center;padding:12px}
+#gross.an{display:grid}
+#gross img{max-width:100%;max-height:85vh;border-radius:8px}
+.versteckt{display:none!important}
+mark{background:#ffd16655;color:inherit;border-radius:3px}
+</style>
+</head>
+<body>
+<div id="kopf">
+  <h1>Du verpasst was – Story <small id="stand"></small></h1>
+  <div class="leiste">
+    <input id="suche" type="search" placeholder="Suchen (Text, Name, Szene)">
+    <button class="knopf" id="b-inhalt">☰ Inhalt</button>
+    <button class="knopf" id="b-aend"><span id="zaehler">Änderungen <b>0</b></span></button>
+    <button class="knopf" id="b-nur">Nur geänderte</button>
+    <button class="knopf" id="b-technik">Technik</button>
+  </div>
+  <div id="hinweis">Text antippen = ändern · ⋯ = löschen / neue Zeile · speichert von selbst · <span id="status">Lade …</span></div>
+</div>
+<main id="haupt"></main>
+<div id="seite"><div class="fl" id="seite-inhalt"></div></div>
+<div id="gross"><img alt=""></div>
+<script>
+(async function () {
+  const $ = (s, e = document) => e.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const statusEl = $('#status');
+  let S;
+  try { S = await (await fetch('story.json')).json(); }
+  catch (e) { statusEl.textContent = 'Die Story-Daten konnten nicht geladen werden.'; statusEl.className = 'warn'; return; }
+  $('#stand').textContent = 'Stand ' + S.stand;
+  const ITEMS = {};        // Zeile -> {it, szene}
+  for (const sz of Object.values(S.szenen)) for (const it of sz.items) ITEMS[it.z] = { it, szene: sz.id };
+  let AE = {};             // Zeile -> Änderung
+  let NO = {};             // Szene -> Notiz
+  let db = null, schreibbar = false, nurGeaendert = false, suchwort = '';
+
+  // ---------- Darstellung ----------
+  function textHTML(it) {
+    const a = AE[it.z];
+    const t = a && typeof a.neu === 'string' ? a.neu : it.text;
+    return `<span class="ed" data-z="${it.z}">${esc(t)}</span>`;
+  }
+  function zielLink(z) {
+    const sz = S.szenen[z];
+    return `<a class="ziel" data-ziel="${esc(z)}">${esc(sz && sz.titel ? sz.titel : z)}</a>`;
+  }
+  function itemInnen(it) {
+    const sek = it.sek ? `<span class="sek">⏸ ${it.sek} s</span>` : '';
+    switch (it.typ) {
+      case 'rede': return `<span class="name ${esc(it.sprecher)}">${esc(it.sprecher)}${it.schrei ? '!' : ''}</span>${textHTML(it)}${sek}`;
+      case 'gedanke': case 'text': return textHTML(it) + sek;
+      case 'wahl': return `${textHTML(it)} <span class="pfeil">→ ${zielLink(it.ziel)}</span>${it.getippt ? '<span class="tag">wird getippt</span>' : ''}${it.handy ? '<span class="tag">+1 Handy</span>' : ''}${it.bed ? `<div class="bed">nur wenn: ${esc(it.bed)}</div>` : ''}`;
+      case 'sprung': return `→ ${esc(it.text)} ${zielLink(it.ziel)}`;
+      case 'wenn': return esc(it.text);
+      case 'bild': return (it.bild ? `<img src="${esc(it.bild)}" alt="" loading="lazy" data-gross="${esc(it.bild)}">` : '<div class="leer">fehlt noch</div>') + `<div><code>${esc(it.code)}</code> ${esc(it.text)}</div>`;
+      case 'chat': return `<div class="absender">${esc(it.sprecher)}</div>${textHTML(it)}`;
+      case 'tippe': return `<div class="vor">er tippt</div>${textHTML(it)}`;
+      case 'benachr': return `<div class="app">🔔 ${esc(it.app)}${it.titel ? ' · ' + esc(it.titel) : ''}</div>${textHTML(it)}`;
+      case 'abzeichen': return `🏅 Abzeichen: ${textHTML(it)}`;
+      case 'uitext': return `<span class="schl">${esc(it.schluessel)}</span>${textHTML(it)}`;
+      case 'umfrage': return `📊 Umfrage: ${textHTML(it)}`;
+      case 'verlauf': return `🗂 alter Chat: ${textHTML(it)}`;
+      default: return esc(it.text);
+    }
+  }
+  function itemHTML(it) {
+    const a = AE[it.z];
+    const kl = ['it', it.typ, it.leise ? 'leise' : '', a ? 'geaendert' : '', a && a.geloescht ? 'geloescht' : ''].join(' ');
+    let unten = '';
+    if (a) {
+      if (typeof a.neu === 'string' && a.neu !== it.text) unten += `<div class="vorher">vorher: <s>${esc(it.text)}</s></div>`;
+      if (a.geloescht) unten += `<div class="vorher">wird gelöscht</div>`;
+      if (a.status === 'uebernommen') unten += `<div class="uebernommen">✓ ins Spiel übernommen${a.version ? ' (' + esc(a.version) + ')' : ''}</div>`;
+    }
+    const danach = a && a.danach ? `<div class="danach"><span class="lbl">neue Zeile(n) danach</span><span class="ed dn" data-z="${it.z}">${esc(a.danach)}</span></div>` : '';
+    const mehr = it.e ? `<button class="mehr" data-z="${it.z}" title="Mehr">⋯</button>` : '';
+    return `<div class="it ${kl}" id="z-${it.z}" style="--t:${it.t || 0}"><div class="inh">${itemInnen(it)}${unten}${danach}</div>${mehr}</div>`;
+  }
+  function szeneHTML(sz) {
+    const von = sz.von && sz.von.length ? `<div class="von">kommt von: ${sz.von.map(v => `<a data-ziel="${esc(v)}">${esc(S.szenen[v] && S.szenen[v].titel ? S.szenen[v].titel : v)}</a>`).join(', ')}</div>` : '';
+    const n = NO[sz.id];
+    return `<section class="szene" id="sz-${esc(sz.id)}" data-id="${esc(sz.id)}"><header><h3>${esc(sz.titel || sz.id)}</h3><span class="id">${esc(sz.id)}</span></header>${von}
+      <div class="items">${sz.items.map(itemHTML).join('')}</div>
+      <div class="notiz"><label>Notiz zu dieser Szene (z. B. „hier fehlt was“, „Bild passt nicht“)</label><textarea data-notiz="${esc(sz.id)}" class="${n && n.text ? 'voll' : ''}" placeholder="…">${esc(n ? n.text : '')}</textarea></div></section>`;
+  }
+  function alles() {
+    $('#haupt').innerHTML = S.kapitel.map(k => `<div class="kapitel"><h2>${esc(k.titel)}</h2>${k.szenen.map(id => szeneHTML(S.szenen[id])).join('')}</div>`).join('');
+    filtern(); zaehlen();
+  }
+  function itemNeu(z) {
+    const el = document.getElementById('z-' + z); const x = ITEMS[z];
+    if (!el || !x) return;
+    if (el.contains(document.activeElement)) return;   // nicht unter den Fingern wegrendern
+    el.outerHTML = itemHTML(x.it);
+  }
+  function zaehlen() {
+    const n = Object.values(AE).filter(a => a.status !== 'uebernommen').length + Object.values(NO).filter(a => a.text && a.status !== 'uebernommen').length;
+    $('#zaehler').innerHTML = `Änderungen <b>${n}</b>`;
+  }
+  function filtern() {
+    const w = suchwort.toLowerCase();
+    document.querySelectorAll('.szene').forEach(sec => {
+      const id = sec.dataset.id; const sz = S.szenen[id];
+      let zeigen = true;
+      if (nurGeaendert) zeigen = sz.items.some(i => AE[i.z]) || !!(NO[id] && NO[id].text);
+      if (zeigen && w) zeigen = (id + ' ' + (sz.titel || '')).toLowerCase().includes(w) || sz.items.some(i => ((AE[i.z] && AE[i.z].neu) || i.text || '').toLowerCase().includes(w) || (i.sprecher || '').toLowerCase().includes(w));
+      sec.classList.toggle('versteckt', !zeigen);
+    });
+    document.querySelectorAll('.kapitel').forEach(k => k.classList.toggle('versteckt', !k.querySelector('.szene:not(.versteckt)')));
+  }
+
+  // ---------- Speichern ----------
+  const warteschlange = {};
+  function schreibe(pfad, fn) {
+    warteschlange[pfad] = (warteschlange[pfad] || Promise.resolve()).then(fn).catch(e => {
+      statusEl.className = 'warn';
+      statusEl.textContent = (e && e.code === 'invalid_argument') ? 'Speichern ist hier nicht erlaubt (nur der Besitzer kann ändern).' : 'Speichern hat nicht geklappt – bitte nochmal versuchen.';
+    });
+    return warteschlange[pfad];
+  }
+  function aendere(z, felder) {
+    if (!db || !schreibbar) { statusEl.className = 'warn'; statusEl.textContent = 'Speichern geht hier gerade nicht. Öffne die Seite angemeldet auf claude.ai.'; return; }
+    const x = ITEMS[z]; const alt = AE[z] || {};
+    const d = Object.assign({}, alt, felder, { zeile: z, szene: x.szene, typ: x.it.typ, original: x.it.raw.trim(), originalText: x.it.text || '', zeit: new Date().toISOString(), status: 'offen' });
+    if (typeof d.neu === 'string' && d.neu.trim() === (x.it.text || '').trim()) delete d.neu;
+    if (!d.danach || !d.danach.trim()) delete d.danach;
+    if (!d.geloescht) delete d.geloescht;
+    delete d.version;
+    const leer = d.neu === undefined && !d.geloescht && !d.danach;
+    if (leer) delete AE[z]; else AE[z] = d;
+    itemNeu(z); zaehlen();
+    return schreibe('aenderungen/z' + z, () => leer ? db.doc('aenderungen/z' + z).delete() : db.doc('aenderungen/z' + z).set(d));
+  }
+  function notiz(id, text) {
+    if (!db || !schreibbar) return;
+    const leer = !text.trim();
+    if (leer) delete NO[id]; else NO[id] = { szene: id, text, zeit: new Date().toISOString(), status: 'offen' };
+    zaehlen();
+    return schreibe('notizen/' + id, () => leer ? db.doc('notizen/' + id).delete() : db.doc('notizen/' + id).set(NO[id]));
+  }
+
+  // ---------- Bedienung ----------
+  document.addEventListener('click', e => {
+    const g = e.target.closest('[data-gross]');
+    if (g) { $('#gross img').src = g.dataset.gross; $('#gross').classList.add('an'); return; }
+    if (e.target.closest('#gross')) { $('#gross').classList.remove('an'); return; }
+    const zl = e.target.closest('[data-ziel]');
+    if (zl) { springe(zl.dataset.ziel); return; }
+    const m = e.target.closest('.mehr');
+    document.querySelectorAll('.menue').forEach(x => x.remove());
+    if (m) { menue(m); return; }
+    const ed = e.target.closest('.ed');
+    if (ed && !ed.isContentEditable) {
+      try { ed.contentEditable = 'plaintext-only'; } catch (_) { ed.contentEditable = 'true'; }
+      if (ed.contentEditable !== 'plaintext-only') ed.contentEditable = 'true';
+      ed.dataset.vorher = ed.textContent; ed.focus();
+    }
+  });
+  document.addEventListener('focusout', e => {
+    const ed = e.target.closest && e.target.closest('.ed');
+    if (ed) {
+      ed.contentEditable = 'false';
+      const t = ed.textContent.replace(/ /g, ' ');
+      if (t !== ed.dataset.vorher) {
+        const z = +ed.dataset.z;
+        if (ed.classList.contains('dn')) aendere(z, { danach: t }); else aendere(z, { neu: t });
+      }
+      return;
+    }
+    const ta = e.target.closest && e.target.closest('textarea[data-notiz]');
+    if (ta) { const id = ta.dataset.notiz; if ((NO[id] ? NO[id].text : '') !== ta.value) notiz(id, ta.value); ta.classList.toggle('voll', !!ta.value.trim()); }
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey && e.target.classList && e.target.classList.contains('ed') && !e.target.classList.contains('dn')) { e.preventDefault(); e.target.blur(); }
+    if (e.key === 'Escape' && e.target.classList && e.target.classList.contains('ed')) { e.target.textContent = e.target.dataset.vorher; e.target.blur(); }
+  });
+  function menue(knopf) {
+    const z = +knopf.dataset.z; const a = AE[z] || {};
+    const m = document.createElement('div'); m.className = 'menue';
+    m.innerHTML = `<button data-a="danach">➕ Neue Zeile danach</button><button data-a="loeschen">${a.geloescht ? '↩︎ Doch nicht löschen' : '🗑 Zeile löschen'}</button>${AE[z] ? '<button data-a="zurueck">⟲ Alles zurücksetzen</button>' : ''}`;
+    m.addEventListener('click', ev => {
+      ev.stopPropagation(); const b = ev.target.closest('button'); if (!b) return; m.remove();
+      if (b.dataset.a === 'loeschen') aendere(z, { geloescht: !a.geloescht });
+      if (b.dataset.a === 'zurueck') aendere(z, { neu: undefined, geloescht: false, danach: '' });
+      if (b.dataset.a === 'danach') {
+        if (!a.danach) { AE[z] = Object.assign({}, a, { danach: ' ' }); itemNeu(z); delete AE[z].danach; if (!a.neu && !a.geloescht && !Object.keys(a).length) delete AE[z]; }
+        const ed = document.querySelector(`#z-${z} .ed.dn`);
+        if (ed) { if (ed.textContent === ' ') ed.textContent = ''; ed.click(); }
+      }
+    });
+    knopf.parentElement.appendChild(m);
+  }
+  function springe(id) {
+    const el = document.getElementById('sz-' + id);
+    if (!el) return;
+    if (el.classList.contains('versteckt')) { suchwort = ''; $('#suche').value = ''; nurGeaendert = false; $('#b-nur').classList.remove('an'); filtern(); }
+    $('#seite').classList.remove('an');
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    el.animate([{ boxShadow: '0 0 0 3px #8ab4ff' }, { boxShadow: '0 0 0 0 transparent' }], { duration: 1600 });
+  }
+  let suchTimer;
+  $('#suche').addEventListener('input', e => { clearTimeout(suchTimer); suchTimer = setTimeout(() => { suchwort = e.target.value.trim(); filtern(); }, 200); });
+  $('#b-nur').onclick = () => { nurGeaendert = !nurGeaendert; $('#b-nur').classList.toggle('an', nurGeaendert); filtern(); };
+  $('#b-technik').onclick = () => { document.body.classList.toggle('technik'); $('#b-technik').classList.toggle('an'); };
+  $('#b-inhalt').onclick = () => {
+    $('#seite-inhalt').innerHTML = `<h2>Inhalt <button class="knopf" data-zu>✕</button></h2>` + S.kapitel.map(k => `<div class="k">${esc(k.titel)}</div>` + k.szenen.map(id => `<a data-ziel="${esc(id)}">${esc(S.szenen[id].titel || id)}<small>${esc(id)}</small></a>`).join('')).join('');
+    $('#seite').classList.add('an');
+  };
+  $('#b-aend').onclick = () => {
+    const liste = Object.values(AE).sort((a, b) => a.zeile - b.zeile).map(a => {
+      const was = [typeof a.neu === 'string' ? `<div>neu: „${esc(a.neu)}“</div><div class="vorher">vorher: <s>${esc(a.originalText)}</s></div>` : '', a.geloescht ? '<div>🗑 löschen</div>' : '', a.danach ? `<div>➕ danach: „${esc(a.danach)}“</div>` : ''].join('');
+      return `<div class="ae"><span class="wo" data-ziel="${esc(a.szene)}">${esc(S.szenen[a.szene] ? (S.szenen[a.szene].titel || a.szene) : a.szene)} · Zeile ${a.zeile}</span>${a.status === 'uebernommen' ? ' <span class="uebernommen">✓ übernommen</span>' : ''}${was}</div>`;
+    }).join('') + Object.values(NO).filter(n => n.text).map(n => `<div class="ae"><span class="wo" data-ziel="${esc(n.szene)}">📝 Notiz · ${esc(S.szenen[n.szene] ? (S.szenen[n.szene].titel || n.szene) : n.szene)}</span>${n.status === 'uebernommen' ? ' <span class="uebernommen">✓ erledigt</span>' : ''}<div>${esc(n.text)}</div></div>`).join('');
+    $('#seite-inhalt').innerHTML = `<h2>Deine Änderungen <button class="knopf" data-zu>✕</button></h2>` + (liste || '<p style="color:var(--blass)">Noch nichts geändert.</p>');
+    $('#seite').classList.add('an');
+  };
+  $('#seite').addEventListener('click', e => { if (e.target.id === 'seite' || e.target.closest('[data-zu]')) $('#seite').classList.remove('an'); });
+
+  alles();
+  statusEl.textContent = 'Verbinde zum Speichern …';
+
+  // ---------- Datenbank ----------
+  const timer = setTimeout(() => { if (!db) { statusEl.className = 'warn'; statusEl.textContent = 'Nur Lesen: Speichern ist gerade nicht erreichbar.'; } }, 10000);
+  let dbNs = null;
+  try { dbNs = window.claude && window.claude.use ? await window.claude.use('db') : null; } catch (_) { dbNs = null; }
+  clearTimeout(timer);
+  if (!dbNs) { statusEl.className = 'warn'; statusEl.textContent = 'Nur Lesen: Zum Bearbeiten die Seite angemeldet auf claude.ai öffnen.'; return; }
+  db = dbNs; schreibbar = true;
+  let geladen = 0; const fertig = () => { if (++geladen === 2) { statusEl.className = ''; statusEl.textContent = 'Speichern aktiv ✓'; } };
+  const ladeTimer = setTimeout(() => { if (geladen < 2) { statusEl.className = 'warn'; statusEl.textContent = 'Gespeicherte Änderungen noch nicht erreichbar – evtl. veraltet.'; } }, 10000);
+  db.collection('aenderungen').onSnapshot(snap => {
+    const neu = {}; snap.docs.forEach(d => { const x = d.data(); if (x && x.zeile) neu[x.zeile] = x; });
+    const betroffen = new Set([...Object.keys(AE), ...Object.keys(neu)]);
+    AE = neu; betroffen.forEach(z => itemNeu(+z)); zaehlen(); if (nurGeaendert) filtern();
+    if (!snap.metadata.fromCache) { clearTimeout(ladeTimer); fertig(); }
+  }, e => { statusEl.className = 'warn'; statusEl.textContent = 'Verbindung zum Speicher unterbrochen.'; });
+  db.collection('notizen').onSnapshot(snap => {
+    NO = {}; snap.docs.forEach(d => { const x = d.data(); if (x && x.szene) NO[x.szene] = x; });
+    document.querySelectorAll('textarea[data-notiz]').forEach(ta => { if (ta !== document.activeElement) { const n = NO[ta.dataset.notiz]; ta.value = n ? n.text : ''; ta.classList.toggle('voll', !!ta.value.trim()); } });
+    zaehlen(); if (nurGeaendert) filtern();
+    if (!snap.metadata.fromCache) fertig();
+  }, e => { statusEl.className = 'warn'; statusEl.textContent = 'Verbindung zum Speicher unterbrochen.'; });
+})();
+</script>
+</body>
+</html>
