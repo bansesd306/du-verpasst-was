@@ -12,8 +12,8 @@ Ehrliche Einschätzung vorweg: Die meisten Bilder sind im Vollbild ausreichend s
 | N09 | Weitwinkel Zimmer: Bücher, Papiere, Regal, Fensterblick nur Fleck | fertig |
 | N03 | Zwei Klausuren: Text auf den Blättern und Zetteln unleserlich-weich | fertig |
 | B05 | Schreibtisch mit Kalender/Zetteln: Papiertext weich | fertig |
-| L4b | Offenes Fenster: Dachziegel/Fassade weich, leichte Videokompression | offen |
-| N1 | Bett nachts: Stofffalten und Regal weich (dunkel, Gewinn eher klein) | offen |
+| L4b | Offenes Fenster: Dachziegel/Fassade weich, leichte Videokompression | fertig |
+| N1 | Bett nachts: Stofffalten und Regal weich (dunkel, Gewinn eher klein) | fertig |
 
 ## Bewusst gelassen
 
@@ -27,4 +27,11 @@ Ehrliche Einschätzung vorweg: Die meisten Bilder sind im Vollbild ausreichend s
 
 ## Ergebnisse
 
-(wird nach jedem Lauf ergänzt)
+Alle 7 Bilder fehlerfrei gerechnet (Ähnlichkeit zur Spielfassung ≥ 0,998, jeweils ca. 4,5 Minuten), Größe unverändert 1920×1072.
+Quelle: L4b aus dem Original-Upload, alle anderen aus der Spielfassung (Original passte nicht eindeutig).
+
+- **Deutlich besser:** N09 (Kanten, Zettel, Lampe), L4 (Tasse, Stift, Spirale), L4b (Dachziegel/Fassade).
+- **Moderat:** SO, N1, B05.
+- **Mit Vorbehalt:** In L4, N03 und B05 werden kleine Papiertexte zu härteren, strichartigen Linien (Skalierer „erfindet“ Schrift). Im Vollbild unauffällig, bei 1:1-Zoom sichtbar. Falls das stört: im Spiel die Spielfassung dieser Bilder behalten.
+- **Nicht behoben:** Kleiner Glitch unten links in L4b (Bildfehler im Original) bleibt.
+- Beim Lauf für N1 hat das Skript wegen des Namenspräfixes zusätzlich die Gesichts-Overlays von N13L und N19 mitgerechnet; diese habe ich wieder gelöscht, weil deren Hauptbilder bewusst nicht skaliert wurden.
