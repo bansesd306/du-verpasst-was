@@ -1,0 +1,119 @@
+<div id="bw" class="tippbar">
+  <div class="raum"></div>
+  <div id="boden"></div>
+  <div id="lichtfall"></div>
+  <div id="fwrap"><div id="f3d">
+   <div class="laibung"></div>
+   <div class="rahmen">
+    <div id="draussen"><div class="bokeh"></div><canvas></canvas><svg id="kette" viewBox="0 0 508 398" preserveAspectRatio="none"></svg><div class="vorbei"></div></div>
+    <div class="fluegel fl-l"></div>
+    <div class="fluegel fl-r"></div>
+    <div class="griff"></div>
+   </div>
+   <div class="bank"></div><div class="bankfront"></div>
+  </div></div>
+  <div id="vorhang"></div>
+  <div id="mief"></div>
+  <div id="tisch">
+   <div class="bein bl-l"></div><div class="bein bl-r"></div>
+   <div class="platte"></div>
+   <div class="buch" style="left:40px;width:38px;height:128px;background:#6e2b2b">BGB</div>
+   <div class="buch" style="left:80px;width:30px;height:112px;background:#3c4452">SCHULDRECHT</div>
+   <div class="buch" style="left:112px;width:26px;height:118px;background:#4f4a3c">SKRIPT</div>
+   <div class="buch" style="left:140px;width:22px;height:96px;background:#2e3a36"></div>
+   <div class="offen"><div class="seite"><b>§</b><i></i><i style="width:80%"></i><i></i></div><div class="seite"><i></i><i style="width:70%"></i><i></i><i style="width:90%"></i></div></div>
+   <div class="marker"></div>
+   <div class="tasse"></div>
+   <div class="kante"></div>
+  </div>
+  <div id="lampenlicht"></div>
+  <div id="lichtpfuetze"></div>
+  <svg id="lampe" viewBox="0 0 260 300" aria-hidden="true">
+   <ellipse cx="180" cy="272" rx="34" ry="8" fill="#26282d"/>
+   <path d="M180 268 L214 150 L118 72" fill="none" stroke="#3a3d44" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+   <circle cx="214" cy="150" r="7" fill="#2c2e34"/>
+   <path d="M92 58 L136 70 L118 106 L70 92 Z" fill="#33363c"/>
+   <ellipse class="birne" cx="94" cy="99" rx="25" ry="6" fill="#dfe6b0" opacity=".85" transform="rotate(16 94 99)"/>
+  </svg>
+  <div id="stange"></div>
+
+  <div id="toenung"></div>
+  <div id="scrim"></div>
+  <div id="nacht"></div>
+
+  <div id="handy" aria-hidden="true">
+   <svg viewBox="0 0 92 15">
+    <defs><linearGradient id="displ" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e4f3ff"/><stop offset="1" stop-color="#6cb8ff"/></linearGradient></defs>
+    <g class="koerper">
+     <rect class="kante" x="0" y="9.5" width="92" height="4.5" rx="1.6"/>
+     <polygon class="oben" points="6,0 86,0 92,10 0,10" stroke="#12151c" stroke-width="1" stroke-linejoin="round"/>
+     <polygon class="glanz" points="6,0 86,0 86.6,1 5.4,1"/>
+     <polygon class="aus" points="9,1.6 83,1.6 87.6,8.6 4.4,8.6"/>
+     <ellipse class="kamera" cx="14" cy="4" rx="4" ry="1.6"/>
+    </g>
+    <polygon class="an" points="9,1.6 83,1.6 87.6,8.6 4.4,8.6" fill="url(#displ)"/>
+   </svg>
+  </div>
+  <div id="handyglow"></div>
+
+  <div id="startui">
+   <div id="titelblock">
+    <h1 id="titel">Du <span class="gl" data-t="verpasst">verpasst</span> was</h1>
+    <p id="hinweis"></p>
+    <p id="iosnote"></p>
+   </div>
+   <div id="tippen"></div>
+   <div id="menue">
+    <button class="bl erste spielen" type="button" data-t="Spielen"><span class="mt"></span><span class="mz"><span class="zeit">00:00</span><span class="hk">✓✓</span></span></button>
+    <button class="bl" type="button" data-t="Abzeichen"><span class="mt"></span><span class="mz"><span class="zeit">00:00</span><span class="hk">✓✓</span></span></button>
+    <button class="bl" type="button" data-t="Mitwirkende"><span class="mt"></span><span class="mz"><span class="zeit">00:00</span><span class="hk">✓✓</span></span></button>
+    <div id="enden"></div>
+   </div>
+   <div id="stapel">
+    <div id="stapelkopf"><b id="anzahl">0 neue Nachrichten</b></div>
+   </div>
+  </div>
+
+  <section class="schirm2" id="s-ende" aria-live="polite">
+   <div class="medaille" id="e-med"><span></span></div>
+   <div class="klein" id="e-nr"></div>
+   <h1 class="gross" id="e-name"></h1>
+   <p class="satz" id="e-satz"></p>
+   <button class="knopf" type="button" id="k-weiter">Weiter</button>
+  </section>
+  <section class="schirm2" id="s-gefuehl">
+   <h2 class="gross" id="g-frage"></h2>
+   <div class="liste" id="g-liste"></div>
+  </section>
+  <section class="schirm2" id="s-abz">
+   <div class="kopf"><h2 class="gross" id="a-titel">Abzeichen</h2><span class="zaehler" id="zaehler"></span></div>
+   <div id="raster"></div>
+   <div class="bilanz" id="bilanz"><p id="p-enden"></p><p id="p-entsch"></p></div>
+   <div class="knopfreihe nur-lauf">
+    <button class="knopf warm" type="button" id="k-nochmal"></button>
+    <button class="knopf" type="button" id="k-beenden"></button>
+   </div>
+   <div class="knopfreihe nur-sammlung">
+    <button class="knopf" type="button" id="k-zurueck">Zurück</button>
+   </div>
+  </section>
+  <section class="schirm2" id="s-credits">
+   <h2 class="gross" id="c-titel"></h2>
+   <div class="ctext" id="c-text"></div>
+   <button class="knopf" type="button" id="c-zurueck">Zurück</button>
+  </section>
+  <section class="schirm2" id="s-beenden">
+   <h2 class="gross" id="b-frage"></h2>
+   <div class="knopfreihe">
+    <button class="knopf warm" type="button" id="b-nein"></button>
+    <button class="knopf ja" type="button" id="b-ja"></button>
+   </div>
+  </section>
+  <section class="schirm2" id="s-wusst"><h2 class="gross" id="w-text"></h2></section>
+  <section class="schirm2" id="s-glaub"><h2 class="gross" id="gl-text"></h2></section>
+
+  <div class="zov" id="vignette"></div>
+  <div class="zov" id="korn"></div>
+  <div class="zov" id="blitz"></div>
+  <div class="zdeckel"></div>
+</div>

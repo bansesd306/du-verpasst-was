@@ -1,0 +1,366 @@
+/* Rahmen des Spiels: Start, Menü, Enden, Abzeichen, Beenden (aus der Demo „start-und-ende.html“).
+   Quelle mit den Original-IDs der Demo; build.py setzt alles unter #zimmer und hängt „z-“ vor die IDs.
+   Alles bleibt 2D und günstig: keine 3D-Transforms, kein mix-blend-mode, keine großen Blur-Ebenen. */
+:root{
+  --nacht:#0b1121;
+  --kalt:#7fb0ff;
+  --warm:#ffa23c;
+  --text:#e9edf7;
+  --leise:#8d9ab5;
+  --pink:#ff4fa3;
+}
+#bw{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;overflow:clip;z-index:52;display:none;
+  background:var(--nacht);cursor:default;color:var(--text);text-align:left;
+  font-family:"Bricolage Grotesque",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;user-select:none;-webkit-user-select:none}
+#bw.an{display:block}
+#bw *{box-sizing:border-box;margin:0;padding:0}
+#bw.tippbar{cursor:pointer}
+#bw .zdeckel{position:absolute;inset:0;z-index:8;background:#000;opacity:0;pointer-events:none;transition:opacity .6s}
+#bw.weg .zdeckel{opacity:1}
+
+/* ---------- Raum ---------- */
+.raum{position:absolute;inset:0;
+  background:
+   radial-gradient(ellipse 760px 620px at 1450px 360px,rgba(255,150,60,.20),transparent 70%),
+   radial-gradient(ellipse 1100px 520px at 0% 108%,rgba(70,120,255,.20),transparent 70%),
+   linear-gradient(180deg,#121a2e 0,#0b1121 60%,#080c18 100%)}
+.raum::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse 900px 420px at 1450px 360px,rgba(255,170,90,.10),transparent 70%);
+  animation:beat .98s ease-out infinite}
+@keyframes beat{0%{opacity:1}100%{opacity:.35}}
+
+/* ---------- Raum frontal: Rückwand mit Fenster, Boden ab y=860, Licht fällt nach vorn auf den Boden ---------- */
+#boden{position:absolute;left:0;right:0;top:860px;bottom:0;
+  background:linear-gradient(180deg,#070a14 0,#0a0f1d 100%);box-shadow:0 -1px 0 rgba(160,185,235,.08)}
+#boden::before{content:"";position:absolute;left:0;right:0;top:-14px;height:14px;background:linear-gradient(180deg,#0e1424,#090d18)}
+#fwrap{position:absolute;left:1220px;top:110px;width:580px;height:510px}
+#f3d{position:absolute;inset:0}
+#f3d .laibung{position:absolute;left:0;top:0;width:580px;height:470px;
+  background:#070a13;box-shadow:inset 0 22px 26px rgba(0,0,0,.75),inset 14px 0 18px rgba(0,0,0,.5),inset -14px 0 18px rgba(0,0,0,.5),
+  0 0 140px 30px rgba(255,140,60,calc(.10 + var(--sog,0)*.14 + var(--lebhaft,0)*.03))}
+#f3d .rahmen{position:absolute;left:14px;top:14px;width:552px;height:442px;
+  background:linear-gradient(180deg,#323a4e 0,#232a3a 100%);
+  box-shadow:inset 2px 2px 0 rgba(255,255,255,.08),inset -2px -2px 0 rgba(0,0,0,.45)}
+#draussen{position:absolute;left:22px;top:22px;right:22px;bottom:22px;overflow:hidden;
+  background:linear-gradient(180deg,#3b1260 0,#7a1d6e 40%,#d2463f 78%,#ff9b3d 100%)}
+#draussen .bokeh{position:absolute;inset:-50px;transform:translate(calc(var(--px,0)*14px),calc(var(--py,0)*8px));transition:transform .6s ease-out,filter .8s}
+#draussen .bok{position:absolute;border-radius:50%;filter:blur(10px);opacity:.5;
+  animation:bok var(--d,4s) ease-in-out var(--v,0s) infinite alternate}
+@keyframes bok{0%{opacity:.25;transform:translate(0,0) scale(.85)}100%{opacity:.95;transform:translate(var(--x,14px),var(--y,-10px)) scale(1.2)}}
+#bw.sog #draussen .bokeh,#bw.sog #draussen canvas{filter:brightness(1.3) saturate(1.25)}
+#draussen canvas{position:absolute;inset:0;width:100%;height:100%;transition:filter .8s}
+#draussen svg{position:absolute;left:0;top:0;width:100%;height:100%}
+#draussen .bulb{animation:funkel var(--d,1.6s) ease-in-out var(--v,0s) infinite alternate}
+@keyframes funkel{0%{opacity:.45}100%{opacity:1}}
+#draussen .vorbei{position:absolute;top:18%;width:200px;height:118%;left:-220px;opacity:.5;
+  background:radial-gradient(closest-side,rgba(26,10,34,.95) 35%,rgba(26,10,34,0))}
+#draussen .vorbei.geht{animation:vorbei 5.5s ease-in-out forwards}
+@keyframes vorbei{to{left:calc(100% + 220px)}}
+#f3d .fluegel{position:absolute;top:22px;bottom:22px;width:254px;border:14px solid #283045;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.55),inset 0 0 30px rgba(0,0,0,.35),1px 1px 0 rgba(255,255,255,.06),0 2px 5px rgba(0,0,0,.45)}
+#f3d .fl-l{left:22px}
+#f3d .fl-r{left:276px}
+#f3d .fluegel::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(118deg,rgba(255,255,255,.10) 0,transparent 24%,transparent 60%,rgba(255,255,255,.05) 70%,transparent 80%)}
+/* ---------- Drinnen: Schreibtisch mit Lernzeug, trübe Neonlampe ---------- */
+#mief{position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 620px 380px at 830px 760px,rgba(190,200,120,.10),transparent 70%)}
+#tisch{position:absolute;left:540px;top:690px;width:560px;height:250px}
+#tisch .platte{position:absolute;left:0;top:50px;width:560px;height:52px;
+  background:linear-gradient(180deg,#2a2c2f,#34362f);clip-path:polygon(4% 0,96% 0,100% 100%,0 100%)}
+#tisch .kante{position:absolute;left:0;top:102px;width:560px;height:18px;background:linear-gradient(180deg,#232428,#17181c);box-shadow:0 14px 26px rgba(0,0,0,.55)}
+#tisch .bein{position:absolute;top:120px;width:16px;height:122px;background:linear-gradient(90deg,#1b1c21,#121317)}
+#tisch .bl-l{left:22px}#tisch .bl-r{right:22px}
+#tisch .buch{position:absolute;bottom:162px;border-radius:2px 2px 0 0;box-shadow:inset -3px 0 0 rgba(0,0,0,.25);
+  writing-mode:vertical-rl;transform:rotate(180deg);display:flex;align-items:center;justify-content:center;
+  font:700 15px/1 "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:1px;color:rgba(235,230,210,.55)}
+#tisch .offen{position:absolute;left:214px;top:56px;width:240px;height:40px;display:flex;gap:3px;filter:drop-shadow(0 3px 3px rgba(0,0,0,.4))}
+#tisch .seite{flex:1;background:#9e9b88;padding:5px 12px;display:flex;flex-direction:column;gap:4px}
+#tisch .seite:first-child{clip-path:polygon(6% 0,100% 0,100% 100%,0 100%);border-radius:3px 0 0 2px}
+#tisch .seite:last-child{clip-path:polygon(0 0,94% 0,100% 100%,0 100%);border-radius:0 3px 2px 0}
+#tisch .seite i{display:block;height:2px;background:rgba(40,40,35,.35)}
+#tisch .seite b{font:700 11px/1 serif;color:rgba(40,40,35,.6)}
+#tisch .marker{position:absolute;left:324px;top:84px;width:46px;height:9px;border-radius:4px;background:#b8c94a;transform:rotate(-8deg);opacity:.75}
+#tisch .tasse{position:absolute;left:168px;top:48px;width:34px;height:40px;border-radius:3px 3px 8px 8px;background:linear-gradient(90deg,#5c5f66,#3c3f45)}
+#tisch .tasse::after{content:"";position:absolute;right:-12px;top:9px;width:12px;height:18px;border:4px solid #4a4d53;border-left:none;border-radius:0 10px 10px 0}
+#lampe{position:absolute;left:840px;top:470px;width:260px;height:300px;overflow:visible}
+#lampenlicht{position:absolute;left:680px;top:540px;width:340px;height:215px;pointer-events:none;
+  background:linear-gradient(180deg,rgba(215,225,160,.30),rgba(200,210,140,.08) 85%,transparent);
+  clip-path:polygon(73% 4%,83% 10%,96% 100%,4% 100%)}
+#lichtpfuetze{position:absolute;left:640px;top:735px;width:420px;height:70px;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 50%,rgba(210,220,150,.22),transparent 70%)}
+#bw.flack #lampenlicht,#bw.flack #lichtpfuetze,#bw.flack #mief,#bw.flack #lampe .birne{animation:flick .7s steps(1)}
+@keyframes flick{0%,100%{opacity:1}12%{opacity:.55}22%{opacity:1}34%{opacity:.7}44%{opacity:1}58%{opacity:.82}66%{opacity:1}}
+
+#f3d .griff{position:absolute;left:256px;top:190px;width:14px;height:26px;border-radius:4px;background:linear-gradient(90deg,#9aa3b5,#5d6578);box-shadow:0 3px 6px rgba(0,0,0,.6);z-index:3}
+#f3d .griff::after{content:"";position:absolute;left:2px;top:20px;width:10px;height:54px;border-radius:5px;background:linear-gradient(90deg,#aab3c4,#636b7e);box-shadow:0 4px 6px rgba(0,0,0,.5)}
+#f3d .bank{position:absolute;left:-26px;top:466px;width:632px;height:20px;
+  background:linear-gradient(180deg,#3b4458,#2a3142);clip-path:polygon(3% 0,97% 0,100% 100%,0 100%)}
+#f3d .bank::before{content:"";position:absolute;left:3%;right:3%;top:0;height:6px;background:linear-gradient(180deg,rgba(255,170,110,.28),transparent)}
+#f3d .bankfront{position:absolute;left:-26px;top:486px;width:632px;height:16px;background:linear-gradient(180deg,#1c2231,#121724);box-shadow:0 14px 24px rgba(0,0,0,.55)}
+#vorhang{position:absolute;left:1140px;top:84px;width:120px;height:770px;transform-origin:50% 0;
+  background:repeating-linear-gradient(90deg,#141a2a 0,#1e2638 13px,#10141f 27px,#1a2132 40px);
+  box-shadow:12px 0 26px rgba(0,0,0,.55);animation:wehen 8s ease-in-out infinite alternate}
+#vorhang::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.45),transparent 50%,rgba(255,150,80,.06))}
+@keyframes wehen{0%{transform:rotate(0deg)}100%{transform:rotate(.6deg)}}
+#stange{position:absolute;left:1120px;top:74px;width:720px;height:10px;border-radius:5px;background:linear-gradient(180deg,#3b4356,#151a26);box-shadow:0 4px 10px rgba(0,0,0,.6)}
+#stange::before,#stange::after{content:"";position:absolute;top:-4px;width:18px;height:18px;border-radius:50%;background:#2a3142}
+#stange::before{left:-8px}#stange::after{right:-8px}
+#lichtfall{position:absolute;left:900px;top:860px;width:1020px;height:220px;pointer-events:none;
+  background:linear-gradient(90deg,rgba(255,79,163,.22),rgba(255,160,60,.24) 35%,rgba(60,240,255,.14) 65%,rgba(154,92,255,.2));
+  clip-path:polygon(31% 0,88% 0,100% 100%,6% 100%);
+  opacity:calc(.8 + var(--sog,0)*.5 + var(--lebhaft,0)*.07);animation:beat .98s ease-out infinite,farbe 9s linear infinite;transition:opacity .8s;
+  -webkit-mask-image:linear-gradient(180deg,#000,transparent);mask-image:linear-gradient(180deg,#000,transparent)}
+@keyframes farbe{to{filter:hue-rotate(360deg)}}
+#lichtfall.dunkel{opacity:.5;transition:opacity 1.2s}
+
+/* ---------- Handy auf dem Schreibtisch (nur in den Enden) ---------- */
+#handy{position:absolute;left:896px;top:762px;width:92px;height:15px;pointer-events:none;opacity:0;transition:opacity .8s}
+#handy svg{display:block;width:100%;height:100%;overflow:visible}
+#handy .oben{fill:#12151c}
+#handy .kante{fill:#07090d}
+#handy .glanz{fill:rgba(255,255,255,.10)}
+#handy .aus{fill:#1b2334}
+#handy .kamera{fill:#0b0d12;display:none}
+#handy .an{opacity:0}
+#handy.h-unten .oben{fill:#2a2e38}
+#handy.h-unten .aus{display:none}
+#handy.h-unten .kamera{display:block}
+#handy.h-unten .an{display:none}
+#handy.h-hell .an{opacity:1;animation:scrollen 3.2s steps(1) infinite}
+#handy.blip .an{animation:blip 1.9s ease-out}
+#bw.ende-an #handy{opacity:1}
+#bw.sammlung #handy,#bw.sammlung #handyglow{opacity:0!important;animation:none!important}
+#handyglow{position:absolute;left:942px;top:769px;width:640px;height:400px;margin:-200px 0 0 -320px;pointer-events:none;opacity:0;
+  background:radial-gradient(closest-side,rgba(110,190,255,.42),rgba(60,140,255,.13) 48%,rgba(60,140,255,0))}
+#handyglow.g-unten{width:250px;height:64px;margin:-26px 0 0 -125px;
+  background:radial-gradient(closest-side,rgba(120,180,255,.55),rgba(120,180,255,0))}
+#handyglow.g-hell{opacity:1;animation:scrollen 3.2s steps(1) infinite}
+#handyglow.blip{animation:blip 1.9s ease-out}
+@keyframes blip{0%{opacity:0}8%{opacity:1}55%{opacity:.85}100%{opacity:0}}
+@keyframes scrollen{0%{opacity:1}23%{opacity:.8}41%{opacity:.95}67%{opacity:.76}84%{opacity:1}}
+
+/* ---------- Titel ---------- */
+#startui{position:absolute;inset:0;pointer-events:none;transition:opacity .8s,visibility 0s}
+#bw.ende-an #startui{opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
+#titelblock{position:absolute;left:150px;top:350px;transition:transform 1.4s cubic-bezier(.2,.8,.2,1),top 1.4s cubic-bezier(.2,.8,.2,1)}
+#titel{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-stretch:75%;
+  font-variation-settings:"opsz" 96,"wdth" 75;font-size:138px;line-height:1;letter-spacing:2px;text-transform:uppercase;
+  white-space:nowrap;color:#eef2fb;text-shadow:0 0 60px rgba(120,170,255,.28);
+  opacity:0;filter:blur(16px);
+  transition:font-size 1.4s cubic-bezier(.2,.8,.2,1)}
+@keyframes wein{to{opacity:1;filter:none}}
+#titel .gl{display:inline-block;font-style:italic;margin-left:-.07em;margin-right:.1em}
+.gl{position:relative}
+.gl::before,.gl::after{content:attr(data-t);position:absolute;left:0;top:0;white-space:nowrap;opacity:0;pointer-events:none}
+.gl::before{color:var(--pink);animation:g1 7s 4s infinite}
+.gl::after{color:#4fc3ff;animation:g2 7s 4s infinite}
+@keyframes g1{0%,91%,100%{opacity:0;clip-path:inset(0 0 100% 0)}92%{opacity:.9;transform:translate(-7px,0);clip-path:inset(8% 0 58% 0)}94%{opacity:.9;transform:translate(5px,0);clip-path:inset(62% 0 10% 0)}96%{opacity:0}}
+@keyframes g2{0%,91%,100%{opacity:0;clip-path:inset(0 0 100% 0)}93%{opacity:.9;transform:translate(6px,0);clip-path:inset(40% 0 30% 0)}95%{opacity:.9;transform:translate(-5px,0);clip-path:inset(15% 0 60% 0)}96%{opacity:0}}
+
+#hinweis{margin-top:34px;font-size:34px;color:var(--leise);letter-spacing:.5px;opacity:0}
+#iosnote{margin-top:14px;font-size:24px;color:var(--leise);opacity:0;max-width:900px}
+@keyframes ein{to{opacity:1}}
+
+#tippen{position:absolute;left:150px;bottom:130px;font-size:38px;color:#fff;letter-spacing:1px;
+  opacity:0;transition:opacity .5s}
+@keyframes atmen{0%,100%{opacity:.35}50%{opacity:1}}
+#tippen::before{content:"";display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--kalt);
+  margin-right:20px;box-shadow:0 0 18px 6px rgba(127,176,255,.55)}
+#bw.anlauf #titel{animation:wein 2.4s .5s cubic-bezier(.2,.8,.2,1) forwards}
+#bw.anlauf #hinweis,#bw.anlauf #iosnote{animation:ein 1.6s 3s forwards}
+#bw.anlauf #tippen{animation:ein 1.4s 3.6s forwards,atmen 2.8s 5s ease-in-out infinite}
+
+/* ---------- Menü ---------- */
+#menue{position:absolute;left:150px;top:330px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  opacity:0;pointer-events:none;transform:translateX(-30px);transition:opacity 1s .5s,transform 1s .5s}
+#menue .bl{position:relative;display:flex;align-items:flex-end;gap:22px;max-width:640px;cursor:pointer;
+  padding:16px 24px 13px 30px;border-radius:24px;color:var(--text);text-align:left;
+  background:rgba(24,30,46,.82);border:1px solid rgba(160,185,235,.16);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  font:500 44px/1.25 "Bricolage Grotesque",system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.45);
+  opacity:0;transform:translateY(18px) scale(.96);transition:opacity .35s,transform .35s,background .25s,border-color .25s,box-shadow .25s}
+#menue .bl.erste{border-top-left-radius:6px}
+#menue .bl.spielen{font-size:56px;font-weight:600;padding:18px 26px 15px 34px;
+  background:linear-gradient(120deg,rgba(255,150,60,.30),rgba(255,79,163,.22) 60%,rgba(120,80,220,.20)),rgba(30,22,38,.85);
+  border-color:rgba(255,175,110,.45);box-shadow:0 14px 50px rgba(255,120,80,.22);animation:warm 3s ease-in-out infinite}
+@keyframes warm{50%{box-shadow:0 14px 70px rgba(255,120,80,.38)}}
+#menue .bl:hover,#menue .bl:focus-visible{background-color:rgba(40,50,74,.9);border-color:rgba(127,176,255,.5);outline:none}
+#menue .bl.spielen:hover,#menue .bl.spielen:focus-visible{border-color:rgba(255,190,130,.8)}
+#menue .bl:focus-visible{box-shadow:0 0 0 3px rgba(127,176,255,.6)}
+#menue .mz{display:flex;align-items:center;gap:6px;flex:none;font:400 23px system-ui,sans-serif;color:var(--leise);margin-bottom:4px}
+#menue .hk{letter-spacing:-9px;padding-right:9px;color:var(--leise);transition:color .3s}
+#menue .bl:hover .hk,#menue .bl:focus-visible .hk{color:var(--kalt)}
+#menue .bl.gelesen .hk{color:var(--kalt)}
+#enden{align-self:flex-start;margin-top:18px;padding:9px 22px;border-radius:14px;background:rgba(24,30,46,.6);color:var(--leise);
+  font:500 26px "Bricolage Grotesque",system-ui,sans-serif;opacity:0;transition:opacity .5s}
+#enden.neu{animation:endenNeu 2.8s 2.1s ease-out both}
+@keyframes endenNeu{0%{color:#fff;background:rgba(70,38,40,.8);box-shadow:0 0 0 1px rgba(255,175,110,.7),0 0 36px rgba(255,140,80,.45)}
+  100%{color:var(--leise);background:rgba(24,30,46,.6);box-shadow:0 0 0 1px rgba(255,175,110,0),0 0 36px rgba(255,140,80,0)}}
+#bw.menue-an #menue .bl,#bw.menue-an #enden{opacity:1;transform:none}
+#bw.menue-an #menue .bl:nth-child(1){transition-delay:.7s,.7s,0s,0s,0s}
+#bw.menue-an #menue .bl:nth-child(2){transition-delay:1.15s,1.15s,0s,0s,0s}
+#bw.menue-an #menue .bl:nth-child(3){transition-delay:1.5s,1.5s,0s,0s,0s}
+#bw.menue-an #enden{transition-delay:1.9s}
+#bw.menue-an #menue{opacity:1;pointer-events:auto;transform:none}
+#bw.menue-an #titelblock{top:150px}
+#bw.menue-an #titel{font-size:84px}
+#bw.menue-an #hinweis,#bw.menue-an #iosnote,#bw.menue-an #tippen{opacity:0;animation:none}
+
+/* ---------- Nachrichten ---------- */
+#stapel{position:absolute;left:1220px;width:560px;bottom:70px;display:flex;flex-direction:column;gap:14px;pointer-events:none}
+#stapelkopf{font-size:26px;color:var(--leise);padding-left:10px;opacity:0;transition:opacity .8s}
+#stapelkopf.an{opacity:1}
+#stapelkopf b{color:#c9d4ec;font-weight:600}
+.nk{display:flex;gap:18px;align-items:center;padding:20px 26px;border-radius:32px;
+  background:rgba(24,28,40,.94);box-shadow:0 14px 40px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.05);
+  animation:nrein .5s cubic-bezier(.2,.9,.3,1.25);transition:opacity .9s,transform .9s}
+@keyframes nrein{from{opacity:0;transform:translateY(40px) scale(.94)}}
+.nk.alt1{opacity:.6;transform:scale(.97)}
+.nk.alt2{opacity:.28;transform:scale(.94)}
+.nk.weg{opacity:0;transform:translateY(-30px) scale(.9)}
+.nk .ic{width:56px;height:56px;border-radius:50%;flex:none;background:#2b3348;display:flex;align-items:center;justify-content:center}
+.nk .ic i{display:block;width:26px;height:22px;border-radius:8px 8px 8px 2px;background:#9fb3d9}
+.nk .tx{min-width:0}
+.nk .wer{font-size:27px;font-weight:600;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nk .was{display:flex;gap:10px;margin-top:10px}
+.nk .was i{display:block;height:16px;border-radius:8px;background:rgba(207,214,230,.45);filter:blur(4px)}
+.nk .was .klar{display:block;height:16px;line-height:16px;font:500 21px/16px "Bricolage Grotesque",system-ui,sans-serif;color:rgba(232,237,247,.92);
+  white-space:nowrap;max-width:430px;overflow:visible;transition:filter 1.4s ease,color 1.4s ease}
+.nk .was .klar.zu{filter:blur(4px);color:rgba(207,214,230,.5)}
+
+/* ---------- Atmosphäre ---------- */
+.zov{position:absolute;inset:0;pointer-events:none}
+#vignette{z-index:2;background:radial-gradient(ellipse at 50% 50%,transparent 50%,rgba(0,0,0,.62) 100%)}
+#korn{z-index:2;opacity:.05;animation:korn .6s steps(5) infinite;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  inset:-60px}
+@keyframes korn{0%{transform:translate(0,0)}20%{transform:translate(-40px,20px)}40%{transform:translate(30px,-30px)}60%{transform:translate(-20px,-40px)}80%{transform:translate(40px,30px)}}
+#blitz{z-index:2;background:#fff;opacity:0}
+#blitz.an{animation:blitz .45s ease-out}
+@keyframes blitz{0%{opacity:.55}100%{opacity:0}}
+
+/* =================== ENDE: gleiche Welt wie der Start =================== */
+#scrim{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s,background 1s;
+  background:linear-gradient(90deg,rgba(6,9,18,.9) 0,rgba(6,9,18,.72) 45%,rgba(6,9,18,.15) 62%,transparent 75%)}
+#toenung{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.2s}
+#bw.ende-an #scrim{opacity:1}
+#bw.ende-an #toenung{opacity:.55}
+.schirm2{position:absolute;left:150px;top:0;bottom:0;width:990px;display:flex;flex-direction:column;justify-content:center;gap:26px;
+  opacity:0;visibility:hidden;pointer-events:none;transform:translateY(16px);transition:opacity .7s,transform .7s,visibility 0s .7s}
+.schirm2.an{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .7s,transform .7s,visibility 0s}
+.klein{font:600 28px "Bricolage Grotesque",system-ui,sans-serif;letter-spacing:6px;text-transform:uppercase;color:var(--leise)}
+.gross{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-weight:800;font-stretch:75%;font-variation-settings:"opsz" 96,"wdth" 75;
+  text-transform:uppercase;letter-spacing:2px;line-height:1;color:#eef2fb;text-shadow:0 0 60px rgba(120,170,255,.25)}
+.satz{font:400 36px/1.45 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6;max-width:780px}
+
+.knopf{display:inline-flex;align-items:flex-end;gap:20px;align-self:flex-start;cursor:pointer;
+  padding:16px 26px 13px 30px;border-radius:24px;border-top-left-radius:6px;color:var(--text);text-align:left;
+  background:rgba(24,30,46,.82);border:1px solid rgba(160,185,235,.16);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  font:500 40px/1.25 "Bricolage Grotesque",system-ui,sans-serif;box-shadow:0 14px 40px rgba(0,0,0,.45);transition:background .25s,border-color .25s,transform .2s,box-shadow .25s}
+.knopf:hover,.knopf:focus-visible{background:rgba(40,50,74,.9);border-color:rgba(127,176,255,.5);outline:none}
+.knopf:focus-visible{box-shadow:0 0 0 3px rgba(127,176,255,.6)}
+.knopf.warm{background:linear-gradient(120deg,rgba(255,150,60,.30),rgba(255,79,163,.22) 60%,rgba(120,80,220,.20)),rgba(30,22,38,.85);
+  border-color:rgba(255,175,110,.45);box-shadow:0 14px 50px rgba(255,120,80,.22);font-size:46px;font-weight:600}
+.knopf.warm:hover{border-color:rgba(255,190,130,.85)}
+.knopf.warm:focus-visible{box-shadow:0 0 0 3px rgba(255,190,130,.7)}
+.knopf .mz{font:400 22px system-ui,sans-serif;color:var(--leise);margin-bottom:4px;white-space:nowrap}
+.knopfreihe{display:flex;gap:18px;align-items:flex-end;flex-wrap:wrap}
+
+/* ---------- 1) Ende-Karte ---------- */
+#s-ende .medaille{width:150px;height:150px;margin-bottom:6px}
+#s-ende .gross{font-size:150px}
+#s-ende .satz{font-size:38px}
+.medaille{position:relative;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none;
+  background:radial-gradient(circle at 35% 28%,var(--c1),var(--c2) 70%);
+  box-shadow:0 0 0 3px rgba(255,255,255,.18),0 0 0 9px rgba(0,0,0,.25),0 0 60px 6px color-mix(in srgb,var(--c1) 45%,transparent),inset 0 -8px 16px rgba(0,0,0,.3),inset 0 6px 10px rgba(255,255,255,.25)}
+.medaille span{font-size:.5em;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4))}
+.medaille::after{content:"";position:absolute;inset:7%;border-radius:50%;border:2px dashed rgba(255,255,255,.28)}
+#s-ende .medaille{font-size:150px}
+#s-ende.an .medaille{animation:stempel .8s cubic-bezier(.3,1.5,.5,1) var(--verz,.3s) both}
+@keyframes stempel{from{transform:scale(2.2) rotate(-14deg);opacity:0}to{transform:none;opacity:1}}
+
+/* ---------- 2) Gefühl ---------- */
+#s-gefuehl .gross{font-size:92px;max-width:900px;text-wrap:balance}
+#s-gefuehl .liste{display:flex;flex-direction:column;gap:12px}
+
+/* ---------- 3) Abzeichen als Benachrichtigungen ---------- */
+#s-abz{gap:14px}
+#s-abz .kopf{display:flex;align-items:baseline;gap:26px}
+#s-abz .gross{font-size:76px}
+#s-abz .zaehler{display:inline-block;font:600 32px "Bricolage Grotesque",system-ui,sans-serif;color:var(--leise)}
+#s-abz .zaehler.hoch{animation:hoch .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes hoch{0%{transform:scale(1.25);color:#ffc08a}100%{transform:none;color:var(--leise)}}
+#raster{display:grid;grid-template-columns:repeat(3,314px);gap:10px;max-height:436px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:12px 8px 40px 2px;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 82%,transparent);mask-image:linear-gradient(180deg,#000 0,#000 82%,transparent);scrollbar-width:thin}
+.ab{position:relative;display:flex;gap:14px;align-items:center;min-height:96px;padding:11px 16px;border-radius:24px;
+  background:rgba(22,28,42,.88);border:1px solid rgba(160,185,235,.12);box-shadow:0 10px 30px rgba(0,0,0,.4);
+  opacity:0;transform:translateY(14px) scale(.97);transition:opacity .45s,transform .45s}
+.ab.da{opacity:1;transform:none}
+.ab .medaille{width:58px;height:58px;font-size:58px}
+.ab .medaille::after{inset:5%;border-width:1.5px}
+.ab .tx{min-width:0;display:flex;flex-direction:column;gap:3px}
+.ab .n{font:700 25px/1.08 "Bricolage Grotesque",system-ui,sans-serif;color:#fff}
+.ab .w{font:400 20px/1.22 "Bricolage Grotesque",system-ui,sans-serif;color:#aeb9d2}
+.ab .neu{position:absolute;right:12px;top:-10px;padding:3px 12px;border-radius:12px;font:700 15px system-ui,sans-serif;letter-spacing:1px;
+  background:linear-gradient(90deg,#ff9a3c,#ff4fa3);color:#1a0d14;box-shadow:0 4px 14px rgba(255,79,163,.45)}
+.ab.frisch{border-color:rgba(255,175,110,.55);box-shadow:0 10px 40px rgba(255,120,80,.25)}
+.ab.frisch.da{animation:aufdruck .55s cubic-bezier(.2,.9,.3,1) both}
+@keyframes aufdruck{0%{opacity:0;transform:scale(1.1)}45%{opacity:1;transform:scale(.975)}100%{opacity:1;transform:none}}
+.ab.frisch.da .medaille{animation:stempel .7s cubic-bezier(.3,1.5,.5,1) both}
+.ab.frisch .medaille::before{content:"";position:absolute;inset:-4px;border-radius:50%;border:3px solid var(--c1);opacity:0;pointer-events:none}
+.ab.frisch.da .medaille::before{animation:ring .9s .28s ease-out}
+@keyframes ring{0%{opacity:.95;transform:scale(.85)}100%{opacity:0;transform:scale(1.9)}}
+.ab.frisch.da .neu{animation:neuPop .42s .5s cubic-bezier(.3,1.6,.5,1) both}
+@keyframes neuPop{0%{opacity:0;transform:scale(.3)}100%{opacity:1;transform:none}}
+.ab.zu{background:rgba(16,20,32,.7)}
+.ab.zu .medaille{background:radial-gradient(circle at 35% 28%,#2a3044,#161a26 70%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.06)}
+.ab.zu .medaille span{opacity:.4;font-size:.42em;filter:none}
+.ab.zu .medaille::after{display:none}
+.ab.zu .n.verdeckt{color:#8a95b0;filter:blur(6px);transition:filter .6s ease,color .6s ease}
+.ab.zu.blick .n.verdeckt{color:#e6ebf5;filter:blur(0);transition:filter .12s,color .12s}
+.ab.zu .w.hinweis{color:#8792ad}
+#s-abz .bilanz{display:flex;flex-direction:column;gap:2px;margin-top:4px;opacity:0;transition:opacity .6s}
+#s-abz .bilanz.da{opacity:1}
+#s-abz .bilanz p{font:400 30px/1.3 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6}
+#s-abz .bilanz b{color:#fff;font-weight:700}
+#s-abz .knopf{font-size:38px;padding:13px 24px 11px 28px}
+#s-abz .knopf.warm{font-size:42px}
+#s-abz.sammlung .nur-lauf,#s-abz:not(.sammlung) .nur-sammlung{display:none}
+
+/* ---------- Mitwirkende ---------- */
+#s-credits .gross{font-size:84px}
+#s-credits .ctext{font:400 30px/1.6 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6;max-width:900px}
+#s-credits .ctext b{color:#fff;font-weight:600}
+
+/* ---------- 4) Beenden ---------- */
+#s-beenden .gross{font-size:96px;max-width:900px;text-wrap:balance}
+#s-beenden .knopf.ja{transition:all .4s}
+#s-beenden .knopfreihe{margin-top:22px}
+#s-wusst .gross,#s-glaub .gross{font-size:120px}
+#s-glaub .gross{font-weight:300;font-stretch:100%;font-variation-settings:"opsz" 96,"wdth" 100;letter-spacing:0;text-transform:none;color:#d9dfec}
+
+#bw.licht-aus #lampenlicht,#bw.licht-aus #lichtpfuetze,#bw.licht-aus #mief{opacity:0;transition:opacity .15s}
+#bw.licht-aus #lampe .birne{opacity:0}
+#nacht{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 3.5s ease;
+  background:radial-gradient(ellipse 330px 300px at 1510px 345px,rgba(0,0,0,0) 75%,#000 100%)}
+#bw.licht-aus #nacht{opacity:.92}
+#bw.licht-aus #scrim{opacity:0}
+#bw.licht-aus #lichtfall{z-index:1}
+#bw.licht-aus #handy .koerper{opacity:.3;transition:opacity 2s}
+#bw.licht-aus #handy.h-hell .an,#bw.licht-aus #handyglow.g-hell{opacity:0;animation:none}
+#bw.licht-aus #handy.blip .an,#bw.licht-aus #handyglow.blip{animation:blip 2.2s ease-out}
+
+@media (prefers-reduced-motion:reduce){
+  #korn,.gl::before,.gl::after{animation:none}
+  .raum::after,#draussen .bok,#draussen .bulb,#lampenlicht,#vorhang,#lichtfall,#menue .bl.spielen{animation:none}
+  #bw.anlauf #titel{animation:wein .8s forwards}
+  #bw.anlauf #hinweis,#bw.anlauf #tippen{animation:ein .8s .6s forwards}
+  #enden.neu{animation:none}
+  .ab,.schirm2{transition:none}
+  .ab,.ab *,.ab .medaille::before{animation:none!important}
+  .medaille{animation:none!important}
+  .nk .was .klar{transition:none}
+  #handy .an,#handyglow{animation:none!important}
+  #bw.licht-aus #handy.blip .an,#bw.licht-aus #handyglow.blip{animation:none!important}
+  #titelblock,#titel{transition:none}
+}

@@ -1,0 +1,722 @@
+{
+"A1": {
+"quelle": "/mnt/user-data/uploads/68e412de-image.jpg",
+"diff": 0.18,
+"groesse": [
+1920,
+1080
+]
+},
+"APS": {
+"quelle": null,
+"diff": 27.8,
+"groesse": [
+810,
+1080
+]
+},
+"B05": {
+"quelle": null,
+"diff": 35.93,
+"groesse": [
+1920,
+1072
+]
+},
+"B07": {
+"quelle": null,
+"diff": 58.96,
+"groesse": [
+810,
+1080
+]
+},
+"B09": {
+"quelle": "/mnt/user-data/uploads/5ac03c89-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1072
+]
+},
+"B10": {
+"quelle": null,
+"diff": 22.75,
+"groesse": [
+1920,
+1072
+]
+},
+"B12": {
+"quelle": "/mnt/user-data/uploads/45746173-image.jpg",
+"diff": 0.18,
+"groesse": [
+1920,
+1072
+]
+},
+"B12A": {
+"quelle": "bilder_neu/B12a.jpg",
+"diff": 0.14,
+"groesse": [
+1920,
+1080
+]
+},
+"B12B": {
+"quelle": "bilder_neu/B12b.jpg",
+"diff": 0.16,
+"groesse": [
+1920,
+1072
+]
+},
+"B12L": {
+"quelle": "/mnt/user-data/uploads/e84cca17-image.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1072
+]
+},
+"B12T": {
+"quelle": "bilder_neu/B12_tuer.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1072
+]
+},
+"B14": {
+"quelle": "/mnt/user-data/uploads/ea99c5fb-image.jpg",
+"diff": 0.16,
+"groesse": [
+1920,
+1072
+]
+},
+"B15": {
+"quelle": "/mnt/user-data/uploads/ea99c5fb-image.jpg",
+"diff": 1.93,
+"groesse": [
+1920,
+1072
+]
+},
+"BR": {
+"quelle": "bilder_neu/BR2.jpg",
+"diff": 0.14,
+"groesse": [
+1920,
+1072
+]
+},
+"FL1": {
+"quelle": null,
+"diff": 5.98,
+"groesse": [
+1920,
+1080
+]
+},
+"FL2": {
+"quelle": null,
+"diff": 5.93,
+"groesse": [
+1920,
+1080
+]
+},
+"FL3": {
+"quelle": null,
+"diff": 6.23,
+"groesse": [
+1920,
+1080
+]
+},
+"HB1": {
+"quelle": "/mnt/user-data/uploads/67cbd9d4-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1072
+]
+},
+"K12": {
+"quelle": null,
+"diff": 21.84,
+"groesse": [
+1920,
+1072
+]
+},
+"L4": {
+"quelle": null,
+"diff": 51.41,
+"groesse": [
+1920,
+1072
+]
+},
+"L4b": {
+"quelle": "bilder_neu/L4b.jpg",
+"diff": 0.52,
+"groesse": [
+1920,
+1072
+]
+},
+"LNL": {
+"quelle": "/mnt/user-data/uploads/628ad14a-image.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1072
+]
+},
+"LNN": {
+"quelle": "/mnt/user-data/uploads/12d6f71a-image.jpg",
+"diff": 0.16,
+"groesse": [
+1920,
+1072
+]
+},
+"MK1": {
+"quelle": null,
+"diff": 17.73,
+"groesse": [
+1920,
+1080
+]
+},
+"MK2": {
+"quelle": null,
+"diff": 18.58,
+"groesse": [
+1920,
+1080
+]
+},
+"MK3": {
+"quelle": null,
+"diff": 19.45,
+"groesse": [
+1920,
+1080
+]
+},
+"MM01": {
+"quelle": "/mnt/user-data/uploads/479d4d35-image.jpg",
+"diff": 0.21,
+"groesse": [
+1920,
+1080
+]
+},
+"MM02": {
+"quelle": "/mnt/user-data/uploads/7a9fcaeb-image.jpg",
+"diff": 0.2,
+"groesse": [
+1920,
+1080
+]
+},
+"MM03": {
+"quelle": "/mnt/user-data/uploads/04cf52d8-image.jpg",
+"diff": 0.2,
+"groesse": [
+1920,
+1080
+]
+},
+"MM04": {
+"quelle": "/mnt/user-data/uploads/d70ad59d-image.jpg",
+"diff": 0.18,
+"groesse": [
+1920,
+1080
+]
+},
+"MM05": {
+"quelle": "/mnt/user-data/uploads/bd3fda03-image.jpg",
+"diff": 0.21,
+"groesse": [
+1920,
+1080
+]
+},
+"MM06": {
+"quelle": "/mnt/user-data/uploads/377e9163-image.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1080
+]
+},
+"MM07": {
+"quelle": "/mnt/user-data/uploads/305efe61-image.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1080
+]
+},
+"MM08": {
+"quelle": "/mnt/user-data/uploads/a800fda5-image.jpg",
+"diff": 0.18,
+"groesse": [
+1920,
+1080
+]
+},
+"MM09": {
+"quelle": "/mnt/user-data/uploads/a6b82724-image.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1080
+]
+},
+"N03": {
+"quelle": null,
+"diff": 42.13,
+"groesse": [
+1920,
+1072
+]
+},
+"N04": {
+"quelle": null,
+"diff": 35.98,
+"groesse": [
+1920,
+1072
+]
+},
+"N08": {
+"quelle": null,
+"diff": 28.83,
+"groesse": [
+1920,
+1072
+]
+},
+"N09": {
+"quelle": null,
+"diff": 12.53,
+"groesse": [
+1920,
+1072
+]
+},
+"N1": {
+"quelle": null,
+"diff": 27.59,
+"groesse": [
+1920,
+1072
+]
+},
+"N11": {
+"quelle": null,
+"diff": 19.41,
+"groesse": [
+1920,
+1072
+]
+},
+"N12": {
+"quelle": null,
+"diff": 28.47,
+"groesse": [
+1920,
+1072
+]
+},
+"N13": {
+"quelle": "bilder_neu/N13.jpg",
+"diff": 0.23,
+"groesse": [
+1920,
+1072
+]
+},
+"N13L": {
+"quelle": "bilder_neu/N13_lena.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1072
+]
+},
+"N14": {
+"quelle": "/mnt/user-data/uploads/713f2cb8-image.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1072
+]
+},
+"N14b": {
+"quelle": "/mnt/user-data/uploads/713f2cb8-image.jpg",
+"diff": 1.03,
+"groesse": [
+1920,
+1072
+]
+},
+"N14g": {
+"quelle": null,
+"diff": 11.64,
+"groesse": [
+1920,
+1072
+]
+},
+"N14r": {
+"quelle": "bilder_neu/G30_haende.jpg",
+"diff": 0.16,
+"groesse": [
+1920,
+1072
+]
+},
+"N14z": {
+"quelle": "/mnt/user-data/uploads/713f2cb8-image.jpg",
+"diff": 1.2,
+"groesse": [
+1920,
+1072
+]
+},
+"N15": {
+"quelle": "bilder_neu/N15.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1072
+]
+},
+"N17": {
+"quelle": null,
+"diff": 6.0,
+"groesse": [
+1920,
+1080
+]
+},
+"N18": {
+"quelle": null,
+"diff": 6.5,
+"groesse": [
+1920,
+1080
+]
+},
+"N19": {
+"quelle": null,
+"diff": 7.27,
+"groesse": [
+1920,
+1080
+]
+},
+"N20": {
+"quelle": null,
+"diff": 5.52,
+"groesse": [
+1920,
+1080
+]
+},
+"N21": {
+"quelle": null,
+"diff": 8.08,
+"groesse": [
+1920,
+1080
+]
+},
+"N25": {
+"quelle": "bilder_neu/N25.jpg",
+"diff": 0.19,
+"groesse": [
+1920,
+1072
+]
+},
+"N26": {
+"quelle": null,
+"diff": 12.57,
+"groesse": [
+1920,
+1080
+]
+},
+"N28": {
+"quelle": null,
+"diff": 24.11,
+"groesse": [
+1920,
+1080
+]
+},
+"N31a": {
+"quelle": null,
+"diff": 4.61,
+"groesse": [
+1920,
+1072
+]
+},
+"N31b": {
+"quelle": "/mnt/user-data/uploads/a88c16ab-image.jpg",
+"diff": 0.16,
+"groesse": [
+1920,
+1072
+]
+},
+"N31c": {
+"quelle": "/mnt/user-data/uploads/1c86391f-image.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1080
+]
+},
+"N31d": {
+"quelle": "/mnt/user-data/uploads/b9a7602c-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1072
+]
+},
+"N32b": {
+"quelle": "/mnt/user-data/uploads/cc0f0b0b-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1080
+]
+},
+"N32d": {
+"quelle": "/mnt/user-data/uploads/293f02f4-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1072
+]
+},
+"N32dA": {
+"quelle": "/mnt/user-data/uploads/63df81f6-image.jpg",
+"diff": 0.12,
+"groesse": [
+1920,
+1072
+]
+},
+"N32dC": {
+"quelle": "/mnt/user-data/uploads/537d73b9-image.jpg",
+"diff": 0.12,
+"groesse": [
+1920,
+1072
+]
+},
+"N32dP": {
+"quelle": "/mnt/user-data/uploads/64eb4272-image.jpg",
+"diff": 0.12,
+"groesse": [
+1920,
+1072
+]
+},
+"N33": {
+"quelle": null,
+"diff": 5.44,
+"groesse": [
+1920,
+1080
+]
+},
+"N35M1": {
+"quelle": "/mnt/user-data/uploads/29f6a1e2-image.png",
+"diff": 0.16,
+"groesse": [
+1920,
+1080
+]
+},
+"N35M2": {
+"quelle": "/mnt/user-data/uploads/b61e37eb-image.png",
+"diff": 0.19,
+"groesse": [
+1920,
+1080
+]
+},
+"N35b": {
+"quelle": "/mnt/user-data/uploads/9e1b023c-image.png",
+"diff": 0.14,
+"groesse": [
+1920,
+1080
+]
+},
+"N35be": {
+"quelle": "/mnt/user-data/uploads/a673108e-image.jpg",
+"diff": 0.14,
+"groesse": [
+1920,
+1080
+]
+},
+"N35c": {
+"quelle": "/mnt/user-data/uploads/17e2684a-image.webp",
+"diff": 0.14,
+"groesse": [
+1920,
+1080
+]
+},
+"N35cL": {
+"quelle": "/mnt/user-data/uploads/59efd44e-image.jpg",
+"diff": 0.14,
+"groesse": [
+1920,
+1080
+]
+},
+"N35d": {
+"quelle": "/mnt/user-data/uploads/28ffd3b0-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1080
+]
+},
+"N35f": {
+"quelle": "/mnt/user-data/uploads/3f47871f-image.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1080
+]
+},
+"N35fz": {
+"quelle": "/mnt/user-data/uploads/7d71aa3c-image.jpg",
+"diff": 0.15,
+"groesse": [
+1920,
+1080
+]
+},
+"N35n": {
+"quelle": "/mnt/user-data/uploads/5a3a402a-image.png",
+"diff": 0.16,
+"groesse": [
+1920,
+1080
+]
+},
+"N35s": {
+"quelle": "/mnt/user-data/uploads/27ae1f3d-image.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1072
+]
+},
+"N35t": {
+"quelle": "/mnt/user-data/uploads/76b6a931-image.png",
+"diff": 0.13,
+"groesse": [
+1920,
+1080
+]
+},
+"N35w": {
+"quelle": "/mnt/user-data/uploads/ad1c1d2e-image.jpg",
+"diff": 0.17,
+"groesse": [
+1920,
+1072
+]
+},
+"N35z": {
+"quelle": "/mnt/user-data/uploads/5428387b-image.png",
+"diff": 0.16,
+"groesse": [
+1920,
+1080
+]
+},
+"N36": {
+"quelle": "/mnt/user-data/uploads/46cd8df4-image.jpg",
+"diff": 0.11,
+"groesse": [
+1920,
+1072
+]
+},
+"N36L": {
+"quelle": "bilder_neu/N36_ohne_lynn.jpg",
+"diff": 0.14,
+"groesse": [
+1920,
+1072
+]
+},
+"SO": {
+"quelle": null,
+"diff": 43.92,
+"groesse": [
+1920,
+1072
+]
+},
+"SO1a": {
+"quelle": null,
+"diff": 10.23,
+"groesse": [
+1920,
+1072
+]
+},
+"SO1b": {
+"quelle": null,
+"diff": 6.75,
+"groesse": [
+1920,
+1072
+]
+},
+"SO1c": {
+"quelle": null,
+"diff": 6.8,
+"groesse": [
+1920,
+1072
+]
+},
+"SP1": {
+"quelle": null,
+"diff": 5.99,
+"groesse": [
+1920,
+1080
+]
+},
+"T": {
+"quelle": null,
+"diff": 18.56,
+"groesse": [
+1920,
+1072
+]
+}
+}

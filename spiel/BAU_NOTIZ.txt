@@ -1,0 +1,5 @@
+
+Bei jedem Bau zusätzlich:
+- python3 /home/claude/tools/galerie.py
+- Galerie-Artefakt neu veröffentlichen: Slug 26fa13a7-d8e2-4e18-b7fb-15d961d90eaf (mode replace, alle Dateien aus /home/claude/galerie)
+- Projekt-Doc claude/bilder-liste.md aus /home/claude/galerie/bilder-liste.md ersetzen

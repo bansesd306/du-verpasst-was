@@ -1,0 +1,458 @@
+@font-face{font-family:'Bricolage Grotesque';src:url(fonts/bricolage.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Bricolage Grotesque';src:url(fonts/bricolage-ext.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Permanent Marker';src:url(fonts/marker.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Patrick Hand';src:url(fonts/hand.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Patrick Hand';src:url(fonts/hand-ext.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF;font-display:swap}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#eee;user-select:none;-webkit-user-select:none;touch-action:manipulation}
+#rahmen{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#000}
+#buehne{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;background:#000}
+
+/* ---------- Hintergrund ---------- */
+#kamera{position:absolute;inset:0;transition:transform 1.2s ease}
+#welt{position:absolute;inset:0;transition:filter 1.5s ease}
+.ebene{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
+.ebene.an{opacity:1}
+.ebene img,.ebene .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ebene img{filter:saturate(.94) contrast(1.03)}
+.ebene .blink{opacity:0;transition:none}
+.ebene .blink.zu{opacity:1}
+.f-dunkel{filter:brightness(.42) saturate(.6) hue-rotate(12deg) contrast(1.05)!important}
+.f-tag{filter:brightness(1.25) saturate(.8) hue-rotate(-8deg) contrast(.92) sepia(.12)!important}
+.f-lichtaus{filter:brightness(.28) saturate(.5) hue-rotate(15deg) contrast(1.1)!important}
+.f-nacht{filter:brightness(.7) saturate(.85) contrast(1.05)!important}
+.innen{position:absolute;inset:0;transform-origin:50% 45%}
+.atmen{animation:atmen 4.6s ease-in-out infinite}
+@keyframes atmen{0%,100%{transform:scale(1)}50%{transform:scale(1.009) translateY(-2px)}}
+.drift{animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{0%{transform:scale(1.04) translate(-10px,4px)}100%{transform:scale(1.07) translate(12px,-6px)}}
+.schwenk{animation:schwenk 14s ease-in-out infinite alternate}
+@keyframes schwenk{0%{transform:scale(1.12) translateX(-60px)}100%{transform:scale(1.12) translateX(60px)}}
+.zoomrein{transition:transform 7s ease-out!important;transform:scale(1.18)!important}
+
+/* Platzhalter */
+.ph{display:block;border:3px solid rgba(255,255,255,.18);overflow:hidden}
+.ph .lab{position:absolute;left:34px;bottom:300px;font:500 30px/1.25 system-ui,sans-serif;color:rgba(255,255,255,.78);background:rgba(0,0,0,.28);padding:8px 16px;border-radius:8px;max-width:70%}
+.ph .lab b{color:#fff;margin-right:10px}
+.ph .muster{position:absolute;inset:0;opacity:.45}
+.st-nacht{background:radial-gradient(ellipse at 70% 30%,#2b4a7a 0,#14233f 45%,#0b1226 100%)}
+.st-zimmer{background:radial-gradient(ellipse at 25% 20%,#8a6a3e 0,#3b3550 40%,#1a1d33 100%)}
+.st-party{background:linear-gradient(120deg,#6b1f5c 0,#b34a2e 35%,#d18a2d 55%,#5b2a86 80%,#2a1640 100%)}
+.st-balkon{background:linear-gradient(180deg,#1b2340 0,#2b2c4f 55%,#5a3a2a 100%)}
+.st-pruefung{background:linear-gradient(180deg,#9aa3ab 0,#727c86 50%,#555d66 100%)}
+.st-morgen{background:linear-gradient(160deg,#f3d7a6 0,#d8b48a 40%,#9fa8b8 100%)}
+.st-tag{background:linear-gradient(160deg,#cfd6dd 0,#a8b2bd 50%,#7d8794 100%)}
+.st-strasse{background:radial-gradient(ellipse at 50% 70%,#8a6a32 0,#2c2a3c 35%,#111628 100%)}
+.st-flur{background:radial-gradient(ellipse at 75% 45%,#b5664e 0,#4a2c3a 40%,#1d1622 100%)}
+.st-bad{background:linear-gradient(180deg,#5d6f72 0,#3d4b52 60%,#283238 100%)}
+.st-traum{background:radial-gradient(ellipse at 40% 40%,#ffe2b0 0,#d9a476 40%,#8a6a5a 100%)}
+.st-foto{background:linear-gradient(135deg,#7a3a6e 0,#c46a3a 50%,#3a2a6a 100%)}
+.st-start{background:radial-gradient(ellipse at 50% 50%,#3a3f6a 0,#1b1f3a 50%,#0c0e1e 100%)}
+.st-pruefung .lab,.st-morgen .lab,.st-tag .lab{color:rgba(0,0,0,.7);background:rgba(255,255,255,.35)}
+.st-pruefung .lab b,.st-morgen .lab b,.st-tag .lab b{color:#000}
+
+/* ---------- Overlays ---------- */
+.ov{position:absolute;inset:0;pointer-events:none}
+#vignette{background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
+#koernung{opacity:.045;animation:korn .5s steps(4) infinite}
+@keyframes korn{0%{transform:translate(0,0)}25%{transform:translate(-40px,20px)}50%{transform:translate(30px,-30px)}75%{transform:translate(-20px,-40px)}}
+#schwarz{background:#000;opacity:0;transition:opacity .5s}
+#schwarz.an{opacity:1}
+#schwarz.langsam{transition:opacity 1.8s}
+#traumglow{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,rgba(255,230,190,.28) 0,rgba(255,210,150,.12) 45%,rgba(255,240,220,.55) 100%);mix-blend-mode:screen;backdrop-filter:blur(0px)}
+#traumrand{opacity:0;transition:opacity 1.6s;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);-webkit-mask-image:radial-gradient(ellipse at 50% 45%,transparent 38%,#000 80%);mask-image:radial-gradient(ellipse at 50% 45%,transparent 38%,#000 80%)}
+.traum #traumglow,.traum #traumrand{opacity:1}
+.traum #welt{filter:sepia(.35) saturate(1.25) brightness(1.1) blur(.6px)}
+.einfrieren #welt{filter:grayscale(.75) brightness(.78) contrast(.95)!important}
+.einfrieren .atmen,.einfrieren .drift,.einfrieren .schwenk,.einfrieren #licht,.einfrieren #koernung{animation-play-state:paused!important}
+.waermer #welt{filter:sepia(.32) saturate(1.3) brightness(1.08) hue-rotate(-10deg)!important;transition:filter 9s ease!important}
+#tunnel{opacity:0;transition:opacity .3s;background:radial-gradient(circle at 50% 50%,transparent var(--t,70%),#000 calc(var(--t,70%) + 12%))}
+#lider-o,#lider-u{position:absolute;left:-5%;width:110%;height:52%;background:#000;transition:transform 2.6s ease-in-out}
+#lider-o{top:0;border-radius:0 0 50% 50%/0 0 30% 30%;transform:translateY(-102%)}
+#lider-u{bottom:0;border-radius:50% 50% 0 0/30% 30% 0 0;transform:translateY(102%)}
+#lider.halb #lider-o{transform:translateY(-55%)}#lider.halb #lider-u{transform:translateY(55%)}
+#lider.zu #lider-o{transform:translateY(0)}#lider.zu #lider-u{transform:translateY(0)}
+#licht{opacity:0;transition:opacity 1s}
+#licht.an{opacity:1}
+#licht .l{position:absolute;width:800px;height:800px;border-radius:50%;filter:blur(60px);opacity:.2}
+#licht .l1{background:#ff2fa0;left:-200px;top:-300px;animation:l1 7s ease-in-out infinite alternate,puls .49s ease-out infinite}
+#licht .l2{background:#2f8bff;right:-250px;top:100px;animation:l2 9s ease-in-out infinite alternate,puls .49s ease-out infinite .245s}
+#licht .l3{background:#ffb22f;left:500px;bottom:-500px;animation:l3 6s ease-in-out infinite alternate,puls .98s ease-out infinite}
+@keyframes l1{to{transform:translate(700px,300px)}}@keyframes l2{to{transform:translate(-800px,200px)}}@keyframes l3{to{transform:translate(400px,-300px)}}
+@keyframes puls{0%{opacity:.3}100%{opacity:.08}}
+#blitz{background:#fff;opacity:0}
+#blitz.an{animation:blitz .35s ease-out}
+@keyframes blitz{0%{opacity:.8}100%{opacity:0}}
+#rufe .ruf{position:absolute;font:800 64px/1 system-ui,sans-serif;color:#fff;text-shadow:0 0 18px rgba(255,80,180,.9),0 3px 0 rgba(0,0,0,.4);animation:ruf 2.6s ease-out forwards;white-space:nowrap}
+@keyframes ruf{0%{opacity:0;transform:translateY(30px) scale(.8)}15%{opacity:1}100%{opacity:0;transform:translateY(-120px) scale(1.1)}}
+.lichterbox .p{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,160,.95) 0,rgba(255,200,110,.45) 35%,transparent 70%);mix-blend-mode:screen;animation:funkeln 2.4s ease-in-out infinite alternate}
+@keyframes funkeln{0%{opacity:.15}100%{opacity:.85}}
+#handylicht{opacity:0;transition:opacity .5s}
+#handylicht.kurz{animation:hlicht 2s ease-out}
+#handylicht.an{animation:hflacker 3.2s steps(1) infinite}
+@keyframes hlicht{0%{opacity:0}7%{opacity:1}22%{opacity:.82}40%{opacity:.95}100%{opacity:0}}
+@keyframes hflacker{0%{opacity:1}23%{opacity:.84}41%{opacity:.97}67%{opacity:.8}84%{opacity:1}}
+#handylicht.fern .g{display:none}
+#handylicht.fern .raum{background:radial-gradient(ellipse 45% 70% at -6% 58%,rgba(110,165,255,.26),rgba(80,130,255,.07) 55%,transparent 80%)}
+#handylicht .g{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(205,228,255,.62),rgba(120,175,255,.28) 45%,rgba(90,150,255,0));transform:scale(3.2)}
+#handylicht .raum{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at var(--hx,52%) var(--hy,66%),rgba(110,165,255,.20),rgba(80,130,255,.06) 50%,transparent 75%)}
+#handylicht.an{opacity:1}
+#fenster .w{position:absolute;background:#232a38;opacity:0;transition:opacity .4s}
+#fenster .w.aus{opacity:.96}
+#zettel{display:none;position:absolute;right:170px;top:120px;width:560px;padding:44px 40px;background:#f4ecd2;color:#222;font:600 40px/1.35 'Patrick Hand',"Segoe Print",cursive;transform:rotate(2.5deg);box-shadow:0 18px 40px rgba(0,0,0,.6);border-radius:3px}
+#zettel.an{display:block;animation:rein .6s ease}
+#tasche{display:none;position:absolute;right:210px;bottom:330px;width:150px;height:260px;border-radius:26px;background:linear-gradient(160deg,#9bc0ff,#3a5fa8);box-shadow:0 0 70px 25px rgba(120,170,255,.4);transform:rotate(-14deg)}
+#tasche b{position:absolute;right:-16px;top:-16px;background:#e33;color:#fff;font:700 34px/1 system-ui;padding:10px 14px;border-radius:30px}
+#tasche.an{display:block;animation:rein .4s}
+#grossuhr{display:none;position:absolute;left:0;right:0;top:330px;text-align:center;font:200 220px/1 system-ui,sans-serif;color:#ddd;letter-spacing:6px}
+#grossuhr.an{display:block}
+
+/* Heads-up-Banner (Handy liegt auf dem Tisch) */
+#banner{position:absolute;left:50%;top:40px;width:760px;margin-left:-380px;padding:24px 30px;border-radius:40px;background:rgba(28,28,30,.96);display:flex;gap:22px;align-items:center;transform:translateY(-180%);opacity:0;transition:transform .45s cubic-bezier(.2,.9,.3,1.2),opacity .3s;box-shadow:0 12px 40px rgba(0,0,0,.6)}
+#banner.an{transform:none;opacity:1}
+#banner .t{font:600 30px system-ui;color:#fff}#banner .x{font:400 28px system-ui;color:#c9c9cc;margin-top:4px}
+#anrufmini{display:none;position:absolute;left:50%;top:40px;margin-left:-300px;width:600px;padding:22px 30px;border-radius:40px;background:rgba(20,40,30,.9);color:#fff;font:500 32px system-ui;animation:pulsier 1s ease-in-out infinite;opacity:.85}
+#anrufmini.an{display:flex;align-items:center;gap:20px}
+@keyframes pulsier{50%{box-shadow:0 0 0 14px rgba(40,200,120,.15)}}
+
+/* ---------- Textbox ---------- */
+#textbox{position:absolute;left:150px;right:150px;bottom:40px;min-height:200px;padding:42px 60px 46px;border-radius:26px;background:linear-gradient(180deg,rgba(10,12,22,.74),rgba(6,8,16,.9));border:1px solid rgba(255,255,255,.08);box-shadow:0 16px 50px rgba(0,0,0,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transform:translateY(20px);transition:opacity .35s,transform .35s,left .5s,right .5s,bottom .5s}
+#textbox.an{opacity:1;transform:none}
+#textbox.schwarzmodus{background:none;border:none;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none;text-align:center}
+#name{position:absolute;left:44px;top:-30px;padding:8px 26px;border-radius:30px;font:700 30px system-ui;background:#2d3550;color:#fff;display:none;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+#name.an{display:block}
+#text{font:400 46px/1.42 system-ui,sans-serif;color:#f3f1ec;min-height:66px;white-space:pre-wrap}
+#text.gedanke{font-style:italic;color:rgba(235,232,225,.72)}
+#text.leise{font-size:34px;font-style:italic;color:rgba(235,232,225,.5)}
+#text.schrei{font-weight:800;font-size:52px;animation:wackel .12s linear 4}
+@keyframes wackel{25%{transform:translate(2px,-1px)}75%{transform:translate(-2px,1px)}}
+#weiter{position:absolute;right:38px;bottom:22px;font-size:30px;color:rgba(255,255,255,.55);opacity:0;animation:hops 1.1s ease-in-out infinite}
+#weiter.an{opacity:1}
+@keyframes hops{50%{transform:translateY(6px)}}
+#sperre{position:absolute;left:60px;right:60px;bottom:16px;height:4px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden;opacity:0}
+#sperre.an{opacity:1}#sperre i{display:block;height:100%;width:0;background:rgba(255,255,255,.45)}
+
+/* ---------- Wahl ---------- */
+#wahl{position:absolute;left:0;right:0;bottom:270px;display:flex;flex-direction:column;align-items:center;gap:22px;transition:all .5s}
+#wahl button{min-width:640px;max-width:1100px;padding:28px 50px;border-radius:60px;border:2px solid rgba(255,255,255,.28);background:rgba(15,18,30,.82);color:#fff;font:500 40px system-ui;cursor:pointer;backdrop-filter:blur(6px);animation:rein .35s ease both;transition:transform .15s,background .15s}
+#wahl button:active{transform:scale(.97);background:rgba(60,70,110,.9)}
+#wahl button.getippt{border-color:#00a884}
+#wahl button.wackelt{animation:nein .5s}
+@keyframes nein{20%,60%{transform:translateX(-18px)}40%,80%{transform:translateX(18px)}}
+@keyframes rein{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* Handy offen: Text links, Wahl rechts */
+.handyoffen #textbox{left:36px;right:1262px;bottom:40px;min-height:160px;padding:34px 36px 40px}
+.handyoffen #text{font-size:38px}
+.handyoffen #text.schrei{font-size:42px}
+.handyoffen #wahl{left:1268px;right:30px;bottom:60px;align-items:stretch}
+.handyoffen #wahl button{min-width:0;font-size:32px;padding:24px 28px}
+.handyoffen #welt{filter:brightness(.55) blur(2.5px)!important}
+.handyoffen.traum #welt{filter:brightness(.6) blur(3px) sepia(.3)!important}
+
+/* ---------- Topbar ---------- */
+#topbar{position:absolute;left:0;right:0;top:0;height:110px;display:flex;align-items:center;padding:0 30px;gap:18px;pointer-events:none}
+#topbar button{pointer-events:auto;width:78px;height:78px;border-radius:50%;border:none;background:rgba(0,0,0,.35);color:rgba(255,255,255,.75);font:400 34px system-ui;cursor:pointer}
+#topbar button.wackelt{animation:nein .5s}
+#uhr{margin-left:auto;font:300 54px/1 system-ui;color:rgba(255,255,255,.9);padding:12px 28px;border-radius:40px;background:rgba(0,0,0,.35);opacity:0;transition:opacity 1.6s;font-variant-numeric:tabular-nums;pointer-events:auto}
+#uhr.an{opacity:1}
+#uhr.springt{color:#fff;text-shadow:0 0 12px rgba(255,255,255,.5)}
+.handyoffen #uhr{opacity:.35}
+#toast{position:absolute;left:50%;top:130px;transform:translate(-50%,-30px);padding:22px 40px;border-radius:40px;background:rgba(20,20,24,.95);color:#fff;font:500 32px system-ui;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;gap:18px;align-items:center;white-space:nowrap}
+#toast.an{opacity:1;transform:translate(-50%,0)}
+#toast .ic{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#ffcf4a,#ff7a2f);display:flex;align-items:center;justify-content:center;font-size:32px}
+
+/* ---------- Kapitelkarte ---------- */
+#karte{position:absolute;inset:0;background:#000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 1s}
+#karte.an{opacity:1;pointer-events:auto}
+#karte div{font:300 56px/1.5 system-ui;color:#d8d8d8;letter-spacing:1px;text-align:center;max-width:1400px}
+
+/* ---------- Titel ---------- */
+#titel{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none}
+#titel.an{display:flex}
+#titel span{font:800 150px/1 'Bricolage Grotesque',system-ui;font-stretch:75%;font-variation-settings:'opsz' 96,'wdth' 75;text-transform:uppercase;white-space:nowrap;color:#eef2fb;letter-spacing:2px;text-shadow:0 0 60px rgba(120,170,255,.28);transition:all 2.2s cubic-bezier(.2,.8,.2,1)}
+
+/* ---------- Bildschirme (Start, Ende, Verlauf, Debug) ---------- */
+.schirm{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:34px;background:rgba(0,0,0,.92);z-index:50;text-align:center;padding:60px}
+.schirm.an{display:flex}
+.schirm h1{font:700 76px system-ui}.schirm h2{font:600 52px system-ui}
+.schirm p{font:400 38px/1.5 system-ui;color:#ccc;max-width:1400px}
+.schirm button{padding:26px 60px;border-radius:60px;border:2px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font:500 40px system-ui;cursor:pointer;transition:all .6s}
+#start{background:none}
+#start .ph{position:absolute;inset:0}
+#start .inhalt{position:relative;display:flex;flex-direction:column;align-items:center;gap:30px;background:rgba(0,0,0,.45);padding:60px 90px;border-radius:40px}
+#start .hinweis{font:500 44px system-ui;color:#fff}
+#start .klein{font:400 30px system-ui;color:#bbb;max-width:1100px}
+#start .tippen{font:400 36px system-ui;color:#fff;animation:hops 1.4s infinite}
+#verlauf{justify-content:flex-start;align-items:stretch;overflow:auto;text-align:left}
+#verlauf .zeile{font:400 34px/1.45 system-ui;color:#ddd;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+#verlauf .zeile b{color:#9fb3ff;margin-right:12px}
+#verlauf .zeile.g{font-style:italic;color:#aaa}
+#verlauf .zu{position:sticky;top:0;align-self:flex-end}
+.knoepfe{display:flex;gap:40px;align-items:center;justify-content:center}
+#stoppuhr table{font:400 32px system-ui;color:#ddd;border-collapse:collapse;margin:0 auto}
+#stoppuhr td{padding:6px 30px;border-bottom:1px solid rgba(255,255,255,.1)}
+#stoppuhr td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+#drehen{position:fixed;inset:0;background:#000;color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px;z-index:99;font:500 22px system-ui;text-align:center;padding:30px}
+#drehen .ic{font-size:64px;animation:dreh 2s ease-in-out infinite}
+@keyframes dreh{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@media (orientation:portrait){#drehen.aktiv{display:flex}}
+
+#debug{position:absolute;right:20px;top:120px;width:620px;max-height:900px;overflow:auto;background:rgba(0,0,0,.9);border:1px solid #444;border-radius:20px;padding:24px;font:400 24px/1.4 ui-monospace,monospace;color:#9f9;display:none;z-index:60}
+#debug.an{display:block}
+#debug select,#debug button,#debug input{font:400 24px system-ui;margin:4px 0;padding:8px 12px;border-radius:10px;border:1px solid #555;background:#222;color:#fff}
+#debug select{width:100%}
+#dbgknopf{display:none}
+
+.ruck{animation:ruck .45s ease-out}
+@keyframes ruck{0%{transform:none}30%{transform:translateX(-90px) rotate(-2deg) scale(1.05)}100%{transform:none}}
+.wackeln{animation:wackelbild .5s linear}
+@keyframes wackelbild{20%{transform:translate(6px,-3px)}40%{transform:translate(-6px,3px)}60%{transform:translate(4px,2px)}80%{transform:translate(-3px,-2px)}}
+
+.ph-halter,.ph-halter .ph{position:absolute;inset:0}
+
+/* ---- Runde 3: Rückblick ---- */
+#textbox.rueckblick{border-color:rgba(255,210,120,.45)}
+#textbox.rueckblick::before{content:'◀ Rückblick';position:absolute;right:40px;top:-24px;padding:4px 16px;border-radius:20px;background:rgba(255,210,120,.9);color:#222;font:600 22px system-ui}
+#textbox.rueckblick #text{opacity:.75}
+/* ---- Prüfungsschema ---- */
+#schema{display:none;position:absolute;left:50%;top:70px;width:760px;transform:translateX(-50%) rotate(-1.2deg);padding:40px 56px 34px;background:#f6f0dc;color:#222;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.55);font:500 40px/1.5 'Patrick Hand',"Segoe Print",cursive;z-index:6}
+#schema.an{display:block;animation:rein .5s ease}
+#schema h3{margin:0 0 14px;font:700 46px 'Patrick Hand',"Segoe Print",cursive;color:#1b3c8f;border-bottom:3px solid rgba(27,60,143,.35)}
+#schema ol{margin:0;padding-left:56px}
+#schema li{position:relative;padding:4px 0;transition:opacity .9s}
+#schema li::after{content:'';position:absolute;left:-118px;top:14px;width:40px;height:40px;border:3px solid #444;border-radius:6px}
+#schema li.ok::before{content:'✓';position:absolute;left:-114px;top:-8px;font:900 64px system-ui;color:#1b4fd1;z-index:1;animation:hakrein .25s ease-out}
+#schema li.blass::before{opacity:0;transition:opacity .9s}
+#schema .th{text-align:right;font:400 26px system-ui;color:#999;opacity:0}
+#schema.wartet .th{opacity:1;animation:hops 1.2s infinite}
+@keyframes hakrein{from{transform:scale(1.8);opacity:0}to{transform:none;opacity:1}}
+/* ---- Hauptmenü ---- */
+#menue{padding:0;background:#000}
+#menue .m-bild{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:brightness(.55) saturate(1.1);animation:mdrift 40s ease-in-out infinite alternate}
+@keyframes mdrift{from{transform:scale(1.04) translateX(-12px)}to{transform:scale(1.12) translateX(18px)}}
+#menue::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,transparent 30%,rgba(0,0,0,.75) 100%),linear-gradient(90deg,rgba(0,0,0,.8),rgba(0,0,0,.15) 55%,transparent)}
+#menue .m-inhalt{position:absolute;left:150px;top:0;bottom:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:26px;z-index:2;text-align:left}
+#menue h1{font:800 120px/1 system-ui;letter-spacing:-3px;margin:0;color:#fff;text-shadow:0 0 40px rgba(255,90,200,.35)}
+#menue .m-unter{font:400 34px system-ui;color:#c9c9d6;margin-bottom:30px}
+#menue .m-knoepfe{display:flex;flex-direction:column;gap:20px;align-items:flex-start}
+#menue .m-knoepfe button{min-width:460px;text-align:left;padding:24px 44px;font:600 42px system-ui;border-radius:22px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.18)}
+#menue .m-knoepfe .m-spielen{background:linear-gradient(90deg,#ff4fa3,#9a5cff);border:none;box-shadow:0 10px 40px rgba(255,79,163,.35)}
+#menue .m-enden{font:400 28px system-ui;color:#999;margin-top:20px}
+/* ---- Abzeichen ---- */
+.abz{display:grid;grid-template-columns:repeat(4,250px);gap:26px 34px;justify-content:center}
+.abz .b{display:flex;flex-direction:column;align-items:center;gap:12px;font:600 24px/1.2 system-ui;color:#eee;text-align:center}
+.abz .b .abk{width:118px;height:118px;flex:none;padding:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:58px;box-shadow:0 8px 24px rgba(0,0,0,.45),inset 0 -6px 0 rgba(0,0,0,.18),inset 0 4px 0 rgba(255,255,255,.25);border:4px solid rgba(255,255,255,.55)}
+.abz .b.nein{color:#666}.abz .b.nein .abk{background:#26262c!important;border-color:#3a3a42;font-size:44px;color:#555;box-shadow:none}
+#sammlung .abz{grid-template-columns:repeat(6,190px);gap:20px 16px}
+#sammlung .abz .b .abk{width:96px;height:96px;font-size:46px}
+#sammlung .abz .b{font-size:20px}
+#toast .ic.bunt{border-radius:50%;width:66px;height:66px;font-size:36px;border:3px solid rgba(255,255,255,.6)}
+/* ---- Endbildschirm ---- */
+#endname{background:#000;gap:20px}
+#endname .e-klein{font:500 30px system-ui;letter-spacing:8px;text-transform:uppercase;color:rgba(255,255,255,.6)}
+#endname .e-ic{width:200px;height:200px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:100px;border:6px solid rgba(255,255,255,.6);box-shadow:0 0 80px rgba(255,255,255,.18);animation:eic 1.2s cubic-bezier(.2,1.4,.4,1)}
+@keyframes eic{from{transform:scale(.3) rotate(-20deg);opacity:0}to{transform:none;opacity:1}}
+#endname h1{font:800 104px system-ui;margin:10px 0 0}
+#endname .e-nr{font:400 32px system-ui;color:rgba(255,255,255,.65)}
+#credits .c-text{font:400 32px/1.6 system-ui;color:#ccc;max-width:1300px}
+#credits .c-text b{color:#fff}
+#menuabz,#credits{background:rgba(6,6,10,.97);z-index:55}
+/* Vibration: Bild zittert kurz, Handy ruckelt */
+#kamera.zittern{animation:zittern .55s linear}
+@keyframes zittern{0%,100%{translate:0 0}10%{translate:-3px 1px}20%{translate:3px -1px}30%{translate:-3px 0}40%{translate:2px 1px}50%{translate:-2px -1px}60%{translate:3px 0}70%{translate:-2px 1px}80%{translate:2px 0}90%{translate:-1px 0}}
+#handy.zittert .geraet{animation:hzittern .6s linear}
+@keyframes hzittern{0%,100%{transform:none}15%{transform:translateX(-4px) rotate(-.6deg)}30%{transform:translateX(4px) rotate(.6deg)}45%{transform:translateX(-3px) rotate(-.4deg)}60%{transform:translateX(3px) rotate(.4deg)}75%{transform:translateX(-2px)}90%{transform:translateX(1px)}}
+
+/* Analoge Uhr */
+#analoguhr{position:absolute;left:50%;top:90px;width:560px;transform:translateX(-50%);opacity:0;transition:opacity 1s;z-index:4;pointer-events:none;text-align:center}
+#analoguhr.an{opacity:1}
+#analoguhr svg{width:560px;height:560px;filter:drop-shadow(0 0 30px rgba(255,255,255,.12))}
+#analoguhr .zg{transform-origin:200px 200px;transform-box:view-box}
+#analoguhr .ad{font:300 44px system-ui;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:4px}
+
+/* Rückblick-Box (Spiel pausiert) */
+#rueckbox{display:none;position:absolute;left:150px;right:150px;bottom:40px;min-height:200px;padding:42px 60px 46px;border-radius:26px;background:linear-gradient(180deg,rgba(26,22,10,.92),rgba(14,12,6,.96));border:2px solid rgba(255,210,120,.55);z-index:30;box-shadow:0 16px 50px rgba(0,0,0,.5)}
+#rueckbox.an{display:block}
+#rueckbox.links{left:36px;right:1262px}
+#rueckbox .rmark{position:absolute;right:40px;top:-24px;padding:4px 16px;border-radius:20px;background:rgba(255,210,120,.95);color:#222;font:600 22px system-ui}
+#rueckbox .rn{position:absolute;left:44px;top:-30px;padding:8px 26px;border-radius:30px;font:700 30px system-ui;color:#fff;display:none}
+#rueckbox .rt{font:400 44px/1.45 system-ui;color:#eee}
+#rueckbox .rt.gedanke{font-style:italic;color:#b9bfd0}
+#rueckbox .rt.leise{font-style:italic;color:#8f95a6;font-size:38px}
+
+/* ---- Papier-Zettel (Start, Menü, Ende) ---- */
+.papier{position:relative;background:#f4eedc;color:#23201a;clip-path:polygon(0.0% 0.4%,3.8% 0.2%,7.7% 0.6%,11.5% 0.2%,15.4% 0.1%,19.2% 0.6%,23.1% 1.5%,26.9% 1.3%,30.8% 1.2%,34.6% 0.4%,38.5% 0.9%,42.3% 0.4%,46.2% 0.3%,50.0% 0.2%,53.8% 0.3%,57.7% 1.5%,61.5% 1.3%,65.4% 1.3%,69.2% 1.3%,73.1% 0.3%,76.9% 0.5%,80.8% 1.0%,84.6% 1.2%,88.5% 1.4%,92.3% 1.4%,96.2% 0.1%,100.0% 1.0%,99.4% 3.8%,99.5% 7.7%,99.8% 11.5%,99.6% 15.4%,99.9% 19.2%,99.2% 23.1%,99.2% 26.9%,99.5% 30.8%,99.7% 34.6%,99.2% 38.5%,99.5% 42.3%,99.2% 46.2%,99.2% 50.0%,99.5% 53.8%,99.6% 57.7%,99.5% 61.5%,99.6% 65.4%,99.9% 69.2%,99.7% 73.1%,99.3% 76.9%,100.0% 80.8%,100.0% 84.6%,99.4% 88.5%,99.7% 92.3%,99.5% 96.2%,100.0% 98.8%,96.2% 99.1%,92.3% 97.4%,88.5% 99.5%,84.6% 98.9%,80.8% 99.5%,76.9% 98.4%,73.1% 99.3%,69.2% 99.1%,65.4% 98.1%,61.5% 99.2%,57.7% 98.6%,53.8% 97.7%,50.0% 99.7%,46.2% 99.8%,42.3% 99.4%,38.5% 98.0%,34.6% 98.4%,30.8% 99.4%,26.9% 99.2%,23.1% 99.5%,19.2% 98.8%,15.4% 99.9%,11.5% 98.2%,7.7% 97.7%,3.8% 97.6%,0.0% 98.1%,0.9% 96.2%,0.0% 92.3%,0.3% 88.5%,0.9% 84.6%,0.7% 80.8%,0.4% 76.9%,0.8% 73.1%,0.6% 69.2%,0.7% 65.4%,0.3% 61.5%,0.2% 57.7%,0.4% 53.8%,0.1% 50.0%,0.3% 46.2%,0.9% 42.3%,0.3% 38.5%,0.0% 34.6%,0.0% 30.8%,0.2% 26.9%,0.7% 23.1%,0.3% 19.2%,0.3% 15.4%,0.1% 11.5%,0.9% 7.7%,0.4% 3.8%);box-shadow:none;filter:drop-shadow(0 18px 40px rgba(0,0,0,.6))}
+.papier::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(180deg,transparent 0 58px,rgba(70,110,180,.16) 58px 60px),radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.5),transparent 60%),radial-gradient(ellipse at 80% 90%,rgba(150,120,60,.12),transparent 60%);pointer-events:none}
+.papier .hand{font-family:'Patrick Hand',"Segoe Print",cursive}
+#start .inhalt.papier{background:#f4eedc;padding:70px 100px 80px;border-radius:0;transform:rotate(-1.5deg)}
+#start .inhalt.papier .hinweis{color:#1b3c8f;font:700 50px 'Patrick Hand',"Segoe Print",cursive}
+#start .inhalt.papier .klein{color:#555}
+#start .inhalt.papier .tippen{color:#23201a;font:400 34px 'Patrick Hand',"Segoe Print",cursive}
+#menue .m-inhalt.papier{left:120px;top:90px;bottom:auto;padding:70px 90px 90px;transform:rotate(-1.8deg);gap:18px;width:720px}
+#menue .m-inhalt.papier h1{color:#1d1a14;text-shadow:none;font:700 92px/1.05 'Patrick Hand',"Segoe Print",cursive;letter-spacing:-1px}
+#menue .m-inhalt.papier .m-unter{color:#555;margin-bottom:10px}
+#menue .m-inhalt.papier .m-knoepfe button{min-width:0;background:none;border:none;box-shadow:none;padding:6px 0;color:#1b3c8f;font:600 46px 'Patrick Hand',"Segoe Print",cursive;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:10px}
+#menue .m-inhalt.papier .m-knoepfe .m-spielen{color:#c0263b;font-size:58px}
+#menue .m-inhalt.papier .m-knoepfe button::before{content:'→ '}
+#menue .m-inhalt.papier .m-enden{color:#666;font:400 28px 'Patrick Hand',"Segoe Print",cursive}
+#endname .e-zettel{display:flex;flex-direction:column;align-items:center;gap:16px;padding:70px 120px 90px;transform:rotate(1.4deg);min-width:820px}
+#endname .e-zettel .e-klein{color:#666}
+#endname .e-zettel h1{color:#1d1a14;font:700 110px 'Patrick Hand',"Segoe Print",cursive;margin:0}
+#endname .e-zettel .e-nr{color:#555;font:400 32px 'Patrick Hand',"Segoe Print",cursive}
+#endname .e-zettel .e-ic{position:absolute;right:50px;top:40px;width:150px;height:150px;font-size:74px;transform:rotate(14deg);border:6px double rgba(255,255,255,.75);box-shadow:0 0 0 4px rgba(0,0,0,.08);opacity:.92;animation:stempel .5s cubic-bezier(.3,1.6,.5,1) .6s both}
+@keyframes stempel{from{transform:rotate(14deg) scale(2.2);opacity:0}to{transform:rotate(14deg) scale(1);opacity:.92}}
+#endname .e-zettel button{background:none;border:none;color:#1b3c8f;font:600 44px 'Patrick Hand',"Segoe Print",cursive;text-decoration:underline;text-underline-offset:10px;padding:10px 0}
+
+/* dicke, etwas cartoonige Handschrift für Titel auf den Zetteln */
+#menue .m-inhalt.papier h1,#endname .e-zettel h1,#start .inhalt.papier .hinweis,#schema h3{font-family:'Permanent Marker','Patrick Hand',cursive!important;font-weight:400!important;letter-spacing:.5px}
+#menue .m-inhalt.papier h1{font-size:96px!important;line-height:1.05!important;color:#1d1a14}
+#menue .m-inhalt.papier .m-knoepfe button{font-family:'Permanent Marker','Patrick Hand',cursive!important;font-weight:400!important;font-size:44px!important}
+#menue .m-inhalt.papier .m-knoepfe .m-spielen{font-size:56px!important}
+#endname .e-zettel h1{font-size:120px!important}
+#endname .e-zettel button{font-family:'Permanent Marker','Patrick Hand',cursive!important;font-weight:400!important}
+#start .inhalt.papier .tippen,#menue .m-inhalt.papier .m-enden,#endname .e-zettel .e-nr,#endname .e-zettel .e-klein{font-family:'Patrick Hand',cursive!important;font-size:36px!important}
+#zettel{font-family:'Patrick Hand',cursive}
+
+#titel span i{font-style:italic}
+#stoppuhr{z-index:58}
+
+/* ================= V6 ================= */
+@font-face{font-family:'Bricolage Grotesque';src:url(fonts/bricolage.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap}
+#schwarz.schnell{transition:opacity .1s}
+#weiss{background:#fff;opacity:0}
+#weiss.an{animation:weissblitz .7s ease-out}
+@keyframes weissblitz{0%{opacity:.95}100%{opacity:0}}
+#zuruf{position:absolute;left:0;right:0;top:300px;text-align:center;pointer-events:none;opacity:0;font:800 170px/1 'Bricolage Grotesque',system-ui;font-stretch:75%;font-variation-settings:'opsz' 96,'wdth' 75;color:#fff;text-shadow:0 0 40px rgba(255,80,160,.8),0 0 90px rgba(255,160,60,.6);letter-spacing:4px}
+#zuruf.an{animation:zuruf 1.4s cubic-bezier(.2,.9,.3,1)}
+@keyframes zuruf{0%{opacity:0;transform:scale(.6) rotate(-4deg)}12%{opacity:1;transform:scale(1.08) rotate(2deg)}60%{opacity:.9;transform:scale(1) rotate(-1deg)}100%{opacity:0;transform:scale(1.25)}}
+/* Partylicht im Takt (normales Mischen statt Blend-Modes, läuft auch am Handy) */
+#licht .l{opacity:calc(.07 + var(--beat,0) * .2);filter:blur(80px)}
+/* fester Puls raus, die Helligkeit kommt jetzt aus dem Bass der Musik (--beat) */
+#licht .l1{animation:l1 7s ease-in-out infinite alternate}
+#licht .l2{animation:l2 9s ease-in-out infinite alternate}
+#licht .l3{animation:l3 6s ease-in-out infinite alternate}
+/* Funken der Wunderkerzen */
+.funken{position:absolute;inset:0;pointer-events:none}
+.funken i{position:absolute;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,250,225,.9),rgba(255,214,120,.45) 30%,rgba(255,180,80,0));animation:funkel .11s steps(2) infinite alternate}
+@keyframes funkel{0%{opacity:.55;transform:scale(.82) rotate(0)}50%{opacity:1;transform:scale(1.08) rotate(40deg)}100%{opacity:.7;transform:scale(.92) rotate(80deg)}}
+/* Haftnotiz am Schreibtisch */
+#haftnotiz{position:absolute;left:40px;bottom:330px;width:160px;padding:18px 12px 14px;background:linear-gradient(170deg,#ffe97a,#f6d53c);color:#2a2a2a;font:400 29px/1.05 'Permanent Marker','Patrick Hand',cursive;text-align:center;transform:rotate(-5deg);box-shadow:0 10px 20px rgba(0,0,0,.45);opacity:0;transition:opacity .6s;pointer-events:none}
+#haftnotiz::before{content:'';position:absolute;left:0;right:0;top:0;height:16px;background:rgba(0,0,0,.06)}
+#haftnotiz.an{opacity:.93}
+/* Autolicht über die Zimmerdecke */
+#autolicht i{position:absolute;top:-10%;left:-40%;width:28%;height:55%;background:linear-gradient(100deg,transparent,rgba(255,236,200,.10),transparent);transform:skewX(-25deg);opacity:0}
+#autolicht.faehrt i{animation:auto 3.8s ease-in-out}
+@keyframes auto{0%{left:-40%;opacity:0}15%{opacity:1}85%{opacity:1}100%{left:120%;opacity:0}}
+#partikel{width:100%;height:100%;pointer-events:none}
+/* Karteikarten */
+#karteikarten{position:absolute;left:0;right:0;top:110px;display:flex;justify-content:center;gap:44px;opacity:0;pointer-events:none;transition:opacity .5s}
+#karteikarten.an{opacity:1}
+.kk{width:470px;height:300px;perspective:1400px;transform:rotate(calc((var(--i) - 1) * 2.5deg)) translateY(30px);opacity:0;animation:kkrein .5s ease forwards;animation-delay:calc(var(--i) * .12s)}
+#karteikarten.einzeln .kk{transform:rotate(-2deg) translateY(30px)}
+@keyframes kkrein{to{opacity:1;transform:rotate(calc((var(--i) - 1) * 2.5deg))}}
+.kk-in{position:relative;width:100%;height:100%;transition:transform .55s cubic-bezier(.3,.8,.3,1);transform-style:preserve-3d}
+.kk.um .kk-in{transform:rotateY(180deg)}
+.kk-v,.kk-r{position:absolute;inset:0;padding:38px 36px;border-radius:10px;backface-visibility:hidden;-webkit-backface-visibility:hidden;box-shadow:0 18px 40px rgba(0,0,0,.5);display:flex;flex-direction:column;justify-content:center}
+.kk-v{background:#fbfaf4 repeating-linear-gradient(180deg,transparent 0 46px,rgba(80,130,200,.22) 46px 48px);border-top:10px solid #e2584f;font:400 40px/1.25 'Patrick Hand',cursive;color:#222}
+.kk-v small{position:absolute;right:20px;top:14px;font:600 20px 'Bricolage Grotesque',system-ui;color:#999}
+.kk-r{background:#eef5ff;transform:rotateY(180deg);font:400 38px/1.25 'Patrick Hand',cursive;color:#1b3c8f;border-top:10px solid #1b4fd1}
+.kk.dran .kk-v{outline:4px solid rgba(255,214,90,.9);outline-offset:6px;animation:hops 1.2s infinite}
+#karteikarten.wartet::after{content:'tippen';position:absolute;top:350px;left:50%;transform:translateX(-50%);padding:6px 18px;border-radius:20px;background:rgba(10,14,26,.6);font:500 26px 'Bricolage Grotesque',system-ui;color:#e6e9f2;animation:hops 1.2s infinite}
+/* Lernplan auf Papier */
+#lernplan{position:absolute;right:140px;top:90px;width:560px;padding:40px 50px 44px;background:#f6f0dc;color:#222;transform:rotate(2deg);box-shadow:0 22px 60px rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .6s}
+#lernplan.an{opacity:1}
+#lernplan h3{margin:0 0 18px;font:400 60px 'Permanent Marker',cursive;color:#1b3c8f}
+#lernplan ul{list-style:none;margin:0;padding:0}
+#lernplan li{position:relative;padding:6px 0 6px 74px;font:400 44px/1.3 'Patrick Hand',cursive}
+#lernplan li::before{content:'';position:absolute;left:8px;top:16px;width:38px;height:38px;border:3px solid #555;border-radius:5px}
+#lernplan li.ok::after{content:'✓';position:absolute;left:4px;top:-14px;font:900 66px system-ui;color:#1b4fd1;animation:hakrein .25s ease-out}
+/* Prüfungsschema: Kausalität dick */
+#schema li.dick::before{font-size:86px;top:-22px;text-shadow:2px 0 0 #1b4fd1,-1px 1px 0 #1b4fd1}
+/* ---------- Neue Kapitelkarte ---------- */
+#karte{position:absolute;inset:0;background:#0b1121;display:block;opacity:0;pointer-events:none;transition:opacity 1s}
+#karte.an,#karte.vorspann{opacity:1;pointer-events:auto}
+#karte .k-hg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(18px) brightness(.42) saturate(.85);opacity:0;transition:opacity 2.4s,transform 12s linear;transform:scale(1.06)}
+#karte.an .k-hg{opacity:.75;transform:scale(1)}
+#karte::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(11,17,33,.92) 0,rgba(11,17,33,.6) 55%,rgba(11,17,33,.25));pointer-events:none}
+#karte .k-inhalt{position:absolute;left:150px;top:50%;transform:translateY(-50%);z-index:1;opacity:0;transition:opacity 1s}
+#karte.an .k-inhalt{opacity:1}
+#karte.langsam .k-inhalt{transition:opacity 3.2s ease}
+#karte.langsam .k-hg{transition:opacity 4s,transform 12s linear}
+#karte .k-tag{font:600 34px 'Bricolage Grotesque',system-ui;letter-spacing:8px;text-transform:uppercase;color:#8d9ab5}
+#karte .k-uhr{margin:10px 0 18px;font:800 260px/1 'Bricolage Grotesque',system-ui;font-stretch:75%;font-variation-settings:'opsz' 96,'wdth' 75;letter-spacing:4px;color:#eef2fb;text-shadow:0 0 70px rgba(120,170,255,.28)}
+#karte .k-uhr span{display:inline-block;transform:translateY(.32em);opacity:0;filter:blur(6px)}
+#karte.an .k-uhr span{animation:ziffer .7s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes ziffer{to{transform:none;opacity:1;filter:none}}
+#karte .k-noch{display:inline-block;font:600 46px 'Bricolage Grotesque',system-ui;color:#ffa23c;letter-spacing:1px;font-variant-numeric:tabular-nums}
+#karte .k-noch.tick{animation:tick .16s ease-out}
+@keyframes tick{0%{transform:translateY(-6px);opacity:.6}100%{transform:none;opacity:1}}
+/* ---------- Schrift im Spiel ---------- */
+#text{font-family:'Bricolage Grotesque',system-ui,sans-serif;font-weight:400;font-size:46px;letter-spacing:.1px}
+#text.schrei{font-weight:800;font-stretch:80%;font-variation-settings:'wdth' 80;letter-spacing:.5px}
+#name{font:800 28px 'Bricolage Grotesque',system-ui;font-stretch:75%;font-variation-settings:'opsz' 48,'wdth' 75;text-transform:uppercase;letter-spacing:3px;padding:8px 24px 6px}
+#uhr{font-family:'Bricolage Grotesque',system-ui;font-weight:600;font-stretch:80%;font-variation-settings:'wdth' 80}
+#grossuhr{font-family:'Bricolage Grotesque',system-ui;font-weight:800;font-stretch:75%;font-variation-settings:'opsz' 96,'wdth' 75}
+#toast{font-family:'Bricolage Grotesque',system-ui}
+#textbox{border-radius:26px 26px 26px 26px}
+/* Wahl-Knöpfe: Glas-Blasen wie im Menü, alle gleich (keine Option bevorzugt) */
+#wahl button{min-width:620px;padding:22px 46px 20px;border-radius:26px;border-top-left-radius:8px;border:1px solid rgba(160,185,235,.22);background:rgba(20,26,42,.84);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font:500 40px/1.25 'Bricolage Grotesque',system-ui;box-shadow:0 14px 40px rgba(0,0,0,.45);transition:background .2s,border-color .2s,transform .15s}
+#wahl button:hover{background:rgba(40,50,74,.92);border-color:rgba(127,176,255,.55)}
+#wahl button:active{transform:scale(.97);background:rgba(50,62,92,.95)}
+#kamera.ruck{animation:kruck .45s cubic-bezier(.2,.9,.3,1)}
+@keyframes kruck{0%{transform:translate(0,0)}25%{transform:translate(-14px,6px)}55%{transform:translate(8px,-3px)}100%{transform:none}}
+
+/* ================= V7 ================= */
+:root{color-scheme:only light}
+@font-face{font-family:'Caveat';src:url(fonts/caveat.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Caveat';src:url(fonts/caveat-bold.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Reenie Beanie';src:url(fonts/reenie.woff2) format('woff2');font-display:swap}
+/* Die alte Klausur: liniertes Blatt, blaue Schrift, roter Korrekturrand (nach Philips Fotos) */
+#klausur{position:absolute;left:50%;top:18px;width:900px;height:790px;transform:translateX(-50%) rotate(1.4deg);opacity:0;pointer-events:none;transition:opacity .5s,transform .5s;filter:drop-shadow(0 26px 50px rgba(0,0,0,.6))}
+#klausur.an{opacity:1;transform:translateX(-50%) rotate(-1deg)}
+.kl-blatt{position:absolute;inset:0;background:#fbfaf6 repeating-linear-gradient(180deg,transparent 0 43px,#b7c6dc 43px 45px);background-position:0 100px;padding:30px 190px 0 70px;overflow:hidden;color:#1d3bb0;font:400 34px/45px 'Reenie Beanie','Caveat',cursive;forced-color-adjust:none}
+.kl-blatt::before{content:'';position:absolute;left:52px;top:0;bottom:0;width:2px;background:#e3a3a3}
+.kl-rand{position:absolute;right:170px;top:0;bottom:0;width:2px;background:#d6c9c9}
+.kl-kopf{font:400 34px 'Reenie Beanie',cursive;color:#1d3bb0;height:70px;display:flex;gap:30px;align-items:baseline}
+.kl-kopf span{opacity:.85}.kl-kopf em{margin-left:auto;font-style:normal;margin-right:-130px}
+.kl-blatt p{margin:0 0 0;text-indent:0;letter-spacing:.3px;transform:rotate(-.4deg)}
+.kl-blatt p:nth-child(odd){transform:rotate(.25deg)}
+.kl-blatt s{text-decoration-thickness:3px}
+.kl-welle{text-decoration:underline wavy #d0221d 2px;text-underline-offset:8px}
+.kl-mk{position:absolute;right:70px;font:700 44px 'Caveat',cursive;color:#d0221d;opacity:0}
+.m1{top:140px}.m2{top:196px}.m3{top:360px;right:40px}.m4{top:450px}.m5{top:540px}
+#klausur.an .kl-mk{animation:rotrein .35s ease forwards}
+#klausur.an .m1{animation-delay:.3s}#klausur.an .m2{animation-delay:.45s}#klausur.an .m3{animation-delay:.6s}#klausur.an .m4{animation-delay:.75s}#klausur.an .m5{animation-delay:.9s}
+.kl-rot{position:absolute;font:700 54px 'Caveat',cursive;color:#d0221d;opacity:0}
+.kl-rot.r1{right:28px;top:300px;font-size:44px;transform:rotate(-9deg)}
+.kl-rot.r2{left:110px;top:640px;transform:rotate(-3deg)}
+.kl-rot.r3{right:70px;top:620px;font-size:110px;transform:rotate(-8deg)}
+.kl-rot.r3::after{content:'';position:absolute;left:-20px;right:-20px;top:-10px;bottom:-6px;border:4px solid #d0221d;border-radius:50%;transform:rotate(4deg)}
+#klausur.an .kl-rot{animation:rotrein .55s ease forwards}
+#klausur.an .r1{animation-delay:1.2s}#klausur.an .r2{animation-delay:1.9s}#klausur.an .r3{animation-delay:2.6s}
+@keyframes rotrein{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+/* Haftnotiz und freie Rufe gibt es nicht mehr */
+#haftnotiz,#zuruf{display:none!important}
+/* Kapitelkarte: alles genau mittig */
+#karte .k-inhalt{left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:1600px}
+#karte::after{background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(11,17,33,.9),rgba(11,17,33,.55) 70%,rgba(11,17,33,.3))}
+/* Gesichts-Varianten über dem Bild */
+.ebene .innen img.ov-v{position:absolute;inset:auto;object-fit:fill;opacity:0;transition:opacity .22s ease;pointer-events:none}
+.ebene .innen img.ov-v.blink{transition:opacity .06s linear}
+.ebene .innen img.ov-v.zu,.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.fest{opacity:1}
+.ebene .innen img.ov-v.mimik{opacity:1;transition:opacity .5s ease}
+.ebene .innen img.ov-v.fest{transition:opacity .35s ease}
+.ebene .innen img.wechsel{opacity:0;transition:opacity 3.2s ease-in-out}
+.ebene .innen img.wechsel.an{opacity:1}
+/* Tanzfläche: Lichtkegel, Farbe im Takt, dunkle Gestalten vorne */
+#buehne.tanzflaeche #licht{opacity:1}
+#buehne.tanzflaeche #welt::after{content:'';position:absolute;inset:-20%;pointer-events:none;background:conic-gradient(from 200deg at 30% -10%,transparent 0 8deg,rgba(255,80,190,.16) 12deg,transparent 18deg 40deg,rgba(120,110,255,.14) 46deg,transparent 52deg),conic-gradient(from 140deg at 75% -10%,transparent 0 10deg,rgba(80,210,255,.13) 14deg,transparent 21deg);animation:kegel 7s ease-in-out infinite alternate;opacity:calc(.55 + var(--beat,0) * .9)}
+@keyframes kegel{from{transform:rotate(-6deg)}to{transform:rotate(6deg)}}
+#buehne.tanzflaeche #kamera{animation:wippen .66s ease-in-out infinite}
+@keyframes wippen{0%,100%{translate:0 0}50%{translate:0 4px}}
+#buehne.tanzflaeche #welt::before{content:'';position:absolute;z-index:3;left:-30%;bottom:-25%;width:30%;height:95%;border-radius:45% 45% 10% 10%;background:radial-gradient(ellipse at 50% 40%,rgba(5,5,12,.92),rgba(5,5,12,.6) 55%,transparent 72%);filter:blur(18px);animation:gestalt 11s linear infinite;pointer-events:none}
+@keyframes gestalt{0%{left:-35%}38%{left:115%}100%{left:115%}}
+#welt.spiegel .ebene.an{transform:scaleX(-1)}
+#weiss.kurz.an{animation:weissblitz .22s ease-out}
+#buehne.tanzflaeche #weiss{background:var(--farbe,#fff);mix-blend-mode:screen}
+.kl-p{font:400 30px 'Caveat',cursive;font-style:normal}
