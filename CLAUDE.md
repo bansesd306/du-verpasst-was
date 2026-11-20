@@ -18,6 +18,12 @@
 - Test-Link (privat): Artefakt-Slug `5d6f857a-23db-4da8-8501-add017b70699`. Alle Dateien aus `dist/` hochladen (Overlay-Bilder werden dynamisch geladen!). Öffentlicher Link V5 nur mit Philips Okay ersetzen.
 - Galerie: Artefakt-Slug `26fa13a7-d8e2-4e18-b7fb-15d961d90eaf`, Projekt-Doc `claude/bilder-liste.md`.
 
+## Story-Datei (Philips Textquelle, seit 20.11. abends)
+- Artefakt „Du verpasst was – Story“, Slug `9d2f17e7-d9d1-4e6e-ab48-6fecf368d0d8`: zeigt das ganze Skript lesbar nach Kapiteln und Szenen, Philip ändert Texte direkt darin.
+- Philips Änderungen liegen in der Artefakt-Datenbank: Sammlung `aenderungen` (Dokument `z<Zeile>`: original, originalText, neu, geloescht, danach) und `notizen` (pro Szene ein Auftrag in seinen Worten). Lesen mit db_list.
+- Beim Bau: Änderungen nach /tmp/aenderungen.json, `python3 tools/story_uebernehmen.py /tmp/aenderungen.json`, Bericht prüfen, Notizen umsetzen. Danach übernommene Dokumente nach `erledigt/…` verschieben und aus `aenderungen` löschen, `python3 tools/storydatei.py` und `story.json` neu ins Artefakt laden (Zeilennummern ändern sich).
+- Diese Änderungen sind Philips Okay. Zusätzlich ins Story-Dokument (Claude-Doc) eintragen, wenn sie dort vorkommen.
+
 ## Regeln (Philip)
 - Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
