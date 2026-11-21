@@ -365,3 +365,6 @@
   #bw.licht-aus #handy.blip .an,#bw.licht-aus #handyglow.blip{animation:none!important}
   #titelblock,#titel{transition:none}
 }
+/* Design-Durchgang 21.11.: die Bilanz ist die Pointe – größer und heller */
+#s-abz .bilanz{gap:6px;bottom:140px}
+#s-abz .bilanz p{font-size:36px;color:#dfe5f2}
