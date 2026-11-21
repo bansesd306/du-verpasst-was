@@ -1,0 +1,156 @@
+Das Skript trifft sein Thema bemerkenswert gut: Gerade weil FoMO auch auf der Party selbst (Mitlachen über fremde Insider, das verpasste Bad-Ereignis, die Afterparty-Gäste vom Konzert) und über kleine Spielmechaniken (verblassende Schema-Haken, Lähmung auf Weg B, Pizza-Umfrage) spürbar wird, statt es zu erklären, trägt die Grundidee hervorragend. Auch die Stimmen von Jonas, Mia und Lynn sind klar unterscheidbar, und der Kontrast auf dem Lynn-Weg („Jetzt verpass ich’s doch. … Egal.“, verschwindende Uhr) funktioniert emotional stark. Das größte Problem liegt derzeit nicht im Grundton, sondern in mehreren harten Verzweigungs- und Logikfehlern, die beim Zusammenführen der Wege entstehen. Besonders kritisch ist das +handy-Punktesystem, durch das das Ende „Blaues Licht“ auf Weg B und der Afterparty mathematisch unerreichbar ist, während der Doomscrolling-Weg sogar im Ende „Leiser“ landen kann. Hinzu kommen einige Zeit- und Wissensbrüche (falscher Wochentag im Abschied, Feuerlöscher-Wissen ohne Erwähnung, Rückwärtssprung der Uhr) sowie ein für eine Soziale-Arbeit-Abgabe riskanter Popkultur-Verweis. Auf dem Afterparty-Pfad droht das Spiel zudem deutlich unter die 14-Minuten-Grenze zu fallen, weil gleich mehrere Kapitel übersprungen werden. Wenn du die „Muss“- und die wichtigsten „Sollte“-Punkte bereinigst, steht hier eine wirklich starke, runde Abgabe.
+Muss geändert werden
+ * Szene == S4 und == B_UEBER
+   @benachrichtigung YouNow | drachenlordofficial | drachenlordofficial ist jetzt live 🔴
+   * Problem: „Drachenlord“ ist im Kontext von Sozialer Arbeit und Medienpsychologie massiv durch jahrelanges Cybermobbing und reale Belästigung vorbelastet; zudem ist YouNow im deutschsprachigen Raum faktisch tot. Bei Dozierenden kann das als geschmackloser Gag auf Kosten eines Mobbing-Betroffenen negativ aufstoßen.
+   * Vorschlag: Durch einen fiktiven, neutralen Livestream ersetzen: @benachrichtigung Twitch | kairo_live | kairo_live ist jetzt live 🔴.
+ * Szenen-übergreifend (LEISER_BIS, HIER_ODER_DA_BIS, Weg B, == BALKON, == ABSCHIED_A)
+   @setze LEISER_BIS = 2 / @setze HIER_ODER_DA_BIS = 5 sowie ? „Okay. Ich komm mit.“ -> ZU_TIM +handy
+   * Problem: Auf Weg B (dem extremen Handy-/Shutdown-Weg mit +9 Std. Bildschirmzeit) gibt es insgesamt nur 5 mögliche +handy-Wahlen (N_NACHSCHAUEN, M3_FRAGEN, M4_ANSCHAUEN, SN_AUF, SN_LESEN). Damit ist „Blaues Licht“ (> 5) auf Weg B und auf dem Afterparty-Weg (ebenfalls max. 5) rechnerisch unerreichbar, während man auf Weg B sogar „Leiser“ bekommen kann; gleichzeitig zählt der fatale Handy-Blick bei Lynn (BALKON_SCHAUEN, GM_DRAUF) gar nicht, ZU_TIM dagegen schon, obwohl dort kein Handy vorkommt.
+   * Vorschlag: +handy bei ZU_TIM streichen und stattdessen bei BALKON_SCHAUEN und GM_DRAUF setzen; auf Weg B bei S2_SCHLUMMER, S3_SCHLUMMER und S4_SCHLUMMER (oder einmalig @setze punkte + 3 in B_UEBER) Handy-Punkte addieren.
+ * Szene == BAD_WEG
+   @effekt schnittgewitter N32b N32e N32a […] Ich seh nur noch das Ende. / Jonas wischt sich die Augen. Keiner erklärt’s mir.
+   * Problem: Anders als in BAD_RAUS fehlt vor dem Schnittgewitter ein @bild N36. Da die Engine nach dem Schnittgewitter auf das vorherige Bild zurückspringt, steht die Figur während der Sätze über Jonas wieder im leeren Badezimmer (N16).
+   * Vorschlag: Direkt vor @effekt schnittgewitter die Zeile @bild N36 einfügen.
+ * Szenen == ABSCHIED_A und == ABSCHIED_O
+   Ich muss echt nach Hause. Morgen ist Lerntag. Der letzte vor Montag. / Morgen ist Lerntag. Der letzte vor Montag.
+   * Problem: Die Party ist am Freitagabend (um 00:40 beginnt gerade der Samstag), es folgen also noch zwei volle Lerntage (Samstag und Sonntag) – am Samstag sagt die Figur selbst „Zwei Tage noch.“.
+   * Vorschlag: Den Zusatz streichen: Ich muss echt nach Hause. Morgen ist Lerntag. (oder Zwei Tage noch.).
+ * Szene == HEIMWEG (tritt auf dem Weg GM_START -> GM_DRAUF -> ABSCHIED_A -> A_HEIM auf)
+   @wenn vielglueck / ~ Woher weiß sie das mit Montag?
+   * Problem: Wer über GM_START und GM_DRAUF in ABSCHIED_A landet, hat Lynn auf dem Balkon längst selbst vom dritten Versuch am Montag erzählt (Ich: „Frag mich Montag.“). Die Verwunderung passt nur, wenn er schon vor dem Gespräch weggeschaut hat (lynn=="geschaut").
+   * Vorschlag: Bedingung ändern in @wenn vielglueck && lynn=="geschaut".
+ * Szene == SAMSTAG (tritt auf dem Weg GM_START -> GM_DRAUF -> ABSCHIED_A -> A_HEIM auf)
+   @wenn typ=="party" && ankunft<=23:30 / Ich war da. / … !2 / Im Bad.
+   * Problem: Auf diesem Pfad ist typ=="party" und ankunft<=23:30, aber die Szene BAD wurde komplett übersprungen. Die Figur behauptet am Samstag, im Bad gewesen zu sein, obwohl sie die ganze Zeit auf dem Balkon war.
+   * Vorschlag: In BAD ein @setze imBad setzen und in SAMSTAG auf @wenn imBad prüfen (für lynn=="gm_geschaut" stattdessen: Ich war da. / … !2 / Draußen.).
+ * Szene == MONTAG (tritt auf allen AFTERPARTY-Wegen außer von SP1 auf)
+   @wenn typ=="party" || typ=="afterparty" / Ich denk an den Feuerlöscher.
+   * Problem: Wer nach BAD_WEG, BAD_RAUS oder GM_DRAUF über ABSCHIED_A auf die Afterparty geht, erlebt am Samstag SAMSTAG_1420 statt SAMSTAG – und das Wort „Feuerlöscher“ fällt auf diesem gesamten Durchgang kein einziges Mal.
+   * Vorschlag: In SAMSTAG_1420 zwei Gruppenchat-Zeilen ergänzen (@nachricht Lena: feuerlöscher-mann 🧯😂 und @nachricht Tim: legendär. einfach legendär), damit er den Begriff kennt.
+ * Szene == GM_START
+   Lynn: „Man verpasst immer irgendwas.“ / ~ Fragt sich nur, was. / Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
+   * Problem: ~ Fragt sich nur, was. ist als stummer innerer Gedanke markiert, aber Lynn antwortet direkt darauf, als könnte sie Gedanken lesen. Zudem klingt dieser direkte Schlagabtausch etwas zu sehr nach Thesen-Erklärung.
+   * Vorschlag: Entweder Ich: „Fragt sich nur, was.“ daraus machen – oder noch stärker: die beiden Zeilen nach Lynns Satz streichen und nach Lynn: „Man verpasst immer irgendwas.“ einfach Stille (… !4) stehen lassen.
+ * Szenen == S3 -> == S3_SCHLUMMER
+   @uhr mind 21:58 -> @effekt schlummer 20 -> @uhr 22:05
+   * Problem: Durch 20 Minuten Schlummern springt die Uhr auf 22:18 und wird danach bei Sophies Klopfen rückwärts auf 22:05 zurückgesetzt.
+   * Vorschlag: @uhr 22:05 entfernen (oder auf @uhr mind 22:20 setzen und S4 entsprechend auf @uhr mind 22:25 anpassen).
+ * Szenen == L10 -> == NACHT_ZUHAUSE (tritt auf Weg A nach „Lynn schreiben“ + „Schlafen“ auf)
+   @effekt einschlafen -> -> NACHT_ZUHAUSE -> Licht aus. Das Handy liegt neben dem Kopfkissen.
+   * Problem: In L10 (00:50) liegt er bereits im Dunkeln (N02D) und schläft mit Augen-zu-Effekt ein, ist in NACHT_ZUHAUSE aber sofort wieder wach, macht nochmal „Licht aus“, durchlebt eine Nachrichtenflut und schläft ein zweites Mal ein.
+   * Vorschlag: Am Ende von L10 @setze typ = "zuhause" setzen und direkt zu -> SAMSTAG springen (nach „Blau. … Fuck.“ ist das Ende der Nacht ohnehin stärker, wenn nichts mehr folgt).
+ * Szene == SO (Sonntag)
+   @ton bzzz_tisch -> @benachrichtigung Instagram | lena.mln | lena.mln hat 12 Fotos gepostet -> (Stories) -> @handy zu -> Es liegt da seit heute Morgen. Es ist still.
+   * Problem: Das Handy hat gerade eben vibriert und er hatte es in der Hand, um Lenas Fotos anzusehen – direkt danach widerspricht sich „Es liegt da seit heute Morgen. Es ist still.“ komplett.
+   * Vorschlag: Es liegt da seit heute Morgen. Es ist still. inklusive der Wahl Umdrehen / Liegen lassen vor Lenas Foto-Dump ziehen (oder danach formulieren: Ich dreh es wieder um. Still.).
+ * Szene == EN2 (Montagmorgen, Bildschirmzeit auf dem Lynn-Weg)
+   @wenn typ!="zuhause" / @wohlbefinden Du hast dein Handy letzte Woche {ZEIT_PARTY} Stunden mehr genutzt als zuvor.
+   * Problem: Auf dem glücklichen Weg (typ=="gluecklich") hat er das Handy bewusst ignoriert und stecken lassen, bekommt aber denselben +4 Stunden-Vorwurf wie der Party-/Afterparty-Weg.
+   * Vorschlag: Für typ=="gluecklich" eine eigene Abfrage einfügen, die {ZEIT_A} Stunden weniger zeigt (oder @wenn (typ=="zuhause" && weg=="A") || typ=="gluecklich").
+ * Szene == SB (Sonntag Aufholen auf Afterparty-Weg) & == SAMSTAG (Weg B)
+   @handy notizen / @handy notizen datum (SB) und @handy notizfix 9:00|11:00 (SAMSTAG)
+   * Problem: Wer über AFTERPARTY in SB landet, ohne je auf Weg B gewesen zu sein, ändert plötzlich eine „Lernplan Samstag“-Notiz, die er nie geschrieben hat. Auf Weg B wiederum steht nach dem Fix am Samstag „11:00 Schuldrecht AT“ zeitlich vor „10:00 BGB AT“.
+   * Vorschlag: Den Notizen-Block in SB in @wenn weg=="B" kapseln; in S2_SCHLUMMER die zweite Zeile auf 12:00 BGB AT setzen, damit 11:00 am Samstag chronologisch sauber bleibt.
+ * Szene == WEITER_ZUHAUSE (tritt nach „Doch bleiben.“ oder „Umdrehen“ auf)
+   @rufe L1 (Okay. Kapitel vier.) / @rufe S1 (Heute vor einem Jahr 🎂) und L9 (Wenn ich jetzt losgehe, bin ich kurz vor zwölf da.)
+   * Problem: Kehrt man von einem späteren Aufbruch nach Hause zurück, spielt S1 dieselbe Galerie-Erinnerung ein zweites Mal ab und L1 startet um 22:40 oder 23:43 erneut mit „Okay. Kapitel vier.“. Wer zudem in L5 (23:40) aufbricht und „Doch bleiben“ wählt, landet in L9 („kurz vor zwölf“, obwohl es mit 17 Min Weg schon 00:00 wäre) und kann zwischen L9 und AUFBRUCH endlos im Kreis laufen.
+   * Vorschlag: In L1 und S1 ein Erstbesuchs-Flag setzen (bei Rückkehr nur Wieder am Tisch. / Wieder im Bett.) und in AUFBRUCH bei uhr>=23:30 nach AUFBRUCH_BLEIBEN direkt zu L9_LICHTAUS springen.
+ * Szene == SO (Sonntag, Foto-Dump auf Party-Wegen ohne Küche)
+   @sonst -> @handy story lena.mln B12A / N13L / N32dA -> ~ Da. Das bin ich.
+   * Problem: Auf SP1 (Ankunft nach 23:30), GM (nur Balkon) und TANZ+BALKON (nie in der Küche) war die Figur beim Torten-Jubel (N32dA, 22:45) und in der Küche (N13L) gar nicht dabei; zudem sind die Bilder laut Bildliste aus seiner Perspektive aufgenommen, zeigen ihn also gar nicht.
+   * Vorschlag: Den Gedanken nur bei kueche auf die Bilder beziehen oder auf allen Party-Wegen ändern in ~ Ich war da. (ohne „Das bin ich.“).
+ * Szenen == W3 und == ANRUF_RAN (fehlende Töne)
+   @ton schief / Alter, singt der schief. (W3) und @ton jonas_lacht / @warte 2 (ANRUF_RAN)
+   * Problem: Laut TOENE-Liste sind schief und jonas_lacht aktuell leer. Ohne Audiodatei kommentiert die Figur in W3 schiefen Gesang, den Spielende gar nicht hören, und in ANRUF_RAN entstehen zwei Sekunden Stille am Telefon.
+   * Vorschlag: Beide Töne unbedingt vor Abgabe nachliefern – oder in W3 den Satz auf die Bässe/Stimmen umstellen (Ganz schön laut von hier.) und in ANRUF_RAN @warte 2 auf @warte 0.8 kürzen.
+Sollte geändert werden
+ * Szenen == GM_DRAUF -> == ABSCHIED_A
+   Lynn sagt nichts mehr. Sie schaut in die Stadt. -> -> ABSCHIED_A -> @bild N19 (strahlt) -> Lynn: „Du kommst doch noch mit zu Tim, oder?“
+   * Problem: Zwischen dem verletzten Schweigen auf dem Balkon und der strahlenden Lynn, die plötzlich aus dem Bad kommt, fehlen sowohl der räumliche Übergang als auch die emotionale Kontinuität.
+   * Vorschlag: Am Ende von GM_DRAUF zwei Zeilen einfügen (Nach einer Weile steht sie auf. „Ich geh mal rein.“ / Ich bleib noch kurz. Dann hol ich meine Jacke.) und in ABSCHIED_A bei lynn=="gm_geschaut" eine gedämpftere Begrüßung statt N19 (strahlend) wählen (Lynn: „Gehst du schon?“).
+ * Szene == M4B (Samstag, Entwürfe an Lynn)
+   @wenn typ=="party" / @entwurf du warst auf einmal weg
+   * Problem: Auf den Wegen ABSCHIED_O (nie mit ihr geredet), SP1 (sie war schon vor seiner Ankunft weg) und ABSCHIED_A (er hat sich gerade im Flur von ihr verabschiedet) stimmt „du warst auf einmal weg“ inhaltlich nicht.
+   * Vorschlag: Den Entwurf auf @wenn lynn=="geschaut" beschränken und für die übrigen Party-Wege z. B. @entwurf schade dass wir uns kaum gesehen haben einsetzen.
+ * Szenen == AFTERPARTY und == SAMSTAG_1420
+   Tim: oder soll ich eher sagen / zu lynn? 😏 / ~ … Der Wichser.
+   * Problem: Obwohl die Figur auf SP1 oder ABSCHIED_A oft gerade wegen Lynn zu Tim geht, kommt Lynn in AFTERPARTY mit keinem Wort vor. Gleichzeitig zieht Tim ihn am Samstag mit ihr auf, selbst wenn er auf SP1 nie mit ihr gesprochen hat und Tim davon nichts wissen kann.
+   * Vorschlag: In AFTERPARTY eine kurze Beobachtung einfügen (Drüben redet Lynn mit irgendwem. Ich komm nicht durch.) und Tims „zu lynn? 😏“ in SAMSTAG_1420 nur ausspielen @wenn balkon.
+ * Pfad == AFTERPARTY -> == SAMSTAG_1420 -> == SB (Spielzeit unter 14 Min.)
+   @wenn typ=="afterparty" -> -> SONNTAG (in SAMSTAGABEND)
+   * Problem: Wer in K1 direkt „Okay. Ich komm!“ wählt und (besonders über GM_DRAUF -> ZU_TIM) auf der Afterparty landet, überspringt Kapitel 2, die Freitagnacht, den Monolog, M2–M4B sowie den kompletten Samstagabend und bekommt nur den extrem kurzen Sonntag (SB). Dieser Durchgang rauscht im Schnelldurchlauf zum Ende und droht deutlich unter 14 Minuten zu bleiben.
+   * Vorschlag: Den SAMSTAGABEND für afterparty nicht komplett streichen, sondern eine kurze verkaterte Schreibtisch-Szene einbauen (Jonas schickt das Video „heute abend gehts weiter“, er starrt drauf und legt es weg), und SB um ein kurzes Lern-Scheitern (z. B. ein abgebrochenes Schema) ergänzen.
+ * Szene == MONOLOG (nur lynn=="gm")
+   Manchmal fühlt sich ein Moment einfach unendlich an. Obwohl man weiß, dass er irgendwann aufhören muss. Aber vielleicht vergisst man eben genau das. […] Ich glaub, heute hab ich mal nichts verpasst.
+   * Problem: Mit 23 Zeilen ist dieser Monolog viermal länger als alle anderen und buchstabiert die Kernbotschaft („im Moment sein“, „nichts verpasst“) fast erklärend aus, statt sie zwischen den Zeilen wirken zu lassen.
+   * Vorschlag: Die Reflexion in der Mitte radikal kürzen und die konkreten Bilder (Stolz, Krypto, zwei Uhr, Jonas’ Pizza) stehen lassen: Auf einmal war es zwei Uhr. Gar nicht gemerkt. / … !3 / Egal, was draus wird. / Und falls das alles schiefgeht … hab ich immer noch Jonas.
+ * Szene == K1 im Vergleich zu @verlauf
+   @verlauf Lenas Geburtstag 🎂 | Mittwoch | 17:12 | Lena: Freitag bei mir!! 🎂🎉 vs. Jonas: Ey, Lena feiert heute doch!! 🎉
+   * Problem: Laut Chatverlauf am Dienstag und Mittwoch stand die Feier längst fest – das „doch!!“ in Jonas’ Nachricht wirkt, als wäre die Party vorher abgesagt gewesen.
+   * Vorschlag: In K1 das „doch“ ändern in Ey, bei Lena geht’s gleich los!! 🎉 oder im @verlauf am Donnerstag eine kurze Nachricht von Lena ergänzen (bin halb krank, weiß noch nicht ob das morgen klappt 🤧).
+ * Szenen == B_SCHLUSS2 -> == NACHT_ZUHAUSE (tritt auf Weg B auf)
+   @fenster_aus Sa 01:30 -> -> NACHT_ZUHAUSE -> Jonas: WO BIST DU 😭 / mia.chaos ist jetzt live 🔴
+   * Problem: Weg B hatte um 22:45 bereits das große Benachrichtigungs-Gewitter mit Shutdown (B_UEBER) und endet um 01:30 nach dem Doomscrolling. Dass um 01:30 in NACHT_ZUHAUSE erneut eine komplette Party-Flut losgeht (zu einer Zeit, zu der die Party auf den anderen Wegen längst vorbei ist), doppelt sich dramaturgisch und passt zeitlich nicht.
+   * Vorschlag: In NACHT_ZUHAUSE bei weg=="B" das erneute Wegwisch-Gewitter überspringen und direkt nach dem Hinlegen zum Stummschalten und dem Phantom-Vibrieren (bzzz_dumpf) gehen.
+ * Szenen == SN_STUMM -> == SN_BETT (und Weg A in == SN_BETT)
+   @uhr So 22:40 -> Gruppe stummschalten. -> @ton! lichtschalter -> @uhr Mo 01:12 / Wecker auf 6:30. (Weg A: Wecker auf 6:30. -> @uhr Mo 07:05)
+   * Problem: Wer um 22:40 stummschaltet und sofort das Licht ausmacht, stellt unerklärt erst um 01:12 den Wecker; und auf Weg A wacht er nach einem 6:30-Wecker ohne Klingeln erst um 07:05 auf, was wie Verschlafen wirkt.
+   * Vorschlag: In SN_BETT den Wecker vor dem Zeitverlauf setzen (oder einen kurzen Satz fürs Wachliegen einfügen: Ich lieg da. Die Decke ist zu warm.), und auf Weg A @uhr Mo 07:05 in @uhr Mo 06:30 + kurzen Weckerton ändern.
+ * Szene == TANZ_RAND
+   ? „Mittanzen.“ -> TANZ_MIT / ? „Zurück an den Rand.“ -> TANZ_RAND -> -> TANZ_SHOW
+   * Problem: „Zurück an den Rand.“ hat im Moment keinerlei Textreaktion und spielt exakt dieselbe ekstatische Tanzflächen-Montage ab wie „Mittanzen.“ – die Wahl fühlt sich folgenlos an.
+   * Vorschlag: In TANZ_RAND zwei kurze Sätze vor -> TANZ_SHOW setzen: Ich geh zwei Schritte zurück. Becher in der Hand. / Alle Hände oben. Nur meine nicht.
+ * Szene == GM_STECKEN
+   ? „Gute Nacht sagen.“ -> !wackeln / ? „Lynn, willst du mich heiraten?“ -> GM_HEIRAT
+   * Problem: Nach dem ehrlichsten, ruhigsten Dialog des Spiels bricht der erzwungene Heirats-Witz die Stimmung – besonders für Spielende, die Mia auf der Tanzfläche nie getroffen haben und den Rückbezug gar nicht kennen.
+   * Vorschlag: Den Heirats-Spruch nur als dritte Option @wenn tanz freischalten, oder die wählbare Option etwas geerdeter formulieren (? „Klingt nach ’nem Plan.“ / Lynn: „Bis Montag.“), wenn man nicht bei Mia war.
+ * Szene == ENDE_TWIST („Hier oder da“ vs. „Blaues Licht“)
+   @wenn punkte<=LEISER_BIS -> ENDE_PIZZA / -> ENDE_TWIST
+   * Problem: Das Spiel zählt drei Enden, aber „Hier oder da“ und „Blaues Licht“ spielen exakt dieselbe Szene ENDE_TWIST ab. Wer für ein neues Ende nochmal spielt, erlebt bis zur Endkarte keinen Unterschied.
+   * Vorschlag: In ENDE_TWIST für punkte > HIER_ODER_DA_BIS („Blaues Licht“) eine kurze Verschärfung einbauen: Vor Jonas’ Nachricht laufen noch drei weitere Pings über den Sperrbildschirm, während die Prüfungshalle noch zu hören ist (Kaum draußen. Schon in der Hand.).
+ * Szenen == S4_SCHLUMMER und == B_UEBER
+   @handy kommentar tim.dreams | wo seid ihr 😭 (S4_SCHLUMMER) und Jonas: WO SEID IHR (B_UEBER)
+   * Problem: Tim ist laut Pizza-Umfrage und Küchenszene längst auf der Party, warum fragt er im Live „wo seid ihr“? Und in B_UEBER sind alle außer der Hauptfigur bereits dort, weshalb Jonas’ Plural nicht passt.
+   * Vorschlag: In S4_SCHLUMMER die Frage hannah.lt oder jule.mxn geben (und Tim stattdessen tim.dreams | gleich boxen auf anschlag 🔊 schreiben lassen); in B_UEBER Jonas’ Nachricht ändern in WO BIST DU oder BRO KOMM HER.
+ * Szene == SP1 im Vergleich zu == ABSCHIED_A
+   Jonas: „Lynn? Die ist vor zehn Minuten mit Tim los. Afterparty.“ (SP1, ausgelöst ab 23:31) vs. Tim und Lynn noch um 00:40 auf Lenas Party (ABSCHIED_A)
+   * Problem: Je nachdem, wann die Figur eintrifft, ist die Party entweder schon um 23:40 vorbei oder um 00:40 noch voll im Gange. Bei mehreren Durchgängen fällt dieser Zeitbruch auf.
+   * Vorschlag: In BAD_ENDE statt Sa 00:40 auf Sa 00:05 springen (und in GM_DRAUF ebenfalls auf Sa 00:05), oder in SP1 erst ab ankunft > 23:55 auslösen (und L5/L9 entsprechend 15 Minuten später ansetzen).
+ * Szene == M4_ANSCHAUEN (Samstag, Lynns Story N29 auf dem glücklichen Weg)
+   ? „Anschauen.“ -> M4_ANSCHAUEN +handy -> @handy story lynn N29 -> @warte 5 -> -> M4_DANACH
+   * Problem: Auf dem glücklichen Weg sind die zwei Becher auf dem Geländer ihr gemeinsamer Abend – es fühlt sich bestrafend an, dafür einen negativen +handy-Punkt zu bekommen, und das völlige Fehlen einer Reaktion verschenkt den emotionalen Treffer.
+   * Vorschlag: In M4_ANSCHAUEN bei typ=="gluecklich" den Punkt wieder abziehen (@setze punkte - 1) und eine kurze Zeile je nach Weg ergänzen (~ Zwei Uhr. auf gluecklich, sonst ~ Zwei Becher.).
+Kann geändert werden
+ * Szene == BAD_SCHAUEN
+   Kann ich nicht einfach an beiden Orten sein?
+   * Problem: Das Hin-und-her-Schauen zwischen Bad und Storys zeigt die Zerrissenheit bereits stark; der Satz spricht das FoMO-Konzept etwas zu theoretisch aus.
+   * Vorschlag: Konkreter und kürzer: Ich bin hier. Und irgendwie nicht.
+ * Szene == KUECHE
+   @bild N13L / Lena: „Du bist wirklich gekommen.“ -> -> HUB_ZURUECK
+   * Problem: Auf ihrem eigenen Geburtstag sagt Lena in der gesamten Küche nur diesen einen Satz ganz am Ende, und die Hauptfigur antwortet nicht einmal darauf.
+   * Vorschlag: Eine knappe Erwiderung anfügen (Ich: „Alles Gute, Lena.“ / Sie drückt mich kurz.), dann wirkt Lena greifbarer und der Szenenwechsel weniger abrupt.
+ * Szenen == ABSCHIED_A und == ABSCHIED_O
+   Tim: „Alle Wege führen nach –“ / Ich: „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“
+   * Problem: Das aggressive „scheiß Rom“ kommt ohne vorherigen Konflikt mit Tim etwas unvermittelt und schroff für die sonst eher trockene Ich-Stimme.
+   * Vorschlag: Ich: „Ich will aber nicht nach Rom. Ich will einfach nach Hause.“ – trockener, und das anschließende Gelächter passt besser.
+ * Szene == GM_START
+   Lynn: „Er sagt, über Nacht.“ (Lachen) / Ich erzähl ihr vom dritten Versuch.
+   * Problem: Der Sprung vom lockeren Spott über Tims Krypto-Pläne zu seinem größten persönlichen Druckpunkt wirkt ohne Brücke etwas plötzlich.
+   * Vorschlag: Einen Satz dazwischensetzen: Irgendwann fragt sie, warum ich fast nicht gekommen wär.
+ * Szene == K1 (S18_A, S18_B, S18_C)
+   ?? „Okay. Ich komm!“ -> S18_C -> sofort @handy zu
+   * Problem: Jonas ist in diesem Moment live im Chat („Hallo?? 😄“), aber auf keine der drei Antworten kommt eine kurze Reaktion von ihm.
+   * Vorschlag: Bei S18_C noch ein schnelles @nachricht! Jonas: JAAAA 🔥 vor dem Schließen (und bei S18_A ein kurzes Jonas: schwach man 😕 – das verstärkt den kleinen Stich beim Absagen).
+ * Szene == W0 (Weg zur Party)
+   @bild W0 langsam / @warte 1.5 / ? „Nach vorne gehen“ -> W1 / ? „Umdrehen“ -> UMDREHEN wenn !umgedreht
+   * Problem: Unmittelbar nach dem Kurzfilm poppen ohne Text vier identische „Nach vorne gehen / Umdrehen“-Wahlen hintereinander auf (W0 bis W3).
+   * Vorschlag: In W0 die Wahl weglassen und nach W0 direkt in W1 übergehen, sodass das Zögern erst einsetzt, sobald man die Musik hört.
+ * Szene == AO_BALKON
+   @bild N29b / … !3 -> -> HEIMWEG
+   * Problem: Da N29b (zwei Becher auf dem Geländer) in index.html noch fehlt und auf BALKON_LEER zurückfällt, sehen Spielende aktuell drei Sekunden lang nur einen leeren Balkon ohne Pointe.
+   * Vorschlag: Falls N29b nicht rechtzeitig fertig wird, eine knappe Zeile ergänzen: Zwei leere Becher auf dem Geländer. / … !2.
+ * Szene == SAMSTAG_1420
+   Irgendwas war halt immer.
+   * Problem: Als Klammer zwischen Prolog und schlechtem Montag-Ausgang ist der Satz extrem stark; auf dem Afterparty-Weg kommt er durch Samstagmittag aber dreimal vor und verliert am Montag an Wucht.
+   * Vorschlag: In SAMSTAG_1420 konkreter einsteigen, z. B.: Mein Mund schmeckt nach Pappe. oder Es ist zwei. Nachmittags.
