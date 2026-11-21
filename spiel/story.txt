@@ -420,6 +420,10 @@ Gleich fang ich an.
 == S2_SCHLUMMER
 @effekt schlummer 10
 Fünf Minuten.
+# V8.4: Griff zum Handy, um den Gedanken nicht zu haben
+~ Zweimal 5,0.
+… !2
+~ Nur kurz.
 @handy notizneu Lernplan Samstag
 @handy notizzeile 8:00 Schuldrecht AT
 @handy notizzeile 10:00 BGB AT
@@ -617,7 +621,13 @@ Unten lacht jemand auf der Straße.
 @loop wind aus
 @musik aus
 Fenster zu.
+# V8.4: Vorhang zu, ruhig, nicht traurig
+Den Vorhang auch.
+… !2
 @bild K10H
+~ Die da draußen haben ihren Abend.
+~ Ich hab meinen.
+… !2
 -> ANRUF_A
 
 == L4B_JACKE
@@ -1604,6 +1614,59 @@ Lynn: „Kein Kommentar.“
 @bild N14b gesicht
 @ton lynn_lacht2
 Wir lachen beide.
+# V8.4: der dritte Versuch, Lynns Schwester (Philip 21.11.)
+@bild N14 gesicht
+Lynn: „Warte.“
+Lynn: „Dritter Versuch.“
+Lynn: „Wie viele hast du denn noch?“
+Ich: „Letzter.“
+… !3
+@bild N14c gesicht
+Lynn: „Oh.“
+… !2
+Lynn: „Und dann stehst du hier. Auf einem Balkon.“
+Ich: „Sieht so aus.“
+Lynn: „Bereust du’s?“
+… !2
+Ich: „Frag mich Montag.“
+… !3
+Sie dreht ihren Becher in der Hand.
+Lynn: „Hm.“
+… !3
+Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
+Lynn: „Erste Beziehung. Drei Jahre.“
+Ich: „Shit.“
+… !2
+Lynn: „Und ich hatte noch drei Kapitel.“
+… !2
+Lynn: „Sie hat die ganze Nacht geheult.“
+Lynn: „Was hätte ich machen sollen.“
+… !2
+Lynn: „Hättest sie hören müssen.“
+… !3
+Ich: „Kann ich mir vorstellen.“
+@bild N14 gesicht
+Lynn: „Alle anderen waren an dem Abend am See.“
+Lynn: „Hab ich erst am nächsten Morgen gesehen. Auf Insta.“
+… !2
+Lynn: „War mir egal.“
+Lynn: „Bestanden hab ich trotzdem. Knapp.“
+… !2
+Ich: „Okay. Und ich bin auf eine Party gegangen.“
+Ich: „Bisschen was anderes, oder?“
+@bild N14d gesicht
+Lynn: „Bisschen.“
+… !3
+@bild N14 gesicht
+Ich: „Ich hatte nur so ein Gefühl.“
+… !3
+Lynn: „Man verpasst immer irgendwas.“
+~ Fragt sich nur, was.
+@bild N14d gesicht
+Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
+… !2
+Lynn: „… Naja.“
+… !4
 @bild N34 langsam
 @effekt waermer
 @musik aus langsam
@@ -2482,6 +2545,11 @@ Ich leg das Handy weg. Zwei Tage noch.
   @karteikarten aus
   … !2
   ~ Montag.
+  @wenn typ=="gluecklich"
+    ~ Letzter.
+  @sonst
+    ~ Meine Entscheidung.
+  @ende
   @loop lampe aus
 @ende
 -> SONNTAG

@@ -521,3 +521,8 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @media (prefers-reduced-motion:reduce){.bettatmen{animation:none;transform:scale(1.035)}}
 /* Platz für den festen Vollbild-Knopf oben rechts (V8.2) */
 #topbar{padding-right:150px}
+
+/* Handy-Knopf (V8.4): selbst aufs Handy schauen */
+#handyknopf{transition:opacity .35s}
+#handyknopf svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;vertical-align:middle}
+#handyknopf.aus{opacity:0;pointer-events:none}

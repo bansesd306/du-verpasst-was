@@ -531,6 +531,11 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 /* Platz für den festen Vollbild-Knopf oben rechts (V8.2) */
 #topbar{padding-right:150px}
 
+/* Handy-Knopf (V8.4): selbst aufs Handy schauen */
+#handyknopf{transition:opacity .35s}
+#handyknopf svg{width:38px;height:38px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;vertical-align:middle}
+#handyknopf.aus{opacity:0;pointer-events:none}
+
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 #handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,.85,.25,1);z-index:5}
 #handy.an{transform:none}
@@ -1551,6 +1556,10 @@ Gleich fang ich an.
 == S2_SCHLUMMER
 @effekt schlummer 10
 Fünf Minuten.
+# V8.4: Griff zum Handy, um den Gedanken nicht zu haben
+~ Zweimal 5,0.
+… !2
+~ Nur kurz.
 @handy notizneu Lernplan Samstag
 @handy notizzeile 8:00 Schuldrecht AT
 @handy notizzeile 10:00 BGB AT
@@ -1748,7 +1757,13 @@ Unten lacht jemand auf der Straße.
 @loop wind aus
 @musik aus
 Fenster zu.
+# V8.4: Vorhang zu, ruhig, nicht traurig
+Den Vorhang auch.
+… !2
 @bild K10H
+~ Die da draußen haben ihren Abend.
+~ Ich hab meinen.
+… !2
 -> ANRUF_A
 
 == L4B_JACKE
@@ -2735,6 +2750,59 @@ Lynn: „Kein Kommentar.“
 @bild N14b gesicht
 @ton lynn_lacht2
 Wir lachen beide.
+# V8.4: der dritte Versuch, Lynns Schwester (Philip 21.11.)
+@bild N14 gesicht
+Lynn: „Warte.“
+Lynn: „Dritter Versuch.“
+Lynn: „Wie viele hast du denn noch?“
+Ich: „Letzter.“
+… !3
+@bild N14c gesicht
+Lynn: „Oh.“
+… !2
+Lynn: „Und dann stehst du hier. Auf einem Balkon.“
+Ich: „Sieht so aus.“
+Lynn: „Bereust du’s?“
+… !2
+Ich: „Frag mich Montag.“
+… !3
+Sie dreht ihren Becher in der Hand.
+Lynn: „Hm.“
+… !3
+Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
+Lynn: „Erste Beziehung. Drei Jahre.“
+Ich: „Shit.“
+… !2
+Lynn: „Und ich hatte noch drei Kapitel.“
+… !2
+Lynn: „Sie hat die ganze Nacht geheult.“
+Lynn: „Was hätte ich machen sollen.“
+… !2
+Lynn: „Hättest sie hören müssen.“
+… !3
+Ich: „Kann ich mir vorstellen.“
+@bild N14 gesicht
+Lynn: „Alle anderen waren an dem Abend am See.“
+Lynn: „Hab ich erst am nächsten Morgen gesehen. Auf Insta.“
+… !2
+Lynn: „War mir egal.“
+Lynn: „Bestanden hab ich trotzdem. Knapp.“
+… !2
+Ich: „Okay. Und ich bin auf eine Party gegangen.“
+Ich: „Bisschen was anderes, oder?“
+@bild N14d gesicht
+Lynn: „Bisschen.“
+… !3
+@bild N14 gesicht
+Ich: „Ich hatte nur so ein Gefühl.“
+… !3
+Lynn: „Man verpasst immer irgendwas.“
+~ Fragt sich nur, was.
+@bild N14d gesicht
+Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
+… !2
+Lynn: „… Naja.“
+… !4
 @bild N34 langsam
 @effekt waermer
 @musik aus langsam
@@ -3613,6 +3681,11 @@ Ich leg das Handy weg. Zwei Tage noch.
   @karteikarten aus
   … !2
   ~ Montag.
+  @wenn typ=="gluecklich"
+    ~ Letzter.
+  @sonst
+    ~ Meine Entscheidung.
+  @ende
   @loop lampe aus
 @ende
 -> SONNTAG
@@ -4310,7 +4383,7 @@ const FILME = { weg: 'vid/weg.mp4' };
   <div id="wahl"></div>
   <div id="rueckbild"></div><div id="rueckbox"><div class="rmark">◀ Rückblick · tippen = weiter</div><div class="rn"></div><div class="rt"></div></div>
   <div id="textbox"><div id="name"></div><div id="text"></div><div id="weiter">▼</div><div id="sperre"><i></i></div></div>
-  <div id="topbar"><button id="zurueckknopf" title="Zurück">⏪</button><button id="verlaufknopf" title="Verlauf">☰</button><div id="uhr"></div><button id="dbgknopf">🐞</button></div>
+  <div id="topbar"><button id="zurueckknopf" title="Zurück">⏪</button><button id="verlaufknopf" title="Verlauf">☰</button><button id="handyknopf" class="aus" title="Aufs Handy schauen" aria-label="Aufs Handy schauen"><svg viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.5 18.5h3"/></svg></button><div id="uhr"></div><button id="dbgknopf">🐞</button></div>
   <div id="karte"><div class="k-hg"></div><div class="k-inhalt"><div class="k-tag"></div><div class="k-uhr"></div><div class="k-noch"></div></div></div>
   <div id="toast"></div>
   <div id="debug"></div>
@@ -4404,7 +4477,7 @@ const FILME = { weg: 'vid/weg.mp4' };
   <section class="schirm2" id="z-s-abz">
    <div class="kopf"><h2 class="gross" id="z-a-titel">Abzeichen</h2><span class="zaehler" id="z-zaehler"></span></div>
    <div id="z-raster"></div>
-   <div class="bilanz" id="z-bilanz"><p id="z-p-enden"></p><p id="z-p-entsch"></p></div>
+   <div class="bilanz" id="z-bilanz"><p id="z-p-enden"></p><p id="z-p-entsch"></p><p id="z-p-handy"></p></div>
    <div class="knopfreihe nur-lauf">
     <button class="knopf warm" type="button" id="z-k-nochmal"></button>
     <button class="knopf" type="button" id="z-k-beenden"></button>
@@ -5460,10 +5533,15 @@ const Rahmen = (() => {
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
       $('p-entsch').innerHTML = 'Also auch noch nichts verpasst. Noch.';
+      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; }
     } else {
       $('p-enden').innerHTML = offen > 0 ? T('enden_verpasst', 'Du hast {n} von 3 Enden verpasst. Schade.').replace('{n} von 3 Enden', '<b>{n} von 3 Enden</b>').replace('{n}', offen) : 'Du hast alle Enden gesehen. Und trotzdem.';
       const [nie, gesamt] = api.entscheidungen();
       $('p-entsch').innerHTML = T('entscheidungen', 'Du hast {x} von {y} Entscheidungen nie getroffen.').replace('{x} von {y} Entscheidungen', '<b>{x} von {y} Entscheidungen</b>').replace('{x}', nie).replace('{y}', gesamt);
+      // V8.4: wie oft man von sich aus aufs Handy geschaut hat
+      const bl = api.blick ? api.blick() : null, ph = $('p-handy');
+      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
+        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');
@@ -5739,6 +5817,34 @@ const Spiel = (() => {
     if (tippWarter) tippWarter();
   }
   B.addEventListener('pointerdown', aufTippen);
+
+  // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
+  // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
+  const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
+  const blickKnopf = $('#handyknopf');
+  function blickMoeglich() {
+    return !(window.Rahmen && Rahmen.sichtbar) && !Handy.offen && rueckPos < 0 && !wahlEl.querySelector('button')
+      && !B.classList.contains('traum') && aktBild && aktBild.code !== 'film'
+      && !$('#schwarz').classList.contains('an') && !$('#karte').classList.contains('an');
+  }
+  function blickAuf() {
+    blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
+    Ton.spiele('display_klick');
+    haendeTausch('sperr'); Handy.sperr();
+    if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
+  }
+  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
+  ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
+  blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
+  // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
+  B.addEventListener('pointerdown', e => {
+    if (!blick.offen || e.target.closest('#handyknopf')) return;
+    e.stopPropagation(); e.preventDefault();
+    if (e.target.closest('#handy') && Handy.app === 'sperr' && !(aktBild && aktBild.stimmung === 'pruefung')) { Handy.liste(); Ton.spiele('display_klick'); return; }
+    blickZu();
+  }, true);
+  B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  setInterval(() => blickKnopf.classList.toggle('aus', !(blick.offen || blickMoeglich())), 250);
 
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
@@ -6267,6 +6373,7 @@ const Spiel = (() => {
   // ---------------- Befehle ----------------
   async function befehl(ins) {
     const a = ersetze(ins.arg || ''); const teile = a.split(/\s+/).filter(Boolean);
+    if (/^(benachrichtigung|nachricht!?|foto|video|schreibt|tippe)$/.test(ins.name)) { blick.neu++; if (blick.offen) { blick.offen = false; Handy.zu(); } }
     switch (ins.name) {
       case 'setze': {
         const m = a.match(/^([\wÄÖÜäöüß]+)\s*(=|\+|-)?\s*(.*)$/); if (!m) break;
@@ -6370,11 +6477,13 @@ const Spiel = (() => {
   function haendeTausch(was) {
     if (!aktBild) return;
     const zu = was === 'zu' || was === 'weg';
-    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'schnitt');
-    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'schnitt');
+    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'geste');
+    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'geste');
   }
   async function handyBefehl(t, a) {
     const was = t[0];
+    if (blick.offen) { blick.offen = false; Handy.zu(); }
+    if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
     switch (was) {
       case 'sperr': Handy.sperr(); zeigeTextbox(false); await warte(.5); break;
@@ -6483,6 +6592,7 @@ const Spiel = (() => {
   function grundzustand() {
     V = { punkte: 0, besucht: 0, lynn: '', weg: '', typ: '', ankunft: 0, aufbruch: 0, abmarsch: 0, uhr: zeit('20:04'), uhr_zeigen: false };
     verlauf = []; kapitelZeiten = []; pfad = []; pfadPlus = false; abzNeu = []; abzQueue = []; stack = [];
+    blick.offen = false; blick.zahl = 0; blick.leer = 0; blick.neu = 0;
     welt.innerHTML = ''; aktBild = null; party(false); effekt('alles_aus');
     ['#schwarz', '#karte', '#zettel', '#banner', '#anrufmini', '#grossuhr', '#titel', '#toast', '#klausur', '#karteikarten', '#lernplan', '#handylicht'].forEach(s => $(s).classList.remove('an'));
     $('#karte').classList.remove('vorspann', 'langsam'); ersteKarte = true; letzterCountdown = null; pModus = '';
@@ -6628,7 +6738,7 @@ const Spiel = (() => {
     const ios = /iPhone|iPod/.test(navigator.userAgent);
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
-      TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ,
+      TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {

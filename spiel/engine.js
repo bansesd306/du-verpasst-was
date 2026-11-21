@@ -151,6 +151,34 @@ const Spiel = (() => {
   }
   B.addEventListener('pointerdown', aufTippen);
 
+  // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
+  // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
+  const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
+  const blickKnopf = $('#handyknopf');
+  function blickMoeglich() {
+    return !(window.Rahmen && Rahmen.sichtbar) && !Handy.offen && rueckPos < 0 && !wahlEl.querySelector('button')
+      && !B.classList.contains('traum') && aktBild && aktBild.code !== 'film'
+      && !$('#schwarz').classList.contains('an') && !$('#karte').classList.contains('an');
+  }
+  function blickAuf() {
+    blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
+    Ton.spiele('display_klick');
+    haendeTausch('sperr'); Handy.sperr();
+    if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
+  }
+  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
+  ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
+  blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
+  // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
+  B.addEventListener('pointerdown', e => {
+    if (!blick.offen || e.target.closest('#handyknopf')) return;
+    e.stopPropagation(); e.preventDefault();
+    if (e.target.closest('#handy') && Handy.app === 'sperr' && !(aktBild && aktBild.stimmung === 'pruefung')) { Handy.liste(); Ton.spiele('display_klick'); return; }
+    blickZu();
+  }, true);
+  B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  setInterval(() => blickKnopf.classList.toggle('aus', !(blick.offen || blickMoeglich())), 250);
+
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
   let lynnHand = 0;
@@ -678,6 +706,7 @@ const Spiel = (() => {
   // ---------------- Befehle ----------------
   async function befehl(ins) {
     const a = ersetze(ins.arg || ''); const teile = a.split(/\s+/).filter(Boolean);
+    if (/^(benachrichtigung|nachricht!?|foto|video|schreibt|tippe)$/.test(ins.name)) { blick.neu++; if (blick.offen) { blick.offen = false; Handy.zu(); } }
     switch (ins.name) {
       case 'setze': {
         const m = a.match(/^([\wÄÖÜäöüß]+)\s*(=|\+|-)?\s*(.*)$/); if (!m) break;
@@ -781,11 +810,13 @@ const Spiel = (() => {
   function haendeTausch(was) {
     if (!aktBild) return;
     const zu = was === 'zu' || was === 'weg';
-    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'schnitt');
-    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'schnitt');
+    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'geste');
+    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'geste');
   }
   async function handyBefehl(t, a) {
     const was = t[0];
+    if (blick.offen) { blick.offen = false; Handy.zu(); }
+    if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
     switch (was) {
       case 'sperr': Handy.sperr(); zeigeTextbox(false); await warte(.5); break;
@@ -894,6 +925,7 @@ const Spiel = (() => {
   function grundzustand() {
     V = { punkte: 0, besucht: 0, lynn: '', weg: '', typ: '', ankunft: 0, aufbruch: 0, abmarsch: 0, uhr: zeit('20:04'), uhr_zeigen: false };
     verlauf = []; kapitelZeiten = []; pfad = []; pfadPlus = false; abzNeu = []; abzQueue = []; stack = [];
+    blick.offen = false; blick.zahl = 0; blick.leer = 0; blick.neu = 0;
     welt.innerHTML = ''; aktBild = null; party(false); effekt('alles_aus');
     ['#schwarz', '#karte', '#zettel', '#banner', '#anrufmini', '#grossuhr', '#titel', '#toast', '#klausur', '#karteikarten', '#lernplan', '#handylicht'].forEach(s => $(s).classList.remove('an'));
     $('#karte').classList.remove('vorspann', 'langsam'); ersteKarte = true; letzterCountdown = null; pModus = '';
@@ -1039,7 +1071,7 @@ const Spiel = (() => {
     const ios = /iPhone|iPod/.test(navigator.userAgent);
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
-      TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ,
+      TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {

@@ -19,7 +19,7 @@ buehne = f'''<div id="rahmen"><div id="buehne">
   <div id="wahl"></div>
   <div id="rueckbild"></div><div id="rueckbox"><div class="rmark">◀ Rückblick · tippen = weiter</div><div class="rn"></div><div class="rt"></div></div>
   <div id="textbox"><div id="name"></div><div id="text"></div><div id="weiter">▼</div><div id="sperre"><i></i></div></div>
-  <div id="topbar"><button id="zurueckknopf" title="Zurück">⏪</button><button id="verlaufknopf" title="Verlauf">☰</button><div id="uhr"></div><button id="dbgknopf">🐞</button></div>
+  <div id="topbar"><button id="zurueckknopf" title="Zurück">⏪</button><button id="verlaufknopf" title="Verlauf">☰</button><button id="handyknopf" class="aus" title="Aufs Handy schauen" aria-label="Aufs Handy schauen"><svg viewBox="0 0 24 24"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.5 18.5h3"/></svg></button><div id="uhr"></div><button id="dbgknopf">🐞</button></div>
   <div id="karte"><div class="k-hg"></div><div class="k-inhalt"><div class="k-tag"></div><div class="k-uhr"></div><div class="k-noch"></div></div></div>
   <div id="toast"></div>
   <div id="debug"></div>
