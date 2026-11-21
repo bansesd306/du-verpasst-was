@@ -156,8 +156,9 @@ const Spiel = (() => {
   let lynnHand = 0;
   async function lynnGeste(ins) {
     if (!aktBild || !['N14', 'N14r'].includes(aktBild.code) || Handy.offen) return;
-    let ziel = 'N14'; if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; ziel = lynnHand ? 'N14r' : 'N14'; }
-    if (ziel !== aktBild.code) await zeigeBild(ziel, 'pose');
+    // V8.2: seltener und langsamer wechseln (nur jede dritte Lynn-Zeile mit Händen, weiche Überblendung)
+    let ziel = 'N14'; if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; ziel = lynnHand === 2 ? 'N14r' : 'N14'; }
+    if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
   let textZahl = 0;
   async function text(ins) {
@@ -277,7 +278,7 @@ const Spiel = (() => {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null;
     if (e.datei) { const ok = lade(e.datei); await Promise.race([ok, new Promise(r => setTimeout(r, 2500))]); }
     $('#schwarz').classList.remove('an', 'langsam');
-    if (modus !== 'gesicht' && modus !== 'pool' && modus !== 'pose') { zeigeTextbox(false); kamera.classList.remove('zoomrein'); kamera.style.transform = ''; poolAktiv = null; }
+    if (modus !== 'gesicht' && modus !== 'pool' && modus !== 'pose' && modus !== 'geste') { zeigeTextbox(false); kamera.classList.remove('zoomrein'); kamera.style.transform = ''; poolAktiv = null; }
     if (modus === 'traum') { B.classList.add('traum'); Ton.spiele('flashback'); }
     const alt = [...welt.querySelectorAll('.ebene')];
     const neu = document.createElement('div'); neu.className = 'ebene';
@@ -298,7 +299,7 @@ const Spiel = (() => {
     huelle.appendChild(innen); neu.appendChild(huelle);
     if (modus === 'ran') { huelle.style.transform = 'scale(.9)'; huelle.style.transition = 'transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'ruck') { huelle.style.transform = 'scale(1.09)'; huelle.style.transition = 'transform .32s cubic-bezier(.2,.9,.3,1)'; }
-    const dauer = modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
+    const dauer = modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     welt.appendChild(neu); void neu.offsetWidth; neu.classList.add('an');
     if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { huelle.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
@@ -309,6 +310,7 @@ const Spiel = (() => {
     aktBild = Object.assign({ code }, e, { el: neu });
     // Fenster-Overlay und Handylicht
     fensterOverlay(e.fenster);
+    { const h = $('#handylicht'); if (e.fernLicht) { h.style.setProperty('--fx', e.fernLicht[0]); h.style.setProperty('--fy', e.fernLicht[1]); } else { h.style.removeProperty('--fx'); h.style.removeProperty('--fy'); } }
     const hl = $('#handylicht .g'); if (e.handy) { const [x, y, w, h] = e.handy; Object.assign(hl.style, { left: x * 1920 + 'px', top: y * 1080 + 'px', width: w * 1920 + 'px', height: h * 1080 + 'px' }); }
     if (modus === 'schnitt') return;
     await warte(Math.min(dauer, .5));
@@ -474,7 +476,7 @@ const Spiel = (() => {
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
   const TISCH = ['B05', 'N04', 'K10', 'K10H', 'K10O', 'L4', 'N03', 'L7', 'N09', 'N09D'];
-  const BETT = ['N1', 'N02', 'SO', 'N1D', 'N24', 'N31a'];
+  const BETT = ['N1', 'N02', 'N02D', 'N1L', 'SO', 'N1D', 'N24', 'N31a'];
   let letzteVib = 0;
   function bzzz(o = {}) {
     const jetzt = performance.now(); if (o.entprellen && jetzt - letzteVib < 1400) return 0; letzteVib = jetzt;
@@ -502,7 +504,7 @@ const Spiel = (() => {
     const v = neu.querySelector('video'); try { await v.play(); } catch (e) { }
     if (name === 'weg') Ton.loop('schritte', true);
     // Ende weich: die Kamerafahrt bremst in den letzten Sekunden ab, statt hart stehen zu bleiben
-    const bremse = () => { if (!v.isConnected || v.ended || v.paused) return; const rest = v.duration - v.currentTime; if (rest < 2.2) v.playbackRate = Math.max(.32, rest / 2.2); requestAnimationFrame(bremse); };
+    const bremse = () => { if (!v.isConnected || v.ended || v.paused) return; const rest = v.duration - v.currentTime; if (rest < .6) v.playbackRate = Math.max(.6, rest / .6); requestAnimationFrame(bremse); };
     requestAnimationFrame(bremse);
     if (schnell) { v.pause(); vz += 12; if (name === 'weg') Ton.loop('schritte', false); return; }
     const g = gen;

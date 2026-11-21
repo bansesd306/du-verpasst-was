@@ -29,6 +29,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .f-dunkel{filter:brightness(.42) saturate(.6) hue-rotate(12deg) contrast(1.05)!important}
 .f-tag{filter:brightness(1.25) saturate(.8) hue-rotate(-8deg) contrast(.92) sepia(.12)!important}
 .f-lichtaus{filter:brightness(.28) saturate(.5) hue-rotate(15deg) contrast(1.1)!important}
+.f-nachtaus{filter:brightness(.55) saturate(.7) hue-rotate(10deg) contrast(1.05)!important}
 .f-nacht{filter:brightness(.7) saturate(.85) contrast(1.05)!important}
 .innen{position:absolute;inset:0;transform-origin:50% 45%}
 .atmen{animation:atmen 4.6s ease-in-out infinite}
@@ -102,7 +103,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes hlicht{0%{opacity:0}7%{opacity:1}22%{opacity:.82}40%{opacity:.95}100%{opacity:0}}
 @keyframes hflacker{0%{opacity:1}23%{opacity:.84}41%{opacity:.97}67%{opacity:.8}84%{opacity:1}}
 #handylicht.fern .g{display:none}
-#handylicht.fern .raum{background:radial-gradient(ellipse 45% 70% at -6% 58%,rgba(110,165,255,.26),rgba(80,130,255,.07) 55%,transparent 80%)}
+#handylicht.fern .raum{background:radial-gradient(ellipse 45% 70% at var(--fx,-6%) var(--fy,58%),rgba(110,165,255,.26),rgba(80,130,255,.07) 55%,transparent 80%)}
 #handylicht .g{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(205,228,255,.62),rgba(120,175,255,.28) 45%,rgba(90,150,255,0));transform:scale(3.2)}
 #handylicht .raum{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at var(--hx,52%) var(--hy,66%),rgba(110,165,255,.20),rgba(80,130,255,.06) 50%,transparent 75%)}
 #handylicht.an{opacity:1}
@@ -646,9 +647,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .fotogross{position:absolute;inset:0;z-index:7;background:#000;opacity:0;transition:opacity .4s}
 .fotogross.an{opacity:1}
 .fotogross>*{transition:transform 3.5s ease}
-.fotogross.zoom>*:first-child{transform:scale(2.3);transform-origin:78% 35%}
+.fotogross.zoom>*:first-child{transform:scale(1.8);transform-origin:78% 35%}
 .fotogross>.fz-scharf{opacity:0;transition:transform 3.5s ease,opacity 1.3s ease}
-.fotogross.zoom>.fz-scharf{transform:scale(2.3)}
+.fotogross.zoom>.fz-scharf{transform:scale(1.8)}
 .fotogross.fokus>.fz-scharf{opacity:1}
 .c-eingabe{display:flex;gap:10px;align-items:flex-end;padding:10px 12px 22px;flex:none}
 .pille{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:72px;padding:0 20px;border-radius:36px;background:#202c33;color:#8696a0;font-size:30px;min-width:0}
@@ -1016,7 +1017,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes z_korn{0%{transform:translate(0,0)}20%{transform:translate(-40px,20px)}40%{transform:translate(30px,-30px)}60%{transform:translate(-20px,-40px)}80%{transform:translate(40px,30px)}}#zimmer #z-blitz{z-index:2;background:#fff;opacity:0}
 #zimmer #z-blitz.an{animation:z_blitz .45s ease-out}
 @keyframes z_blitz{0%{opacity:.55}100%{opacity:0}}#zimmer #z-scrim{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s,background 1s;
-  background:linear-gradient(90deg,rgba(6,9,18,.9) 0,rgba(6,9,18,.72) 45%,rgba(6,9,18,.15) 62%,transparent 75%)}
+  background:linear-gradient(90deg,rgba(6,9,18,.88) 0,rgba(6,9,18,.7) 28%,rgba(6,9,18,.4) 42%,rgba(6,9,18,.12) 56%,transparent 68%)}
 #zimmer #z-toenung{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.2s}
 #zimmer.ende-an #z-scrim{opacity:1}
 #zimmer.ende-an #z-toenung{opacity:.55}
@@ -1266,12 +1267,12 @@ Deliktsrecht. Ergibt plötzlich alles Sinn.
 Fremdes Eigentum verletzt. {haken}Check.
 Durch sein Handeln. Kausal. {haken}Check.
 Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
+@bild K10H
 Schaden: eine Scheibe.
 § 823 Absatz 1.
 … !2
 Ha.
 Ich musste nicht mal nachschauen.
-@bild B05
 Ich glaub wirklich, diesmal wird’s was.
 Es macht fast schon Spaß.
 Ja. Natürlich macht es Spaß. Ich könnte mir nichts Besseres vorstellen.
@@ -1297,7 +1298,10 @@ Fast drei Jahre Studium. Alles hängt an Montag.
 @bild N31d langsam
 Zehn Minuten Pause. Hab ich mir verdient.
 @ton handy_ablegen
-@bild N1 langsam
+@bild N1L langsam
+@warte 1
+@ton decke1
+@bild N02 langsam
 @warte 1
 -> K1
 
@@ -1308,7 +1312,7 @@ Zehn Minuten Pause. Hab ich mir verdient.
 == K1
 @kapitel Kapitel 1
 @uhr 21:07
-@bild N1
+@bild N02
 @handy sperr
 Das war vor einer Stunde.
 @ton bzzz
@@ -1337,7 +1341,7 @@ Links: der Schreibtisch. Die zwei 5,0 liegen obendrauf.
 Rechts: das Fenster.
 @effekt heranzoomen
 Ich weiß, dass das nur die Stadt ist. Aber irgendwie sieht es lebendig aus.
-@bild N1
+@bild N02
 @handy gruppe
 @foto N26 Mia
 @tipp
@@ -1377,7 +1381,7 @@ Die Frau muss wirklich viel von mir halten.
 @loop seminar aus
 @effekt traum aus weich
 @raum nacht
-@bild N1 langsam
+@bild N02 langsam
 @handy her
 @handy chat Jonas
 @schreibt Jonas 5
@@ -1506,7 +1510,7 @@ Ich bleib erst mal liegen. Ich entscheide später.
 == L2
 @uhr mind 21:30
 @rufe CHECK_WOBLEIBST
-@schwarz
+@bild K10H
 @ton blaettern
 „M bestellt online einen Kühlschrank, tippt aber 9 statt 900 Euro …“
 Irrtum. Anfechtung. § 119.
@@ -1996,7 +2000,7 @@ Aber auch nicht nichts.
 @ton haustuer leise dumpf
 @warte 2.5
 @fenster_aus Sa 01:30
-@bild N02 langsam
+@bild N02D langsam
 @effekt handylicht an
 @handy feed
 @warte 4
@@ -2079,7 +2083,7 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 # ---- 00:50 – Blaue Haken ----
 == L10
 @uhr Sa 00:50
-@bild N02
+@bild N02D
 @handy chat Lynn
 @haken blau
 Blau. !3
@@ -2589,8 +2593,10 @@ Mia: „Party Nummer vieeer.“
 @party aus
 @musik party tuer
 @uhr +5
-@bild N14
+@bild N36Z
+@warte 1.6
 @ton tuer_auf leise
+@bild N14
 @loop wind an
 Lynn: „Du bist ja doch gekommen.“
 …
@@ -2602,9 +2608,9 @@ Lynn: „Geht mir auch so.“
 @bild N14 gesicht
 Lynn: „Und mein Heiligtum?“
 Ich: „Was?“
-@bild N14r gesicht
+@bild N14r geste
 Lynn: „Na, der Stift.“
-@bild N14 gesicht
+@bild N14 geste
 …
 Ich: „Ach so. Klar hab ich den noch.“
 @bild N14d gesicht
@@ -3062,7 +3068,7 @@ Hm.
 @ton schritte_holz leise
 @warte .6
 @ton decke1
-@bild N1
+@bild N02D
 … !2
 @zurueck
 
@@ -3127,7 +3133,7 @@ Und eine ist ja keine. !3
 @karte auto Sa 00:12
 @raum nacht
 @wenn handyweg
-  @bild N02
+  @bild N02D
   Licht aus. Das Handy liegt auf dem Schreibtisch.
   … !3
   @rufe NACHT_STRASSE
@@ -3152,7 +3158,7 @@ Und eine ist ja keine. !3
   @warte 1.6
   @abzeichen Außer Reichweite
 @sonst
-  @bild N1
+  @bild N02D
   Licht aus. Das Handy liegt neben dem Kopfkissen.
   … !3
   @rufe NACHT_STRASSE
@@ -3189,7 +3195,7 @@ Stumm.
 @abzeichen Stumm
 @setze phantom
 @handy zu
-@bild N1
+@bild N02D
 … !3
 @warte 4
 @ton bzzz_dumpf
@@ -3229,7 +3235,7 @@ Ich schlafe nicht. Ich warte.
 @stille
 @karte auto Sa 01:14
 @raum nacht
-@bild N02
+@bild N02D
 @ton decke1
 @handy gruppe
 @foto N32c Mia
@@ -3280,7 +3286,7 @@ Ich bin auf keinem Foto. !3
 
 # ---- Monolog im Bett (je nach Erlebtem) ----
 == MONOLOG
-@bild N1
+@bild N02D
 @wenn kueche
   Hm.
   … !2
@@ -3344,7 +3350,9 @@ Ich bin auf keinem Foto. !3
   Ob sie auch noch lacht, wenn er morgen wirklich Millionär ist?
   Naja.
   Manchmal fühlt sich ein Moment einfach unendlich an. Obwohl man weiß, dass er irgendwann aufhören muss.
-  Aber vielleicht vergisst man eben genau das. Oder will es vergessen.
+  Aber vielleicht vergisst man eben genau das.
+  …
+  Oder will es vergessen.
   Und lässt es einfach zu.
   Auf einmal war es zwei Uhr. Gar nicht gemerkt.
   … !3
@@ -3790,10 +3798,9 @@ Senner: „Handys aus. Taschen nach vorne.“
 @loop pruefung an
 Der Prüfungsraum ist still. Nur Papier und Stifte. !3
 Aufgabe 1.
-@schwarz schnitt
-@ton! stift
-Ihr Stift. Blau.
 @bild N25B schnitt
+@ton! stift
+Blau.
 „A könnte gegen B einen Anspruch aus § 823 I BGB haben.“
 @wenn (typ=="zuhause" && weg=="A") || typ=="gluecklich"
   @schema 5
@@ -4015,7 +4022,9 @@ const BILDER = {
   N31a: { datei: "img/N31a.webp", text: "Zeitraffer: Morgen, er im Bett am Handy", stimmung: "morgen" },
 
   // ---------- Zimmer (noch offen) ----------
-  N02:  { datei: "img/N02.webp", text: "Ich-Sicht aus dem Bett nachts: Regal links, Tür geradeaus, Schreibtisch rechts (V8)", stimmung: "nacht", bett: true, handy: [0.46, 0.86, 0.09, 0.1] },
+  N1L:  { datei: "", ersatz: "N02", text: "Blick vom Schreibtisch aufs Bett, Licht an, kein Handy auf dem Bett – fehlt noch, Philip erstellt es (V8.2)", stimmung: "zimmer" },
+  N02D: { datei: "", ersatz: "N02", filter: "nachtaus", text: "Ich-Sicht aus dem Bett, Licht aus (bis zum eigenen Bild: N02 abgedunkelt) (V8.2)", stimmung: "nacht", bett: true, handy: [0.46, 0.86, 0.09, 0.1], fernLicht: ["96%", "60%"] },
+  N02:  { datei: "img/N02.webp", text: "Ich-Sicht aus dem Bett nachts: Regal links, Tür geradeaus, Schreibtisch rechts (V8)", stimmung: "nacht", bett: true, handy: [0.46, 0.86, 0.09, 0.1], fernLicht: ["96%", "60%"] },
   N31b: { datei: "img/N31b.webp", text: "Zeitraffer: Mittag, Bett leer", stimmung: "tag" },
   N31c: { datei: "img/N31c.webp", text: "Zeitraffer: Nachmittag, wieder im Bett am Handy", stimmung: "tag" },
   N31d: { datei: "img/N31d.webp", text: "Abend, er am Schreibtisch, Lampe an", stimmung: "zimmer", tisch: true },
@@ -4131,7 +4140,7 @@ const BILDER = {
   MK2: { datei: "img/MK2.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK3: { datei: "img/MK3.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   K10H: { datei: "img/K10H.webp", text: "Ich-Sicht am Schreibtisch nachts, Hände auf dem Tisch, Lynns Stift auf dem Buch (V8)", stimmung: "zimmer", tisch: true, ohneHaende: "K10O" },
-  K10O: { datei: "", text: "Wie K10H, aber ohne Hände auf dem Tisch (er hält das Handy) – fehlt noch, Philip erstellt es (V8.2)", stimmung: "zimmer", tisch: true, mitHaenden: "K10H" },
+  K10O: { datei: "img/K10O.webp", text: "Wie K10H, aber ohne Hände auf dem Tisch (er hält das Handy) (V8.2)", stimmung: "zimmer", tisch: true, mitHaenden: "K10H" },
   N38c: { datei: "img/N38c.webp", text: "Rückblende Seminar: Lynn grinst spöttisch rüber (nah) (V8)", stimmung: "traum", figur: true },
   N38n: { datei: "img/N38n.webp", text: "Rückblende Seminar: Lynn ganz nah, Grinsen hinter den Fingern (V8)", stimmung: "traum", figur: true },
   N25L: { datei: "img/N25L.webp", text: "Prüfungsraum fast leer, noch zehn Minuten (V8)", stimmung: "pruefung" },
@@ -5736,8 +5745,9 @@ const Spiel = (() => {
   let lynnHand = 0;
   async function lynnGeste(ins) {
     if (!aktBild || !['N14', 'N14r'].includes(aktBild.code) || Handy.offen) return;
-    let ziel = 'N14'; if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; ziel = lynnHand ? 'N14r' : 'N14'; }
-    if (ziel !== aktBild.code) await zeigeBild(ziel, 'pose');
+    // V8.2: seltener und langsamer wechseln (nur jede dritte Lynn-Zeile mit Händen, weiche Überblendung)
+    let ziel = 'N14'; if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; ziel = lynnHand === 2 ? 'N14r' : 'N14'; }
+    if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
   let textZahl = 0;
   async function text(ins) {
@@ -5857,7 +5867,7 @@ const Spiel = (() => {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null;
     if (e.datei) { const ok = lade(e.datei); await Promise.race([ok, new Promise(r => setTimeout(r, 2500))]); }
     $('#schwarz').classList.remove('an', 'langsam');
-    if (modus !== 'gesicht' && modus !== 'pool' && modus !== 'pose') { zeigeTextbox(false); kamera.classList.remove('zoomrein'); kamera.style.transform = ''; poolAktiv = null; }
+    if (modus !== 'gesicht' && modus !== 'pool' && modus !== 'pose' && modus !== 'geste') { zeigeTextbox(false); kamera.classList.remove('zoomrein'); kamera.style.transform = ''; poolAktiv = null; }
     if (modus === 'traum') { B.classList.add('traum'); Ton.spiele('flashback'); }
     const alt = [...welt.querySelectorAll('.ebene')];
     const neu = document.createElement('div'); neu.className = 'ebene';
@@ -5878,7 +5888,7 @@ const Spiel = (() => {
     huelle.appendChild(innen); neu.appendChild(huelle);
     if (modus === 'ran') { huelle.style.transform = 'scale(.9)'; huelle.style.transition = 'transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'ruck') { huelle.style.transform = 'scale(1.09)'; huelle.style.transition = 'transform .32s cubic-bezier(.2,.9,.3,1)'; }
-    const dauer = modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
+    const dauer = modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     welt.appendChild(neu); void neu.offsetWidth; neu.classList.add('an');
     if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { huelle.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
@@ -5889,6 +5899,7 @@ const Spiel = (() => {
     aktBild = Object.assign({ code }, e, { el: neu });
     // Fenster-Overlay und Handylicht
     fensterOverlay(e.fenster);
+    { const h = $('#handylicht'); if (e.fernLicht) { h.style.setProperty('--fx', e.fernLicht[0]); h.style.setProperty('--fy', e.fernLicht[1]); } else { h.style.removeProperty('--fx'); h.style.removeProperty('--fy'); } }
     const hl = $('#handylicht .g'); if (e.handy) { const [x, y, w, h] = e.handy; Object.assign(hl.style, { left: x * 1920 + 'px', top: y * 1080 + 'px', width: w * 1920 + 'px', height: h * 1080 + 'px' }); }
     if (modus === 'schnitt') return;
     await warte(Math.min(dauer, .5));
@@ -6054,7 +6065,7 @@ const Spiel = (() => {
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
   const TISCH = ['B05', 'N04', 'K10', 'K10H', 'K10O', 'L4', 'N03', 'L7', 'N09', 'N09D'];
-  const BETT = ['N1', 'N02', 'SO', 'N1D', 'N24', 'N31a'];
+  const BETT = ['N1', 'N02', 'N02D', 'N1L', 'SO', 'N1D', 'N24', 'N31a'];
   let letzteVib = 0;
   function bzzz(o = {}) {
     const jetzt = performance.now(); if (o.entprellen && jetzt - letzteVib < 1400) return 0; letzteVib = jetzt;
@@ -6082,7 +6093,7 @@ const Spiel = (() => {
     const v = neu.querySelector('video'); try { await v.play(); } catch (e) { }
     if (name === 'weg') Ton.loop('schritte', true);
     // Ende weich: die Kamerafahrt bremst in den letzten Sekunden ab, statt hart stehen zu bleiben
-    const bremse = () => { if (!v.isConnected || v.ended || v.paused) return; const rest = v.duration - v.currentTime; if (rest < 2.2) v.playbackRate = Math.max(.32, rest / 2.2); requestAnimationFrame(bremse); };
+    const bremse = () => { if (!v.isConnected || v.ended || v.paused) return; const rest = v.duration - v.currentTime; if (rest < .6) v.playbackRate = Math.max(.6, rest / .6); requestAnimationFrame(bremse); };
     requestAnimationFrame(bremse);
     if (schnell) { v.pause(); vz += 12; if (name === 'weg') Ton.loop('schritte', false); return; }
     const g = gen;

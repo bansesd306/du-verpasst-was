@@ -136,12 +136,12 @@ Deliktsrecht. Ergibt plötzlich alles Sinn.
 Fremdes Eigentum verletzt. {haken}Check.
 Durch sein Handeln. Kausal. {haken}Check.
 Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
+@bild K10H
 Schaden: eine Scheibe.
 § 823 Absatz 1.
 … !2
 Ha.
 Ich musste nicht mal nachschauen.
-@bild B05
 Ich glaub wirklich, diesmal wird’s was.
 Es macht fast schon Spaß.
 Ja. Natürlich macht es Spaß. Ich könnte mir nichts Besseres vorstellen.
@@ -167,7 +167,10 @@ Fast drei Jahre Studium. Alles hängt an Montag.
 @bild N31d langsam
 Zehn Minuten Pause. Hab ich mir verdient.
 @ton handy_ablegen
-@bild N1 langsam
+@bild N1L langsam
+@warte 1
+@ton decke1
+@bild N02 langsam
 @warte 1
 -> K1
 
@@ -178,7 +181,7 @@ Zehn Minuten Pause. Hab ich mir verdient.
 == K1
 @kapitel Kapitel 1
 @uhr 21:07
-@bild N1
+@bild N02
 @handy sperr
 Das war vor einer Stunde.
 @ton bzzz
@@ -207,7 +210,7 @@ Links: der Schreibtisch. Die zwei 5,0 liegen obendrauf.
 Rechts: das Fenster.
 @effekt heranzoomen
 Ich weiß, dass das nur die Stadt ist. Aber irgendwie sieht es lebendig aus.
-@bild N1
+@bild N02
 @handy gruppe
 @foto N26 Mia
 @tipp
@@ -247,7 +250,7 @@ Die Frau muss wirklich viel von mir halten.
 @loop seminar aus
 @effekt traum aus weich
 @raum nacht
-@bild N1 langsam
+@bild N02 langsam
 @handy her
 @handy chat Jonas
 @schreibt Jonas 5
@@ -376,7 +379,7 @@ Ich bleib erst mal liegen. Ich entscheide später.
 == L2
 @uhr mind 21:30
 @rufe CHECK_WOBLEIBST
-@schwarz
+@bild K10H
 @ton blaettern
 „M bestellt online einen Kühlschrank, tippt aber 9 statt 900 Euro …“
 Irrtum. Anfechtung. § 119.
@@ -866,7 +869,7 @@ Aber auch nicht nichts.
 @ton haustuer leise dumpf
 @warte 2.5
 @fenster_aus Sa 01:30
-@bild N02 langsam
+@bild N02D langsam
 @effekt handylicht an
 @handy feed
 @warte 4
@@ -949,7 +952,7 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 # ---- 00:50 – Blaue Haken ----
 == L10
 @uhr Sa 00:50
-@bild N02
+@bild N02D
 @handy chat Lynn
 @haken blau
 Blau. !3
@@ -1459,8 +1462,10 @@ Mia: „Party Nummer vieeer.“
 @party aus
 @musik party tuer
 @uhr +5
-@bild N14
+@bild N36Z
+@warte 1.6
 @ton tuer_auf leise
+@bild N14
 @loop wind an
 Lynn: „Du bist ja doch gekommen.“
 …
@@ -1472,9 +1477,9 @@ Lynn: „Geht mir auch so.“
 @bild N14 gesicht
 Lynn: „Und mein Heiligtum?“
 Ich: „Was?“
-@bild N14r gesicht
+@bild N14r geste
 Lynn: „Na, der Stift.“
-@bild N14 gesicht
+@bild N14 geste
 …
 Ich: „Ach so. Klar hab ich den noch.“
 @bild N14d gesicht
@@ -1932,7 +1937,7 @@ Hm.
 @ton schritte_holz leise
 @warte .6
 @ton decke1
-@bild N1
+@bild N02D
 … !2
 @zurueck
 
@@ -1997,7 +2002,7 @@ Und eine ist ja keine. !3
 @karte auto Sa 00:12
 @raum nacht
 @wenn handyweg
-  @bild N02
+  @bild N02D
   Licht aus. Das Handy liegt auf dem Schreibtisch.
   … !3
   @rufe NACHT_STRASSE
@@ -2022,7 +2027,7 @@ Und eine ist ja keine. !3
   @warte 1.6
   @abzeichen Außer Reichweite
 @sonst
-  @bild N1
+  @bild N02D
   Licht aus. Das Handy liegt neben dem Kopfkissen.
   … !3
   @rufe NACHT_STRASSE
@@ -2059,7 +2064,7 @@ Stumm.
 @abzeichen Stumm
 @setze phantom
 @handy zu
-@bild N1
+@bild N02D
 … !3
 @warte 4
 @ton bzzz_dumpf
@@ -2099,7 +2104,7 @@ Ich schlafe nicht. Ich warte.
 @stille
 @karte auto Sa 01:14
 @raum nacht
-@bild N02
+@bild N02D
 @ton decke1
 @handy gruppe
 @foto N32c Mia
@@ -2150,7 +2155,7 @@ Ich bin auf keinem Foto. !3
 
 # ---- Monolog im Bett (je nach Erlebtem) ----
 == MONOLOG
-@bild N1
+@bild N02D
 @wenn kueche
   Hm.
   … !2
@@ -2214,7 +2219,9 @@ Ich bin auf keinem Foto. !3
   Ob sie auch noch lacht, wenn er morgen wirklich Millionär ist?
   Naja.
   Manchmal fühlt sich ein Moment einfach unendlich an. Obwohl man weiß, dass er irgendwann aufhören muss.
-  Aber vielleicht vergisst man eben genau das. Oder will es vergessen.
+  Aber vielleicht vergisst man eben genau das.
+  …
+  Oder will es vergessen.
   Und lässt es einfach zu.
   Auf einmal war es zwei Uhr. Gar nicht gemerkt.
   … !3
@@ -2660,10 +2667,9 @@ Senner: „Handys aus. Taschen nach vorne.“
 @loop pruefung an
 Der Prüfungsraum ist still. Nur Papier und Stifte. !3
 Aufgabe 1.
-@schwarz schnitt
-@ton! stift
-Ihr Stift. Blau.
 @bild N25B schnitt
+@ton! stift
+Blau.
 „A könnte gegen B einen Anspruch aus § 823 I BGB haben.“
 @wenn (typ=="zuhause" && weg=="A") || typ=="gluecklich"
   @schema 5

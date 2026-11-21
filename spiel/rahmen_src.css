@@ -242,7 +242,7 @@
 
 /* =================== ENDE: gleiche Welt wie der Start =================== */
 #scrim{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .8s,background 1s;
-  background:linear-gradient(90deg,rgba(6,9,18,.9) 0,rgba(6,9,18,.72) 45%,rgba(6,9,18,.15) 62%,transparent 75%)}
+  background:linear-gradient(90deg,rgba(6,9,18,.88) 0,rgba(6,9,18,.7) 28%,rgba(6,9,18,.4) 42%,rgba(6,9,18,.12) 56%,transparent 68%)}
 #toenung{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 1.2s}
 #bw.ende-an #scrim{opacity:1}
 #bw.ende-an #toenung{opacity:.55}

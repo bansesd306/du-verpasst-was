@@ -114,9 +114,9 @@
 .fotogross{position:absolute;inset:0;z-index:7;background:#000;opacity:0;transition:opacity .4s}
 .fotogross.an{opacity:1}
 .fotogross>*{transition:transform 3.5s ease}
-.fotogross.zoom>*:first-child{transform:scale(2.3);transform-origin:78% 35%}
+.fotogross.zoom>*:first-child{transform:scale(1.8);transform-origin:78% 35%}
 .fotogross>.fz-scharf{opacity:0;transition:transform 3.5s ease,opacity 1.3s ease}
-.fotogross.zoom>.fz-scharf{transform:scale(2.3)}
+.fotogross.zoom>.fz-scharf{transform:scale(1.8)}
 .fotogross.fokus>.fz-scharf{opacity:1}
 .c-eingabe{display:flex;gap:10px;align-items:flex-end;padding:10px 12px 22px;flex:none}
 .pille{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:72px;padding:0 20px;border-radius:36px;background:#202c33;color:#8696a0;font-size:30px;min-width:0}
