@@ -218,6 +218,7 @@ const Rahmen = (() => {
     $('e-nr').textContent = T('ende_nr', 'Ende {x} von 3').replace('{x}', ENDEN.indexOf(n) + 1);
     $('e-name').textContent = n;
     $('e-satz').textContent = s[4].replace('Ende: ', '');
+    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Montagabend. Das Handy liegt umgedreht auf dem Tisch.'; $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
     zeige(null); void bw.offsetWidth;
     zeige('s-ende');
   }
@@ -362,8 +363,9 @@ const Rahmen = (() => {
     weg,
     get sichtbar() { return bw.classList.contains('an'); },
     // Spielende: Endkarte → (Testmodus: Stoppuhr) → Gefühlsfrage → Abzeichen mit Nochmal/Beenden
+    variante: '',
     async ende(name, neu, nachKarte) {
-      planStopp(); zeigen(); laeuft = false;
+      planStopp(); zeigen(); laeuft = false; if (api) api.variante = this.variante;
       S().laeufe = laeufe() + 1; sichern();
       letzter = { ende: name, neu: neu || [] };
       bzzzZaehler = 0; besuch();

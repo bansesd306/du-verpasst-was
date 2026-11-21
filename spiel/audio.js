@@ -21,7 +21,7 @@ const Ton = (() => {
     musikBus = ctx.createGain(); musikBus.connect(musikFilter); musikFilter.connect(musikGain); musikGain.connect(master);
     analyser = ctx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = .55; musikGain.connect(analyser); fftDaten = new Uint8Array(analyser.frequencyBinCount);
     // kurze Töne zuerst, Musik danach
-    const namen = Object.keys(TOENE).filter(k => eintrag(k).datei).sort((a, b) => /^M\d|Outro/.test(a) - /^M\d|Outro/.test(b));
+    const namen = Object.keys(TOENE).filter(k => eintrag(k).datei).sort((a, b) => /^M\d|Outro|lofi|restaurant|club2|ende_warm|tippen_laptop/.test(a) - /^M\d|Outro|lofi|restaurant|club2|ende_warm|tippen_laptop/.test(b) || (b === 'muffled_party') - (a === 'muffled_party'));
     namen.forEach(k => lade(k));
   }
   function eintrag(k) { const e = TOENE[k]; return typeof e === 'string' ? { datei: e } : (e || {}); }
@@ -79,12 +79,15 @@ const Ton = (() => {
     regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
     oben: [['M1_party', { vol: .5, lp: 160 }]],
     halle: [['halle', { vol: .75 }]],
-    pruefung: [['raum_tag', { vol: .35 }], ['PR3_stift', { vol: .18 }]],
+    schritte: [['schritte', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
+    pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
     klingel: [['anruf', { vol: 1 }]],
-    party_fern: [['party_fern', { vol: .95, lp: 2200 }]],   // Startbildschirm: Party hinter dem Fenster
+    party_fern: [['muffled_party', { vol: .9 }]],   // Startbildschirm: Party hinter dem Fenster, gedämpft (Philips Datei)
+    seminar: [['tippen_laptop', { vol: .38 }], ['gemurmel', { vol: .08, lp: 700 }]],   // Rückblende Seminar
+    restaurant: [['restaurant_lofi', { vol: .42, lp: 5200 }], ['gemurmel', { vol: .26, lp: 1500 }]],   // Lynn-Ende
     lampe: 'lampe', rauschen: 'rauschen',
   };
-  const AUSKLANG = { party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
+  const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
   function loop(name, an) {
     if (!ctx) return;
     if (loops[name]) { loops[name](); delete loops[name]; }
@@ -92,7 +95,13 @@ const Ton = (() => {
     const g = ctx.createGain(); g.connect(loopsBus); g.gain.setValueAtTime(0, now()); g.gain.linearRampToValueAtTime(1, now() + .4);
     const def = LOOPS[name]; if (!def) return;
     let stops = [];
-    if (def === 'lampe') stops.push(synthLampe(g));
+    if (def === 'pruefung') {
+      const r = quelle('raum_tag', g, { loop: true, vol: .35 }); if (r) stops.push(() => r.stop());
+      let aktiv = true, q = null, t = null;
+      const schub = () => { if (!aktiv) return; const d = .5 + Math.random() * 2.4; q = quelle('PR3_stift', g, { ab: Math.random() * 3.2, dauer: d, vol: .2 + Math.random() * .08 }); t = setTimeout(() => { t = setTimeout(schub, 350 + Math.random() * (Math.random() < .3 ? 3800 : 1400)); }, d * 1000); };
+      schub(); stops.push(() => { aktiv = false; clearTimeout(t); try { q && q.stop(); } catch (e) { } });
+    }
+    else if (def === 'lampe') stops.push(synthLampe(g));
     else if (def === 'rauschen') stops.push(synthRauschen(g));
     else def.forEach(([k, o]) => { const q = quelle(k, g, Object.assign({ loop: true, ab: Math.random() * 3 }, o)); if (q) stops.push(() => q.stop()); else lade(k).then(() => { if (loops[name] && !q) { const q2 = quelle(k, g, Object.assign({ loop: true }, o)); if (q2) stops.push(() => q2.stop()); } }); });
     const tau = AUSKLANG[name] || .15;
@@ -116,6 +125,8 @@ const Ton = (() => {
     const qs = [];
     if (welche === 'party') { const a = quelle('M1_party', musikBus, { loop: true }); if (a) qs.push(a); [['gemurmel', .62], ['gemurmel2', .3], ['frauen', .34]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); if (!a) lade('M1_party').then(() => { if (musik && musik.art === 'party' && !musik.qs.length) { const q = quelle('M1_party', musikBus, { loop: true }); q && musik.qs.push(q); } }); }
     if (welche === 'spaet') { const a = quelle('M3_spaet', musikBus, { loop: true, vol: 1.4 }); if (a) qs.push(a); }
+    if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
+    if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
     musik = { art: welche, qs };
     if (welche === 'mia') { const a = quelle('mia', musikBus, { ab: miaAb }); if (a) qs.push(a); musik.t0 = now() - miaAb; }
@@ -162,7 +173,7 @@ const Ton = (() => {
       if (art === 'aus') { liedStopp(); return musikStopp(false); }
       if (art === 'lied') { if (opt === 'aus') return liedStopp(); return lied(opt); }
       if (art === 'fern') { musikStart('fern'); stelle('aufnahme'); return; }
-      if (art === 'spaet' || art === 'party') { musikStart(art); stelle(opt || 'laut'); return; }
+      if (art === 'spaet' || art === 'party' || art === 'club' || art === 'lofi') { musikStart(art); stelle(opt || 'laut'); return; }
       if (art === 'mia') { if (opt && /^\d/.test(opt)) { miaAb = +opt; if (musik && musik.art === 'mia') this.miaSpring(miaAb); else { musikStart('mia'); } stelle('laut'); } else stelle(opt || 'laut', true); return; }
     },
     musikStufe(art, langsam) { if (ctx) stelle(art, langsam); },
@@ -199,7 +210,7 @@ const Ton = (() => {
     // echtes Tippen: Abschnitt der Aufnahme abspielen
     tippLauf(ab, dauer) { if (!ctx || gesperrt || !P.tipplauf) return null; return quelle('tipplauf', sfx, { ab, dauer }); },
     get anschlaege() { return (TOENE.tipplauf && TOENE.tipplauf.anschlaege) || []; },
-    outro() { if (!ctx) return; musikStopp(true); this.introAus(); outroNode = quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); },
+    outro(welche) { if (!ctx) return; musikStopp(true); this.introAus(); if (welche === 'warm') { outroNode = quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }); return; } outroNode = quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); },
     outroAus() { if (outroNode) { outroNode.stop(3); outroNode = null; } },
   };
 })();

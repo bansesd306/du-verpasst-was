@@ -68,7 +68,7 @@ async def main():
     sel=sys.argv[1:] or list(SZ)
     async with async_playwright() as p:
         b = await p.chromium.launch(executable_path='/usr/bin/google-chrome')
-        out=[]; k=4
+        import os; out=[]; k=int(os.environ.get("K","3"))
         grp=[sel[i::k] for i in range(k)]
         await asyncio.gather(*[lauf(b,g,out) for g in grp if g])
         vis=set(); 

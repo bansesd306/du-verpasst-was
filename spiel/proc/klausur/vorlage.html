@@ -1,0 +1,49 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><style>
+@font-face{font-family:'Bricolage Grotesque';src:url(http://localhost:8765/fonts/bricolage.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Bricolage Grotesque';src:url(http://localhost:8765/fonts/bricolage-ext.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap;unicode-range:U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF}
+@font-face{font-family:'Permanent Marker';src:url(http://localhost:8765/fonts/marker.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Patrick Hand';src:url(http://localhost:8765/fonts/hand.woff2) format('woff2');font-display:swap}
+@font-face{font-family:'Patrick Hand';src:url(http://localhost:8765/fonts/hand-ext.woff2) format('woff2');unicode-range:U+0100-024F,U+1E00-1EFF,U+2020,U+20A0-20AB,U+20AD-20CF;font-display:swap}
+@font-face{font-family:'Bricolage Grotesque';src:url(http://localhost:8765/fonts/bricolage.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap}
+@font-face{font-family:'Caveat';src:url(http://localhost:8765/fonts/caveat.woff2) format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Caveat';src:url(http://localhost:8765/fonts/caveat-bold.woff2) format('woff2');font-weight:700;font-display:swap}
+@font-face{font-family:'Reenie Beanie';src:url(http://localhost:8765/fonts/reenie.woff2) format('woff2');font-display:swap}
+#klausur{position:absolute;left:50%;top:18px;width:900px;height:790px;transform:translateX(-50%) rotate(1.4deg);opacity:0;pointer-events:none;transition:opacity .5s,transform .5s;filter:drop-shadow(0 26px 50px rgba(0,0,0,.6))}
+#klausur.an{opacity:1;transform:translateX(-50%) rotate(-1deg)}
+.kl-blatt{position:absolute;inset:0;background:#fbfaf6 repeating-linear-gradient(180deg,transparent 0 43px,#b7c6dc 43px 45px);background-position:0 100px;padding:30px 190px 0 70px;overflow:hidden;color:#1d3bb0;font:400 34px/45px 'Reenie Beanie','Caveat',cursive;forced-color-adjust:none}
+.kl-blatt::before{content:'';position:absolute;left:52px;top:0;bottom:0;width:2px;background:#e3a3a3}
+.kl-rand{position:absolute;right:170px;top:0;bottom:0;width:2px;background:#d6c9c9}
+.kl-kopf{font:400 34px 'Reenie Beanie',cursive;color:#1d3bb0;height:70px;display:flex;gap:30px;align-items:baseline}
+.kl-kopf span{opacity:.85}.kl-kopf em{margin-left:auto;font-style:normal;margin-right:-130px}
+.kl-blatt p{margin:0 0 0;text-indent:0;letter-spacing:.3px;transform:rotate(-.4deg)}
+.kl-blatt p:nth-child(odd){transform:rotate(.25deg)}
+.kl-blatt s{text-decoration-thickness:3px}
+.kl-welle{text-decoration:underline wavy #d0221d 2px;text-underline-offset:8px}
+.kl-mk{position:absolute;right:70px;font:700 44px 'Caveat',cursive;color:#d0221d;opacity:0}
+#klausur.an .kl-mk{animation:rotrein .35s ease forwards}
+#klausur.an .m1{animation-delay:.3s}#klausur.an .m2{animation-delay:.45s}#klausur.an .m3{animation-delay:.6s}#klausur.an .m4{animation-delay:.75s}#klausur.an .m5{animation-delay:.9s}
+.kl-rot{position:absolute;font:700 54px 'Caveat',cursive;color:#d0221d;opacity:0}
+.kl-rot.r1{right:28px;top:300px;font-size:44px;transform:rotate(-9deg)}
+.kl-rot.r2{left:110px;top:640px;transform:rotate(-3deg)}
+.kl-rot.r3{right:70px;top:620px;font-size:110px;transform:rotate(-8deg)}
+.kl-rot.r3::after{content:'';position:absolute;left:-20px;right:-20px;top:-10px;bottom:-6px;border:4px solid #d0221d;border-radius:50%;transform:rotate(4deg)}
+#klausur.an .kl-rot{animation:rotrein .55s ease forwards}
+#klausur.an .r1{animation-delay:1.2s}#klausur.an .r2{animation-delay:1.9s}#klausur.an .r3{animation-delay:2.6s}
+@keyframes rotrein{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+.kl-p{font:400 30px 'Caveat',cursive;font-style:normal}
+body{margin:0;background:transparent}
+#klausur{position:relative!important;left:0!important;top:0!important;transform:none!important;opacity:1!important;filter:none!important;width:900px;height:790px}
+.kl-mk,.kl-rot{opacity:1!important;animation:none!important}
+body.basis .kl-mk,body.basis .kl-rot{visibility:hidden}
+body.schicht .kl-blatt{background:transparent!important} body.schicht .kl-blatt > *:not(.kl-mk):not(.kl-rot){visibility:hidden} body.schicht .kl-blatt::before{display:none} body.schicht .kl-rand{visibility:hidden}
+body.schicht .kl-mk,body.schicht .kl-rot{visibility:hidden}
+body.schicht.z-mk .kl-mk{visibility:visible} body.schicht.z-r1 .r1{visibility:visible} body.schicht.z-r2 .r2{visibility:visible} body.schicht.z-r3 .r3{visibility:visible}
+</style></head><body class="KLASSE"><div id="klausur"><div class="kl-blatt"><div class="kl-rand"></div>
+<div class="kl-kopf">Zivilrecht – Klausur <span>2. Versuch</span><em>Seite 3</em></div>
+<p>Fraglich ist, ob A gegen B einen Anspruch auf Schadensersatz aus <i class="kl-p">§</i> 823 I BGB hat. Dazu müsste B ein Rechtsgut des A verletzt haben.</p>
+<p>Das Eigentum des A an dem Fahrrad ist ein Rechtsgut <s>und wurde</s> im Sinne des <i class="kl-p">§</i> 823 I. Das Fahrrad wurde beschädigt, also ist das Eigentum verletzt.</p>
+<p>B hat gehandelt, indem er <u class="kl-welle">gegen das Rad gefahren</u> ist. Daraus folgt der Schaden.</p>
+<p>Fraglich ist die Rechtswidrigkeit. Diese wird durch die Verletzung indiziert, Rechtfertigungsgründe sind nicht ersichtlich. B handelte auch <u class="kl-welle">fahrlässig</u>, weil er</p>
+<div class="kl-mk m1">R</div><div class="kl-mk m2">Z</div><div class="kl-mk m3">A</div><div class="kl-mk m4">Gr</div><div class="kl-mk m5">R</div>
+<div class="kl-rot r1">Kausalität?!</div><div class="kl-rot r2">Unvollständig.</div><div class="kl-rot r3">5,0</div>
+</div></div></body></html>

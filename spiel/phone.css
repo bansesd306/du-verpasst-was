@@ -115,6 +115,9 @@
 .fotogross.an{opacity:1}
 .fotogross>*{transition:transform 3.5s ease}
 .fotogross.zoom>*:first-child{transform:scale(2.3);transform-origin:78% 35%}
+.fotogross>.fz-scharf{opacity:0;transition:transform 3.5s ease,opacity 1.3s ease}
+.fotogross.zoom>.fz-scharf{transform:scale(2.3)}
+.fotogross.fokus>.fz-scharf{opacity:1}
 .c-eingabe{display:flex;gap:10px;align-items:flex-end;padding:10px 12px 22px;flex:none}
 .pille{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:72px;padding:0 20px;border-radius:36px;background:#202c33;color:#8696a0;font-size:30px;min-width:0}
 .pille>span{line-height:72px;flex:none}
@@ -235,6 +238,9 @@
 .ka-fenster{width:100%;aspect-ratio:1/1;overflow:hidden;margin-top:14px}
 .ka-band{display:flex;width:300%;height:100%;transition:transform .45s cubic-bezier(.3,.8,.3,1)}
 [data-app=karussell].wisch .ka-band{transform:translateX(-33.333%)}
+[data-app=karussell].wisch2 .ka-band{transform:translateX(-66.666%)}
+.lv-bild{transition:transform .26s ease-in,filter .26s}
+.lv-bild.dreht{transform:scaleX(.02);filter:blur(6px) brightness(1.6)}
 .ka-seite{width:33.333%;height:100%;display:flex;align-items:center;justify-content:center;padding:60px;text-align:center;background:#f7d24c;color:#1d1d1d;font:800 60px/1.15 system-ui}
 .ka-seite.b{background:#2fbf8f;color:#fff}
 .ka-seite.c{background:#e85d75;color:#fff}
@@ -269,3 +275,7 @@
 .lvk b{margin-right:8px}
 @keyframes lvrein{from{transform:translateY(20px);opacity:0}}
 .lv-feld{position:absolute;left:24px;right:24px;bottom:60px;border:2px solid rgba(255,255,255,.6);border-radius:30px;padding:14px 22px;color:#ddd;font-size:24px;background:rgba(0,0,0,.3)}
+
+/* Story: Querformat ganz zeigen (Instagram-Stil) */
+.st-bild.ganz{background:linear-gradient(180deg,#4a3346 0,#2a1e2c 50%,#191321 100%)}
+.st-bild.ganz>img{object-fit:contain!important}

@@ -6,7 +6,7 @@ const KONTAKTE = {
   Lena: { farbe: '#e0558e', name: 'Lena' },
   Tim: { farbe: '#22a39a', name: 'Tim' },
   Mia: { farbe: '#9b6ad8', name: 'Mia' },
-  Lynn: { farbe: '#3d4a66', name: 'Lynn', info: 'Seminar Schuldrecht AT' },
+  Lynn: { farbe: '#3d4a66', name: 'Lynn', info: 'Seminar Gesprächsführung' },
   Ben: { farbe: '#4f8ad6', name: 'Ben' },
   Mama: { farbe: '#c0a062', name: 'Mama' },
   Paul: { farbe: '#7cb342', name: 'Paul', info: 'Lerngruppe Schuldrecht' },
@@ -72,12 +72,12 @@ const Handy = (() => {
     <div class="app" data-app="notizen">
       <div class="n-kopf">‹ &nbsp;Notizen</div>
       <div class="n-titel">Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i></div>
-      <div class="n-liste"><div>☑ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div></div>
+      <div class="n-liste"><div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div></div>
     </div>
     <div class="app" data-app="feed"><div class="f-kopf">Instagram</div><div class="f-rolle"></div></div>
     <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.mln</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
     <div class="app" data-app="karussell"><div class="f-kopf">Instagram</div><div class="ka-post"><div class="f-k"><span class="av" style="background:#6a5acd">s</span><b>studygram.de</b></div>
-      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. …</div></div></div>
+      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div></div>
       <div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div><div class="f-a">♡ 💬 ➤</div></div></div>
     <div class="app" data-app="video"><div class="v-bild"></div><div class="v-balken"><i></i></div><div class="v-ton">🔊</div></div>
     <div class="hhinweis"><span class="h-ic"></span><div><b></b><div class="h-x"></div></div></div>
@@ -248,7 +248,7 @@ const Handy = (() => {
         this.hinweis(appName, titel, text || ''); return;
       }
       if (!offen || app !== 'sperr') { oeffne(); zeige('sperr'); }
-      const ic = { WhatsApp: ['#25d366', '✆'], Instagram: ['linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)', '◎'], Wetter: ['#f0a030', '☀'], System: ['#607d8b', '⚙'], Livestream: ['#8e44ad', '▶'], Telefon: ['#2e7d32', '✆'], Wohlbefinden: ['#2e9e5b', '♥'] }[appName] || ['#555', '•'];
+      const ic = { WhatsApp: ['#25d366', '✆'], Instagram: ['linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)', '◎'], Wetter: ['#f0a030', '☀'], System: ['#607d8b', '⚙'], Livestream: ['#8e44ad', '▶'], YouNow: ['#2fd171', '▶'], Telefon: ['#2e7d32', '✆'], Wohlbefinden: ['#2e9e5b', '♥'] }[appName] || ['#555', '•'];
       if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) merke(k, text || '', zeit || uhrText(), 1); }
       const top = $('.sp-notifs').firstElementChild; const schl = appName + '|' + titel;
       if (top && top.dataset.k === schl && text) { const z = document.createElement('div'); z.className = 'nt neu'; z.textContent = text; top.querySelector('.ntx').appendChild(z); top.querySelector('.nkopf span').textContent = zeit || uhrText(); top.classList.remove('stups'); void top.offsetWidth; top.classList.add('stups'); return; }
@@ -258,6 +258,17 @@ const Handy = (() => {
       while (box.children.length > 7) box.lastChild.remove();
     },
     async wegwischen() { const n = $('.sp-notifs .nk'); if (n) { n.classList.add('wisch'); await warte(500); n.remove(); } },
+    // Sperrbildschirm voll: er wischt eine weg, es kommen neue nach, er wischt schneller, bis alle weg sind
+    async allesWegwischen(nachschub) {
+      const neu = (nachschub || []).slice(); let tempo = 520;
+      while (true) {
+        const n = $('.sp-notifs .nk'); if (!n) break;
+        n.classList.add('wisch'); Ton.spiele('whoosh_kurz', { vol: .18, rate: 1.6 }); await warteZ(60, tempo); n.remove();
+        if (neu.length && Math.random() < .75) { const [a, t, x] = neu.shift(); this.benachrichtigung(a, t, x); Ton.spiele('bzzz', { vol: .45 }); await warteZ(60, 220); }
+        tempo = Math.max(170, tempo * .78);
+      }
+      await warteZ(60, 300);
+    },
     async chat(name, fix) {
       warteAuf = null;
       const schonDa = offen && app === 'chat' && aktChat === name && !el.classList.contains('weg');
@@ -320,6 +331,7 @@ const Handy = (() => {
       l.querySelector('.lv-z b').textContent = zuschauer; this._live = { z: +zuschauer };
       await warteZ(20, 900);
     },
+    async liveDrehen(code) { const b = $('[data-app=live] .lv-bild'); b.classList.add('dreht'); Ton.spiele('whoosh_kurz', { vol: .25 }); await warteZ(60, 260); b.innerHTML = Spiel.bildHTML(code, true); await warteZ(60, 40); b.classList.remove('dreht'); await warteZ(60, 500); },
     async liveKommentar(name, text) {
       const k = $('[data-app=live] .lv-k'); const d = document.createElement('div'); d.className = 'lvk'; d.innerHTML = `<b>${esc(name)}</b> ${esc(text)}`;
       k.appendChild(d); while (k.children.length > 6) k.firstChild.remove();
@@ -372,7 +384,17 @@ const Handy = (() => {
     },
     async ich(text, haken) { await this.rein(); if (app !== 'chat') return; anhaengen({ von: 'Ich', text, zeit: uhrText(), haken: haken || 'grau2' }); },
     async foto(code, von, typ = 'foto') { if (app === 'liste' && warteAuf) await this.geier(von, typ === 'video' ? '🎥 Video' : '📷 Foto', 1.3); else { if (app !== 'chat') await this.chat('gruppe'); await warte(400); await schreibt(von, 1.3); } anhaengen({ von, typ, bild: code, zeit: uhrText() });  await warte(500); },
-    async fotozoom() { const f = [...el.querySelectorAll('.mfoto')].pop(); if (!f) return; const r = f.cloneNode(true); r.className = 'fotogross'; $('.screen').appendChild(r); await warte(30); r.classList.add('an'); await warte(1200); r.classList.add('zoom'); },
+    async fotozoom() {
+      const f = [...el.querySelectorAll('.mfoto')].pop(); if (!f) return; const r = f.cloneNode(true); r.className = 'fotogross'; $('.screen').appendChild(r);
+      // Zoom-Ziel aus der Bildliste (z. B. Lynn hinten in der Küche), damit der Ausschnitt im Hochformat auf ihr liegt
+      const im = r.querySelector('img'); const m = im && (im.getAttribute('src') || '').match(/img\/([^./]+)\.webp/); const z = m && typeof BILDER !== 'undefined' && BILDER[m[1]] && BILDER[m[1]].zoom;
+      if (z && r.firstElementChild) { const p = `${z[0] * 100}% ${z[1] * 100}%`; r.firstElementChild.style.objectPosition = p; r.firstElementChild.style.transformOrigin = p; }
+      // Fokus ziehen: scharfe Fassung liegt deckungsgleich darüber und blendet während des Zooms ein
+      const sch = z && BILDER[m[1]].scharf && BILDER[BILDER[m[1]].scharf];
+      if (sch) { const s2 = document.createElement('img'); s2.className = 'fz-scharf'; s2.src = sch.datei; s2.alt = ''; s2.style.objectPosition = s2.style.transformOrigin = `${z[0] * 100}% ${z[1] * 100}%`; r.appendChild(s2); }
+      await warte(30); r.classList.add('an'); await warte(1200); r.classList.add('zoom');
+      if (sch) setTimeout(() => r.classList.add('fokus'), 1700);
+    },
     fotozoomWeg() { el.querySelectorAll('.fotogross').forEach(e => e.remove()); },
     async tippeUndSende(text) { await this.rein(); if (app !== 'chat') return; await tippe(text); return sende(); },
     tippe, sende, loesche,
@@ -401,6 +423,8 @@ const Handy = (() => {
     async story(name, code, dauer = 5) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true);
+      // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
+      s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));
       s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.startsWith('lena') ? '#e0558e' : name.startsWith('lynn') ? '#3d4a66' : '#22a39a'}">${name[0].toUpperCase()}</span>`;
       s.querySelector('.st-zeit').textContent = name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.';
       s.classList.remove('post'); const b = s.querySelector('.st-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth;
@@ -446,10 +470,13 @@ const Handy = (() => {
       await warteZ(2, 500);
     },
     // Weg B: ein Karussell-Post, einmal nach rechts gewischt, dann sofort weitergescrollt
-    async karussell() {
-      oeffne(); zeige('karussell'); const k = $('[data-app=karussell]'); k.classList.remove('wisch', 'weg'); const p = k.querySelectorAll('.ka-punkte i');
+    async karussell(modus) {
+      const k = $('[data-app=karussell]'); const p = k.querySelectorAll('.ka-punkte i');
+      if (modus === 'weiter') { k.classList.add('weg'); Ton.spiele('whoosh_kurz', { vol: .35 }); await warteZ(20, 350); this.feed(); await warteZ(20, 1600); return; }
+      oeffne(); zeige('karussell'); k.classList.remove('wisch', 'wisch2', 'weg');
       p.forEach((x, i) => x.classList.toggle('an', i === 0)); await warteZ(20, 2200);
       k.classList.add('wisch'); p[0].classList.remove('an'); p[1].classList.add('an'); await warteZ(20, 1500);
+      if (modus === 'zwei') { k.classList.add('wisch2'); p[1].classList.remove('an'); p[2].classList.add('an'); await warteZ(20, 1300); return; }
       k.classList.add('weg'); Ton.spiele('whoosh_kurz', { vol: .35 }); await warteZ(20, 350); this.feed(); await warteZ(20, 1600);
     },
     // Storys fremder Leute im Schnelldurchlauf
@@ -475,7 +502,7 @@ const Handy = (() => {
     aus() { Ton.spiele('klick'); $('.displayaus').classList.add('an'); },
     reset() {
       for (const k in chats) delete chats[k];
-      $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); for (const k in meta) delete meta[k]; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☑ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();
+      $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); for (const k in meta) delete meta[k]; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();
     },
   };
 })();
