@@ -79,7 +79,7 @@ const BILDER = {
   N32c: { datei: "img/N32c.webp", imHandy: "img/N32c_h.webp", text: "Party-Pool: Jonas auf dem Tisch (Gemini v3, V8.5)", stimmung: "party", pool: true },
   N32d: { datei: "img/N32d.webp", imHandy: "img/N32d_h.webp", text: "Lena mit Torte und Wunderkerzen", stimmung: "party", funken: [[.452,.705],[.503,.632],[.512,.742],[.556,.712]] },
   N32e: { datei: "img/N32e.webp", imHandy: "img/N32e_h.webp", text: "Party-Pool: lachende Gruppe in der Küche, Handy-Blitze (Gemini, V8.5)", stimmung: "party", pool: true },
-  MIA_SELFIE: { datei: "img/MIA_SELFIE.webp", imHandy: "img/MIA_SELFIE_h.webp", text: "Mias Selfie in der Küche, Zunge raus; Tim, Jonas, Lena dahinter (Gemini, V8.5)", stimmung: "foto" },
+  MIA_SELFIE: { datei: "img/MIA_SELFIE.webp", imHandy: "img/MIA_SELFIE_h.webp", posHandy: "60% 50%", text: "Mias Selfie in der Küche, Zunge raus; Tim, Jonas, Lena dahinter (Gemini, V8.5)", stimmung: "foto" },
   BALKON_GRUPPE: { datei: "img/BALKON_GRUPPE.webp", imHandy: "img/BALKON_GRUPPE_h.webp", text: "Gruppenfoto Balkon: Lena, Tim (Zigarette), Lynn (Zunge raus) (Gemini, V8.5)", stimmung: "foto" },
   N33: { datei: "img/N33.webp", imHandy: "img/N33_h.webp", text: "Wohnzimmer spät, halb leer", stimmung: "party" },
   N16:  { datei: "img/N16.webp", text: "Badezimmer, Partylicht unter der Tür (Gemini, V8.5)", stimmung: "bad" },
@@ -245,6 +245,7 @@ const TOENE = {
   schloss:         { datei: "ton/schloss.mp3" },
   badtuer:         { datei: "ton/badtuer.mp3" },           // Wasser hört auf, Schloss, Tür (A4)
   schritte_holz:   { datei: "ton/schritte_holz.mp3" },
+  tinnitus:        { datei: "ton/tinnitus.mp3" },          // V8.6 Kater: hohes Pfeifen beim Aufwachen (synthetisch)
   lynn_lacht1:     { datei: "ton/lynn_lacht1.mp3" },
   lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3" },
   // Morgen, Prüfung

@@ -569,6 +569,8 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #verlauf .zu{width:72px;height:72px;padding:0;font-size:34px;border-radius:50%}
 /* Weniger Bewegung, wenn das Gerät das wünscht (nur Bedienelemente, nicht die Story-Effekte) */
 @media (prefers-reduced-motion:reduce){#weiter,#start .tippen,#schema.wartet .th,#karteikarten.wartet::after,#handyknopf.puls,#koernung{animation:none!important}}
+/* V8.6: § 823-Zettel – Kästchen links nicht mehr abgeschnitten */
+#schema{width:820px;padding-left:112px}
 
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 #handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,.85,.25,1);z-index:5}
@@ -1202,7 +1204,20 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #zimmer #z-titelblock,#zimmer #z-titel{transition:none}
 }#zimmer #z-s-abz .bilanz{gap:6px;bottom:140px}
 #zimmer #z-s-abz .bilanz p{font-size:36px;color:#dfe5f2}
-
+#zimmer .ab{min-height:132px;padding:20px 26px 20px 22px}
+#zimmer .ab .tx{padding-right:34px}
+#zimmer #z-lampenlicht{left:680px;top:548px;width:420px;height:200px;
+  background:linear-gradient(180deg,rgba(255,236,196,.22),rgba(255,226,170,.07) 70%,rgba(255,226,170,.02));
+  clip-path:polygon(53.5% 7%,67% 15%,86% 100%,2.5% 100%);filter:blur(7px)}
+#zimmer #z-lichtpfuetze{left:650px;top:712px;width:470px;height:78px;
+  background:radial-gradient(ellipse at 50% 45%,rgba(255,232,180,.30),rgba(255,220,160,.10) 45%,transparent 72%)}
+#zimmer #z-mief{background:radial-gradient(ellipse 620px 380px at 860px 740px,rgba(255,215,150,.09),transparent 70%)}
+#zimmer #z-tisch .offen{filter:drop-shadow(0 3px 3px rgba(0,0,0,.4)) brightness(1.08)}
+#zimmer.flack #z-lampenlicht,#zimmer.flack #z-lichtpfuetze,#zimmer.flack #z-mief,#zimmer.flack #z-lampe .birne,#zimmer.flack #z-lampenglow{animation:z_flick2 1.1s ease-in-out}
+@keyframes z_flick2{0%,100%{opacity:1}18%{opacity:.72}34%{opacity:.95}46%{opacity:.84}70%{opacity:1}}#zimmer.licht-aus #z-lampenglow{opacity:0;transition:opacity .15s}
+#zimmer #z-lampenglow{position:absolute;left:863px;top:520px;width:150px;height:110px;pointer-events:none;border-radius:50%;background:radial-gradient(ellipse at 50% 55%,rgba(255,240,205,.42),rgba(255,226,170,.12) 45%,transparent 70%);animation:z_glimm 4.5s ease-in-out infinite alternate}
+@keyframes z_glimm{from{opacity:.85}to{opacity:1}}@media (prefers-reduced-motion:reduce){#zimmer #z-lampenglow{animation:none}
+}
 </style>
 </head>
 <body>
@@ -2667,7 +2682,10 @@ Mia: „Party Nummer vieeer.“
 @bild N35w langsam
 @musik mia leise
 @uhr +15
-@warte 1.5
+# V8.6 (Philip): nachdem Mia weg ist, länger bleiben und das Lied ausklingen lassen
+@warte 3
+@musik mia still langsam
+@warte 5.5
 -> TANZ_ENDE
 
 == TANZ_ENDE
@@ -3670,10 +3688,15 @@ Ich bin auf keinem Foto. !3
 @karte Samstag. 14:20. Noch 42 Stunden.
 @uhr Sa 14:20
 @schwarz
+# V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
+@ton tinnitus
+@warte 3.5
 @ton voegel
-@warte 3
+@warte 1.5
 @bild SO schnitt
 @raum tag
+~ Wieso bin ich so dumm?
+… !2
 Irgendwas war halt immer.
 … !2
 @handy chat Tim
@@ -3821,13 +3844,20 @@ Ich leg das Handy weg. Zwei Tage noch.
 @bild SO1b schnitt
 @warte .6
 @lernplan haken 2
-@lernplan haken 3
+@wenn typ!="party"
+  @lernplan haken 3
+@ende
 @bild SO1c schnitt
 @warte .6
+# V8.6 (Philip): nicht mehr alles schaffen. Zu Hause/Lynn-Weg: Fälle 1–5 bleiben offen. Party: auch Deliktsrecht offen.
 @lernplan haken 4
 @bild SO1d schnitt
-@warte .6
-@lernplan haken 5
+@warte 1.2
+@wenn typ=="party"
+  @lernplan blick 3
+  @warte .8
+@ende
+@lernplan blick 5
 @warte 1.4
 @wenn typ=="zuhause" && weg=="A"
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
@@ -4121,7 +4151,6 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   Die Buchstaben auf den Karteikarten der anderen verschwimmen kurz.
 @ende
-Senner: „Handys aus. Taschen nach vorne.“
 # Zwei letzte Nachrichten. Zählen nie als Handy-Punkt: Schauen ist hier richtig.
 @handy sperr
 @ton bzzz
@@ -4144,10 +4173,14 @@ Senner: „Handys aus. Taschen nach vorne.“
 @warte 1.4
 @handy zu
 …
+# V8.6 (Philip): statt „Taschen nach vorne“ – rein, hinsetzen, warten
+Senner: „Bitte reinkommen.“
+@ton schritte_holz leise
 @loop halle aus
 @uhr Mo 08:58
 @bild N25 langsam
 @loop pruefung an
+… !3
 Der Prüfungsraum ist still. Nur Papier und Stifte. !3
 Aufgabe 1.
 @bild N25B schnitt
@@ -4204,8 +4237,6 @@ Senner: „Noch zehn Minuten.“
   ~ Ich glaub … das war’s.
   … !2
   ~ Im guten Sinn.
-@sonst
-  ~ Irgendwas war halt immer.
 @ende
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   -> ENDE_TWIST
@@ -4425,7 +4456,7 @@ const BILDER = {
   N32c: { datei: "img/N32c.webp", imHandy: "img/N32c_h.webp", text: "Party-Pool: Jonas auf dem Tisch (Gemini v3, V8.5)", stimmung: "party", pool: true },
   N32d: { datei: "img/N32d.webp", imHandy: "img/N32d_h.webp", text: "Lena mit Torte und Wunderkerzen", stimmung: "party", funken: [[.452,.705],[.503,.632],[.512,.742],[.556,.712]] },
   N32e: { datei: "img/N32e.webp", imHandy: "img/N32e_h.webp", text: "Party-Pool: lachende Gruppe in der Küche, Handy-Blitze (Gemini, V8.5)", stimmung: "party", pool: true },
-  MIA_SELFIE: { datei: "img/MIA_SELFIE.webp", imHandy: "img/MIA_SELFIE_h.webp", text: "Mias Selfie in der Küche, Zunge raus; Tim, Jonas, Lena dahinter (Gemini, V8.5)", stimmung: "foto" },
+  MIA_SELFIE: { datei: "img/MIA_SELFIE.webp", imHandy: "img/MIA_SELFIE_h.webp", posHandy: "60% 50%", text: "Mias Selfie in der Küche, Zunge raus; Tim, Jonas, Lena dahinter (Gemini, V8.5)", stimmung: "foto" },
   BALKON_GRUPPE: { datei: "img/BALKON_GRUPPE.webp", imHandy: "img/BALKON_GRUPPE_h.webp", text: "Gruppenfoto Balkon: Lena, Tim (Zigarette), Lynn (Zunge raus) (Gemini, V8.5)", stimmung: "foto" },
   N33: { datei: "img/N33.webp", imHandy: "img/N33_h.webp", text: "Wohnzimmer spät, halb leer", stimmung: "party" },
   N16:  { datei: "img/N16.webp", text: "Badezimmer, Partylicht unter der Tür (Gemini, V8.5)", stimmung: "bad" },
@@ -4591,6 +4622,7 @@ const TOENE = {
   schloss:         { datei: "ton/schloss.mp3" },
   badtuer:         { datei: "ton/badtuer.mp3" },           // Wasser hört auf, Schloss, Tür (A4)
   schritte_holz:   { datei: "ton/schritte_holz.mp3" },
+  tinnitus:        { datei: "ton/tinnitus.mp3" },          // V8.6 Kater: hohes Pfeifen beim Aufwachen (synthetisch)
   lynn_lacht1:     { datei: "ton/lynn_lacht1.mp3" },
   lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3" },
   // Morgen, Prüfung
@@ -4706,12 +4738,20 @@ const FILME = { weg: 'vid/weg.mp4' };
   <div id="z-lampenlicht"></div>
   <div id="z-lichtpfuetze"></div>
   <svg id="z-lampe" viewBox="0 0 260 300" aria-hidden="true">
-   <ellipse cx="180" cy="272" rx="34" ry="8" fill="#26282d"/>
-   <path d="M180 268 L214 150 L118 72" fill="none" stroke="#3a3d44" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
-   <circle cx="214" cy="150" r="7" fill="#2c2e34"/>
-   <path d="M92 58 L136 70 L118 106 L70 92 Z" fill="#33363c"/>
-   <ellipse class="birne" cx="94" cy="99" rx="25" ry="6" fill="#dfe6b0" opacity=".85" transform="rotate(16 94 99)"/>
+   <ellipse cx="180" cy="271" rx="36" ry="8" fill="#1d1f24"/>
+   <path d="M150 268 Q180 258 210 268 L210 272 Q180 280 150 272 Z" fill="#30333a"/>
+   <path d="M180 266 L214 150" fill="none" stroke="#3d4048" stroke-width="7" stroke-linecap="round"/>
+   <path d="M214 150 L134 80" fill="none" stroke="#3d4048" stroke-width="6" stroke-linecap="round"/>
+   <path d="M193 214 L205 186" fill="none" stroke="#5a5f69" stroke-width="2" stroke-linecap="round" opacity=".7"/>
+   <circle cx="214" cy="150" r="7.5" fill="#2c2e34" stroke="#4a4e57" stroke-width="2"/>
+   <circle cx="136" cy="80" r="6" fill="#2c2e34" stroke="#4a4e57" stroke-width="2"/>
+   <path d="M124 60 Q138 60 144 72 L122 110 Q94 112 64 92 Z" fill="#33363d"/>
+   <path d="M130 62 Q139 64 142 72 L124 104" fill="none" stroke="#4c5059" stroke-width="3" stroke-linecap="round"/>
+   <path d="M124 60 Q138 60 144 72" fill="none" stroke="#61666f" stroke-width="2" stroke-linecap="round"/>
+   <ellipse class="birne" cx="93" cy="101" rx="30" ry="7.5" fill="#fff1cc" transform="rotate(20 93 101)"/>
+   <ellipse class="birne" cx="93" cy="101" rx="17" ry="3.5" fill="#ffffff" opacity=".9" transform="rotate(20 93 101)"/>
   </svg>
+  <div id="z-lampenglow"></div>
   <div id="z-stange"></div>
 
   <div id="z-toenung"></div>
@@ -4916,7 +4956,7 @@ const Ton = (() => {
   // ---------- Musik ----------
   const STUFEN = {
     laut: [1, 18000], leise: [.45, 2600], dumpf: [.6, 380], tuer: [.55, 650], fern: [.22, 300], telefon: [.3, 1300],
-    strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
+    still: [0, 18000], strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
   };
   function stelle(art, langsam) {
     const p = STUFEN[art] || STUFEN.laut; const t = now();
@@ -5214,10 +5254,10 @@ const Handy = (() => {
     kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : (chatListe(n).length ? 'online' : '');
     kopf.classList.toggle('gr', istGruppe(n));
   }
-  function eingabe(txt) {
+  function eingabe(txt, beimLoeschen) {
     const f = $('.c-eingabe'); f.querySelector('.txt').textContent = txt; f.classList.toggle('voll', txt.length > 0);
     const feld = f.querySelector('.feld'); feld.scrollTop = feld.scrollHeight;
-    const w = txt.split(/\s/).pop(); const vw = $('.vw'); if (vw) vw.textContent = w ? (w.length > 12 ? w.slice(0, 11) + '…' : w) : '';
+    const w = beimLoeschen ? '' : txt.split(/\s/).pop(); const vw = $('.vw'); if (vw) vw.textContent = w ? (w.length > 12 ? w.slice(0, 11) + '…' : w) : '';  // V8.6: beim Löschen kein Wortvorschlag (sah aus, als käme Text zurück)
     const b = $('.c-msgs'); if (b) b.scrollTop = b.scrollHeight;
   }
   function tastatur(an) { $('[data-app=chat]').classList.toggle('tippt', an); const b = $('.c-msgs'); setTimeout(() => b.scrollTop = b.scrollHeight, 260); }
@@ -5246,7 +5286,7 @@ const Handy = (() => {
   async function loesche() {
     let s = $('.c-eingabe .txt').textContent;
     const arr = Array.from(s);
-    while (arr.length) { arr.pop(); eingabe(arr.join('')); taste('⌫'); Ton.spiele('tipp', { rate: .8, vol: .55 }); await warte(70); }
+    while (arr.length) { arr.pop(); eingabe(arr.join(''), true); taste('⌫'); Ton.spiele('tipp', { rate: .8, vol: .55 }); await warte(70); }
   }
   async function sende() {
     const txt = $('.c-eingabe .txt').textContent; if (!txt) return;
@@ -5340,6 +5380,27 @@ const Handy = (() => {
       zeige('chat'); setzeKopf(); renderChat(); eingabe(''); tastatur(false);
     },
     liste() { oeffne(); renderListe(); zeige('liste'); },
+    // V8.6: Handy-Knopf – einen Chat nur ansehen (nichts schreiben). Zeigt den Verlauf bis jetzt; ungelesene Nachricht,
+    // die bisher nur in der Liste stand, wird als letzte Blase gezeigt. Danach wird der Story-Chat wiederhergestellt.
+    lesen(n) {
+      if (this._lesenAlt === undefined) this._lesenAlt = aktChat;
+      aktChat = n; setzeKopf(); tastatur(false);
+      const box = $('.c-msgs'); box.innerHTML = '';
+      const liste = chatListe(n).map(m => Object.assign({}, m)); const m0 = meta[n];
+      if (m0 && m0.ungelesen && m0.vorschau) {
+        const letzte = liste[liste.length - 1]; const vtxt = m0.vorschau;
+        if (!letzte || vorschauVon(letzte) !== vtxt) {
+          const g = istGruppe(n) && vtxt.match(/^([^:]{1,20}):\s(.*)$/);
+          liste.push({ von: g ? g[1] : n, text: g ? g[2] : vtxt, zeit: m0.zeit || '', tagIdx: m0.tagIdx });
+        }
+      }
+      let vorher = null, tag = null;
+      if (!liste.length) box.insertAdjacentHTML('beforeend', '<div class="c-system">🔒 Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen.</div>');
+      liste.forEach(m => { const t = tagLabel(m.tagIdx == null ? 0 : m.tagIdx); if (t !== tag) { box.insertAdjacentHTML('beforeend', `<div class="c-tag"><span>${esc(t)}</span></div>`); tag = t; vorher = null; } box.appendChild(bubble(m, vorher)); vorher = m; });
+      zeige('chat'); box.scrollTop = box.scrollHeight;
+    },
+    lesenZuListe() { renderListe(); zeige('liste'); },
+    lesenZu() { if (this._lesenAlt !== undefined) { aktChat = this._lesenAlt; this._lesenAlt = undefined; if (aktChat) { setzeKopf(); renderChat(); } } },
     // Chat „vormerken“: in der Liste warten, bis jemand schreibt (bei neuen Chats direkt rein)
     async vorChat(name) {
       if (offen && app === 'chat' && aktChat === name && !el.classList.contains('weg')) return;
@@ -5619,7 +5680,7 @@ const Rahmen = (() => {
 
   // ---------------- Draußen ----------------
   const farben = ['#ff9a3c', '#ff4fa3', '#ffd27a', '#9a5cff', '#3cf0ff', '#7dff8a', '#ff6a3c', '#ffe14d'];
-  let aktiv = false, feuerRate = .025, vorbeiT = null;
+  let aktiv = false, feuerRate = .025, vorbeiT = null, flackZ = 0;
   (() => {
     const bok = bw.querySelector('#z-draussen .bokeh');
     for (let i = 0; i < 34; i++) {
@@ -5768,7 +5829,8 @@ const Rahmen = (() => {
       if (alter >= 3 && !karten[j].classList.contains('weg')) { karten[j].classList.add('weg'); const x = karten[j]; setTimeout(() => x.remove(), 900); }
     }
     ton('bzzz');
-    if (!reduziert) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
+    // V8.6: Lampe flackert nur noch bei jeder dritten Nachricht, weich
+    if (!reduziert && (++flackZ % 3 === 1)) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
     sichern();
   }
   function nachrichtenStart(verz) { nachrichtenStopp(); nStart = setTimeout(() => { neu(); nTimer = setInterval(neu, 3600); }, verz); }
@@ -5930,6 +5992,8 @@ const Rahmen = (() => {
         bw.classList.add('licht-aus'); ton('lichtschalter'); handyStopp();
         plan(() => ton('party_fern'), 900);
         if (!reduziert) plan(function los() { aufleuchten(true); plan(los, 14000 + Math.random() * 6000); }, 5200);
+        // V8.6 (Philip): danach zurück ins Hauptmenü (eine Webseite kann sich nicht selbst schließen)
+        plan(insMenueNachEnde, 9500);
       }, 1600);
       return;
     }
@@ -5944,6 +6008,7 @@ const Rahmen = (() => {
     ja.style.transform = 'scale(' + (2 - k) + ')'; ja.style.transformOrigin = 'left bottom'; ja.style.opacity = stufe === 1 ? '.9' : '.55';
     ja.onclick = () => beenden(stufe + 1); nein.onclick = nochmal;
   }
+  function insMenueNachEnde() { if (akt !== 's-glaub') return; startZeigen(false); zumMenue(); }
   function nochmal() {
     $('w-text').textContent = T('nochmal', 'Wusst ich’s doch.');
     zeige('s-wusst'); plan(() => { if (akt === 's-wusst') startZeigen(true); }, 2600);
@@ -5957,6 +6022,7 @@ const Rahmen = (() => {
     if (!bw.classList.contains('ende-an')) { if (!bw.classList.contains('menue-an')) zumMenue(); return; }
     if (akt === 's-ende' && weiterWarter) { const w = weiterWarter; weiterWarter = null; w(); }
     else if (akt === 's-wusst') startZeigen(true);
+    else if (akt === 's-glaub' && bw.classList.contains('licht-aus')) { planStopp(); insMenueNachEnde(); }
   });
   $('k-weiter').addEventListener('click', ev => { ev.stopPropagation(); if (weiterWarter) { const w = weiterWarter; weiterWarter = null; w(); } });
   sp.addEventListener('click', ev => {
@@ -6164,12 +6230,15 @@ const Spiel = (() => {
     rbb.classList.toggle('handy', !!e.handy && !!e.bild);
     if (e.schwarz || !e.bild) { rbb.innerHTML = ''; rbb.classList.toggle('an', !!e.schwarz || !!e.handy); }
     else { const k = e.gesicht && typeof OVERLAYS !== 'undefined' && OVERLAYS[e.gesicht]; rbb.innerHTML = bildHTML(e.bild) + (k ? `<img src="img/${e.gesicht}.webp" alt="" style="position:absolute;left:${k.box[0] * 100}%;top:${k.box[1] * 100}%;width:${k.box[2] * 100}%;height:${k.box[3] * 100}%">` : ''); rbb.classList.add('an'); }
+    // V8.6: im Rückblick die Uhrzeit von damals zeigen (sonst stand z. B. „09:00“ über einem Nachtbild)
+    const uhrEl = $('#uhr'); if (uhrJetzt === null) uhrJetzt = uhrEl.textContent; if (e.uhr != null) uhrEl.textContent = e.uhr;
     textbox.style.visibility = 'hidden';
     const t = rb.querySelector('.rt'), n = rb.querySelector('.rn');
     t.className = 'rt ' + (e.ins.stil || '') + (e.ins.schrei ? ' schrei' : ''); t.textContent = e.voll;
     if (e.ins.sprecher) { n.textContent = e.ins.sprecher; n.style.background = SPRECHERFARBE[e.ins.sprecher] || '#2d3550'; n.style.display = 'block'; } else n.style.display = 'none';
   }
-  function rueckZu() { rueckPos = -1; pausiert = false; rb.classList.remove('an'); const rbb = $('#rueckbild'); rbb.classList.remove('an', 'handy'); rbb.innerHTML = ''; textbox.style.visibility = ''; }
+  let uhrJetzt = null;
+  function rueckZu() { if (uhrJetzt !== null) { $('#uhr').textContent = uhrJetzt; uhrJetzt = null; } rueckPos = -1; pausiert = false; rb.classList.remove('an'); const rbb = $('#rueckbild'); rbb.classList.remove('an', 'handy'); rbb.innerHTML = ''; textbox.style.visibility = ''; }
   function aufTippen(e) {
     if (e.target.closest('button,#debug,.schirm,select,input')) return;
     if (Ton.introLaeuft && !$('#karte').classList.contains('an') && !$('#karte').classList.contains('vorspann')) Ton.introAus();
@@ -6195,14 +6264,19 @@ const Spiel = (() => {
     haendeTausch('sperr'); Handy.sperr();
     if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
   }
-  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
+  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
   B.addEventListener('pointerdown', e => {
     if (!blick.offen || e.target.closest('#handyknopf')) return;
     e.stopPropagation(); e.preventDefault();
-    if (e.target.closest('#handy') && Handy.app === 'sperr' && !(aktBild && aktBild.stimmung === 'pruefung')) { Handy.liste(); Ton.spiele('display_klick'); return; }
+    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung')) {
+      if (Handy.app === 'sperr') { Handy.liste(); Ton.spiele('display_klick'); return; }
+      // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
+      if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
+      if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
+    }
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
@@ -6240,7 +6314,7 @@ const Spiel = (() => {
     if (ins.sprecher) { nameEl.textContent = ins.sprecher; nameEl.style.background = SPRECHERFARBE[ins.sprecher] || '#2d3550'; nameEl.classList.add('an'); } else nameEl.classList.remove('an');
     zeigeTextbox(true); textEl.textContent = '';
     verlauf.push({ n: ins.sprecher, t: voll, g: !!ins.stil }); if (verlauf.length > 60) verlauf.shift();
-    rueck.push({ ins, voll, bild: aktBild && aktBild.code !== 'film' ? (aktBild.ersatzFuer || aktBild.code) : null, gesicht: gesichtFest, schwarz: $('#schwarz').classList.contains('an'), handy: B.classList.contains('handyoffen') });
+    rueck.push({ ins, voll, bild: aktBild && aktBild.code !== 'film' ? (aktBild.ersatzFuer || aktBild.code) : null, gesicht: gesichtFest, schwarz: $('#schwarz').classList.contains('an'), handy: B.classList.contains('handyoffen'), uhr: $('#uhr').textContent });
     tippt = true; ueberspringen = false; let s = '';
     const vSp = aktBild && typeof VARIANTEN !== 'undefined' && VARIANTEN[aktBild.code] && VARIANTEN[aktBild.code].spricht;
     const spEl = vSp && ins.sprecher && vSp[ins.sprecher] && !gesichtFest ? ovEl(vSp[ins.sprecher]) : null;
@@ -6325,7 +6399,8 @@ const Spiel = (() => {
   function bildHTML(code, klein) {
     const e = eintrag(code);
     // V8.5: im Handy (klein) die Handyfoto-Fassung (dunkler, Körnung), wenn es eine gibt
-    if (e.datei) return `<img src="${klein && e.imHandy ? e.imHandy : e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">`;
+    // V8.6: optional eigener Bildausschnitt im Handy (z. B. MIA_SELFIE: Mias Gesicht ganz drin)
+    if (e.datei) return `<img src="${klein && e.imHandy ? e.imHandy : e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}"${klein && e.posHandy ? ` style="object-position:${e.posHandy}"` : ''} draggable="false">`;
     return phHTML(code, e, klein);
   }
   // Bilder vorladen: nie halb aufgebaut zeigen

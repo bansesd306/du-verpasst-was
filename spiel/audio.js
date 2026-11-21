@@ -113,7 +113,7 @@ const Ton = (() => {
   // ---------- Musik ----------
   const STUFEN = {
     laut: [1, 18000], leise: [.45, 2600], dumpf: [.6, 380], tuer: [.55, 650], fern: [.22, 300], telefon: [.3, 1300],
-    strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
+    still: [0, 18000], strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
   };
   function stelle(art, langsam) {
     const p = STUFEN[art] || STUFEN.laut; const t = now();

@@ -32,7 +32,7 @@ const Rahmen = (() => {
 
   // ---------------- Draußen ----------------
   const farben = ['#ff9a3c', '#ff4fa3', '#ffd27a', '#9a5cff', '#3cf0ff', '#7dff8a', '#ff6a3c', '#ffe14d'];
-  let aktiv = false, feuerRate = .025, vorbeiT = null;
+  let aktiv = false, feuerRate = .025, vorbeiT = null, flackZ = 0;
   (() => {
     const bok = bw.querySelector('#z-draussen .bokeh');
     for (let i = 0; i < 34; i++) {
@@ -181,7 +181,8 @@ const Rahmen = (() => {
       if (alter >= 3 && !karten[j].classList.contains('weg')) { karten[j].classList.add('weg'); const x = karten[j]; setTimeout(() => x.remove(), 900); }
     }
     ton('bzzz');
-    if (!reduziert) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
+    // V8.6: Lampe flackert nur noch bei jeder dritten Nachricht, weich
+    if (!reduziert && (++flackZ % 3 === 1)) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
     sichern();
   }
   function nachrichtenStart(verz) { nachrichtenStopp(); nStart = setTimeout(() => { neu(); nTimer = setInterval(neu, 3600); }, verz); }
@@ -343,6 +344,8 @@ const Rahmen = (() => {
         bw.classList.add('licht-aus'); ton('lichtschalter'); handyStopp();
         plan(() => ton('party_fern'), 900);
         if (!reduziert) plan(function los() { aufleuchten(true); plan(los, 14000 + Math.random() * 6000); }, 5200);
+        // V8.6 (Philip): danach zurück ins Hauptmenü (eine Webseite kann sich nicht selbst schließen)
+        plan(insMenueNachEnde, 9500);
       }, 1600);
       return;
     }
@@ -357,6 +360,7 @@ const Rahmen = (() => {
     ja.style.transform = 'scale(' + (2 - k) + ')'; ja.style.transformOrigin = 'left bottom'; ja.style.opacity = stufe === 1 ? '.9' : '.55';
     ja.onclick = () => beenden(stufe + 1); nein.onclick = nochmal;
   }
+  function insMenueNachEnde() { if (akt !== 's-glaub') return; startZeigen(false); zumMenue(); }
   function nochmal() {
     $('w-text').textContent = T('nochmal', 'Wusst ich’s doch.');
     zeige('s-wusst'); plan(() => { if (akt === 's-wusst') startZeigen(true); }, 2600);
@@ -370,6 +374,7 @@ const Rahmen = (() => {
     if (!bw.classList.contains('ende-an')) { if (!bw.classList.contains('menue-an')) zumMenue(); return; }
     if (akt === 's-ende' && weiterWarter) { const w = weiterWarter; weiterWarter = null; w(); }
     else if (akt === 's-wusst') startZeigen(true);
+    else if (akt === 's-glaub' && bw.classList.contains('licht-aus')) { planStopp(); insMenueNachEnde(); }
   });
   $('k-weiter').addEventListener('click', ev => { ev.stopPropagation(); if (weiterWarter) { const w = weiterWarter; weiterWarter = null; w(); } });
   sp.addEventListener('click', ev => {

@@ -1454,7 +1454,10 @@ Mia: „Party Nummer vieeer.“
 @bild N35w langsam
 @musik mia leise
 @uhr +15
-@warte 1.5
+# V8.6 (Philip): nachdem Mia weg ist, länger bleiben und das Lied ausklingen lassen
+@warte 3
+@musik mia still langsam
+@warte 5.5
 -> TANZ_ENDE
 
 == TANZ_ENDE
@@ -2457,10 +2460,15 @@ Ich bin auf keinem Foto. !3
 @karte Samstag. 14:20. Noch 42 Stunden.
 @uhr Sa 14:20
 @schwarz
+# V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
+@ton tinnitus
+@warte 3.5
 @ton voegel
-@warte 3
+@warte 1.5
 @bild SO schnitt
 @raum tag
+~ Wieso bin ich so dumm?
+… !2
 Irgendwas war halt immer.
 … !2
 @handy chat Tim
@@ -2608,13 +2616,20 @@ Ich leg das Handy weg. Zwei Tage noch.
 @bild SO1b schnitt
 @warte .6
 @lernplan haken 2
-@lernplan haken 3
+@wenn typ!="party"
+  @lernplan haken 3
+@ende
 @bild SO1c schnitt
 @warte .6
+# V8.6 (Philip): nicht mehr alles schaffen. Zu Hause/Lynn-Weg: Fälle 1–5 bleiben offen. Party: auch Deliktsrecht offen.
 @lernplan haken 4
 @bild SO1d schnitt
-@warte .6
-@lernplan haken 5
+@warte 1.2
+@wenn typ=="party"
+  @lernplan blick 3
+  @warte .8
+@ende
+@lernplan blick 5
 @warte 1.4
 @wenn typ=="zuhause" && weg=="A"
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
@@ -2908,7 +2923,6 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   Die Buchstaben auf den Karteikarten der anderen verschwimmen kurz.
 @ende
-Senner: „Handys aus. Taschen nach vorne.“
 # Zwei letzte Nachrichten. Zählen nie als Handy-Punkt: Schauen ist hier richtig.
 @handy sperr
 @ton bzzz
@@ -2931,10 +2945,14 @@ Senner: „Handys aus. Taschen nach vorne.“
 @warte 1.4
 @handy zu
 …
+# V8.6 (Philip): statt „Taschen nach vorne“ – rein, hinsetzen, warten
+Senner: „Bitte reinkommen.“
+@ton schritte_holz leise
 @loop halle aus
 @uhr Mo 08:58
 @bild N25 langsam
 @loop pruefung an
+… !3
 Der Prüfungsraum ist still. Nur Papier und Stifte. !3
 Aufgabe 1.
 @bild N25B schnitt
@@ -2991,8 +3009,6 @@ Senner: „Noch zehn Minuten.“
   ~ Ich glaub … das war’s.
   … !2
   ~ Im guten Sinn.
-@sonst
-  ~ Irgendwas war halt immer.
 @ende
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   -> ENDE_TWIST

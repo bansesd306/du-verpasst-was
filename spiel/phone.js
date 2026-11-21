@@ -187,10 +187,10 @@ const Handy = (() => {
     kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : (chatListe(n).length ? 'online' : '');
     kopf.classList.toggle('gr', istGruppe(n));
   }
-  function eingabe(txt) {
+  function eingabe(txt, beimLoeschen) {
     const f = $('.c-eingabe'); f.querySelector('.txt').textContent = txt; f.classList.toggle('voll', txt.length > 0);
     const feld = f.querySelector('.feld'); feld.scrollTop = feld.scrollHeight;
-    const w = txt.split(/\s/).pop(); const vw = $('.vw'); if (vw) vw.textContent = w ? (w.length > 12 ? w.slice(0, 11) + '…' : w) : '';
+    const w = beimLoeschen ? '' : txt.split(/\s/).pop(); const vw = $('.vw'); if (vw) vw.textContent = w ? (w.length > 12 ? w.slice(0, 11) + '…' : w) : '';  // V8.6: beim Löschen kein Wortvorschlag (sah aus, als käme Text zurück)
     const b = $('.c-msgs'); if (b) b.scrollTop = b.scrollHeight;
   }
   function tastatur(an) { $('[data-app=chat]').classList.toggle('tippt', an); const b = $('.c-msgs'); setTimeout(() => b.scrollTop = b.scrollHeight, 260); }
@@ -219,7 +219,7 @@ const Handy = (() => {
   async function loesche() {
     let s = $('.c-eingabe .txt').textContent;
     const arr = Array.from(s);
-    while (arr.length) { arr.pop(); eingabe(arr.join('')); taste('⌫'); Ton.spiele('tipp', { rate: .8, vol: .55 }); await warte(70); }
+    while (arr.length) { arr.pop(); eingabe(arr.join(''), true); taste('⌫'); Ton.spiele('tipp', { rate: .8, vol: .55 }); await warte(70); }
   }
   async function sende() {
     const txt = $('.c-eingabe .txt').textContent; if (!txt) return;
@@ -313,6 +313,27 @@ const Handy = (() => {
       zeige('chat'); setzeKopf(); renderChat(); eingabe(''); tastatur(false);
     },
     liste() { oeffne(); renderListe(); zeige('liste'); },
+    // V8.6: Handy-Knopf – einen Chat nur ansehen (nichts schreiben). Zeigt den Verlauf bis jetzt; ungelesene Nachricht,
+    // die bisher nur in der Liste stand, wird als letzte Blase gezeigt. Danach wird der Story-Chat wiederhergestellt.
+    lesen(n) {
+      if (this._lesenAlt === undefined) this._lesenAlt = aktChat;
+      aktChat = n; setzeKopf(); tastatur(false);
+      const box = $('.c-msgs'); box.innerHTML = '';
+      const liste = chatListe(n).map(m => Object.assign({}, m)); const m0 = meta[n];
+      if (m0 && m0.ungelesen && m0.vorschau) {
+        const letzte = liste[liste.length - 1]; const vtxt = m0.vorschau;
+        if (!letzte || vorschauVon(letzte) !== vtxt) {
+          const g = istGruppe(n) && vtxt.match(/^([^:]{1,20}):\s(.*)$/);
+          liste.push({ von: g ? g[1] : n, text: g ? g[2] : vtxt, zeit: m0.zeit || '', tagIdx: m0.tagIdx });
+        }
+      }
+      let vorher = null, tag = null;
+      if (!liste.length) box.insertAdjacentHTML('beforeend', '<div class="c-system">🔒 Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen.</div>');
+      liste.forEach(m => { const t = tagLabel(m.tagIdx == null ? 0 : m.tagIdx); if (t !== tag) { box.insertAdjacentHTML('beforeend', `<div class="c-tag"><span>${esc(t)}</span></div>`); tag = t; vorher = null; } box.appendChild(bubble(m, vorher)); vorher = m; });
+      zeige('chat'); box.scrollTop = box.scrollHeight;
+    },
+    lesenZuListe() { renderListe(); zeige('liste'); },
+    lesenZu() { if (this._lesenAlt !== undefined) { aktChat = this._lesenAlt; this._lesenAlt = undefined; if (aktChat) { setzeKopf(); renderChat(); } } },
     // Chat „vormerken“: in der Liste warten, bis jemand schreibt (bei neuen Chats direkt rein)
     async vorChat(name) {
       if (offen && app === 'chat' && aktChat === name && !el.classList.contains('weg')) return;

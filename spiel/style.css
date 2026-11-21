@@ -560,3 +560,5 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #verlauf .zu{width:72px;height:72px;padding:0;font-size:34px;border-radius:50%}
 /* Weniger Bewegung, wenn das Gerät das wünscht (nur Bedienelemente, nicht die Story-Effekte) */
 @media (prefers-reduced-motion:reduce){#weiter,#start .tippen,#schema.wartet .th,#karteikarten.wartet::after,#handyknopf.puls,#koernung{animation:none!important}}
+/* V8.6: § 823-Zettel – Kästchen links nicht mehr abgeschnitten */
+#schema{width:820px;padding-left:112px}

@@ -136,12 +136,15 @@ const Spiel = (() => {
     rbb.classList.toggle('handy', !!e.handy && !!e.bild);
     if (e.schwarz || !e.bild) { rbb.innerHTML = ''; rbb.classList.toggle('an', !!e.schwarz || !!e.handy); }
     else { const k = e.gesicht && typeof OVERLAYS !== 'undefined' && OVERLAYS[e.gesicht]; rbb.innerHTML = bildHTML(e.bild) + (k ? `<img src="img/${e.gesicht}.webp" alt="" style="position:absolute;left:${k.box[0] * 100}%;top:${k.box[1] * 100}%;width:${k.box[2] * 100}%;height:${k.box[3] * 100}%">` : ''); rbb.classList.add('an'); }
+    // V8.6: im Rückblick die Uhrzeit von damals zeigen (sonst stand z. B. „09:00“ über einem Nachtbild)
+    const uhrEl = $('#uhr'); if (uhrJetzt === null) uhrJetzt = uhrEl.textContent; if (e.uhr != null) uhrEl.textContent = e.uhr;
     textbox.style.visibility = 'hidden';
     const t = rb.querySelector('.rt'), n = rb.querySelector('.rn');
     t.className = 'rt ' + (e.ins.stil || '') + (e.ins.schrei ? ' schrei' : ''); t.textContent = e.voll;
     if (e.ins.sprecher) { n.textContent = e.ins.sprecher; n.style.background = SPRECHERFARBE[e.ins.sprecher] || '#2d3550'; n.style.display = 'block'; } else n.style.display = 'none';
   }
-  function rueckZu() { rueckPos = -1; pausiert = false; rb.classList.remove('an'); const rbb = $('#rueckbild'); rbb.classList.remove('an', 'handy'); rbb.innerHTML = ''; textbox.style.visibility = ''; }
+  let uhrJetzt = null;
+  function rueckZu() { if (uhrJetzt !== null) { $('#uhr').textContent = uhrJetzt; uhrJetzt = null; } rueckPos = -1; pausiert = false; rb.classList.remove('an'); const rbb = $('#rueckbild'); rbb.classList.remove('an', 'handy'); rbb.innerHTML = ''; textbox.style.visibility = ''; }
   function aufTippen(e) {
     if (e.target.closest('button,#debug,.schirm,select,input')) return;
     if (Ton.introLaeuft && !$('#karte').classList.contains('an') && !$('#karte').classList.contains('vorspann')) Ton.introAus();
@@ -167,14 +170,19 @@ const Spiel = (() => {
     haendeTausch('sperr'); Handy.sperr();
     if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
   }
-  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
+  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
   B.addEventListener('pointerdown', e => {
     if (!blick.offen || e.target.closest('#handyknopf')) return;
     e.stopPropagation(); e.preventDefault();
-    if (e.target.closest('#handy') && Handy.app === 'sperr' && !(aktBild && aktBild.stimmung === 'pruefung')) { Handy.liste(); Ton.spiele('display_klick'); return; }
+    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung')) {
+      if (Handy.app === 'sperr') { Handy.liste(); Ton.spiele('display_klick'); return; }
+      // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
+      if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
+      if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
+    }
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
@@ -212,7 +220,7 @@ const Spiel = (() => {
     if (ins.sprecher) { nameEl.textContent = ins.sprecher; nameEl.style.background = SPRECHERFARBE[ins.sprecher] || '#2d3550'; nameEl.classList.add('an'); } else nameEl.classList.remove('an');
     zeigeTextbox(true); textEl.textContent = '';
     verlauf.push({ n: ins.sprecher, t: voll, g: !!ins.stil }); if (verlauf.length > 60) verlauf.shift();
-    rueck.push({ ins, voll, bild: aktBild && aktBild.code !== 'film' ? (aktBild.ersatzFuer || aktBild.code) : null, gesicht: gesichtFest, schwarz: $('#schwarz').classList.contains('an'), handy: B.classList.contains('handyoffen') });
+    rueck.push({ ins, voll, bild: aktBild && aktBild.code !== 'film' ? (aktBild.ersatzFuer || aktBild.code) : null, gesicht: gesichtFest, schwarz: $('#schwarz').classList.contains('an'), handy: B.classList.contains('handyoffen'), uhr: $('#uhr').textContent });
     tippt = true; ueberspringen = false; let s = '';
     const vSp = aktBild && typeof VARIANTEN !== 'undefined' && VARIANTEN[aktBild.code] && VARIANTEN[aktBild.code].spricht;
     const spEl = vSp && ins.sprecher && vSp[ins.sprecher] && !gesichtFest ? ovEl(vSp[ins.sprecher]) : null;
@@ -297,7 +305,8 @@ const Spiel = (() => {
   function bildHTML(code, klein) {
     const e = eintrag(code);
     // V8.5: im Handy (klein) die Handyfoto-Fassung (dunkler, Körnung), wenn es eine gibt
-    if (e.datei) return `<img src="${klein && e.imHandy ? e.imHandy : e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">`;
+    // V8.6: optional eigener Bildausschnitt im Handy (z. B. MIA_SELFIE: Mias Gesicht ganz drin)
+    if (e.datei) return `<img src="${klein && e.imHandy ? e.imHandy : e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}"${klein && e.posHandy ? ` style="object-position:${e.posHandy}"` : ''} draggable="false">`;
     return phHTML(code, e, klein);
   }
   // Bilder vorladen: nie halb aufgebaut zeigen
