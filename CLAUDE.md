@@ -12,7 +12,7 @@
 - `tools/galerie.py` – Bildergalerie neu erzeugen; `tools/upscale*.py` – Hochskalieren (4x-UltraSharp, ncnn, CPU; Modelle: Real-ESRGAN-Release bzw. upscayl/upscayl resources/models).
 
 ## Testen
-`cd spiel/dist && python3 -m http.server 8765`, dann `python3 spiel/t8.py` (alle Wege, Spielzeit `vz`) bzw. `t_echt.py WEG` (Echtzeit).
+`cd spiel/dist && python3 -m http.server 8765`, dann `python3 spiel/t8.py` (alle Wege, Spielzeit `vz`; `K=1` wenn nebenbei hochskaliert wird, sonst stürzt Chrome wegen Speicher ab) bzw. `t_echt.py WEG` (Echtzeit). Szenen sichtbar prüfen: `t_film.py LABEL '{"typ":"zuhause"}' SCHRITTE /tmp/x` + `t_sheet.py /tmp/x 1,2,3 /tmp/bogen.jpg`; Endbildschirme `t_ende.py`.
 
 ## Veröffentlichen
 - Test-Link (privat): Artefakt-Slug `5d6f857a-23db-4da8-8501-add017b70699`. Alle Dateien aus `dist/` hochladen (Overlay-Bilder werden dynamisch geladen!). Öffentlicher Link V5 nur mit Philips Okay ersetzen.
@@ -24,7 +24,10 @@
 - Beim Bau: Änderungen nach /tmp/aenderungen.json, `python3 tools/story_uebernehmen.py /tmp/aenderungen.json`, Bericht prüfen, Notizen umsetzen. Danach übernommene Dokumente nach `erledigt/…` verschieben und aus `aenderungen` löschen, `python3 tools/storydatei.py` und `story.json` neu ins Artefakt laden (Zeilennummern ändern sich).
 - Diese Änderungen sind Philips Okay. Zusätzlich ins Story-Dokument (Claude-Doc) eintragen, wenn sie dort vorkommen.
 
+## Bilder V8 (Pipeline)
+`proc/v8_prep.py [ABSCHNITT]` → `bilder_neu/v8_src/` → `tools/upscale_v8_lauf.sh CODES…` (ein Prozess pro Bild, ncnn hält sonst Speicher) → `bilder_neu/v8_hq/` → `proc/v8_finish.py` (Spielbilder + Gesichts-Overlays, schreibt OVERLAYS in bilder.js). v8_src/v8_hq sind nicht im Repo.
+
 ## Regeln (Philip)
 - Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
-- Aktuelle Aufgaben: Projekt-Docs `claude/v8-aenderungen-20-11-abend.md`, `claude/story-ideen-20-11-abend.md`, `claude/ziele.md`.
+- Stand: V8 gebaut (21.11. früh), siehe Projekt-Doc `claude/v8-stand-bau.md` (eingebaut, behoben, offen). Ziele: `claude/ziele.md`.
