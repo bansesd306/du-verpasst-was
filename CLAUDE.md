@@ -30,4 +30,4 @@
 ## Regeln (Philip)
 - Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
-- Stand: V8 gebaut (21.11. früh), siehe Projekt-Doc `claude/v8-stand-bau.md` (eingebaut, behoben, offen). Ziele: `claude/ziele.md`.
+- Stand: V8 gebaut (21.11. früh), siehe Projekt-Doc `claude/v8-stand-bau.md` (eingebaut, behoben, offen). Ziele: `claude/ziele.md`. **Nächster Bau: V8.5 nach Projekt-Doc `claude/offen-v8-5.md`** (Vorschau-Bilder für Filter in `quellen/vorschau/`, Filter-Skripte `spiel/proc/fokuslicht.py`, `handylook.py`).
