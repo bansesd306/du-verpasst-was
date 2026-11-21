@@ -1132,7 +1132,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @setze ZEIT_A = 3
 
 # ---------------- Texte für den FoMO-Rahmen ----------------
-@text start_hinweis = Kopfhörer, Ton an, Querformat
+@text start_hinweis = Kopfhörer, Ton an, Querformat · ca. 20 Minuten
 @text start_tippen = Tippen zum Starten
 @text zurueck = Hättest du wohl gern, oder?
 @text senden_frage = Senden?
@@ -1159,9 +1159,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @text menue_credits = Mitwirkende
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
-@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.) – Pixabay // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Umsetzung:</b> mit Claude
+@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
 @abzeichenliste Leiser | Hier oder da | Blaues Licht | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Montagabend
-@gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben
+@gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
 @verlauf Kleinanzeigen Fahrrad | 02.12. | 14:11 | Ich: Ist das noch da?
 @verlauf Seminar Schuldrecht AT | 18.12. | 10:02 | Tutor: Folien sind hochgeladen.
@@ -1843,7 +1843,7 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 @musik party telefon
 @musik lied telefon
 Jonas!: „BRO. Wo bist du?!“
-Ich: „Zuhause. Ich lern’.“
+Ich: „Zuhause. Ich lern.“
 Jonas!: „Du lernst?! Es ist Freitag! Hier geht’s übel ab!“
 Jonas!: „Und Lynn hat nach dir gefragt.“
 Ich: „Du verarschst mich.“
@@ -1971,6 +1971,7 @@ Aber auch nicht nichts.
 @handy sperr
 @benachrichtigung Telefon | Jonas | 3 verpasste Anrufe
 @benachrichtigung WhatsApp | WhatsApp | 47 neue Nachrichten
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: afterparty bei mir später?? 🔥
 @benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
 @tipp
 Natürlich.
@@ -4171,7 +4172,7 @@ const TOENE = {
   halle:           { datei: "ton/halle.mp3" },             // Crowd talking (138493): Halle nach der Prüfung
   party_fern:      { datei: "ton/party_fern.mp3" },        // muffled party music (Fenster auf)
   lied:            { datei: "ton/lied.mp3", start: 0 },    // Happy Birthday – V8: Ausschnitt 0:13–0:42 der Bar-Aufnahme (dort wird gesungen; vorher 1:58 = nur Gemurmel)
-  muffled_party:   { datei: "ton/muffled_party.mp3", vol: 1 },   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
+  muffled_party:   { datei: "ton/muffled_party.mp3", vol: .5 },   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
   glas:            { datei: "ton/glas.mp3" },
   johlen:          { datei: "ton/johlen.mp3", vol: .8 },
   gelaechter:      { datei: "ton/gelaechter.mp3" },
@@ -4191,7 +4192,7 @@ const TOENE = {
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)
-  party_club2:     { datei: "ton/party_club2.mp3", vol: 1 },     // zweiter Party-Song (mondamusic, Philip)
+  party_club2:     { datei: "ton/party_club2.mp3", vol: .6 },     // zweiter Party-Song (mondamusic, Philip)
   ende_warm:       { datei: "ton/ende_warm.mp3", vol: 1 },       // Outro Lynn-Ende (andriig „Warm“, Philip)
   flashback:       { datei: "ton/flashback.mp3", vol: .8 },
   abzeichen:       { datei: "ton/abzeichen.mp3" },
@@ -4400,6 +4401,8 @@ const Ton = (() => {
   let analyser = null, fftDaten = null, pegelSchnitt = 0;
   function init() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    // iPhone: ohne das schweigt Web Audio, wenn der Stumm-Schalter an ist (Safari 16.4+)
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
     try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
     master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
     sfx = ctx.createGain(); sfx.connect(master);

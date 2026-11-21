@@ -1,6 +1,6 @@
 # Prüfung V8 – Fortschritt
 
-Stand: 21.11. ~07:30 – Bereiche 0–8 geprüft, Fixes gebaut (V8.1), Test aller Wege läuft
+Stand: 21.11. – alles geprüft, V8.1 gebaut, alle 22 Wege ohne Fehler getestet, Story-Dokument + Story-Datei aktualisiert. Offen: Test-Link, Projekt-Docs
 
 - [x] 0 Vorbereitung (Repo, Prüfauftrag, Entscheidungs-Docs gelesen)
 - [x] 1 Story-Lücken & Logikfehler (Kontinuität, Uhrzeiten, Namen, Sackgassen, Weg-Dauer)
@@ -11,7 +11,7 @@ Stand: 21.11. ~07:30 – Bereiche 0–8 geprüft, Fixes gebaut (V8.1), Test alle
 - [x] 6 Bedienung
 - [x] 7 Abgabe (Quellen/Lizenzen, Start-Hinweis)
 - [x] 8 Feinschliff
-- [ ] 9 Sichere Fixes eingebaut, gebaut, t8 getestet, Test-Link + Galerie aktualisiert
+- [x] 9 Sichere Fixes eingebaut, gebaut, t8 getestet (22/22 ok). Galerie unverändert (keine Bildänderung). Test-Link: siehe unten
 - [ ] 10 Projekt-Docs + Benachrichtigung
 
 Bericht: pruefung/BERICHT.md · Bau-Plan: pruefung/BAUPLAN.md
