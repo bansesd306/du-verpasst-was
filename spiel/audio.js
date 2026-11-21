@@ -152,6 +152,9 @@ const Ton = (() => {
   return {
     init,
     get bereit() { return !!ctx; },
+    // V8.5: ist ein Ton schon geladen und dekodiert? (Startbild: Web-Audio-Partymusik übernimmt vom Audio-Element)
+    hat(k) { return !!P[k]; },
+    get laeuftKontext() { return !!ctx && ctx.state === 'running'; },
     // Bass-Pegel der Partymusik (0..1), für Licht im Takt. Gibt den Ausschlag über dem gleitenden Mittel zurück.
     pegel() {
       if (!analyser) return 0; analyser.getByteFrequencyData(fftDaten);

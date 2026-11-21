@@ -30,4 +30,5 @@
 ## Regeln (Philip)
 - Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
-- Stand: V8 gebaut (21.11. früh), siehe Projekt-Doc `claude/v8-stand-bau.md` (eingebaut, behoben, offen). Ziele: `claude/ziele.md`. **Nächster Bau: V8.5 nach Projekt-Doc `claude/offen-v8-5.md`** (Vorschau-Bilder für Filter in `quellen/vorschau/`, Filter-Skripte `spiel/proc/fokuslicht.py`, `handylook.py`).
+- Stand: V8.5 gebaut (21.11. abends), siehe Projekt-Doc `claude/v8-5-stand-bau.md`; davor `claude/v8-stand-bau.md`. Ziele: `claude/ziele.md`. Offen: Gedanken zu den Fotos (Vorschläge warten auf Philips Okay), Fokuslicht für Szenenbilder (nur Vorschau `quellen/vorschau/fokuslicht_v85_vorher_nachher.jpg`).
+- V8.5-Bildwerkzeuge: `proc/v85_prep.py` (Gemini-Uploads → v8_src, KI-Hinweis übermalen) → `tools/upscale_sanft.py CODE` (high-fidelity-4x, nur halb über Lanczos – sanft für Gesichter) → `proc/v85_finish.py` (dist/img + Handyfoto-Fassungen `*_h.webp`, Eintrag `imHandy` in bilder.js). Personenfilter mild: `proc/v85_personen.py` (Originale in `bilder_neu/v85_vorfilter/`, zurück mit `--zurueck`).

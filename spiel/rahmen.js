@@ -101,31 +101,52 @@ const Rahmen = (() => {
   // Gedämpfte Partymusik (Philips „Muffled Party“) als Stream: läuft sofort an, ohne auf das Laden
   // und Dekodieren aller anderen Töne zu warten. Datei ist schon leiser gemischt (auch iPhone, das die
   // Lautstärke von Audio-Elementen ignoriert). Autoplay wird versucht, sonst startet sie beim ersten Berühren.
+  // V8.5: Auf dem iPhone blieb das Audio-Element stumm (Stumm-Schalter / Artefakt-Rahmen). Deshalb beides:
+  // Das Element startet sofort (Autoplay-Versuch); sobald Web Audio läuft und die Datei dekodiert ist,
+  // übernimmt der Web-Audio-Loop „party_fern“ (wie bis V8.1) und das Element wird ausgeblendet.
   const fern = (() => {
-    let el = null, soll = false, fadeT = null;
+    let el = null, soll = false, fadeT = null, web = false, webT = null;
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
     const mach = () => { if (!el) { el = new Audio('ton/muffled_party_start.mp3'); el.loop = true; el.preload = 'auto'; el.setAttribute('playsinline', ''); } return el; };
     function blende(ziel, ms, fertig) {
       clearInterval(fadeT); const e = mach(), v0 = e.volume, t0 = performance.now();
       fadeT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); try { e.volume = v0 + (ziel - v0) * k; } catch (x) { } if (k >= 1) { clearInterval(fadeT); fertig && fertig(); } }, 40);
     }
+    function webAn() {
+      if (web || !window.Ton || !Ton.bereit) return;
+      web = true; Ton.loop('party_fern', true);
+      clearInterval(webT);
+      webT = setInterval(() => {
+        if (!soll) { clearInterval(webT); return; }
+        if (Ton.hat('muffled_party') && Ton.laeuftKontext) { clearInterval(webT); if (el && !el.paused) blende(0, 1200, () => { if (web) el.pause(); }); }
+      }, 250);
+    }
     return {
       vorladen() { try { mach().load(); } catch (e) { } },
       start() {
-        const e = mach(); soll = true;
+        soll = true;
+        if (window.Ton && Ton.bereit) { webAn(); if (web && Ton.hat('muffled_party')) return; }
+        const e = mach();
         if (!e.paused) { blende(1, 600); return; }
         try { e.volume = 0; } catch (x) { }
         const p = e.play(); if (p && p.catch) p.catch(() => { });
         blende(1, 900);
       },
-      stopp(ms = 900) { soll = false; if (!el || el.paused) return; blende(0, ms, () => { if (!soll) el.pause(); }); },
-      get laeuft() { return !!el && !el.paused; },
+      stopp(ms = 900) {
+        soll = false; clearInterval(webT);
+        if (web) { web = false; if (window.Ton) Ton.loop('party_fern', false); }
+        if (!el || el.paused) return; blende(0, ms, () => { if (!soll) el.pause(); });
+      },
+      get laeuft() { return web || (!!el && !el.paused); },
+      get web() { return web; },
     };
   })();
   fern.vorladen();
   // Erstes Berühren irgendwo (auch vor dem eigentlichen Klick): Musik sofort an, solange Start/Menü zu sehen sind
   const erstesBeruehren = () => {
     if (!bw.classList.contains('an') || bw.classList.contains('ende-an')) return;
-    if (!fern.laeuft) fern.start();
+    if (window.Ton) Ton.init();   // Web Audio im Tipp freischalten (iPhone), lädt die Töne
+    if (!fern.laeuft || !fern.web) fern.start();
   };
   ['pointerdown', 'touchend', 'pointerup', 'click', 'keydown'].forEach(t => addEventListener(t, erstesBeruehren, true));
   let bzzzZaehler = 0;

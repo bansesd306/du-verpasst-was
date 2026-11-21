@@ -156,7 +156,8 @@ const Spiel = (() => {
   const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
   const blickKnopf = $('#handyknopf');
   function blickMoeglich() {
-    return !(window.Rahmen && Rahmen.sichtbar) && !Handy.offen && rueckPos < 0 && !wahlEl.querySelector('button')
+    // V8.5: nur, wenn das Handy griffbereit ist (Skript setzt `handyweit`, wenn es weg/aus ist)
+    return !V.handyweit && !(window.Rahmen && Rahmen.sichtbar) && !Handy.offen && rueckPos < 0 && !wahlEl.querySelector('button')
       && !B.classList.contains('traum') && aktBild && aktBild.code !== 'film'
       && !$('#schwarz').classList.contains('an') && !$('#karte').classList.contains('an');
   }
@@ -177,15 +178,25 @@ const Spiel = (() => {
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
-  setInterval(() => blickKnopf.classList.toggle('aus', !(blick.offen || blickMoeglich())), 250);
+  // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
+  let blickErstmals = true;
+  setInterval(() => {
+    const an = blick.offen || blickMoeglich();
+    blickKnopf.classList.toggle('aus', !an);
+    if (an && blickErstmals) { blickErstmals = false; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); }
+  }, 250);
 
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
-  let lynnHand = 0;
+  let lynnHand = 0, lynnHaende = -1;
+  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz'];
   async function lynnGeste(ins) {
-    if (!aktBild || !['N14', 'N14r'].includes(aktBild.code) || Handy.offen) return;
+    if (!aktBild || !LYNN_POSEN.includes(aktBild.code) || Handy.offen) return;
     // V8.2: seltener und langsamer wechseln (nur jede dritte Lynn-Zeile mit Händen, weiche Überblendung)
-    let ziel = 'N14'; if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; ziel = lynnHand === 2 ? 'N14r' : 'N14'; }
+    // V8.5: Zwischenposen aus Gemini: N14m (redet, ohne Hände), Hände wechseln zwischen N14r, N14h, N14rz
+    let ziel = 'N14';
+    if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; if (lynnHand === 2) { lynnHaende = (lynnHaende + 1) % 3; ziel = ['N14r', 'N14h', 'N14rz'][lynnHaende]; } else if (lynnHand === 0) ziel = 'N14m'; }
+    if (BILDER[ziel] && !BILDER[ziel].datei) ziel = 'N14';
     if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
   let textZahl = 0;
@@ -285,7 +296,8 @@ const Spiel = (() => {
   }
   function bildHTML(code, klein) {
     const e = eintrag(code);
-    if (e.datei) return `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">`;
+    // V8.5: im Handy (klein) die Handyfoto-Fassung (dunkler, Körnung), wenn es eine gibt
+    if (e.datei) return `<img src="${klein && e.imHandy ? e.imHandy : e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">`;
     return phHTML(code, e, klein);
   }
   // Bilder vorladen: nie halb aufgebaut zeigen
@@ -590,6 +602,9 @@ const Spiel = (() => {
     const el = $('#lernplan');
     if (t[0] === 'an') { el.querySelectorAll('li').forEach(l => l.classList.remove('ok', 'durch')); el.classList.add('an'); Ton.spiele('blaettern', { vol: .5 }); await warte(.6); return; }
     if (t[0] === 'aus') { el.classList.remove('an'); await warte(.5); return; }
+    // V8.5: Stand zeigen, ohne neu zu schreiben: @lernplan stand ok1 ok2 durch3 … / @lernplan blick 4
+    if (t[0] === 'stand') { el.querySelectorAll('li').forEach(l => l.classList.remove('ok', 'durch', 'blick')); t.slice(1).forEach(x => { const m = x.match(/^(ok|durch)(\d)$/); const li = m && el.querySelectorAll('li')[+m[2] - 1]; if (li) li.classList.add(m[1]); }); el.classList.add('an'); Ton.spiele('blaettern', { vol: .4 }); await warte(.6); return; }
+    if (t[0] === 'blick') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) li.classList.add('blick'); await warte(.4); return; }
     if (t[0] === 'an') return;
     if (t[0] === 'haken') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) { li.classList.add('ok'); Ton.spiele('stift', { vol: .7 }); Ton.spiele('haken', { vol: .8 }); } await warte(.5); }
     if (t[0] === 'streich') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) { li.classList.add('durch'); Ton.spiele('PR3_stift', { dauer: .5, vol: .9 }); } await warte(.9); }
@@ -855,6 +870,9 @@ const Spiel = (() => {
       case 'feed': Handy.feed(); break;
       case 'video': Handy.video(t[1]); break;
       case 'stumm': zeigeTextbox(false); await Handy.stumm(); break;
+      case 'pdf': zeigeTextbox(false); await Handy.pdf(t[1], t[2]); break;
+      case 'pdfweiter': await Handy.pdfWeiter(t[1]); break;
+      case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
       case 'wegwischen': await Handy.wegwischen(); break;

@@ -525,7 +525,8 @@ Geht doch.
 @ton bzzz
 @benachrichtigung Instagram | lena.mln | lena.mln hat eine Story gepostet
 Bzzz.
-@handy story lena.mln B07
+# V8.5: N13 statt B07 (B07 kommt in Weg B gleich noch im Live)
+@handy story lena.mln N13
 @warte 5
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
 ? „Noch fünf Minuten.“ -> S3_SCHLUMMER
@@ -849,6 +850,7 @@ Aber auch nicht nichts.
 @warte 0.3
 @benachrichtigung YouNow | drachenlordofficial | drachenlordofficial ist jetzt live 🔴
 @warte 1.4
+@setze handyweit = 1
 @shutdown
 @warte 3
 … !3
@@ -869,6 +871,7 @@ Aber auch nicht nichts.
 ? „Noch fünf Minuten.“ -> B_SCHLUSS2
 
 == B_SCHLUSS2
+@setze handyweit = 0
 … !2
 @bild K12N
 @loop oben aus
@@ -939,6 +942,7 @@ Sie verschwindet ja nicht. !3
 @ton handy_ablegen
 @bild K10H
 @setze handyweg
+@setze handyweit = 1
 @warte 1
 -> NACHT_ZUHAUSE
 
@@ -996,7 +1000,6 @@ Ich zieh das Shirt aus, das ich seit heute Mittag anhab.
 @ton reissverschluss
 Das schwarze. Nein. Das andere.
 @uhr +3
-@bild N07
 Passt. Glaub ich.
 @bild N08
 Schlüssel. Handy. Akku 34 %.
@@ -1768,7 +1771,8 @@ Was war das?
 -> BAD_RAUS
 
 == BAD_SCHAUEN
-@handy story tim.dreams N28
+# V8.5: Mias Selfie (Küche, Tim, Jonas, Lena) statt nochmal N28
+@handy story tim.dreams MIA_SELFIE
 @warte 3
 @handy weg
 @bild N16
@@ -1781,6 +1785,7 @@ Kann ich nicht einfach an beiden Orten sein?
 -> BAD_RAUS
 
 == BAD_WEG
+@setze handyweit = 1
 @musik party laut
 @party an
 @effekt schnittgewitter N32b N32e N32a
@@ -2011,6 +2016,7 @@ Hm.
 
 # ---- Heimweg allein ----
 == HEIMWEG
+@setze handyweit = 0
 @party aus
 @musik aus langsam
 @effekt alles_aus
@@ -2023,10 +2029,19 @@ Hm.
   … !3
 @ende
 @loop wind aus
+# V8.5: zu Hause angekommen, angezogen aufs Bett (N07), Uhr zeigt, wie spät es ist
+@uhr +12
+@ton tuer_auf leise
+@raum nacht
+@bild N07 langsam
+@uhr zeigen sofort
+@ton decke1
+@warte 3
 -> NACHT_PARTY
 
 # ---- Afterparty (nicht ausgespielt) ----
 == AFTERPARTY
+@setze handyweit = 0
 @setze typ = "afterparty"
 @pfad Afterparty
 @abzeichen Eine Stunde
@@ -2048,6 +2063,14 @@ Also sind zwei … eine. !2
 Und eine ist ja keine. !3
 @analoguhr aus
 @musik aus
+@stille
+# V8.5: nach der Afterparty angezogen aufs Bett (N07)
+@uhr Sa 03:26
+@raum nacht
+@bild N07 langsam
+@uhr zeigen sofort
+@ton decke1
+@warte 3
 @stille
 -> SAMSTAG_1420
 
@@ -2088,6 +2111,7 @@ Und eine ist ja keine. !3
   @warte .4
   @ton schritte_holz leise
   @warte 1.6
+  @setze handyweit = 0
   @abzeichen Außer Reichweite
 @sonst
   @bild N02D
@@ -2159,6 +2183,7 @@ Ich schlafe nicht. Ich warte.
 
 # ---- Nach der Party ----
 == NACHT_PARTY
+@setze handyweit = 0
 @wenn typ!="gluecklich"
   @setze typ = "party"
 @ende
@@ -2206,13 +2231,14 @@ Ich bin auf keinem Foto. !3
 ? „Handy weglegen.“ -> NP_WEG
 
 == NP_SCROLL
-@handy storys N28 N32a N32b N32e B16 N28 N32a N32e
+@handy storys H36a N32a N32b B16 N33 TORTE A1
 @uhr springe Sa 01:52
 @handy zu
 … !2
 -> MONOLOG
 
 == NP_WEG
+@setze handyweit = 1
 @handy zu
 -> MONOLOG
 
@@ -2310,6 +2336,7 @@ Ich bin auf keinem Foto. !3
 #   KAPITEL 5 – Samstag, Sonntag, Montag
 # =====================================================================
 == SAMSTAG
+@setze handyweit = 0
 @wenn typ=="afterparty"
   -> SAMSTAG_1420
 @ende
@@ -2330,6 +2357,9 @@ Ich bin auf keinem Foto. !3
 @handy gruppe
 214 neue Nachrichten.
 @nachricht Jonas: leute gestern 😭😭
+# V8.5: Balkonfoto (Lena, Tim, Lynn) – muss auf jedem Weg vorkommen
+@foto BALKON_GRUPPE Lena
+@warte 1.5
 @wenn typ=="gluecklich"
   # (offen: „M2 kurz“ – vorläufige Auswahl)
   @nachricht Lena: feuerlöscher-mann 🧯😂
@@ -2446,9 +2476,12 @@ Irgendwas war halt immer.
 @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
 @nachricht Jonas: du warst dabei 😭
 @nachricht Mia: ja genau das ist ja das problem
-@warte 1
+# V8.5: Balkonfoto auch auf dem Afterparty-Weg
+@foto BALKON_GRUPPE Lena
+@warte 1.5
 @handy chat Tim
-@foto N28 Tim
+# V8.5: APS statt N28 (N28 kam schon im Bad)
+@foto APS Tim
 @tipp
 Da hinten. Das bin ich.
 … !1.5
@@ -2525,7 +2558,7 @@ Ich leg das Handy weg. Zwei Tage noch.
   @video N32a Jonas
   @nachricht Jonas: heute abend gehts weiter 🔥
   @tipp
-  @handy video N32a
+  @handy video N35M1
   @warte 4
   @handy video N32e
   @warte 3.5
@@ -2603,15 +2636,16 @@ Ich leg das Handy weg. Zwei Tage noch.
 @handy sperr
 @benachrichtigung Instagram | lena.mln | lena.mln hat 12 Fotos gepostet
 @tipp
-@handy story lena.mln N32d
-@warte 1.1
-@handy story lena.mln N27
-@warte 1.1
-@handy story lena.mln N26
-@warte 1.1
-@handy story lena.mln N32a
-@warte 1.4
+# V8.5: zu Hause hat man diese Bilder noch nie gesehen, auf den Party-Wegen andere (keine Wiederholungen)
 @wenn typ=="zuhause"
+  @handy story lena.mln N32d
+  @warte 1.1
+  @handy story lena.mln MIA_SELFIE
+  @warte 1.1
+  @handy story lena.mln N32c
+  @warte 1.1
+  @handy story lena.mln N32a
+  @warte 1.4
   @handy story lena.mln N13
   @warte .9
   @handy story lena.mln B12A
@@ -2620,6 +2654,12 @@ Ich leg das Handy weg. Zwei Tage noch.
   Ich tipp aufs Herz.
   … !2
 @sonst
+  @handy story lena.mln B12A
+  @warte 1.1
+  @handy story lena.mln N13L
+  @warte 1.1
+  @handy story lena.mln N32dA
+  @warte 1.4
   ~ Da. Das bin ich.
   … !2
 @ende
@@ -2640,7 +2680,7 @@ Ich krieg das hin.
 … !5
 @loop uhr aus
 … !2
--> EN2
+-> SONNTAGNACHT
 
 # Aufholen (Weg B und Afterparty)
 == SB
@@ -2663,10 +2703,168 @@ Ich krieg das hin.
 @lernplan streich 5
 ~ Kommt eh nicht dran.
 @lernplan aus
-@uhr So 23:12
+# V8.5: 23:12 → 22:31, weil danach die Sonntagnacht um 22:40 beginnt
+@uhr So 22:31
 @handy sperr
 … Ich krieg das hin.
+-> SONNTAGNACHT
+
+# =====================================================================
+#   Sonntagnacht (V8.5, Text von Philip abgenommen 21.11.)
+#   Lerngruppe, Bereicherungsrecht, stummschalten, Wecker, 01:47
+# =====================================================================
+== SONNTAGNACHT
+@handy zu
+@stille
+@karte Sonntag. 22:40. Noch 10 Stunden.
+@uhr So 22:40
+@raum nacht
+@bild K10H schnitt
+@loop lampe an
+@ton bzzz_tisch
+@handy sperr
+@benachrichtigung WhatsApp | Lerngruppe Schuldrecht | Paul: hat jemand noch ne zusammenfassung bereicherungsrecht?? 😩
+@tipp
+@handy chat Lerngruppe Schuldrecht
+@nachricht! Paul: hat jemand noch ne zusammenfassung bereicherungsrecht?? 😩
+@nachricht Mara: senner fragt angeblich IMMER bereicherungsrecht
+@nachricht Paul: woher weißt du das
+@nachricht Mara: hat einer aus dem letzten durchgang gesagt
+… !2
+~ … aus dem letzten Durchgang.
+# Weg B und Afterparty: Bereicherungsrecht war durchgestrichen → trifft doppelt
+@wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
+  @handy zu
+  @lernplan stand ok1 ok2 durch3 durch4 durch5
+  @loop herzschlag an
+  @lernplan blick 4
+  @warte 2.2
+  @lernplan aus
+  @loop herzschlag aus
+@ende
+… !3
+@handy chat Lerngruppe Schuldrecht
+@nachricht Mara: ich schick euch gleich meine
+@nachricht Mara: 📄 Bereicherungsrecht_komplett.pdf (34 Seiten)
+… !2
+? „Aufmachen.“ -> SN_AUF +handy
+? „Gruppe stummschalten.“ -> SN_STUMM
+
+== SN_AUF
+@handy pdf Bereicherungsrecht_komplett.pdf 34
+@handy pdfweiter 4
+@uhr springe So 23:50
+~ … kenn ich nicht.
+@handy pdfweiter 11
+~ … nie gehört.
+@handy pdfweiter 19
+~ … die trollt doch.
+@handy gruppestumm Lerngruppe Schuldrecht
+@handy zu
+-> SN_BETT
+
+== SN_STUMM
+@handy gruppestumm Lerngruppe Schuldrecht
+@handy zu
+~ Ich weiß, was ich weiß.
+…
+-> SN_BETT
+
+== SN_BETT
+@loop lampe aus
+@ton! lichtschalter
+@bild N02D schnitt
+@wenn typ=="zuhause" && weg=="A"
+  # Weg A: ruhiger – Stummschalten fühlt sich richtig an, er schläft eher ein
+  @uhr Mo 00:04
+  @handy sperr
+  @ton display_klick
+  Wecker auf 6:30.
+  @handy zu
+  … !3
+  @effekt einschlafen
+  @uhr Mo 07:05
+  -> EN2
+@ende
+@loop herzschlag an
+@uhr Mo 01:12
+@handy sperr
+@ton display_klick
+Wecker auf 6:30.
+…
+Noch einer auf 6:35.
+…
+Noch einer auf 6:40.
+@handy zu
+# Lynn-Weg: weniger Herzschlag
+@wenn typ=="gluecklich"
+  @loop herzschlag aus
+@ende
+… !3
+@uhr Mo 01:47
+@ton decke1
+@handy sperr
+Ich schau nur, wie spät es ist.
+@benachrichtigung WhatsApp | Lerngruppe Schuldrecht | 14 neue Nachrichten
+? „Lesen.“ -> SN_LESEN +handy
+? „Umdrehen.“ -> SN_UMDREHEN
+
+== SN_LESEN
+@handy chat Lerngruppe Schuldrecht
+@nachricht! Paul: danke mara 🙏
+@nachricht! Paul: seite 12 check ich nicht
+@nachricht! Mara: saldotheorie?
+@nachricht! Paul: ja
+@nachricht! Mara: auswendig lernen
+@nachricht! Paul: es ist halb 2
+@nachricht! Paul: ich bin so am arsch
+@warte 1.5
+@handy zu
+-> SN_SCHLAF
+
+== SN_UMDREHEN
+@handy zu
+@ton decke2
+-> SN_SCHLAF
+
+== SN_SCHLAF
+… !3
+~ Noch sieben Stunden.
+~ Wenn ich jetzt einschlafe.
+@wenn typ=="gluecklich"
+  ~ Letzter.
+@ende
+… !4
+@loop herzschlag aus
+@effekt einschlafen
+# Morgen (wer schlecht geschlafen hat): drei Wecker
+@stille
+@schwarz schnitt
+@uhr Mo 06:30
+@handy sperr
+@ton! wecker
+@handy zu
+@warte 1.5
+@uhr Mo 06:35
+@handy sperr
+@ton wecker 2.6s
+@warte 2.8
+@ton display_klick
+@handy zu
+@warte 1.2
+@uhr Mo 06:40
+@handy sperr
+@ton wecker 2.2s
+@warte 2.4
+@ton display_klick
 -> EN2
+
+== MO_MORGEN
+@bild MO_KAFFEE schnitt
+@raum tag
+~ Kaffee. Jacke. Los.
+… !1.5
+-> MONTAG
 
 == EN2
 @handy sperr
@@ -2683,6 +2881,9 @@ Ich krieg das hin.
 @handy wegwischen
 @warte 1.5
 @handy zu
+@wenn !(typ=="zuhause" && weg=="A")
+  -> MO_MORGEN
+@ende
 -> MONTAG
 
 # ---- Montag ----
@@ -2725,6 +2926,7 @@ Senner: „Handys aus. Taschen nach vorne.“
 @ende
 @tipp
 # Er hält den Knopf gedrückt. Display schwarz.
+@setze handyweit = 1
 @handy aus
 @warte 1.4
 @handy zu
@@ -2781,6 +2983,7 @@ Senner: „Noch zehn Minuten.“
   ~ Alle guten Dinge sind drei.
 @ende
 @loop pruefung aus
+@setze handyweit = 0
 # Rausgehen
 @schwarz langsam
 @loop halle an

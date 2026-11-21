@@ -11,11 +11,23 @@ const KONTAKTE = {
   Mama: { farbe: '#c0a062', name: 'Mama' },
   Paul: { farbe: '#7cb342', name: 'Paul', info: 'Lerngruppe Schuldrecht' },
 };
-const GRUPPENFARBE = { Paul: '#9ccc65', Sophie: '#4dd0e1', Max: '#ff8a65', Leo: '#ba68c8', Jonas: '#f5a623', Lena: '#ff6b9a', Tim: '#35c9b0', Mia: '#b48cff', Ben: '#6fb3ff', Lynn: '#ffd166' };
+const GRUPPENFARBE = { Mara: '#f48fb1', Paul: '#9ccc65', Sophie: '#4dd0e1', Max: '#ff8a65', Leo: '#ba68c8', Jonas: '#f5a623', Lena: '#ff6b9a', Tim: '#35c9b0', Mia: '#b48cff', Ben: '#6fb3ff', Lynn: '#ffd166' };
 
 const Handy = (() => {
   const el = document.getElementById('handy');
   const $ = s => el.querySelector(s);
+  const $$ = s => el.querySelectorAll(s);
+  // V8.5: Inhalt der Bereicherungsrecht-Zusammenfassung (nur Stichworte, wird schnell durchgescrollt)
+  const PDF_INHALT = [
+    ['§ 812 I 1 Alt. 1 BGB – Leistungskondiktion', ['I. Etwas erlangt', 'II. Durch Leistung', 'III. Ohne Rechtsgrund', 'IV. Kein Ausschluss (§§ 814, 817 S. 2)']],
+    ['§ 812 I 1 Alt. 2 BGB – Nichtleistungskondiktion', ['Eingriffskondiktion', 'Vorrang der Leistungsbeziehung', 'Subsidiarität']],
+    ['§ 816 BGB – Verfügung eines Nichtberechtigten', ['§ 816 I 1: entgeltlich', '§ 816 I 2: unentgeltlich', '§ 816 II: Leistung an Nichtberechtigten']],
+    ['§ 818 III BGB – Entreicherung', ['Wegfall der Bereicherung', 'Verschärfte Haftung, §§ 818 IV, 819']],
+    ['Saldotheorie / Zweikondiktionenlehre', ['Gegenseitige Verträge', 'Ausnahmen: Minderjährige, arglistige Täuschung']],
+    ['Mehrpersonenverhältnisse', ['Anweisungsfälle', 'Doppelmangel', 'Durchgriffskondiktion', 'Empfängerhorizont']],
+    ['§ 817 S. 2 BGB – Kondiktionssperre', ['Gesetzes-/Sittenverstoß', 'Analoge Anwendung auf § 812']],
+    ['§ 822 BGB – Unentgeltliche Weitergabe', ['Herausgabe durch Dritten', 'Voraussetzung: Entreicherung des Erstempfängers']],
+  ];
   const chats = {}; // name -> [{von,text,zeit,typ,haken,bild}]
   const meta = {};  // name -> {vorschau, zeit, ungelesen, n}
   let zaehler = 0, warteAuf = null;
@@ -48,6 +60,10 @@ const Handy = (() => {
       <div class="c-msgs"></div>
       <div class="c-eingabe"><div class="pille"><span class="smi">☺</span><div class="feld"><span class="plh">Nachricht</span><span class="txt"></span><i class="cursor"></i></div><span class="clip">📎</span><span class="cam">📷</span></div><div class="mic">🎤</div></div>
       <div class="tastatur"></div>
+      <div class="c-menue"><div>Gruppeninfo</div><div>Gruppenmedien</div><div>Suchen</div><div class="stummpunkt">Benachr. stummschalten</div><div>Selbstlöschende Nachrichten</div><div>Chatdesign</div><div class="mehr">Mehr <span>›</span></div></div>
+      <div class="c-dialog"><div class="cd-box"><b>Benachrichtigungen zu Nachrichten stummschalten</b><p>Andere Mitglieder sehen nicht, dass du diesen Chat stummgeschaltet hast. Du wirst weiterhin benachrichtigt, wenn jemand dich erwähnt.</p>
+        <div class="cd-opt" data-o="8"><i></i>8 Stunden</div><div class="cd-opt" data-o="w"><i></i>1 Woche</div><div class="cd-opt an" data-o="immer"><i></i>Immer</div>
+        <div class="cd-knoepfe"><span>Abbrechen</span><span class="ok">OK</span></div></div></div>
     </div>
     <div class="app" data-app="liste">
       <div class="l-kopf"><b>WhatsApp</b><span>📷&nbsp;&nbsp;⋮</span></div>
@@ -79,6 +95,7 @@ const Handy = (() => {
     <div class="app" data-app="karussell"><div class="f-kopf">Instagram</div><div class="ka-post"><div class="f-k"><span class="av" style="background:#6a5acd">s</span><b>studygram.de</b></div>
       <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div></div>
       <div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div><div class="f-a">♡ 💬 ➤</div></div></div>
+    <div class="app" data-app="pdf"><div class="pdf-kopf"><span>←</span><b class="pdf-name"></b><span>⋮</span></div><div class="pdf-fenster"><div class="pdf-rolle"></div></div><div class="pdf-seite">1 / 34</div></div>
     <div class="app" data-app="video"><div class="v-bild"></div><div class="v-balken"><i></i></div><div class="v-ton">🔊</div></div>
     <div class="hhinweis"><span class="h-ic"></span><div><b></b><div class="h-x"></div></div></div>
     <div class="stummtoast">🔕 Stumm</div>
@@ -145,6 +162,7 @@ const Handy = (() => {
     if (istGruppe(aktChat) && !ich && !reihe) kopf = `<div class="absender" style="color:${GRUPPENFARBE[m.von] || '#aaa'}">${m.von}</div>`;
     let inhalt = '';
     if (m.typ === 'foto' || m.typ === 'video') inhalt = `<div class="mfoto">${Spiel.bildHTML(m.bild, true)}${m.typ === 'video' ? '<div class="play">▶</div><div class="vdauer">0:12</div>' : ''}</div>`;
+    else if (/^📄 .+\.pdf \(\d+ Seiten\)$/.test(m.text)) { const d0 = m.text.match(/^📄 (.+\.pdf) \((\d+) Seiten\)$/); inhalt = `<div class="mdoc"><span class="md-ic">PDF</span><div><b>${esc(d0[1])}</b><small>${d0[2]} Seiten · PDF · 2,1 MB</small></div></div>`; }
     else inhalt = `<span class="mt">${esc(m.text)}</span>`;
     const haken = ich ? `<span class="hk ${m.haken || 'grau1'}">${m.haken === 'grau1' ? '✓' : '✓✓'}</span>` : '';
     d.innerHTML = (istGruppe(aktChat) && !ich && !reihe ? avatar(m.von) : (istGruppe(aktChat) && !ich ? '<span class="av leer"></span>' : '')) +
@@ -156,7 +174,9 @@ const Handy = (() => {
     const liste = chatListe(aktChat); const vorher = liste[liste.length - 1]; liste.push(m); merke(aktChat, vorschauVon(m), m.zeit);
     const box0 = $('.c-msgs'); if (box0.querySelector('.c-system')) box0.querySelector('.c-system').remove();
     if (!vorher || tagLabel(vorher.tagIdx == null ? 0 : vorher.tagIdx) !== tagLabel(m.tagIdx)) box0.insertAdjacentHTML('beforeend', '<div class="c-tag"><span>' + tagLabel(m.tagIdx) + '</span></div>');
-    const box = $('.c-msgs'); box.appendChild(bubble(m, vorher)); box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+    // V8.5: nach einem neuen Datumstrenner wieder mit Name/Avatar anfangen (Gruppen)
+    const neuerTag = vorher && tagLabel(vorher.tagIdx == null ? 0 : vorher.tagIdx) !== tagLabel(m.tagIdx);
+    const box = $('.c-msgs'); box.appendChild(bubble(m, neuerTag ? null : vorher)); box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
     return m;
   }
   function esc(s) { return String(s).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
@@ -491,7 +511,7 @@ const Handy = (() => {
     },
     feed() {
       oeffne(); zeige('feed'); const r = $('.f-rolle'); let h = '';
-      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.mln', 'mia.chaos', 'tim.dreams', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32a', 'N32b', 'N28', 'N32c', 'N32e', 'N33', 'N32d', 'N36'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
+      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.mln', 'mia.chaos', 'tim.dreams', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32c', 'N33', 'N32d', 'TORTE', 'A1', 'H36a', 'B12A', 'N32dA'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
       r.innerHTML = h + h; r.classList.remove('rollt'); void r.offsetWidth; r.classList.add('rollt');
     },
     video(code) { oeffne(); zeige('video'); $('.v-bild').innerHTML = Spiel.bildHTML(code, true); const b = $('.v-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth; b.style.transition = 'width 12s linear'; b.style.width = '100%'; },
@@ -500,9 +520,38 @@ const Handy = (() => {
       Ton.spiele('klick'); const t = $('.stummtoast'); t.classList.add('an'); $('.sp-stumm').classList.add('an'); el.classList.add('handy-stumm'); await warte(1300);
     },
     aus() { Ton.spiele('klick'); $('.displayaus').classList.add('an'); },
+    // ---- V8.5 Sonntagnacht: PDF öffnen und durchscrollen ----
+    async pdf(name, seiten) {
+      oeffne(); zeige('pdf'); this._pdf = { seiten: +seiten || 34, seite: 1, y: 0 };
+      $('.pdf-name').textContent = name; const r = $('.pdf-rolle'); r.style.transition = 'none'; r.style.transform = 'translateY(0)';
+      const T = PDF_INHALT; let h = '';
+      for (let i = 0; i < this._pdf.seiten; i++) { const k = T[i % T.length]; h += `<div class="pdf-blatt"><div class="pb-kopf">Bereicherungsrecht · Zusammenfassung</div><h4>${esc(k[0])}</h4>${k[1].map(z => `<p>${esc(z)}</p>`).join('')}<div class="pb-zeilen">${'<i></i>'.repeat(9)}</div><div class="pb-nr">${i + 1}</div></div>`; }
+      r.innerHTML = h; $('.pdf-seite').textContent = `1 / ${this._pdf.seiten}`; Ton.spiele('display_klick'); await warte(900);
+    },
+    // ein paar Seiten weiter (Wischen), Seitenzahl läuft mit
+    async pdfWeiter(bis) {
+      const p = this._pdf; if (!p) return; const r = $('.pdf-rolle'); const ziel = Math.min(p.seiten, +bis || p.seite + 3);
+      while (p.seite < ziel) {
+        p.seite++; const blatt = r.children[p.seite - 1]; if (!blatt) break;
+        r.style.transition = 'transform .55s cubic-bezier(.2,.7,.3,1)'; r.style.transform = `translateY(${-blatt.offsetTop}px)`;
+        $('.pdf-seite').textContent = `${p.seite} / ${p.seiten}`; Ton.spiele('whoosh_kurz', { vol: .12, rate: 1.7 }); await warteZ(20, 650 + Math.random() * 350);
+      }
+    },
+    // ---- V8.5: Gruppe stummschalten wie WhatsApp: ⋮ → „Benachr. stummschalten“ → „Immer“ → OK ----
+    async gruppeStumm(name) {
+      if (name && !(offen && app === 'chat' && aktChat === name)) await this.chat(name);
+      const c = $('[data-app=chat]'); const ic = $('.c-ic'); tastatur(false);
+      ic.classList.add('druck'); Ton.spiele('display_klick'); await warte(260); ic.classList.remove('druck');
+      c.classList.add('menue'); await warte(1100);
+      const sp = $('.stummpunkt'); sp.classList.add('druck'); Ton.spiele('display_klick'); await warte(320); sp.classList.remove('druck');
+      c.classList.remove('menue'); c.classList.add('dialog'); $$('.cd-opt').forEach(o => o.classList.toggle('an', o.dataset.o === '8')); await warte(1300);
+      const im = $('.cd-opt[data-o=immer]'); $$('.cd-opt').forEach(o => o.classList.remove('an')); im.classList.add('an', 'druck'); Ton.spiele('display_klick'); await warte(700); im.classList.remove('druck');
+      const ok = $('.cd-knoepfe .ok'); ok.classList.add('druck'); Ton.spiele('display_klick'); await warte(300); ok.classList.remove('druck');
+      c.classList.remove('dialog'); if (aktChat && meta[aktChat]) meta[aktChat].stumm = true; c.classList.add('chatstumm'); await warte(600);
+    },
     reset() {
       for (const k in chats) delete chats[k];
-      $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); for (const k in meta) delete meta[k]; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();
+      $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); $('[data-app=chat]').classList.remove('chatstumm', 'menue', 'dialog'); for (const k in meta) delete meta[k]; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();
     },
   };
 })();
