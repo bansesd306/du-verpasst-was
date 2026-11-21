@@ -1,10 +1,10 @@
 # Prüfung V8 – Fortschritt
 
-Stand: 21.11. 06:30 – Prüfung gestartet (V8-Commit 1176545 vorhanden)
+Stand: 21.11. ~07:00 – Bereiche 0–2 fertig, 3 Story-Fixes in story.txt (noch nicht gebaut)
 
-- [ ] 0 Vorbereitung (Repo, Prüfauftrag, Entscheidungs-Docs gelesen)
-- [ ] 1 Story-Lücken & Logikfehler (Kontinuität, Uhrzeiten, Namen, Sackgassen, Weg-Dauer)
-- [ ] 2 Bilder (passen, Fehler, Konsistenz, Licht, KI-Fehler, Zuschnitt)
+- [x] 0 Vorbereitung (Repo, Prüfauftrag, Entscheidungs-Docs gelesen)
+- [x] 1 Story-Lücken & Logikfehler (Kontinuität, Uhrzeiten, Namen, Sackgassen, Weg-Dauer)
+- [x] 2 Bilder (passen, Fehler, Konsistenz, Licht, KI-Fehler, Zuschnitt)
 - [ ] 3 Technik (Konsole, fehlende Dateien, Mehrfachklick, alle Wege + Dauer, Größe, Offline, Safari)
 - [ ] 4 Animationen
 - [ ] 5 Töne

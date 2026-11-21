@@ -69,7 +69,7 @@
 @text ende_nr = Ende {x} von 3
 @text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.) – Pixabay // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Umsetzung:</b> mit Claude
 @abzeichenliste Leiser | Hier oder da | Blaues Licht | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Montagabend
-@gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben
+@gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
 @verlauf Kleinanzeigen Fahrrad | 02.12. | 14:11 | Ich: Ist das noch da?
 @verlauf Seminar Schuldrecht AT | 18.12. | 10:02 | Tutor: Folien sind hochgeladen.
@@ -751,7 +751,7 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 @musik party telefon
 @musik lied telefon
 Jonas!: „BRO. Wo bist du?!“
-Ich: „Zuhause. Ich lern’.“
+Ich: „Zuhause. Ich lern.“
 Jonas!: „Du lernst?! Es ist Freitag! Hier geht’s übel ab!“
 Jonas!: „Und Lynn hat nach dir gefragt.“
 Ich: „Du verarschst mich.“
@@ -879,6 +879,7 @@ Aber auch nicht nichts.
 @handy sperr
 @benachrichtigung Telefon | Jonas | 3 verpasste Anrufe
 @benachrichtigung WhatsApp | WhatsApp | 47 neue Nachrichten
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: afterparty bei mir später?? 🔥
 @benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
 @tipp
 Natürlich.
