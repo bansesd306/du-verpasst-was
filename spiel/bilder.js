@@ -227,7 +227,7 @@ const TOENE = {
   halle:           { datei: "ton/halle.mp3" },             // Crowd talking (138493): Halle nach der Prüfung
   party_fern:      { datei: "ton/party_fern.mp3" },        // muffled party music (Fenster auf)
   lied:            { datei: "ton/lied.mp3", start: 0 },    // Happy Birthday – V8: Ausschnitt 0:13–0:42 der Bar-Aufnahme (dort wird gesungen; vorher 1:58 = nur Gemurmel)
-  muffled_party:   { datei: "ton/muffled_party.mp3", vol: 1 },   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
+  muffled_party:   { datei: "ton/muffled_party.mp3", vol: .5 },   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
   glas:            { datei: "ton/glas.mp3" },
   johlen:          { datei: "ton/johlen.mp3", vol: .8 },
   gelaechter:      { datei: "ton/gelaechter.mp3" },
@@ -247,7 +247,7 @@ const TOENE = {
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)
-  party_club2:     { datei: "ton/party_club2.mp3", vol: 1 },     // zweiter Party-Song (mondamusic, Philip)
+  party_club2:     { datei: "ton/party_club2.mp3", vol: .6 },     // zweiter Party-Song (mondamusic, Philip)
   ende_warm:       { datei: "ton/ende_warm.mp3", vol: 1 },       // Outro Lynn-Ende (andriig „Warm“, Philip)
   flashback:       { datei: "ton/flashback.mp3", vol: .8 },
   abzeichen:       { datei: "ton/abzeichen.mp3" },

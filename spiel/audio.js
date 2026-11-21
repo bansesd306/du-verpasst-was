@@ -12,6 +12,8 @@ const Ton = (() => {
   let analyser = null, fftDaten = null, pegelSchnitt = 0;
   function init() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
+    // iPhone: ohne das schweigt Web Audio, wenn der Stumm-Schalter an ist (Safari 16.4+)
+    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
     try { ctx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { return; }
     master = ctx.createGain(); master.gain.value = 0.9; master.connect(ctx.destination);
     sfx = ctx.createGain(); sfx.connect(master);
