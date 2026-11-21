@@ -81,7 +81,7 @@ const Ton = (() => {
     regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
     oben: [['M1_party', { vol: .5, lp: 160 }]],
     halle: [['halle', { vol: .75 }]],
-    schritte: [['schritte', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
+    schritte: [['schritte_lauf', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
     klingel: [['anruf', { vol: 1 }]],
     party_fern: [['muffled_party', { vol: .9 }]],   // Startbildschirm: Party hinter dem Fenster, gedämpft (Philips Datei)

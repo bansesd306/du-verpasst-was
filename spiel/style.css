@@ -482,3 +482,41 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 
 /* Rückblick: Knöpfe oben bleiben sichtbar (über dem Bild von damals) */
 #buehne:has(#rueckbox.an) #topbar{z-index:31}
+
+/* Vollbild-Knopf (V8.2): fest oben rechts, über allem, klein und leise */
+#vollbildknopf{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:9px;border:none;border-radius:12px;
+  background:rgba(10,14,24,.45);color:rgba(255,255,255,.7);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#vollbildknopf:hover,#vollbildknopf:focus-visible{background:rgba(30,40,64,.75);color:#fff;outline:none}
+#vollbildknopf svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#vollbildknopf .zu,#vollbildknopf.an .auf{display:none}
+#vollbildknopf.an .zu{display:block}
+@media (orientation:portrait){#vollbildknopf{display:none}}
+
+/* Sprungmenü (nur Testversion) */
+#sprungknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 48px);right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:0;border:none;border-radius:12px;
+  background:rgba(10,14,24,.45);color:rgba(255,255,255,.7);font:600 18px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+@media (orientation:portrait){#sprungknopf{display:none}}
+#sprungmenue{position:fixed;top:0;right:0;bottom:0;width:min(520px,94vw);z-index:99;background:rgba(8,11,20,.97);color:#e9edf7;font:400 15px/1.35 system-ui,sans-serif;
+  display:none;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.6)}
+#sprungmenue.an{display:flex}
+#sprungmenue .kopf{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #253049}
+#sprungmenue .kopf span{color:#8d9ab5;font-size:13px;flex:1}
+#sprungmenue button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+#sprungmenue .zu{background:none;border:none;font-size:20px;padding:4px 8px}
+#sprungmenue .wege{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;border-bottom:1px solid #253049}
+#sprungmenue .wege button{border:1px solid #33405e;background:#141b2c;border-radius:16px;padding:5px 11px;font-size:14px}
+#sprungmenue .wege button.an{background:#ffa23c;border-color:#ffa23c;color:#1a0d05;font-weight:700}
+#sprungmenue .liste{overflow:auto;padding:4px 12px 40px;-webkit-overflow-scrolling:touch}
+#sprungmenue summary{font-weight:700;padding:9px 0;cursor:pointer;color:#7fb0ff}
+#sprungmenue .abs{color:#8d9ab5;font-size:13px;margin:8px 0 4px}
+#sprungmenue .szenen{display:flex;flex-wrap:wrap;gap:5px}
+#sprungmenue .szenen button{border:1px solid #2a3550;background:#111827;border-radius:8px;padding:4px 8px;font:500 13px ui-monospace,monospace}
+#sprungmenue .szenen button:active{background:#2b3a5e}
+
+/* Ich-Sicht im Bett (V8.2): leichtes Kippen und Atmen. Grundzoom, damit beim Kippen keine Ränder sichtbar werden */
+.bettatmen{animation:bettatmen 5.8s ease-in-out infinite;transform-origin:50% 70%}
+@keyframes bettatmen{0%,100%{transform:scale(1.035) translateY(0) rotate(-.25deg)}45%{transform:scale(1.042) translateY(-6px) rotate(.3deg)}70%{transform:scale(1.04) translateY(-3px) rotate(.15deg)}}
+.einfrieren .bettatmen{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){.bettatmen{animation:none;transform:scale(1.035)}}
+/* Platz für den festen Vollbild-Knopf oben rechts (V8.2) */
+#topbar{padding-right:150px}

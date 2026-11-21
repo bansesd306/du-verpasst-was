@@ -492,6 +492,44 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 /* Rückblick: Knöpfe oben bleiben sichtbar (über dem Bild von damals) */
 #buehne:has(#rueckbox.an) #topbar{z-index:31}
 
+/* Vollbild-Knopf (V8.2): fest oben rechts, über allem, klein und leise */
+#vollbildknopf{position:fixed;top:max(8px,env(safe-area-inset-top));right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:9px;border:none;border-radius:12px;
+  background:rgba(10,14,24,.45);color:rgba(255,255,255,.7);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+#vollbildknopf:hover,#vollbildknopf:focus-visible{background:rgba(30,40,64,.75);color:#fff;outline:none}
+#vollbildknopf svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#vollbildknopf .zu,#vollbildknopf.an .auf{display:none}
+#vollbildknopf.an .zu{display:block}
+@media (orientation:portrait){#vollbildknopf{display:none}}
+
+/* Sprungmenü (nur Testversion) */
+#sprungknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 48px);right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:0;border:none;border-radius:12px;
+  background:rgba(10,14,24,.45);color:rgba(255,255,255,.7);font:600 18px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+@media (orientation:portrait){#sprungknopf{display:none}}
+#sprungmenue{position:fixed;top:0;right:0;bottom:0;width:min(520px,94vw);z-index:99;background:rgba(8,11,20,.97);color:#e9edf7;font:400 15px/1.35 system-ui,sans-serif;
+  display:none;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.6)}
+#sprungmenue.an{display:flex}
+#sprungmenue .kopf{display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid #253049}
+#sprungmenue .kopf span{color:#8d9ab5;font-size:13px;flex:1}
+#sprungmenue button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+#sprungmenue .zu{background:none;border:none;font-size:20px;padding:4px 8px}
+#sprungmenue .wege{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;border-bottom:1px solid #253049}
+#sprungmenue .wege button{border:1px solid #33405e;background:#141b2c;border-radius:16px;padding:5px 11px;font-size:14px}
+#sprungmenue .wege button.an{background:#ffa23c;border-color:#ffa23c;color:#1a0d05;font-weight:700}
+#sprungmenue .liste{overflow:auto;padding:4px 12px 40px;-webkit-overflow-scrolling:touch}
+#sprungmenue summary{font-weight:700;padding:9px 0;cursor:pointer;color:#7fb0ff}
+#sprungmenue .abs{color:#8d9ab5;font-size:13px;margin:8px 0 4px}
+#sprungmenue .szenen{display:flex;flex-wrap:wrap;gap:5px}
+#sprungmenue .szenen button{border:1px solid #2a3550;background:#111827;border-radius:8px;padding:4px 8px;font:500 13px ui-monospace,monospace}
+#sprungmenue .szenen button:active{background:#2b3a5e}
+
+/* Ich-Sicht im Bett (V8.2): leichtes Kippen und Atmen. Grundzoom, damit beim Kippen keine Ränder sichtbar werden */
+.bettatmen{animation:bettatmen 5.8s ease-in-out infinite;transform-origin:50% 70%}
+@keyframes bettatmen{0%,100%{transform:scale(1.035) translateY(0) rotate(-.25deg)}45%{transform:scale(1.042) translateY(-6px) rotate(.3deg)}70%{transform:scale(1.04) translateY(-3px) rotate(.15deg)}}
+.einfrieren .bettatmen{animation-play-state:paused!important}
+@media (prefers-reduced-motion:reduce){.bettatmen{animation:none;transform:scale(1.035)}}
+/* Platz für den festen Vollbild-Knopf oben rechts (V8.2) */
+#topbar{padding-right:150px}
+
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 #handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,.85,.25,1);z-index:5}
 #handy.an{transform:none}
@@ -1312,10 +1350,12 @@ Lynn.
 @handy weg
 @schwarz langsam
 @musik aus
-@warte 1
+@warte 1.8
 @bild N38a traum
 @raum tag
 @loop seminar an
+# V8.2: länger auf den Block schauen (er hat nichts zum Schreiben dabei)
+@warte 3.5
 ~ Wieder perfekt vorbereitet.
 ~ Gesprächsführung. Ausgerechnet.
 … !1.5
@@ -1473,7 +1513,7 @@ Irrtum. Anfechtung. § 119.
 Keine Sorge, M. Ich hab dich.
 …
 Ha.
-@bild N04
+@bild K10H
 Ich schieb das Handy ein Stück weiter weg.
 @karteikarten
 Drei von drei.
@@ -1553,7 +1593,7 @@ Fünf Minuten.
 == L3
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
-@bild N04
+@bild K10H
 @ton bzzz
 @banner Instagram | lena.mln | lena.mln hat eine Story gepostet
 Bzzz.
@@ -1570,7 +1610,7 @@ Bzzz.
 @warte 3
 @musik aus
 @effekt traum aus
-@bild N04 schnitt
+@bild K10H schnitt
 @setze l3geschaut = 1
 -> L3_SCHEMA
 
@@ -1603,7 +1643,7 @@ Geht doch.
 == S3
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
-@bild N1
+@bild N02
 @handy sperr
 @ton bzzz
 @benachrichtigung Instagram | lena.mln | lena.mln hat eine Story gepostet
@@ -1647,7 +1687,7 @@ Sophie: „Aha.“
 == L4
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
-@bild N04
+@bild K10H
 „Der 17-jährige K kauft sich von seinem Taschengeld …“
 Check. Check. Check.
 Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
@@ -1683,7 +1723,7 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 == L4_WEITER
 @uhr laufen 22:38
 @ton bzzz leise
-@bild L4
+@bild K10H
 @warte 2
 ? „Kurz Fenster auf.“ -> L4B_FENSTER
 ? „Weiter.“ -> ANRUF_A
@@ -1704,7 +1744,7 @@ Unten lacht jemand auf der Straße.
 @loop wind aus
 @musik aus
 Fenster zu.
-@bild N04
+@bild K10H
 -> ANRUF_A
 
 == L4B_JACKE
@@ -1715,7 +1755,7 @@ Fenster zu.
 == S4
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
-@bild N1
+@bild N02
 @handy sperr
 @ton bzzz
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 🎥 Video
@@ -1813,7 +1853,7 @@ Lena: „Leute, gleich kommt die Torte!“
 -> ANRUF_NICHTFLOW
 
 == ANRUF_FLOW
-@bild N04
+@bild K10H
 „V verkauft K ein Auto und verschweigt den Unfall …“
 Easy.
 @anruf_unbemerkt Jonas
@@ -1832,7 +1872,7 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 -> L5
 
 == ANRUF_NICHTFLOW
-@bild N04
+@bild K10H
 @handy anruf Jonas
 ? „Rangehen.“ -> ANRUF_RAN
 ? „Ablehnen.“ -> ANRUF_AB
@@ -1866,7 +1906,7 @@ Jonas!: „Find’s raus.“
 
 == DANACH_2245
 @handy zu
-@bild N04
+@bild K10H
 Ich hab ja heute schon was gelernt.
 Okay. Nicht so viel.
 Aber auch nicht nichts.
@@ -1875,7 +1915,7 @@ Aber auch nicht nichts.
 ? „Nein. Bleiben.“ -> A_OHNEFLOW
 
 == A_OHNEFLOW
-@bild B05
+@bild K10H
 @loop uhr an
 @karteikarten auto
 … !2
@@ -1886,7 +1926,7 @@ Aber auch nicht nichts.
 „Lynn leiht sich …“ ⌫ynn
 @schema 1 still
 @schema aus
-@bild N04
+@bild K10H
 … !3
 @uhr laufen 23:31
 @loop uhr aus
@@ -1896,7 +1936,7 @@ Aber auch nicht nichts.
 == B_UEBER
 @uhr mind 22:45
 @rufe CHECK_WOBLEIBST
-@bild N1
+@bild N02
 @handy sperr
 @warte 2.5
 @ton bzzz
@@ -1956,7 +1996,7 @@ Aber auch nicht nichts.
 @ton haustuer leise dumpf
 @warte 2.5
 @fenster_aus Sa 01:30
-@bild N1 langsam
+@bild N02 langsam
 @effekt handylicht an
 @handy feed
 @warte 4
@@ -1967,7 +2007,7 @@ Aber auch nicht nichts.
 # ---- 23:40 – Auftauchen (Weg A, aus dem Flow) ----
 == L5
 @uhr mind 23:40
-@bild N04
+@bild K10H
 @handy sperr
 @benachrichtigung Telefon | Jonas | 3 verpasste Anrufe
 @benachrichtigung WhatsApp | WhatsApp | 47 neue Nachrichten
@@ -2014,7 +2054,7 @@ Sie verschwindet ja nicht. !3
 == L8_HANDYWEG
 @handy zu
 @ton handy_ablegen
-@bild N04
+@bild K10H
 @setze handyweg
 @warte 1
 -> NACHT_ZUHAUSE
@@ -2022,7 +2062,7 @@ Sie verschwindet ja nicht. !3
 # ---- 23:31 – wer bei 22:45 geblieben ist ----
 == L9
 @uhr mind 23:31
-@bild N04
+@bild K10H
 @handy sperr
 @ton display_klick
 Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
@@ -2039,7 +2079,7 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 # ---- 00:50 – Blaue Haken ----
 == L10
 @uhr Sa 00:50
-@bild N1
+@bild N02
 @handy chat Lynn
 @haken blau
 Blau. !3
@@ -3086,8 +3126,8 @@ Und eine ist ja keine. !3
 @stille
 @karte auto Sa 00:12
 @raum nacht
-@bild N1
 @wenn handyweg
+  @bild N02
   Licht aus. Das Handy liegt auf dem Schreibtisch.
   … !3
   @rufe NACHT_STRASSE
@@ -3112,6 +3152,7 @@ Und eine ist ja keine. !3
   @warte 1.6
   @abzeichen Außer Reichweite
 @sonst
+  @bild N1
   Licht aus. Das Handy liegt neben dem Kopfkissen.
   … !3
   @rufe NACHT_STRASSE
@@ -3188,7 +3229,7 @@ Ich schlafe nicht. Ich warte.
 @stille
 @karte auto Sa 01:14
 @raum nacht
-@bild N1
+@bild N02
 @ton decke1
 @handy gruppe
 @foto N32c Mia
@@ -3612,7 +3653,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @ton PR3_stift
 {haken}Check. {haken}Check. {haken}Check.
 # Lena postet den Foto-Dump
-@bild N04
+@bild K10H
 @ton bzzz_tisch
 @handy sperr
 @benachrichtigung Instagram | lena.mln | lena.mln hat 12 Fotos gepostet
@@ -3974,7 +4015,7 @@ const BILDER = {
   N31a: { datei: "img/N31a.webp", text: "Zeitraffer: Morgen, er im Bett am Handy", stimmung: "morgen" },
 
   // ---------- Zimmer (noch offen) ----------
-  N02:  { datei: "img/N02.webp", text: "Ich-Sicht aus dem Bett nachts: Regal links, Tür geradeaus, Schreibtisch rechts (V8)", stimmung: "nacht" },
+  N02:  { datei: "img/N02.webp", text: "Ich-Sicht aus dem Bett nachts: Regal links, Tür geradeaus, Schreibtisch rechts (V8)", stimmung: "nacht", bett: true, handy: [0.46, 0.86, 0.09, 0.1] },
   N31b: { datei: "img/N31b.webp", text: "Zeitraffer: Mittag, Bett leer", stimmung: "tag" },
   N31c: { datei: "img/N31c.webp", text: "Zeitraffer: Nachmittag, wieder im Bett am Handy", stimmung: "tag" },
   N31d: { datei: "img/N31d.webp", text: "Abend, er am Schreibtisch, Lampe an", stimmung: "zimmer", tisch: true },
@@ -4089,7 +4130,8 @@ const BILDER = {
   MK1: { datei: "img/MK1.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK2: { datei: "img/MK2.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK3: { datei: "img/MK3.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
-  K10H: { datei: "img/K10H.webp", text: "Ich-Sicht am Schreibtisch nachts, Hände auf dem Tisch, Lynns Stift auf dem Buch (V8)", stimmung: "zimmer", tisch: true },
+  K10H: { datei: "img/K10H.webp", text: "Ich-Sicht am Schreibtisch nachts, Hände auf dem Tisch, Lynns Stift auf dem Buch (V8)", stimmung: "zimmer", tisch: true, ohneHaende: "K10O" },
+  K10O: { datei: "", text: "Wie K10H, aber ohne Hände auf dem Tisch (er hält das Handy) – fehlt noch, Philip erstellt es (V8.2)", stimmung: "zimmer", tisch: true, mitHaenden: "K10H" },
   N38c: { datei: "img/N38c.webp", text: "Rückblende Seminar: Lynn grinst spöttisch rüber (nah) (V8)", stimmung: "traum", figur: true },
   N38n: { datei: "img/N38n.webp", text: "Rückblende Seminar: Lynn ganz nah, Grinsen hinter den Fingern (V8)", stimmung: "traum", figur: true },
   N25L: { datei: "img/N25L.webp", text: "Prüfungsraum fast leer, noch zehn Minuten (V8)", stimmung: "pruefung" },
@@ -4163,7 +4205,8 @@ const TOENE = {
   // Draußen
   haustuer:        { datei: "ton/haustuer.mp3" },
   wind:            { datei: "ton/wind.mp3" },              // draußen laut, im Zimmer leise als Raumton
-  schritte:        { datei: "ton/schritte.mp3" },
+  schritte:        { datei: "ton/schritte.mp3" },        // 4 Schritte, gleichmäßig (Kies, V8.2)
+  schritte_lauf:   { datei: "ton/schritte_lauf.mp3" },   // nahtlose Schleife 16 Schritte (Kamerafahrt Weg)
   // Party
   M1_party:        { datei: "ton/M1_party.mp3" },          // Dance Until Dark
   gemurmel:        { datei: "ton/gemurmel.mp3" },          // House-Party-Stimmen (62063)
@@ -4385,6 +4428,7 @@ const FILME = { weg: 'vid/weg.mp4' };
   <div id="stoppuhr" class="schirm"><h2>Stoppuhr (Testmodus)</h2><div class="inhalt"></div><button>Weiter</button></div>
   <div id="verlauf" class="schirm"></div>
 </div></div>
+<button id="vollbildknopf" type="button" title="Vollbild" aria-label="Vollbild"><svg viewBox="0 0 24 24" class="auf"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" class="zu"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
 <div id="drehen"><div class="ic">📱</div><div>Bitte drehen – das Spiel läuft im Querformat.</div></div>
 <script>
 // =====================================================================
@@ -4470,7 +4514,7 @@ const Ton = (() => {
     regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
     oben: [['M1_party', { vol: .5, lp: 160 }]],
     halle: [['halle', { vol: .75 }]],
-    schritte: [['schritte', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
+    schritte: [['schritte_lauf', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
     klingel: [['anruf', { vol: 1 }]],
     party_fern: [['muffled_party', { vol: .9 }]],   // Startbildschirm: Party hinter dem Fenster, gedämpft (Philips Datei)
@@ -5219,11 +5263,41 @@ const Rahmen = (() => {
   ['pointerleave', 'blur'].forEach(t => sp.addEventListener(t, () => sog(false)));
 
   // ---------------- Ton ----------------
+  // Gedämpfte Partymusik (Philips „Muffled Party“) als Stream: läuft sofort an, ohne auf das Laden
+  // und Dekodieren aller anderen Töne zu warten. Datei ist schon leiser gemischt (auch iPhone, das die
+  // Lautstärke von Audio-Elementen ignoriert). Autoplay wird versucht, sonst startet sie beim ersten Berühren.
+  const fern = (() => {
+    let el = null, soll = false, fadeT = null;
+    const mach = () => { if (!el) { el = new Audio('ton/muffled_party_start.mp3'); el.loop = true; el.preload = 'auto'; el.setAttribute('playsinline', ''); } return el; };
+    function blende(ziel, ms, fertig) {
+      clearInterval(fadeT); const e = mach(), v0 = e.volume, t0 = performance.now();
+      fadeT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); try { e.volume = v0 + (ziel - v0) * k; } catch (x) { } if (k >= 1) { clearInterval(fadeT); fertig && fertig(); } }, 40);
+    }
+    return {
+      vorladen() { try { mach().load(); } catch (e) { } },
+      start() {
+        const e = mach(); soll = true;
+        if (!e.paused) { blende(1, 600); return; }
+        try { e.volume = 0; } catch (x) { }
+        const p = e.play(); if (p && p.catch) p.catch(() => { });
+        blende(1, 900);
+      },
+      stopp(ms = 900) { soll = false; if (!el || el.paused) return; blende(0, ms, () => { if (!soll) el.pause(); }); },
+      get laeuft() { return !!el && !el.paused; },
+    };
+  })();
+  fern.vorladen();
+  // Erstes Berühren irgendwo (auch vor dem eigentlichen Klick): Musik sofort an, solange Start/Menü zu sehen sind
+  const erstesBeruehren = () => {
+    if (!bw.classList.contains('an') || bw.classList.contains('ende-an')) return;
+    if (!fern.laeuft) fern.start();
+  };
+  ['pointerdown', 'touchend', 'pointerup', 'click', 'keydown'].forEach(t => addEventListener(t, erstesBeruehren, true));
   let bzzzZaehler = 0;
   function ton(name) {
+    if (name === 'party_fern') { fern.start(); return; }
     if (!api || !window.Ton || !Ton.bereit) return;
     if (name === 'bzzz') { if (bzzzZaehler++ < 3) Ton.spiele('bzzz', { vol: .5 }); return; }  // nur die ersten paar, sonst nervt es
-    if (name === 'party_fern') { Ton.loop('party_fern', true); return; }
     Ton.spiele(name);
   }
 
@@ -5274,7 +5348,7 @@ const Rahmen = (() => {
   }
   function weg() {
     planStopp(); nachrichtenStopp(); handyStopp(); clearTimeout(vorbeiT);
-    aktiv = false; bw.classList.remove('an', 'weg'); laeuft = false;
+    aktiv = false; bw.classList.remove('an', 'weg'); laeuft = false; fern.stopp(700);
   }
   function besuch() {
     const l = Math.min(laeufe(), 3);
@@ -5292,14 +5366,15 @@ const Rahmen = (() => {
     sp.classList.remove('gelesen');
     bzzzZaehler = 0; besuch(); uhrzeitSetzen();
     if (nachWeg && laeufe() > 0) { S().nachr = (S().nachr || 0) + 6 + Math.floor(Math.random() * 7); zaehlerText(); kopf.classList.add('an'); sichern(); }
-    if (nachWeg && window.Ton) { Ton.outroAus(); ton('party_fern'); }
+    if (nachWeg && window.Ton) Ton.outroAus();
+    ton('party_fern');   // beim allerersten Laden: Autoplay-Versuch (Browser blockt evtl. bis zum ersten Tippen)
     bw.classList.remove('anlauf'); void bw.offsetWidth; bw.classList.add('anlauf');
     bw.classList.add('tippbar'); tippAb = Date.now() + 500;
     nachrichtenStart(nachWeg ? 1500 : 2400);
   }
   async function zumMenue() {
     if (bw.classList.contains('menue-an')) return;
-    if (ersterTipp) { ersterTipp = false; if (api.ersterTipp) await api.ersterTipp(); ton('party_fern'); }
+    if (ersterTipp) { ersterTipp = false; ton('party_fern'); if (api.ersterTipp) await api.ersterTipp(); }
     bw.classList.add('menue-an'); bw.classList.remove('tippbar');
     blitz();
     const en = $('enden'); en.textContent = T('menue_enden', 'Enden gefunden: {n} von 3').replace('{n}', S().enden.length);
@@ -5794,6 +5869,8 @@ const Spiel = (() => {
     if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${(Math.random() * 2.4).toFixed(2)}s;animation-duration:${(1.6 + Math.random() * 1.8).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
     if (e.funken && e.datei) { const f = document.createElement('div'); f.className = 'funken'; f.innerHTML = e.funken.map((q, i) => `<i style="left:${q[0] * 100}%;top:${q[1] * 100}%;animation-delay:${-i * .13}s"></i>`).join(''); innen.appendChild(f); }
     if (e.figur) { innen.classList.add('atmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 4.6) + 's'; }
+    // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)
+    if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party') huelle.classList.add('schwenk');
@@ -5976,7 +6053,7 @@ const Spiel = (() => {
   }
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
-  const TISCH = ['B05', 'N04', 'K10', 'L4', 'N03', 'L7', 'N09', 'N09D'];
+  const TISCH = ['B05', 'N04', 'K10', 'K10H', 'K10O', 'L4', 'N03', 'L7', 'N09', 'N09D'];
   const BETT = ['N1', 'N02', 'SO', 'N1D', 'N24', 'N31a'];
   let letzteVib = 0;
   function bzzz(o = {}) {
@@ -6277,8 +6354,17 @@ const Spiel = (() => {
     }
   }
   const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim.dreams', 'tim.dreams hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'mia.chaos', 'mia.chaos hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
+  // Schreibtisch-Ich-Sicht: hält er das Handy, liegen die Hände nicht auf dem Tisch.
+  // Hat ein Bild „ohneHaende“ (eigene Datei vorhanden), wird beim Handy darauf gewechselt und beim Weglegen zurück.
+  function haendeTausch(was) {
+    if (!aktBild) return;
+    const zu = was === 'zu' || was === 'weg';
+    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'schnitt');
+    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'schnitt');
+  }
   async function handyBefehl(t, a) {
     const was = t[0];
+    if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
     switch (was) {
       case 'sperr': Handy.sperr(); zeigeTextbox(false); await warte(.5); break;
       case 'chat': zeigeTextbox(false); await Handy.vorChat(t.slice(1).join(' ')); await warte(.2); break;
@@ -6489,6 +6575,35 @@ const Spiel = (() => {
     B.style.transform = `translate(${(w - 1920 * s) / 2}px,${(h - 1080 * s) / 2}px) scale(${s})`;
   }
   window.addEventListener('resize', passe); window.addEventListener('orientationchange', () => setTimeout(passe, 300)); passe();
+  if (window.visualViewport) visualViewport.addEventListener('resize', passe);
+
+  // ---------------- Vollbild (V8.2) ----------------
+  // Fester Knopf oben rechts. Am Handy holt jeder Tipp automatisch zurück ins Vollbild,
+  // am PC nur der Knopf (Esc soll dort weiter funktionieren).
+  const IPHONE = /iPhone|iPod/.test(navigator.userAgent);
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const fsGeht = () => { const d = document.documentElement; return !!(d.requestFullscreen || d.webkitRequestFullscreen) && document.fullscreenEnabled !== false; };
+  function vollbildAn() {
+    if (fsEl() || !fsGeht()) return null;
+    const d = document.documentElement; let p = null;
+    try { p = d.requestFullscreen ? d.requestFullscreen({ navigationUI: 'hide' }) : d.webkitRequestFullscreen(); } catch (e) { }
+    const danach = () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => { }); } catch (e) { } setTimeout(passe, 250); };
+    if (p && p.then) return p.then(danach).catch(() => { }); danach(); return null;
+  }
+  function vollbildAus() { try { if (document.exitFullscreen) document.exitFullscreen().catch(() => { }); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); } catch (e) { } }
+  const vbKnopf = document.getElementById('vollbildknopf');
+  function vbIcon() { const an = !!fsEl(); vbKnopf.classList.toggle('an', an); vbKnopf.title = an ? 'Vollbild beenden' : 'Vollbild'; vbKnopf.setAttribute('aria-label', vbKnopf.title); }
+  ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => vbKnopf.addEventListener(t, e => e.stopPropagation()));
+  vbKnopf.addEventListener('click', e => {
+    e.stopPropagation(); e.preventDefault();
+    if (IPHONE && !fsGeht()) { toast('iPhone: Safari erlaubt kein Vollbild.<br>Quer halten, dann ist die Leiste fast weg.'); return; }
+    if (fsEl()) vollbildAus(); else vollbildAn();
+  });
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(t => document.addEventListener(t, () => { vbIcon(); setTimeout(passe, 120); setTimeout(passe, 500); }));
+  // jeder Tipp am Handy: zurück ins Vollbild (pointerup/touchend zählen als Nutzer-Geste)
+  const tippVollbild = e => { if (e.pointerType === 'mouse') return; if (e.target && e.target.closest && e.target.closest('#vollbildknopf')) return; if (!fsEl()) vollbildAn(); };
+  addEventListener('pointerup', tippVollbild, true); addEventListener('touchend', tippVollbild, true);
+  vbIcon();
   // Körnung
   (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const d = x.createImageData(256, 256); for (let i = 0; i < d.data.length; i += 4) { const v = Math.random() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); const k = $('#koernung'); k.style.background = `url(${c.toDataURL()})`; k.style.inset = '-60px'; })();
 
@@ -6507,9 +6622,7 @@ const Spiel = (() => {
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
         Ton.init();
-        try { const el = document.documentElement; if (el.requestFullscreen) await el.requestFullscreen({ navigationUI: 'hide' }); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); } catch (e) { }
-        try { if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); } catch (e) { }
-        setTimeout(passe, 300);
+        await vollbildAn();
       },
       spielen() { Ton.init(); neustart(); },
     });
@@ -6521,11 +6634,91 @@ const Spiel = (() => {
   return {
     init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v },
+    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v },
   };
 })();
 
 Spiel.init();
+</script>
+<script>
+// =====================================================================
+//  SPRUNGMENÜ (nur Testversion, TESTMODUS in bilder.js): zu jedem Kapitel
+//  und jeder Szene springen, mit Auswahl des Wegs. In der Abgabe unsichtbar.
+// =====================================================================
+(() => {
+  if (typeof TESTMODUS === 'undefined' || !TESTMODUS) return;
+  const src = document.getElementById('story').textContent.split('\n');
+  // Kapitel, Abschnitte (# ---- … ----) und Szenen (== NAME) in Skript-Reihenfolge
+  const kapitel = []; let kap = null, abs = null; const zeileVon = {};
+  src.forEach((z, i) => {
+    let m;
+    if ((m = z.match(/^#\s{2,}((PROLOG|KAPITEL|KNOTEN|EPILOG)[^\n]*)/))) { kap = { name: m[1].trim(), id: m[2] === 'KAPITEL' ? 'K' + (m[1].match(/\d+/) || [''])[0] : m[2], abs: [] }; kapitel.push(kap); abs = null; return; }
+    if (!kap) return;
+    if ((m = z.match(/^# -{3,}\s*(.+?)\s*-{3,}\s*$/))) { abs = { name: m[1], szenen: [] }; kap.abs.push(abs); return; }
+    if ((m = z.match(/^== (\S+)/))) { if (!abs) { abs = { name: '', szenen: [] }; kap.abs.push(abs); } abs.szenen.push(m[1]); zeileVon[m[1]] = i; }
+  });
+  // Ab welcher Zeile das Skript selbst typ/lynn setzt – davor wird der Wert beim Springen nicht vorweggenommen
+  const ab = re => { const i = src.findIndex(z => re.test(z)); return i < 0 ? 1e9 : i; };
+  const SETZT = {
+    party: ab(/@setze typ = "party"/), afterparty: ab(/@setze typ = "afterparty"/), gluecklich: ab(/@setze typ = "gluecklich"/),
+    zuhause: ab(/@setze typ = "zuhause"/), lynn_geschaut: ab(/@setze lynn = "geschaut"/), lynn_gm: ab(/@setze lynn = "gm"/), kap3: ab(/KAPITEL 3/),
+  };
+  const PARTY = { zugesagt: true, aufbruch: '21:20', ankunft: '21:40', besucht: 2, kueche: true, balkon: true };
+  const WEGE = {
+    'Zuhause A': { v: { weg: 'A', flow: true, phantom: true, punkte: 0 }, typ: 'zuhause' },
+    'Zuhause B': { v: { weg: 'B', punkte: 7 }, typ: 'zuhause' },
+    'Party': { v: Object.assign({ tanz: true, punkte: 4 }, PARTY), typ: 'party', lynn: 'geschaut' },
+    'Afterparty': { v: Object.assign({ punkte: 4, afterpartyStory: true }, PARTY), typ: 'afterparty', lynn: 'geschaut' },
+    'Lynn glücklich': { v: Object.assign({ tanz: true, mittanzen: true, punkte: 3 }, PARTY), typ: 'gluecklich', lynn: 'gm' },
+  };
+  // Uhr beim Springen: Uhrzeit aus der Abschnitts-Überschrift, sonst Kapitelbeginn
+  const KAPUHR = { K1: '21:07', K2: '21:20', KNOTEN: '21:20', K3: '21:40', K4: null, K5: null };
+  let wegWahl = 'Zuhause A';
+  try { wegWahl = localStorage.getItem('dvw-sprung-weg') || wegWahl; } catch (e) { }
+
+  function springen(label, kapId, absName) {
+    const w = WEGE[wegWahl], z = zeileVon[label];
+    if (window.Ton) Ton.init();
+    Spiel._debug.neustart(label);
+    const V = Spiel.V, setze = o => Object.entries(o).forEach(([k, v]) => V[k] = (typeof v === 'string' && /\d:\d\d$/.test(v)) ? Spiel._debug.zeit(v) : v);
+    const partyWeg = wegWahl !== 'Zuhause A' && wegWahl !== 'Zuhause B';
+    const vw = Object.assign({}, w.v);
+    if (partyWeg && z < SETZT.kap3) { delete vw.ankunft; delete vw.kueche; delete vw.balkon; delete vw.besucht; delete vw.tanz; delete vw.mittanzen; delete vw.punkte; delete vw.afterpartyStory; }
+    setze(vw);
+    // typ / lynn nur, wenn das Skript sie an dieser Stelle schon gesetzt hätte
+    if (z > SETZT[w.typ]) V.typ = w.typ; else if (partyWeg && z > SETZT.party) V.typ = 'party';
+    if (w.lynn === 'gm' && z > SETZT.lynn_gm) V.lynn = 'gm'; else if (w.lynn && z > SETZT.lynn_geschaut) V.lynn = 'geschaut';
+    // Uhr
+    let uhr = (absName.match(/(\d{1,2}:\d{2})/) || [])[1] || KAPUHR[kapId];
+    if (kapId === 'K4') uhr = partyWeg ? 'Sa 01:00' : '23:40';
+    if (uhr) { V.uhr = Spiel._debug.zeit(uhr); V.uhr_zeigen = true; }
+    Spiel._debug.zeigeUhr();
+    panel.classList.remove('an');
+  }
+
+  // ---------- Oberfläche ----------
+  const knopf = document.createElement('button');
+  knopf.id = 'sprungknopf'; knopf.type = 'button'; knopf.textContent = '⏭'; knopf.title = 'Sprungmenü (nur Testversion)';
+  const panel = document.createElement('div'); panel.id = 'sprungmenue';
+  const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="zu" aria-label="Schließen">✕</button></div>
+    <div class="wege">${Object.keys(WEGE).map(w => `<button type="button" data-weg="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+    <div class="liste">${kapitel.map((k, ki) => `<details${ki === 2 ? ' open' : ''}><summary>${esc(k.name)}</summary>${k.abs.map(a => `${a.name ? `<div class="abs">${esc(a.name)}</div>` : ''}<div class="szenen">${a.szenen.map(s => `<button type="button" data-l="${s}" data-k="${k.id}" data-a="${esc(a.name)}">${s}</button>`).join('')}</div>`).join('')}</details>`).join('')}</div>`;
+  document.body.appendChild(knopf); document.body.appendChild(panel);
+  const wegeZeigen = () => panel.querySelectorAll('[data-weg]').forEach(b => b.classList.toggle('an', b.dataset.weg === wegWahl));
+  wegeZeigen();
+  const halt = e => e.stopPropagation();
+  [knopf, panel].forEach(el => ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click'].forEach(t => el.addEventListener(t, halt)));
+  knopf.addEventListener('click', () => panel.classList.toggle('an'));
+  panel.addEventListener('click', e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.classList.contains('zu')) panel.classList.remove('an');
+    else if (b.dataset.weg) { wegWahl = b.dataset.weg; try { localStorage.setItem('dvw-sprung-weg', wegWahl); } catch (x) { } wegeZeigen(); }
+    else if (b.dataset.l) springen(b.dataset.l, b.dataset.k, b.dataset.a || '');
+  });
+  window.Sprung = { springen: (l, weg) => { if (weg) wegWahl = weg; const k = kapitel.find(k => k.abs.some(a => a.szenen.includes(l))); const a = k && k.abs.find(a => a.szenen.includes(l)); springen(l, k ? k.id : '', a ? a.name : ''); }, kapitel };
+})();
+
 </script>
 </body>
 </html>

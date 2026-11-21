@@ -289,6 +289,8 @@ const Spiel = (() => {
     if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${(Math.random() * 2.4).toFixed(2)}s;animation-duration:${(1.6 + Math.random() * 1.8).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
     if (e.funken && e.datei) { const f = document.createElement('div'); f.className = 'funken'; f.innerHTML = e.funken.map((q, i) => `<i style="left:${q[0] * 100}%;top:${q[1] * 100}%;animation-delay:${-i * .13}s"></i>`).join(''); innen.appendChild(f); }
     if (e.figur) { innen.classList.add('atmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 4.6) + 's'; }
+    // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)
+    if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party') huelle.classList.add('schwenk');
@@ -471,7 +473,7 @@ const Spiel = (() => {
   }
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
-  const TISCH = ['B05', 'N04', 'K10', 'L4', 'N03', 'L7', 'N09', 'N09D'];
+  const TISCH = ['B05', 'N04', 'K10', 'K10H', 'K10O', 'L4', 'N03', 'L7', 'N09', 'N09D'];
   const BETT = ['N1', 'N02', 'SO', 'N1D', 'N24', 'N31a'];
   let letzteVib = 0;
   function bzzz(o = {}) {
@@ -772,8 +774,17 @@ const Spiel = (() => {
     }
   }
   const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim.dreams', 'tim.dreams hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'mia.chaos', 'mia.chaos hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
+  // Schreibtisch-Ich-Sicht: hält er das Handy, liegen die Hände nicht auf dem Tisch.
+  // Hat ein Bild „ohneHaende“ (eigene Datei vorhanden), wird beim Handy darauf gewechselt und beim Weglegen zurück.
+  function haendeTausch(was) {
+    if (!aktBild) return;
+    const zu = was === 'zu' || was === 'weg';
+    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'schnitt');
+    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'schnitt');
+  }
   async function handyBefehl(t, a) {
     const was = t[0];
+    if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
     switch (was) {
       case 'sperr': Handy.sperr(); zeigeTextbox(false); await warte(.5); break;
       case 'chat': zeigeTextbox(false); await Handy.vorChat(t.slice(1).join(' ')); await warte(.2); break;
@@ -984,6 +995,35 @@ const Spiel = (() => {
     B.style.transform = `translate(${(w - 1920 * s) / 2}px,${(h - 1080 * s) / 2}px) scale(${s})`;
   }
   window.addEventListener('resize', passe); window.addEventListener('orientationchange', () => setTimeout(passe, 300)); passe();
+  if (window.visualViewport) visualViewport.addEventListener('resize', passe);
+
+  // ---------------- Vollbild (V8.2) ----------------
+  // Fester Knopf oben rechts. Am Handy holt jeder Tipp automatisch zurück ins Vollbild,
+  // am PC nur der Knopf (Esc soll dort weiter funktionieren).
+  const IPHONE = /iPhone|iPod/.test(navigator.userAgent);
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  const fsGeht = () => { const d = document.documentElement; return !!(d.requestFullscreen || d.webkitRequestFullscreen) && document.fullscreenEnabled !== false; };
+  function vollbildAn() {
+    if (fsEl() || !fsGeht()) return null;
+    const d = document.documentElement; let p = null;
+    try { p = d.requestFullscreen ? d.requestFullscreen({ navigationUI: 'hide' }) : d.webkitRequestFullscreen(); } catch (e) { }
+    const danach = () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => { }); } catch (e) { } setTimeout(passe, 250); };
+    if (p && p.then) return p.then(danach).catch(() => { }); danach(); return null;
+  }
+  function vollbildAus() { try { if (document.exitFullscreen) document.exitFullscreen().catch(() => { }); else if (document.webkitExitFullscreen) document.webkitExitFullscreen(); } catch (e) { } }
+  const vbKnopf = document.getElementById('vollbildknopf');
+  function vbIcon() { const an = !!fsEl(); vbKnopf.classList.toggle('an', an); vbKnopf.title = an ? 'Vollbild beenden' : 'Vollbild'; vbKnopf.setAttribute('aria-label', vbKnopf.title); }
+  ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => vbKnopf.addEventListener(t, e => e.stopPropagation()));
+  vbKnopf.addEventListener('click', e => {
+    e.stopPropagation(); e.preventDefault();
+    if (IPHONE && !fsGeht()) { toast('iPhone: Safari erlaubt kein Vollbild.<br>Quer halten, dann ist die Leiste fast weg.'); return; }
+    if (fsEl()) vollbildAus(); else vollbildAn();
+  });
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach(t => document.addEventListener(t, () => { vbIcon(); setTimeout(passe, 120); setTimeout(passe, 500); }));
+  // jeder Tipp am Handy: zurück ins Vollbild (pointerup/touchend zählen als Nutzer-Geste)
+  const tippVollbild = e => { if (e.pointerType === 'mouse') return; if (e.target && e.target.closest && e.target.closest('#vollbildknopf')) return; if (!fsEl()) vollbildAn(); };
+  addEventListener('pointerup', tippVollbild, true); addEventListener('touchend', tippVollbild, true);
+  vbIcon();
   // Körnung
   (() => { const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); const d = x.createImageData(256, 256); for (let i = 0; i < d.data.length; i += 4) { const v = Math.random() * 255; d.data[i] = d.data[i + 1] = d.data[i + 2] = v; d.data[i + 3] = 255; } x.putImageData(d, 0, 0); const k = $('#koernung'); k.style.background = `url(${c.toDataURL()})`; k.style.inset = '-60px'; })();
 
@@ -1002,9 +1042,7 @@ const Spiel = (() => {
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
         Ton.init();
-        try { const el = document.documentElement; if (el.requestFullscreen) await el.requestFullscreen({ navigationUI: 'hide' }); else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen(); } catch (e) { }
-        try { if (screen.orientation && screen.orientation.lock) await screen.orientation.lock('landscape'); } catch (e) { }
-        setTimeout(passe, 300);
+        await vollbildAn();
       },
       spielen() { Ton.init(); neustart(); },
     });
@@ -1016,6 +1054,6 @@ const Spiel = (() => {
   return {
     init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v },
+    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v },
   };
 })();

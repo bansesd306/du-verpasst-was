@@ -220,10 +220,12 @@ Lynn.
 @handy weg
 @schwarz langsam
 @musik aus
-@warte 1
+@warte 1.8
 @bild N38a traum
 @raum tag
 @loop seminar an
+# V8.2: länger auf den Block schauen (er hat nichts zum Schreiben dabei)
+@warte 3.5
 ~ Wieder perfekt vorbereitet.
 ~ Gesprächsführung. Ausgerechnet.
 … !1.5
@@ -381,7 +383,7 @@ Irrtum. Anfechtung. § 119.
 Keine Sorge, M. Ich hab dich.
 …
 Ha.
-@bild N04
+@bild K10H
 Ich schieb das Handy ein Stück weiter weg.
 @karteikarten
 Drei von drei.
@@ -461,7 +463,7 @@ Fünf Minuten.
 == L3
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
-@bild N04
+@bild K10H
 @ton bzzz
 @banner Instagram | lena.mln | lena.mln hat eine Story gepostet
 Bzzz.
@@ -478,7 +480,7 @@ Bzzz.
 @warte 3
 @musik aus
 @effekt traum aus
-@bild N04 schnitt
+@bild K10H schnitt
 @setze l3geschaut = 1
 -> L3_SCHEMA
 
@@ -511,7 +513,7 @@ Geht doch.
 == S3
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
-@bild N1
+@bild N02
 @handy sperr
 @ton bzzz
 @benachrichtigung Instagram | lena.mln | lena.mln hat eine Story gepostet
@@ -555,7 +557,7 @@ Sophie: „Aha.“
 == L4
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
-@bild N04
+@bild K10H
 „Der 17-jährige K kauft sich von seinem Taschengeld …“
 Check. Check. Check.
 Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
@@ -591,7 +593,7 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 == L4_WEITER
 @uhr laufen 22:38
 @ton bzzz leise
-@bild L4
+@bild K10H
 @warte 2
 ? „Kurz Fenster auf.“ -> L4B_FENSTER
 ? „Weiter.“ -> ANRUF_A
@@ -612,7 +614,7 @@ Unten lacht jemand auf der Straße.
 @loop wind aus
 @musik aus
 Fenster zu.
-@bild N04
+@bild K10H
 -> ANRUF_A
 
 == L4B_JACKE
@@ -623,7 +625,7 @@ Fenster zu.
 == S4
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
-@bild N1
+@bild N02
 @handy sperr
 @ton bzzz
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 🎥 Video
@@ -721,7 +723,7 @@ Lena: „Leute, gleich kommt die Torte!“
 -> ANRUF_NICHTFLOW
 
 == ANRUF_FLOW
-@bild N04
+@bild K10H
 „V verkauft K ein Auto und verschweigt den Unfall …“
 Easy.
 @anruf_unbemerkt Jonas
@@ -740,7 +742,7 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 -> L5
 
 == ANRUF_NICHTFLOW
-@bild N04
+@bild K10H
 @handy anruf Jonas
 ? „Rangehen.“ -> ANRUF_RAN
 ? „Ablehnen.“ -> ANRUF_AB
@@ -774,7 +776,7 @@ Jonas!: „Find’s raus.“
 
 == DANACH_2245
 @handy zu
-@bild N04
+@bild K10H
 Ich hab ja heute schon was gelernt.
 Okay. Nicht so viel.
 Aber auch nicht nichts.
@@ -783,7 +785,7 @@ Aber auch nicht nichts.
 ? „Nein. Bleiben.“ -> A_OHNEFLOW
 
 == A_OHNEFLOW
-@bild B05
+@bild K10H
 @loop uhr an
 @karteikarten auto
 … !2
@@ -794,7 +796,7 @@ Aber auch nicht nichts.
 „Lynn leiht sich …“ ⌫ynn
 @schema 1 still
 @schema aus
-@bild N04
+@bild K10H
 … !3
 @uhr laufen 23:31
 @loop uhr aus
@@ -804,7 +806,7 @@ Aber auch nicht nichts.
 == B_UEBER
 @uhr mind 22:45
 @rufe CHECK_WOBLEIBST
-@bild N1
+@bild N02
 @handy sperr
 @warte 2.5
 @ton bzzz
@@ -864,7 +866,7 @@ Aber auch nicht nichts.
 @ton haustuer leise dumpf
 @warte 2.5
 @fenster_aus Sa 01:30
-@bild N1 langsam
+@bild N02 langsam
 @effekt handylicht an
 @handy feed
 @warte 4
@@ -875,7 +877,7 @@ Aber auch nicht nichts.
 # ---- 23:40 – Auftauchen (Weg A, aus dem Flow) ----
 == L5
 @uhr mind 23:40
-@bild N04
+@bild K10H
 @handy sperr
 @benachrichtigung Telefon | Jonas | 3 verpasste Anrufe
 @benachrichtigung WhatsApp | WhatsApp | 47 neue Nachrichten
@@ -922,7 +924,7 @@ Sie verschwindet ja nicht. !3
 == L8_HANDYWEG
 @handy zu
 @ton handy_ablegen
-@bild N04
+@bild K10H
 @setze handyweg
 @warte 1
 -> NACHT_ZUHAUSE
@@ -930,7 +932,7 @@ Sie verschwindet ja nicht. !3
 # ---- 23:31 – wer bei 22:45 geblieben ist ----
 == L9
 @uhr mind 23:31
-@bild N04
+@bild K10H
 @handy sperr
 @ton display_klick
 Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
@@ -947,7 +949,7 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 # ---- 00:50 – Blaue Haken ----
 == L10
 @uhr Sa 00:50
-@bild N1
+@bild N02
 @handy chat Lynn
 @haken blau
 Blau. !3
@@ -1994,8 +1996,8 @@ Und eine ist ja keine. !3
 @stille
 @karte auto Sa 00:12
 @raum nacht
-@bild N1
 @wenn handyweg
+  @bild N02
   Licht aus. Das Handy liegt auf dem Schreibtisch.
   … !3
   @rufe NACHT_STRASSE
@@ -2020,6 +2022,7 @@ Und eine ist ja keine. !3
   @warte 1.6
   @abzeichen Außer Reichweite
 @sonst
+  @bild N1
   Licht aus. Das Handy liegt neben dem Kopfkissen.
   … !3
   @rufe NACHT_STRASSE
@@ -2096,7 +2099,7 @@ Ich schlafe nicht. Ich warte.
 @stille
 @karte auto Sa 01:14
 @raum nacht
-@bild N1
+@bild N02
 @ton decke1
 @handy gruppe
 @foto N32c Mia
@@ -2520,7 +2523,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @ton PR3_stift
 {haken}Check. {haken}Check. {haken}Check.
 # Lena postet den Foto-Dump
-@bild N04
+@bild K10H
 @ton bzzz_tisch
 @handy sperr
 @benachrichtigung Instagram | lena.mln | lena.mln hat 12 Fotos gepostet

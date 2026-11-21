@@ -29,7 +29,7 @@ const BILDER = {
   N31a: { datei: "img/N31a.webp", text: "Zeitraffer: Morgen, er im Bett am Handy", stimmung: "morgen" },
 
   // ---------- Zimmer (noch offen) ----------
-  N02:  { datei: "img/N02.webp", text: "Ich-Sicht aus dem Bett nachts: Regal links, Tür geradeaus, Schreibtisch rechts (V8)", stimmung: "nacht" },
+  N02:  { datei: "img/N02.webp", text: "Ich-Sicht aus dem Bett nachts: Regal links, Tür geradeaus, Schreibtisch rechts (V8)", stimmung: "nacht", bett: true, handy: [0.46, 0.86, 0.09, 0.1] },
   N31b: { datei: "img/N31b.webp", text: "Zeitraffer: Mittag, Bett leer", stimmung: "tag" },
   N31c: { datei: "img/N31c.webp", text: "Zeitraffer: Nachmittag, wieder im Bett am Handy", stimmung: "tag" },
   N31d: { datei: "img/N31d.webp", text: "Abend, er am Schreibtisch, Lampe an", stimmung: "zimmer", tisch: true },
@@ -144,7 +144,8 @@ const BILDER = {
   MK1: { datei: "img/MK1.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK2: { datei: "img/MK2.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK3: { datei: "img/MK3.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
-  K10H: { datei: "img/K10H.webp", text: "Ich-Sicht am Schreibtisch nachts, Hände auf dem Tisch, Lynns Stift auf dem Buch (V8)", stimmung: "zimmer", tisch: true },
+  K10H: { datei: "img/K10H.webp", text: "Ich-Sicht am Schreibtisch nachts, Hände auf dem Tisch, Lynns Stift auf dem Buch (V8)", stimmung: "zimmer", tisch: true, ohneHaende: "K10O" },
+  K10O: { datei: "", text: "Wie K10H, aber ohne Hände auf dem Tisch (er hält das Handy) – fehlt noch, Philip erstellt es (V8.2)", stimmung: "zimmer", tisch: true, mitHaenden: "K10H" },
   N38c: { datei: "img/N38c.webp", text: "Rückblende Seminar: Lynn grinst spöttisch rüber (nah) (V8)", stimmung: "traum", figur: true },
   N38n: { datei: "img/N38n.webp", text: "Rückblende Seminar: Lynn ganz nah, Grinsen hinter den Fingern (V8)", stimmung: "traum", figur: true },
   N25L: { datei: "img/N25L.webp", text: "Prüfungsraum fast leer, noch zehn Minuten (V8)", stimmung: "pruefung" },
@@ -218,7 +219,8 @@ const TOENE = {
   // Draußen
   haustuer:        { datei: "ton/haustuer.mp3" },
   wind:            { datei: "ton/wind.mp3" },              // draußen laut, im Zimmer leise als Raumton
-  schritte:        { datei: "ton/schritte.mp3" },
+  schritte:        { datei: "ton/schritte.mp3" },        // 4 Schritte, gleichmäßig (Kies, V8.2)
+  schritte_lauf:   { datei: "ton/schritte_lauf.mp3" },   // nahtlose Schleife 16 Schritte (Kamerafahrt Weg)
   // Party
   M1_party:        { datei: "ton/M1_party.mp3" },          // Dance Until Dark
   gemurmel:        { datei: "ton/gemurmel.mp3" },          // House-Party-Stimmen (62063)

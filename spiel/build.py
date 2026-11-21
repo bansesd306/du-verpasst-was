@@ -27,6 +27,7 @@ buehne = f'''<div id="rahmen"><div id="buehne">
   <div id="stoppuhr" class="schirm"><h2>Stoppuhr (Testmodus)</h2><div class="inhalt"></div><button>Weiter</button></div>
   <div id="verlauf" class="schirm"></div>
 </div></div>
+<button id="vollbildknopf" type="button" title="Vollbild" aria-label="Vollbild"><svg viewBox="0 0 24 24" class="auf"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg><svg viewBox="0 0 24 24" class="zu"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/></svg></button>
 <div id="drehen"><div class="ic">📱</div><div>Bitte drehen – das Spiel läuft im Querformat.</div></div>'''
 
 html = f'''<!DOCTYPE html>
@@ -75,6 +76,9 @@ html = f'''<!DOCTYPE html>
 <script>
 {r('engine.js')}
 Spiel.init();
+</script>
+<script>
+{r('sprung.js')}
 </script>
 </body>
 </html>

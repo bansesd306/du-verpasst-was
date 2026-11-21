@@ -98,11 +98,41 @@ const Rahmen = (() => {
   ['pointerleave', 'blur'].forEach(t => sp.addEventListener(t, () => sog(false)));
 
   // ---------------- Ton ----------------
+  // Gedämpfte Partymusik (Philips „Muffled Party“) als Stream: läuft sofort an, ohne auf das Laden
+  // und Dekodieren aller anderen Töne zu warten. Datei ist schon leiser gemischt (auch iPhone, das die
+  // Lautstärke von Audio-Elementen ignoriert). Autoplay wird versucht, sonst startet sie beim ersten Berühren.
+  const fern = (() => {
+    let el = null, soll = false, fadeT = null;
+    const mach = () => { if (!el) { el = new Audio('ton/muffled_party_start.mp3'); el.loop = true; el.preload = 'auto'; el.setAttribute('playsinline', ''); } return el; };
+    function blende(ziel, ms, fertig) {
+      clearInterval(fadeT); const e = mach(), v0 = e.volume, t0 = performance.now();
+      fadeT = setInterval(() => { const k = Math.min(1, (performance.now() - t0) / ms); try { e.volume = v0 + (ziel - v0) * k; } catch (x) { } if (k >= 1) { clearInterval(fadeT); fertig && fertig(); } }, 40);
+    }
+    return {
+      vorladen() { try { mach().load(); } catch (e) { } },
+      start() {
+        const e = mach(); soll = true;
+        if (!e.paused) { blende(1, 600); return; }
+        try { e.volume = 0; } catch (x) { }
+        const p = e.play(); if (p && p.catch) p.catch(() => { });
+        blende(1, 900);
+      },
+      stopp(ms = 900) { soll = false; if (!el || el.paused) return; blende(0, ms, () => { if (!soll) el.pause(); }); },
+      get laeuft() { return !!el && !el.paused; },
+    };
+  })();
+  fern.vorladen();
+  // Erstes Berühren irgendwo (auch vor dem eigentlichen Klick): Musik sofort an, solange Start/Menü zu sehen sind
+  const erstesBeruehren = () => {
+    if (!bw.classList.contains('an') || bw.classList.contains('ende-an')) return;
+    if (!fern.laeuft) fern.start();
+  };
+  ['pointerdown', 'touchend', 'pointerup', 'click', 'keydown'].forEach(t => addEventListener(t, erstesBeruehren, true));
   let bzzzZaehler = 0;
   function ton(name) {
+    if (name === 'party_fern') { fern.start(); return; }
     if (!api || !window.Ton || !Ton.bereit) return;
     if (name === 'bzzz') { if (bzzzZaehler++ < 3) Ton.spiele('bzzz', { vol: .5 }); return; }  // nur die ersten paar, sonst nervt es
-    if (name === 'party_fern') { Ton.loop('party_fern', true); return; }
     Ton.spiele(name);
   }
 
@@ -153,7 +183,7 @@ const Rahmen = (() => {
   }
   function weg() {
     planStopp(); nachrichtenStopp(); handyStopp(); clearTimeout(vorbeiT);
-    aktiv = false; bw.classList.remove('an', 'weg'); laeuft = false;
+    aktiv = false; bw.classList.remove('an', 'weg'); laeuft = false; fern.stopp(700);
   }
   function besuch() {
     const l = Math.min(laeufe(), 3);
@@ -171,14 +201,15 @@ const Rahmen = (() => {
     sp.classList.remove('gelesen');
     bzzzZaehler = 0; besuch(); uhrzeitSetzen();
     if (nachWeg && laeufe() > 0) { S().nachr = (S().nachr || 0) + 6 + Math.floor(Math.random() * 7); zaehlerText(); kopf.classList.add('an'); sichern(); }
-    if (nachWeg && window.Ton) { Ton.outroAus(); ton('party_fern'); }
+    if (nachWeg && window.Ton) Ton.outroAus();
+    ton('party_fern');   // beim allerersten Laden: Autoplay-Versuch (Browser blockt evtl. bis zum ersten Tippen)
     bw.classList.remove('anlauf'); void bw.offsetWidth; bw.classList.add('anlauf');
     bw.classList.add('tippbar'); tippAb = Date.now() + 500;
     nachrichtenStart(nachWeg ? 1500 : 2400);
   }
   async function zumMenue() {
     if (bw.classList.contains('menue-an')) return;
-    if (ersterTipp) { ersterTipp = false; if (api.ersterTipp) await api.ersterTipp(); ton('party_fern'); }
+    if (ersterTipp) { ersterTipp = false; ton('party_fern'); if (api.ersterTipp) await api.ersterTipp(); }
     bw.classList.add('menue-an'); bw.classList.remove('tippbar');
     blitz();
     const en = $('enden'); en.textContent = T('menue_enden', 'Enden gefunden: {n} von 3').replace('{n}', S().enden.length);

@@ -15,7 +15,7 @@ mk eb45e485 tuer_auf 0 2.5 -20
 mk 55fd9b51 haustuer 0 1.03 -18
 mk 255d9ebe wind 0 100 -26
 mk 968ccabb raum_tag 0 120 -30
-mk e6a4f054 schritte 6.5 2.2 -20
+# schritte + schritte_lauf: aus 3cc39560 (Kies) mit tools/schritte_kies.py gleichmäßig neu gesetzt (V8.2), dann loudnorm -20
 mk 62af7029 schritte_holz 0 4.6 -22
 mk 2cfd056b johlen 0 7.9 -20
 mk 1c3e708e glas 0 1.58 -16
