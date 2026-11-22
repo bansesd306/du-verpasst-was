@@ -100,10 +100,23 @@ if soll('balkon'):
     fr = cv2.imread('/tmp/N34v_f.png')
     for code, up in [('N34', 'N34_fenster'), ('N34a1', 'N34a1'), ('N34a2', 'N34a2'), ('N34b', 'N34b_fenster'), ('N34bB', 'N34b_fenster_becher')]:
         s = lade(up); webp(code, fertig(auf_video(s, schaetze(fr, s))))
-    # Video: Ton aus, 2 s vor + 2 s zurück = 4-s-Schleife ohne Sprung, 1280x720
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-ss', '1', '-t', '2', '-i', U + 'N34v_gemini.mp4', '-an', '-filter_complex',
-                    '[0:v]split[a][b];[b]reverse[r];[a][r]concat=n=2:v=1[o]', '-map', '[o]', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '22',
-                    '-pix_fmt', 'yuv420p', '-movflags', '+faststart', G + 'dist/vid/N34v.mp4'], check=True); print('video N34v')
+    # Video (V8.9): kein Vor-/Zurück mehr (Tänzer liefen rückwärts). Bilder 39–167 (5,4 s), die ersten 30 Bilder
+    # werden weich mit 168–197 überblendet -> Ende geht nahtlos in den Anfang über. Ein Schlüsselbild, crf 16, Ton aus.
+    cap = cv2.VideoCapture(U + 'N34v_gemini.mp4'); fs = []
+    while True:
+        ok, f = cap.read()
+        if not ok: break
+        fs.append(f)
+    S, E, X = 39, 168, 30
+    p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'bgr24', '-s', '1280x720', '-r', '24', '-i', '-',
+                          '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-tune', 'grain', '-x264-params', 'keyint=999:scenecut=0',
+                          '-pix_fmt', 'yuv420p', '-movflags', '+faststart', G + 'dist/vid/N34v.mp4'], stdin=subprocess.PIPE)
+    for k in range(E - S):
+        f = fs[S + k].astype(np.float32)
+        if k < X:
+            t = (k + .5) / X; t = t * t * (3 - 2 * t); f = f * t + fs[E + k].astype(np.float32) * (1 - t)
+        p.stdin.write(f.clip(0, 255).astype(np.uint8).tobytes())
+    p.stdin.close(); p.wait(); print('video N34v')
 
 # ---------- Overlays: N19n (Lächeln, Blinzeln), LNN/LNL (Blinzeln) ----------
 if soll('ov'):
