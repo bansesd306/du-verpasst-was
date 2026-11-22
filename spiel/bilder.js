@@ -46,13 +46,25 @@ const BILDER = {
   N38a: { datei: "img/N38a.webp", text: "Rückblende Seminar: mein zerknitterter, leerer Collegeblock (Gemini, V8.5)", stimmung: "traum" },
   N38b: { datei: "img/N38b.webp", text: "Rückblende Seminar: Lynn kichert hinter der Hand (V8)", stimmung: "traum", figur: true },
   N38:  { datei: "img/N38.webp", text: "Rückblende Seminar: Lynn hält mir den Vierfarb-Stift hin (V8)", stimmung: "traum", figur: true },
-  N26:  { datei: "img/N26.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten (V8)", stimmung: "foto", zoom: [.515, .5], scharf: "N26s" },
+  N26:  { datei: "img/N26.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten unscharf (V8.7: bleibt beim Ranzoomen unscharf)", stimmung: "foto", zoom: [.515, .5] },
   N26s: { datei: "img/N26s.webp", text: "Handyfoto Küche, Lynn scharf (beim Ranzoomen wird darauf überblendet)", stimmung: "foto", zoom: [.515, .5] },
   B07: { datei: "img/B07.webp", text: "Lenas Story: Selfie mit Konfetti, Lynn klein hinten", stimmung: "foto" },
   N27:  { datei: "img/N27.webp", text: "Handyfoto Gruppe auf dem Sofa, Lynn als Letzte, daneben ein Platz frei (V8)", stimmung: "foto", story: "ganz" },
   N28: { datei: "img/N28.webp", text: "Handyfoto: Tims Wohnzimmer voller Leute", stimmung: "foto" },
   N29:  { datei: "img/N29.webp", text: "Lynns Story: zwei Becher auf dem Balkongeländer, Lichterkette (V8)", stimmung: "balkon" },
   APS: { datei: "img/APS.webp", text: "Afterparty-Story bei Tim", stimmung: "foto" },
+
+  // ---------- V8.7: Mia (Person links entfernt) und Lena nah ----------
+  MIA_HANDY: { datei: "img/MIA_HANDY.webp", text: "Mia schaut aufs Handy, getroffen (V8.7)", stimmung: "party", figur: true },
+  MIA_HANDY_LEER: { datei: "img/MIA_HANDY_LEER.webp", text: "Mia aufs Handy, Raum leer, nur Konfetti (V8.7, stiller Moment)", stimmung: "party", figur: true },
+  MIA_GRINST: { datei: "img/MIA_GRINST.webp", text: "Mia lacht breit (V8.7)", stimmung: "party", figur: true },
+  MIA_GRINST_b: { datei: "img/MIA_GRINST_b.webp", text: "Mia lächelt, traurige Brauen – überspielt es (V8.7)", stimmung: "party", figur: true },
+  MIA_GRINST_c: { datei: "img/MIA_GRINST_c.webp", text: "Mia grinst (V8.7)", stimmung: "party", figur: true },
+  MIA_SMIRK: { datei: "img/MIA_SMIRK.webp", text: "Mia, freches kleines Lächeln (V8.7)", stimmung: "party", figur: true },
+  MIA_LEER: { datei: "img/MIA_LEER.webp", text: "Mia smirk, Raum leer (V8.7, Reserve)", stimmung: "party", figur: true },
+  MIA_LEER_TASCHE: { datei: "img/MIA_LEER_TASCHE.webp", text: "Mia smirk, Tasche über der Schulter, Raum leer (V8.7, Reserve)", stimmung: "party", figur: true },
+  MIA_STORY: { datei: "img/MIA_STORY.webp", text: "Mias letzte Story 05:12: nur Text „noch wer wach?“ (V8.7, Claude)", stimmung: "foto" },
+  LENA_NAH: { datei: "img/LENA_NAH.webp", text: "Küche: Lena ganz nah nach der Umarmung (V8.7)", stimmung: "party", figur: true },
 
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
@@ -87,6 +99,7 @@ const BILDER = {
   N17: { datei: "img/N17.webp", text: "Flur: meine Hand nimmt die Jacke vom Haken", stimmung: "flur" },
   N18: { datei: "img/N18.webp", text: "Flur: Lynn kommt aus der Badtür", stimmung: "flur", figur: true },
   N19: { datei: "img/N19.webp", text: "Flur: Lynn nah, strahlt", stimmung: "flur", figur: true },
+  N19n: { datei: "img/N19n.webp", text: "Flur: Lynn nah, normaler Blick, Mund zu (Gemini, V8.7)", stimmung: "flur", figur: true },
   N20: { datei: "img/N20.webp", text: "Flur: Lynn geht, schaut zurück", stimmung: "flur", figur: true },
   N21: { datei: "img/N21.webp", text: "Flur: Lynn geht in die Party (dunkler)", stimmung: "flur" },
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
@@ -105,7 +118,7 @@ const BILDER = {
   N14d: { datei: "img/LNL.webp", text: "Lynn nah, lächelt frech", stimmung: "balkon", figur: true },
   N14e: { datei: "img/LNN.webp", text: "Lynn nah, leise überrascht", stimmung: "balkon", figur: true },
   N15:  { datei: "img/N15.webp", text: "Balkon leer", stimmung: "balkon", lichterVon: "N14" },
-  N29b: { datei: "", ersatz: "BALKON_LEER", text: "Balkon leer, zwei Becher auf dem Geländer – fehlt, bis dahin BALKON_LEER", stimmung: "balkon" },
+  N29b: { datei: "img/N29b.webp", text: "Balkon leer, zwei Becher auf dem Geländer (Gemini, V8.7, abgedunkelt)", stimmung: "balkon" },
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, Leute drinnen (gespiegelt, V8)", stimmung: "balkon" },
   N34b: { datei: "img/N34b.webp", text: "Er und Lynn von hinten auf dem Balkonboden, drinnen leer (gespiegelt, V8)", stimmung: "balkon" },
@@ -114,7 +127,7 @@ const BILDER = {
   N36L: { datei: "img/N36L.webp", text: "Party-Hub ohne Lynn", stimmung: "party" },
   N36Z: { datei: "img/N36Z.webp", text: "Blick durch die Balkontür: Lynn allein am Geländer (Zuschnitt, V8)", stimmung: "balkon", figur: true },
   HB1: { datei: "img/HB1.webp", text: "Hub: Ben erzählt Lynn was, sie lacht", stimmung: "party" },
-  BR: { datei: "img/BR.webp", text: "Balkon-Gegenblick: allein draußen, drinnen die Party", stimmung: "balkon" },
+  BR: { datei: "img/N15.webp", lichterVon: "N14", alt: "img/BR.webp", text: "Balkon-Gegenblick: allein draußen, drinnen die Party", stimmung: "balkon" },
   B12T: { datei: "img/B12T.webp", text: "Begrüßung: Jonas kommt winkend durch die Tür", stimmung: "flur" },
   B12A: { datei: "img/B12A.webp", imHandy: "img/B12A_h.webp", text: "Begrüßung: Jonas und Lena lachen", stimmung: "flur" },
   B12B: { datei: "img/B12B.webp", text: "Begrüßung: Jonas mit offenen Armen", stimmung: "flur" },
@@ -172,7 +185,7 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
   B12: { blink: ["B12z"], spricht: { Jonas: "B12s" }, mimik: ["B12g"] },
@@ -186,10 +199,12 @@ const VARIANTEN = {
   N37: { blink: ["N37z"], spricht: { Jonas: "N37s" } },
   N38b: { blink: ["N38bz"] },
   TV1: { mimik: ["TV3"] },
+  LENA_NAH: { blink: ["LENA_NAH_z"], spricht: { Lena: "LENA_NAH_s" }, mimik: ["LENA_NAH_l"] },
 };
 const TOENE = {
   kerze:           { datei: "ton/kerze.mp3", vol: 1.1 },      // Wunderkerzen auspusten (kai_audio 446030)
   umarmung:        { datei: "ton/umarmung.mp3", vol: 1.2 },   // Jonas’ Umarmung (Philips Aufnahme)
+  feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: 1 },  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
   klopfen:         { datei: "ton/klopfen.mp3", vol: .9 },               // Sophie klopft (Pixabay, Philip)
   treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: .8 },     // Schritte im Treppenhaus
   strasse:         { datei: "ton/strasse_betrunken.mp3", vol: 1 },       // Leute unten auf der Straße

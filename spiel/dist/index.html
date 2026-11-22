@@ -633,8 +633,8 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .av.leer{visibility:hidden}
 
 /* Sperrbildschirm */
-[data-app=sperr]{background:radial-gradient(ellipse at 30% 20%,#2a3e66 0,#141b30 50%,#07090f 100%)}
-.wall{position:absolute;inset:0;background:radial-gradient(circle at 80% 85%,rgba(120,80,200,.35),transparent 50%)}
+[data-app=sperr]{background:linear-gradient(170deg,#151a22 0,#0c0f14 55%,#060709 100%)}
+.wall{position:absolute;inset:0;background:radial-gradient(ellipse 90% 45% at 50% 105%,rgba(70,90,120,.16),transparent 70%)}
 .sp-oben{position:relative;margin-top:120px;text-align:center}
 .sp-uhr{font:200 160px/1 system-ui;color:#fff;letter-spacing:2px}
 .sp-datum{font:400 28px system-ui;color:#ddd;margin-top:10px}
@@ -656,16 +656,19 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .stummtoast.an{opacity:1;transform:translate(-50%,-50%) scale(1)}
 
 /* Chat (WhatsApp dunkel) */
-[data-app=chat]{background:#0b141a}
-.c-kopf{margin-top:56px;height:96px;display:flex;align-items:center;gap:14px;padding:0 18px;background:#1f2c34;flex:none}
+[data-app=chat]{background:#0b1014}
+.c-kopf{margin-top:56px;height:96px;display:flex;align-items:center;gap:14px;padding:0 18px;background:#0b1014;flex:none;border-bottom:1px solid #1a2024}
 .c-kopf .zur{font-size:34px;color:#e9edef}
 .c-kopf .av{width:58px;height:58px;font-size:28px}
 .c-name{flex:1;min-width:0}
 .c-name b{display:block;font:600 34px system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-name small{display:block;font:400 24px system-ui;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-name small.gruen{color:#25d366}
-.c-ic{color:#d0d6d9;font-size:26px}
-.c-msgs{flex:1;overflow-y:auto;padding:16px 14px 10px;scrollbar-width:none;background:#0b141a radial-gradient(circle at 20% 30%,rgba(255,255,255,.015) 0,transparent 30%)}
+.c-ic{color:#e9edef;display:flex;gap:34px;align-items:center;padding:6px 8px;border-radius:30px}
+.c-ic .ico{width:40px;height:40px;fill:currentColor}
+.c-kopf .zur .ico{width:40px;height:40px;fill:#e9edef;display:block}
+.c-kopf .zur{padding:6px}
+.c-msgs{flex:1;overflow-y:auto;padding:16px 14px 10px;scrollbar-width:none;background:#0b1014}
 .c-msgs::-webkit-scrollbar{display:none}
 .msg{display:flex;gap:10px;align-items:flex-start;margin-top:12px}
 .msg.folge{margin-top:3px}
@@ -673,14 +676,14 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .msg .av{width:46px;height:46px;font-size:22px}
 .blase{position:relative;max-width:80%;padding:12px 18px 9px;border-radius:20px;font:400 34px/1.3 system-ui;animation:brein .25s ease-out}
 @keyframes brein{from{opacity:0;transform:translateY(12px) scale(.96)}}
-.ich .blase{background:#005c4b;border-top-right-radius:4px}
-.du .blase{background:#202c33;border-top-left-radius:4px}
+.ich .blase{background:#184936;border-top-right-radius:4px}
+.du .blase{background:#1f272a;border-top-left-radius:4px}
 .folge .blase{border-radius:18px}
 .absender{font:600 27px system-ui;margin-bottom:2px}
 .mt{word-wrap:break-word}
 .mz{float:right;font:400 21px system-ui;color:rgba(233,237,239,.6);margin:12px 0 -4px 14px;white-space:nowrap}
 .hk{margin-left:6px;letter-spacing:-5px;color:#9aa;font-size:19px}
-.hk.blau{color:#53bdeb}
+.hk.blau{color:#3e92ac}
 .mfoto{position:relative;width:380px;height:250px;border-radius:12px;overflow:hidden;margin:2px 0 4px}
 .mfoto .ph .lab,.st-bild .ph .lab,.f-b .ph .lab,.v-bild .ph .lab,.fotogross .ph .lab{font-size:19px;left:12px;bottom:12px;max-width:92%}
 .play{position:absolute;left:50%;top:50%;width:80px;height:80px;margin:-40px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;font-size:36px}
@@ -693,7 +696,9 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .fotogross.zoom>.fz-scharf{transform:scale(1.8)}
 .fotogross.fokus>.fz-scharf{opacity:1}
 .c-eingabe{display:flex;gap:10px;align-items:flex-end;padding:10px 12px 22px;flex:none}
-.pille{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:72px;padding:0 20px;border-radius:36px;background:#202c33;color:#8696a0;font-size:30px;min-width:0}
+.pille{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:72px;padding:0 20px;border-radius:36px;background:#1f272a;color:#8696a0;font-size:30px;min-width:0}
+.pille .ico{width:40px;height:40px;vertical-align:middle;fill:none;stroke:#8d989e;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.pille .ico .f{fill:#8d989e;stroke:none}
 .pille>span{line-height:72px;flex:none}
 .feld{flex:1;font:400 33px/1.3 system-ui;color:#e9edef;min-width:0;overflow:hidden;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;max-height:calc(33px*1.3*5 + 28px);padding:14px 0;display:block}
 .feld .plh{color:#8696a0}
@@ -703,7 +708,8 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .tippt .feld .cursor{display:inline-block}
 @keyframes blk{50%{opacity:0}}
 .voll .cam{display:none}
-.mic{width:72px;height:72px;border-radius:50%;background:#00a884;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none}
+.mic{width:72px;height:72px;border-radius:50%;background:#21c063;display:flex;align-items:center;justify-content:center;font-size:30px;flex:none}
+.mic .ico{width:38px;height:38px;fill:#0b1014}.voll .mic .ico{display:none}
 .voll .mic{font-size:0}.voll .mic::after{content:"➤";font-size:32px;color:#fff}
 .mic.pop{animation:mpop .3s}
 @keyframes mpop{50%{transform:scale(.85)}}
@@ -744,14 +750,14 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .st-balken i{display:block;height:100%;width:0;background:#fff}
 .st-kopf{position:absolute;top:76px;left:16px;right:16px;display:flex;align-items:center;gap:12px;z-index:3;flex-wrap:wrap;font:400 24px system-ui;color:#fff;text-shadow:0 1px 4px #000}
 .st-kopf .av{width:50px;height:50px;font-size:24px}
-.st-kopf b{font-weight:600}.st-zeit{color:#ddd}.st-dots{margin-left:auto}
+.st-kopf b{font:700 31px system-ui;letter-spacing:.2px}.st-zeit{color:#ddd}.st-dots{margin-left:auto}
 .st-musik{width:100%;padding-left:62px;font-size:21px;margin-top:-10px}
 .st-bild{position:absolute;top:56px;left:0;right:0;bottom:120px;border-radius:18px;overflow:hidden}
 .st-text{position:absolute;left:0;right:0;top:44%;text-align:center;font:700 44px system-ui;color:#fff;text-shadow:0 2px 8px #000}
 .st-fuss{position:absolute;left:16px;right:16px;bottom:30px;display:flex;align-items:center;gap:22px;font-size:40px;color:#fff}
 .st-pille{flex:1;border:2px solid rgba(255,255,255,.6);border-radius:40px;padding:16px 26px;font:400 26px system-ui}
 .st-views{display:none;position:absolute;left:30px;bottom:44px;font:600 30px system-ui;color:#fff}
-.post .st-views{display:block}.post .st-fuss{display:none}
+.post .st-views,.aufrufe .st-views{display:block}.post .st-fuss{display:none}
 .st-views.pop{animation:mpop .35s}
 
 /* Notizen */
@@ -797,7 +803,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 
 .c-system{margin:18px auto 8px;max-width:86%;padding:14px 20px;border-radius:14px;background:#182229;color:#ffd279;font:400 24px/1.35 system-ui;text-align:center}
 .c-tag{text-align:center;margin:18px 0 8px}
-.c-tag span{display:inline-block;padding:7px 18px;border-radius:12px;background:#182229;color:#8696a0;font:500 22px system-ui}
+.c-tag span{display:inline-block;padding:7px 18px;border-radius:12px;background:#13181c;color:#8d989e;font:500 22px system-ui}
 .l-treffer{padding:14px 30px 4px;color:#21c063;font:500 24px system-ui}
 .l-suche.aktiv{color:#e9edef;outline:2px solid #21c063}
 .l-sym{display:flex;gap:8px;align-items:center;min-height:34px}
@@ -894,6 +900,13 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .cd-knoepfe{display:flex;justify-content:flex-end;gap:54px;margin-top:20px;font:500 28px system-ui;color:#21c063}
 .cd-knoepfe span{padding:10px 8px;border-radius:10px;transition:background .15s}.cd-knoepfe .druck{background:rgba(33,192,99,.2)}
 [data-app=chat].chatstumm .c-name b::after{content:' 🔕';font-size:.7em;filter:grayscale(1) brightness(1.6)}
+
+/* V8.7: stummer Chat in der Liste */
+.l-sym i.grau{background:#5e6a70!important;color:#0b1014}
+.l-sym u.st{text-decoration:none;font-size:22px;opacity:.7;margin-right:6px}
+/* V8.7: Aufrufe bei fremder Story (Mias Text-Story) über der Fußleiste */
+.aufrufe .st-views{bottom:132px;left:34px;font:600 26px system-ui;opacity:.85}
+.aufrufe .st-musik{display:none}
 
 #zimmer{
   --nacht:#0b1121;
@@ -1266,6 +1279,8 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @setze ZEIT_B = 9
 @setze ZEIT_PARTY = 4
 @setze ZEIT_A = 3
+# V8.7 (D12): Lynn-Weg – Handy lag die meiste Zeit in der Tasche
+@setze ZEIT_LYNN = 2
 
 # ---------------- Texte für den FoMO-Rahmen ----------------
 @text start_hinweis = Kopfhörer, Ton an, Querformat · ca. 20 Minuten
@@ -1313,7 +1328,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @verlauf Lena | Dienstag | 17:03 | Lena: und freitag feierst du trotzdem ein bisschen mit, ja? 🎂🫶
 @verlauf Lena | Dienstag | 17:40 | Ich: mal schauen 😅
 @verlauf Lena | Dienstag | 17:41 | Lena: okiii 🥺❤️
-@verlauf Papa | Dienstag | 18:05 | Ich: Klausur ist Montag um 9.
+@verlauf Papa | Dienstag | 18:05 | Ich: Klausur ist Montag um 9
 @verlauf Papa | Dienstag | 18:40 | Papa: 👍
 @verlauf Lenas Geburtstag 🎂 | Mittwoch | 17:12 | Lena: Freitag bei mir!! 🎂🎉
 @verlauf Lenas Geburtstag 🎂 | Mittwoch | 17:15 | Tim: ich bring boxen mit
@@ -1413,7 +1428,7 @@ Zehn Minuten Pause. Hab ich mir verdient.
 @handy sperr
 Das war vor einer Stunde.
 @ton bzzz
-@benachrichtigung WhatsApp | Jonas | Ey, Lena feiert heute doch!! 🎉
+@benachrichtigung WhatsApp | Jonas | Ey, Lena feiert doch heute!! 🎉
 Bzzz.
 @effekt einfrieren
 Jonas. !2
@@ -1422,13 +1437,13 @@ Seit der Fünften. Nach beiden 5,0 stand er mit Pizza vor meiner Tür. Ungefragt
 Der hält es halt nicht lange ohne seine große Liebe aus.
 @effekt einfrieren aus
 @handy chat Jonas
-@nachricht! Jonas: Ey, Lena feiert heute doch!! 🎉
-@nachricht Jonas: Alle kommen. Echt alle.
+@nachricht! Jonas: Ey, Lena feiert doch heute!! 🎉
+@nachricht Jonas: Alle kommen. Echt alle
 @nachricht Jonas: Bist du dabei??
 @tipp
 @tippe Junge. Du weißt ganz genau, dass ich lernen muss. Geh mir nicht auf den Sack 😂
 @nachricht Jonas: ich lieb dich auch ❤️
-@nachricht Jonas: EINE stunde. du kommst eh nicht weiter heute. glaub mir, du verpasst was.
+@nachricht Jonas: EINE stunde. du kommst eh nicht weiter heute. glaub mir, du verpasst was
 @tipp
 …
 @handy zu
@@ -1437,6 +1452,8 @@ Links: der Schreibtisch. Die zwei 5,0 liegen obendrauf.
 @bild K12
 Rechts: das Fenster.
 @effekt heranzoomen
+# V8.7 (A1): ein, zwei Fenster gehen an/aus, einmal Scheinwerferlicht über die Straße
+@effekt lebendig
 Ich weiß, dass das nur die Stadt ist. Aber irgendwie sieht es lebendig aus.
 @bild N02
 @handy gruppe
@@ -1489,6 +1506,9 @@ Die Frau muss wirklich viel von mir halten.
 
 == S18_A
 @pfad A
+# V8.7 (D35)
+@nachricht Jonas: schwach 😕
+@warte 1.2
 -> KAP2_A
 
 == S18_B
@@ -1498,6 +1518,9 @@ Die Frau muss wirklich viel von mir halten.
 
 == S18_C
 @pfad C
+# V8.7 (D35)
+@nachricht Jonas: JAAAA 🔥
+@warte 1.2
 @setze zugesagt
 @setze uhr_zeigen
 @uhr 21:20
@@ -1530,9 +1553,13 @@ Die Frau muss wirklich viel von mir halten.
 @handy zu
 @bild B05
 @loop lampe an
-Okay. Kapitel vier.
-@ton handy_ablegen
-@bild N04
+# V8.7 (D14): nur beim ersten Mal
+@wenn !l1
+  @setze l1
+  Okay. Kapitel vier.
+  @ton handy_ablegen
+  @bild N04
+@ende
 @wenn !l1b
   # L1b (nur Weg A, einmal)
   @setze l1b
@@ -1553,13 +1580,17 @@ Okay. Kapitel vier.
 == S1
 @handy zu
 @bild N02
-Ich bleib erst mal liegen. Ich entscheide später.
-@ton bzzz
-@benachrichtigung Galerie | Erinnerungen | Heute vor einem Jahr 🎂
-… !3
-@handy wegwischen
-… !2
-@handy zu
+# V8.7 (D14): nur beim ersten Mal
+@wenn !s1
+  @setze s1
+  Ich bleib erst mal liegen. Ich entscheide später.
+  @ton bzzz
+  @benachrichtigung Galerie | Erinnerungen | Heute vor einem Jahr 🎂
+  … !3
+  @handy wegwischen
+  … !2
+  @handy zu
+@ende
 @zurueck
 
 # ---- Zurück zu Hause (nach „Doch bleiben“ oder Umdrehen): nächste Etappe nach Uhrzeit ----
@@ -1636,7 +1667,7 @@ Gleich fang ich an.
 ~ Sogar die von oben.
 … !2
 ? „Aufstehen und lernen.“ -> S2_AUF
-? „Noch fünf Minuten.“ -> S2_SCHLUMMER
+? „Noch fünf Minuten.“ -> S2_SCHLUMMER +handy
 
 == S2_AUF
 @loop oben aus
@@ -1652,6 +1683,7 @@ Fünf Minuten.
 ~ Zweimal 5,0.
 … !2
 ~ Nur kurz.
+@setze notiz
 @handy notizneu Lernplan Samstag
 @handy notizzeile 8:00 Schuldrecht AT
 @handy notizzeile 10:00 BGB AT
@@ -1700,14 +1732,14 @@ Fünf Minuten.
 @rufe CHECK_WOBLEIBST
 @bild K10H
 @ton bzzz
-@banner Instagram | lena.mln | lena.mln hat eine Story gepostet
+@banner Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
 @banner aus
 ? „Kurz schauen.“ -> L3_SCHAUEN +handy
 ? „Weiter.“ -> L3_WEITER
 
 == L3_SCHAUEN
-@handy story lena.mln B07
+@handy story lena.xo B07
 @warte 5
 @handy zu
 @bild N32a traum
@@ -1751,13 +1783,13 @@ Geht doch.
 @bild N02
 @handy sperr
 @ton bzzz
-@benachrichtigung Instagram | lena.mln | lena.mln hat eine Story gepostet
+@benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
 # V8.5: N13 statt B07 (B07 kommt in Weg B gleich noch im Live)
-@handy story lena.mln N13
+@handy story lena.xo N13
 @warte 5
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
-? „Noch fünf Minuten.“ -> S3_SCHLUMMER
+? „Noch fünf Minuten.“ -> S3_SCHLUMMER +handy
 
 == S3_SCHLUMMER
 @handy zu
@@ -1769,7 +1801,8 @@ Bzzz.
 Das meiste kann ich eh.
 @handy zu
 # ---- ca. 22:05 – Sophie (nur durch die Tür) ----
-@uhr 22:05
+# V8.7 (D9): nicht rückwärts (Schlummern ist schon bei ~22:18)
+@uhr mind 22:05
 @bild N02
 @ton klopfen
 @warte 1
@@ -1916,17 +1949,17 @@ Den Vorhang auch.
 == S4_WAHL
 @bild N02
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
-? „Noch fünf Minuten.“ -> S4_SCHLUMMER
+? „Noch fünf Minuten.“ -> S4_SCHLUMMER +handy
 
 == S4_SCHLUMMER
 @handy zu
 @bild N02
 Weiter als letztes Mal bin ich schon.
 @ton bzzz
-@benachrichtigung Instagram | lena.mln | lena.mln ist jetzt live 🔴
+@benachrichtigung Instagram | lena.xo | lena.xo ist jetzt live 🔴
 @handy live N36 23
-@handy kommentar mia.chaos | HAPPY BDAY 🎂🎂
-@handy kommentar tim.dreams | wo seid ihr 😭
+@handy kommentar x.mia.x | HAPPY BDAY 🎂🎂
+@handy kommentar tim_k97 | ich steh direkt hinter dir 😂
 @handy kommentar jule.mxn | wer ist der typ hinten 😂
 @handy kommentar jonas.k | LENAAA
 @handy livedrehen B07
@@ -1938,7 +1971,7 @@ Lena: „Leute, gleich kommt die Torte!“
 == S4_LIVE_SENDEN
 @handy livesenden
 @handy kommentar ben.r | 🔥🔥
-@handy kommentar mia.chaos | TORTEEE
+@handy kommentar x.mia.x | TORTEEE
 @handy kommentar lena.fan | 🎉🎉🎉
 @handy kommentar hannah.lt | wo ist das
 … !3
@@ -2000,8 +2033,7 @@ Jonas!: „Du lernst?! Es ist Freitag! Hier geht’s übel ab!“
 Jonas!: „Und Lynn hat nach dir gefragt.“
 Ich: „Du verarschst mich.“
 Jonas!: „Find’s raus.“
-@ton jonas_lacht
-@warte 2
+Jonas lacht.
 @musik aus
 @handy anruf aufgelegt
 @warte 1
@@ -2058,7 +2090,7 @@ Aber auch nicht nichts.
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: ICH KANN NICHT MEHR 😭😭
 @warte 1.2
 @ton bzzz
-@benachrichtigung Instagram | lena.mln | lena.mln hat eine Story gepostet
+@benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
 @ton aufbau_lang
 @warte 0.9
@@ -2072,7 +2104,7 @@ Aber auch nicht nichts.
 @ton bzzz
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: HAHAHAHA
 @warte 0.4
-@benachrichtigung Instagram | tim.dreams | hat dir einen Beitrag gesendet
+@benachrichtigung Instagram | tim_k97 | hat dir einen Beitrag gesendet
 @warte 0.3
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Lena: 🎂🎂🎂
 @warte 0.3
@@ -2096,7 +2128,7 @@ Aber auch nicht nichts.
 -> B_SCHLUSS
 
 == B_SCHLUSS
-? „Noch fünf Minuten.“ -> B_SCHLUSS2
+? „Noch fünf Minuten.“ -> B_SCHLUSS2 +handy
 
 == B_SCHLUSS2
 @setze handyweit = 0
@@ -2218,7 +2250,7 @@ Fuck.
 @uhr zeigen
 @handy zu
 @effekt alles_aus
-@wenn umgedreht
+@wenn umgedreht || zurueck
   -> AUFBRUCH_ZWEITES
 @ende
 @bild N06
@@ -2316,7 +2348,6 @@ Kalt. Die Luft riecht nach nassem Laub.
 @uhr +4
 @bild N12
 @musik party strasse 3
-@ton schief
 Alter, singt der schief.
 … !2
 ~ Ich glaub, ich dreh doch wieder um.
@@ -2506,9 +2537,9 @@ Lena drückt mir einen Becher in die Hand.
 
 == HUB_HANDY
 @handy sperr
-@benachrichtigung Instagram | mia.chaos | mia.chaos hat eine Story gepostet | vor 2 Min.
+@benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet | vor 2 Min.
 @warte 1
-@handy story mia.chaos H36b
+@handy story x.mia.x H36b
 @warte 3
 ~ Ich bin doch hier.
 @handy zu
@@ -2537,6 +2568,11 @@ Ich: „Du bist so hacke.“
 @bild B12 gesicht
 Jonas: „Ich mein’s ernst.“
 Ich: „… Ich weiß.“
+# V8.7 (Philip 22.11.)
+Jonas: „Montag ist der letzte, oder?“
+Ich: „Danke für die Erinnerung.“
+Jonas: „Deswegen bist du ja hier. Damit du mal nicht dran denkst.“
+Ich: „Klappt super.“
 @bild B12L gesicht
 … !2
 @bild N13
@@ -2596,6 +2632,14 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
 @ende
 @bild N13L
 Lena: „Du bist wirklich gekommen.“
+# V8.7 (D32)
+Ich: „Alles Gute, Lena.“
+@schwarz
+@ton umarmung
+@warte 1.4
+@bild LENA_NAH
+Lena: „Jetzt bleibst du aber auch.“
+… !1.5
 -> HUB_ZURUECK
 
 # ---- Tanzfläche: Mia ----
@@ -2618,15 +2662,29 @@ Mia: „Egal. Ist eh schon gepostet.“
 Mia: „Ich war heute schon auf drei Partys.“
 Ich: „Gleichzeitig?“
 Mia: „Story-mäßig, ja.“
+# V8.7 (C13)
+Ich: „Warum drei?“
+@bild N35s gesicht
+Mia: „Falls eine scheiße ist.“
+… !1.5
+Mia: „Meistens sind’s dann alle.“
 @bild N35n gesicht
-Mia: „Bist du der Jura-Typ?“
+Mia: „Bist du der Jura-Typ von Lena?“
 Ich: „Kommt drauf an, wer fragt.“
 @bild N35b gesicht
-Mia: „Ist das nicht so ein Juristending?“
+# V8.7 (C12)
+Mia: „Is doch son Juristensatz.“
 Ich: „Kommt drauf an.“
-@bild N35s gesicht
-… !1.5
-@bild N35be gesicht
+@bild N35n gesicht
+Mia: „Wo warst du vorher?“
+Ich: „Zuhause.“
+Mia: „Allein?“
+Ich: „Mit Schuldrecht.“
+@bild MIA_GRINST_c schnitt
+Mia: „Klingt nach einem, der dich ghostet.“
+Ich: „Zweimal schon.“
+Mia: „Typisch.“
+@bild N35be schnitt
 Mia: „Kannst du mich verklagen? Bitte.“
 Ich: „Wofür?“
 @bild N35n gesicht
@@ -2645,6 +2703,26 @@ Mia: „Wieso Sorgen? Dass ich dich auch noch heirate?“
 Mia: „Vielleicht.“
 @bild N35fz gesicht
 Mia: „Aber ist ja nicht bindend.“
+Ich: „Und die drei ghostest du dann alle?“
+@bild N35s schnitt
+Mia: „Denkst du, ich mach sowas?“
+… !1.5
+@bild MIA_SMIRK schnitt
+Mia: „Ich geh halt immer zuerst.“
+# stiller Moment (Philip: nur ein Mini-Moment, Musik nur leicht leiser)
+@leer
+@musik party mittel langsam
+@bild MIA_HANDY gesicht
+@warte 1.8
+@bild MIA_HANDY_LEER schnitt
+@warte .7
+@bild MIA_HANDY schnitt
+@warte 1.2
+Ich: „Alles okay?“
+@bild MIA_GRINST_b gesicht
+Mia: „Klar.“
+@warte .8
+@musik party laut langsam
 @bild N32b schnitt
 Mia!: „TIM! DAS IST MEIN LIED!“
 # Mias Lied: setzt mit dem Bass ein, dann dumpf und schwarz, dann zum Refrain die Lichtshow
@@ -2667,6 +2745,9 @@ Ich tanze. Schlecht. Egal.
 -> TANZ_SHOW
 
 == TANZ_RAND
+# V8.7 (D25)
+Ich geh zwei Schritte zurück.
+Alle Hände oben. Meine nicht.
 -> TANZ_SHOW
 
 == TANZ_SHOW
@@ -2767,7 +2848,7 @@ Ich: „Rot ist fast leer.“
 @ton bzzz
 @effekt wackeln
 ? „Ignorieren.“ -> BALKON_IGN1
-? „Nur kurz schauen.“ -> BALKON_SCHAUEN
+? „Nur kurz schauen.“ -> BALKON_SCHAUEN +handy
 
 == BALKON_SCHAUEN
 @setze lynn = "geschaut"
@@ -2817,7 +2898,7 @@ Irgendwann gehe ich rein.
 @effekt wackeln
 Bzzz. Nochmal.
 ? „Ignorieren.“ -> GM_START
-? „Nur kurz schauen.“ -> BALKON_SCHAUEN
+? „Nur kurz schauen.“ -> BALKON_SCHAUEN +handy
 
 # ---- „Gar nicht gemerkt“ (wer zweimal ignoriert) ----
 == GM_START
@@ -2833,6 +2914,8 @@ Lynn: „Er sagt, über Nacht.“
 @ton lynn_lacht1
 @tipp
 @bild N14 gesicht
+# V8.7 (D34)
+Irgendwann fragt sie, warum ich fast nicht gekommen wär.
 Ich erzähl ihr vom dritten Versuch.
 @bild N14c gesicht
 Lynn: „Dritter Versuch? Dann hast du ja zweimal nicht aufgegeben.“
@@ -2895,7 +2978,7 @@ Lynn: „Bisschen.“
 Ich: „Ich hatte nur so ein Gefühl.“
 … !3
 Lynn: „Man verpasst immer irgendwas.“
-~ Fragt sich nur, was.
+Ich: „Fragt sich nur, was.“
 @bild N14d gesicht
 Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
 … !2
@@ -2910,7 +2993,7 @@ Lynn: „… Naja.“
 …
 @ton bzzz
 @effekt tasche 23
-? „Draufschauen.“ -> GM_DRAUF
+? „Draufschauen.“ -> GM_DRAUF +handy
 ? „Stecken lassen.“ -> GM_STECKEN
 
 == GM_DRAUF
@@ -2925,7 +3008,10 @@ Lynn: „… Naja.“
 @effekt waermer aus
 @bild N14
 Lynn sagt nichts mehr. Sie schaut in die Stadt.
-…
+# V8.7 (D17)
+Irgendwann steht sie auf.
+Lynn: „Ich geh mal rein.“
+… !2
 @uhr springe Sa 00:40
 -> ABSCHIED_A
 
@@ -2966,6 +3052,7 @@ Zum Abschied umarmt sie mich. Länger als nötig. !3
 # ---- Bad und Feuerlöscher (gegen 23:20, für alle) ----
 == BAD
 @uhr mind 23:20
+@setze imBad
 @party aus
 @loop wind aus
 @musik party dumpf
@@ -2974,7 +3061,7 @@ Zum Abschied umarmt sie mich. Länger als nötig. !3
 Ich schließe ab. Hier ist es leiser. !2
 @ton bzzz
 @handy chat Tim
-@nachricht Tim: afterparty bei mir später?? 🔥 die vom konzert kommen auch.
+@nachricht Tim: afterparty bei mir später?? 🔥 die vom konzert kommen auch
 @foto N28 Tim
 @tipp
 @handy zu
@@ -2982,7 +3069,13 @@ Ich schließe ab. Hier ist es leiser. !2
 Ein anderes Wohnzimmer. Andere Leute. … Sieht voller aus.
 @effekt traum aus
 @bild N16
-@ton! gelaechter dumpf
+# V8.7: Feuerlöscher durch die Tür (wie bad_vorschau_feuerloescher.mp3: Zischen 1,5 s, Johlen 3,8 s, Gelächter 4,8 s)
+@warte 1.5
+@ton feuerloescher lp1400 vol1.7
+@warte 2.3
+@ton johlen dumpf vol1.6
+@warte 1
+@ton! gelaechter dumpf vol1.9
 Was war das?
 ? „Handy weg. Zurück zu den anderen.“ -> BAD_WEG
 ? „Story posten: Beste Party 🎉“ -> BAD_POSTEN +handy
@@ -3002,8 +3095,8 @@ Was war das?
 -> BAD_RAUS
 
 == BAD_SCHAUEN
-# V8.5: Mias Selfie (Küche, Tim, Jonas, Lena) statt nochmal N28
-@handy story tim.dreams MIA_SELFIE
+# V8.7: wieder Tims Wohnzimmer (Konzert-Leute, Tim selbst ist noch bei Lena) – passt zu „an beiden Orten“
+@handy story tim_k97 N28
 @warte 3
 @handy weg
 @bild N16
@@ -3018,6 +3111,8 @@ Kann ich nicht einfach an beiden Orten sein?
 == BAD_WEG
 @setze handyweit = 1
 @musik party laut
+# V8.7 (D3): er ist schon draußen
+@bild N36
 @party an
 @effekt schnittgewitter N32b N32e N32a
 @effekt blitz
@@ -3038,7 +3133,8 @@ Als ich rauskomme, lachen noch alle. Es ist schon vorbei.
 Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 
 == BAD_ENDE
-@uhr springe Sa 00:40
+# V8.7 (D29): Zeiten angleichen – Lynn geht auf allen Wegen gegen 23:45 mit Tim
+@uhr mind 23:45
 @wenn lynn=="geschaut"
   -> ABSCHIED_A
 @ende
@@ -3049,7 +3145,7 @@ Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 @party an
 @musik party laut
 @bild A1
-Ich muss echt nach Hause. Morgen ist Lerntag. Der letzte vor Montag.
+Ich muss echt nach Hause. Morgen ist Lerntag.
 Ich verabschiede mich.
 Jonas: „Langweiler.“
 Umarmung trotzdem.
@@ -3068,18 +3164,30 @@ Ich: „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“
 Fast draußen.
 @ton! badtuer
 @bild N18
-…
+@wenn lynn=="gm_geschaut"
+  # V8.7 (D17): nach dem Schweigen auf dem Balkon – gedämpft
+  @bild N19n
+  Lynn: „Gehst du schon?“
+@sonst
+  …
+@ende
 Ich: „Ich wollt mich nur … also, ich wollt mich …“
-@bild N19
+@wenn lynn=="gm_geschaut"
+  @bild N19n
+@sonst
+  @bild N19
+@ende
 Lynn: „Du kommst doch noch mit zu Tim, oder?“
 …
+# V8.7 (A6): normaler Blick, Mund zu
+@bild N19n gesicht
 Lynn: „Also, wenn du willst.“
 @gesicht N19l
 Ich: „Ich … eigentlich wollt ich grad …“
 @gesicht aus
 Lynn: „Jonas kommt. Lena, Mia. Und Ben.“
 … !3
-? „Okay. Ich komm mit.“ -> ZU_TIM +handy
+? „Okay. Ich komm mit.“ -> ZU_TIM
 ? „Ich muss echt nach Hause.“ -> A_HEIM
 ? „Vielleicht … ich schau mal.“ -> A_SCHAUMAL
 
@@ -3130,7 +3238,7 @@ Sie geht. Ich stehe im Gang mit der Jacke in der Hand.
 @party an
 @musik party laut
 @bild A1
-Morgen ist Lerntag. Der letzte vor Montag.
+Morgen ist Lerntag.
 Jonas: „Langweiler.“
 Umarmung trotzdem.
 @musik club laut
@@ -3255,7 +3363,7 @@ Hm.
 @loop wind an
 @ton schritte
 @warte 3
-@wenn vielglueck
+@wenn vielglueck && lynn=="geschaut"
   ~ Woher weiß sie das mit Montag?
   … !3
 @ende
@@ -3279,16 +3387,32 @@ Hm.
 @party aus
 @bild N28 langsam
 @musik spaet leise
+@wenn tanz
+  # V8.7 (Philip 03:03): Mias „Party Nummer vier“
+  ~ Die vierte war’s dann wohl.
+  … !1.5
+@ende
 Die vom Konzert erzählen vom Konzert.
 Alle lachen über einen Moment, den ich nicht kenne.
+# V8.7 (D19)
+Drüben redet Lynn mit irgendwem. Ich komm nicht durch.
 … !2
 ~ … Ich war doch gerade noch auf der Party, die alle verpasst haben.
 @schwarz
 @musik spaet dumpf
-@analoguhr Sa 00:40
+# V8.7 (D29): von Lenas Party aus 23:50, nach dem langen Balkon (Gar nicht gemerkt … Draufschauen) erst 00:40
+@wenn lynn=="gm_geschaut"
+  @analoguhr Sa 00:40
+@sonst
+  @analoguhr 23:50
+@ende
 @warte 1.2
 Eine Stunde ist keine Stunde. !2
-@analoguhr Sa 01:40
+@wenn lynn=="gm_geschaut"
+  @analoguhr Sa 01:40
+@sonst
+  @analoguhr Sa 00:50
+@ende
 Also sind zwei … eine. !2
 @analoguhr Sa 02:47
 Und eine ist ja keine. !3
@@ -3323,17 +3447,17 @@ Und eine ist ja keine. !3
   Licht aus. Das Handy liegt auf dem Schreibtisch.
   … !3
   @rufe NACHT_STRASSE
-  @ton bzzz_tisch leise
+  @ton bzzz leise
   @effekt handylicht fern
   Bzzz.
   … !2
-  @ton bzzz_tisch leise
+  @ton bzzz leise
   @effekt handylicht fern
   @warte 0.6
-  @ton bzzz_tisch leise
+  @ton bzzz leise
   @effekt handylicht fern
   … !2
-  @ton bzzz_tisch leise
+  @ton bzzz leise
   @effekt handylicht fern
   @wenn zugesagt
     @warte 1.5
@@ -3370,12 +3494,15 @@ Und eine ist ja keine. !3
 # Vor dem Stummschalten: Sperrbildschirm voll, er wischt alles weg, es kommt immer mehr nach, er wischt schneller
 @handy sperr
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: WO BIST DU 😭
-@benachrichtigung Instagram | lena.mln | lena.mln hat eine Story gepostet
-@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 📷 Foto
-@benachrichtigung Instagram | mia.chaos | mia.chaos ist jetzt live 🔴
-@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
-@warte .6
-@handy allesweg
+@benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
+# V8.7 (D23): Weg B hatte die Flut schon – hier nur kurz
+@wenn !(weg=="B" && typ=="zuhause")
+  @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 📷 Foto
+  @benachrichtigung Instagram | x.mia.x | x.mia.x ist jetzt live 🔴
+  @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
+  @warte .6
+  @handy allesweg
+@ende
 @warte .5
 @handy stumm
 Stumm.
@@ -3455,7 +3582,7 @@ Ich bin auf keinem Foto. !3
   @abzeichen Laucharm
 @ende
 @wenn afterpartyStory
-  @handy story tim.dreams APS
+  @handy story tim_k97 APS
   @warte 5
 @ende
 ? „Weiterscrollen.“ -> NP_SCROLL +handy
@@ -3584,6 +3711,11 @@ Ich bin auf keinem Foto. !3
 @handy sperr
 @ton klick
 …
+# V8.7 (Philip): Mias letzte Story, 05:12 – nur Text, 2 Aufrufe, kein Gedanke
+@wenn tanz
+  @handy story x.mia.x MIA_STORY 5 Std. | 2
+  @warte 3.5
+@ende
 # M2
 @handy gruppe
 214 neue Nachrichten.
@@ -3597,7 +3729,7 @@ Ich bin auf keinem Foto. !3
   @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
   @nachricht Mia: DER FORSTER MORITZ 😭🧯
   @nachricht Jonas: musst du dabei gewesen sein 😂
-  @tippe war ich nicht. war woanders.
+  @tippe war ich nicht. war woanders
   @abzeichen Musst du dabei gewesen sein
   @tipp
   -> M4
@@ -3612,17 +3744,18 @@ Ich bin auf keinem Foto. !3
 @nachricht Mia: DER FORSTER MORITZ 😭🧯
 @tipp
 @wenn typ=="zuhause"
-  @wenn weg=="B"
-    # Lernplan trifft die Uhrzeit (V8): kein Text
+  @wenn weg=="B" && notiz
+    # Lernplan trifft die Uhrzeit (V8): kein Text. V8.7 (D13): beide Zeiten schieben, damit die Reihenfolge stimmt
     @handy notizen
     @warte 2
+    @handy notizfix 10:00|12:00
     @handy notizfix 9:00|11:00
     … !2
     @handy gruppe
   @ende
   -> M3
 @ende
-@wenn typ=="party" && ankunft<=23:30
+@wenn typ=="party" && ankunft<=23:30 && imBad
   …
   Ich war da.
   … !2
@@ -3646,12 +3779,18 @@ Ich bin auf keinem Foto. !3
 == M4
 @handy hinweis Instagram | lynn | hat eine Story gepostet
 …
-? „Anschauen.“ -> M4_ANSCHAUEN +handy
+? „Anschauen.“ -> M4_ANSCHAUEN +handy wenn typ!="gluecklich"
+? „Anschauen.“ -> M4_ANSCHAUEN wenn typ=="gluecklich"
 ? „Nicht.“ -> M4_DANACH
 
 == M4_ANSCHAUEN
 @handy story lynn N29
 @warte 5
+@wenn typ=="gluecklich"
+  # V8.7 (D30): der linke Becher hat Lippenstift
+  ~ Der linke ist meiner.
+  … !2
+@ende
 -> M4_DANACH
 
 == M4_DANACH
@@ -3702,16 +3841,22 @@ Irgendwas war halt immer.
 @handy chat Tim
 @schreibt Tim 2
 @nachricht! Tim: tja. alle wege führen wohl zu tim 😎
-@schreibt Tim 3
-@nachricht! Tim: oder soll ich eher sagen
-@schreibt Tim 3
-@nachricht! Tim: zu lynn? 😏
-@warte 2
-~ … Der Wichser.
+# V8.7 (D19): nur, wer mit Lynn auf dem Balkon war
+@wenn lynn!=""
+  @schreibt Tim 3
+  @nachricht! Tim: oder soll ich eher sagen
+  @schreibt Tim 3
+  @nachricht! Tim: zu lynn? 😏
+  @warte 2
+  ~ … Der Wichser.
+@ende
 @handy gruppe
 @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
 @nachricht Jonas: du warst dabei 😭
 @nachricht Mia: ja genau das ist ja das problem
+# V8.7 (D7)
+@nachricht Lena: wer war eigentlich der feuerlöscher-typ 🧯
+@nachricht Jonas: MORITZ 😭
 # V8.5: Balkonfoto auch auf dem Afterparty-Weg
 @foto BALKON_GRUPPE Lena
 @warte 1.5
@@ -3805,7 +3950,7 @@ Ich leg das Handy weg. Zwei Tage noch.
   @bild K10H schnitt
   @loop lampe an
   @karteikarten auto
-  @ton bzzz_tisch
+  @ton bzzz
   @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @warte 1.6
@@ -3873,40 +4018,8 @@ Ich leg das Handy weg. Zwei Tage noch.
 @schwarz
 @ton PR3_stift
 {haken}Check. {haken}Check. {haken}Check.
-# Lena postet den Foto-Dump
+# V8.7 (D11): erst das stille Handy, dann der Foto-Dump
 @bild K10H
-@ton bzzz_tisch
-@handy sperr
-@benachrichtigung Instagram | lena.mln | lena.mln hat 12 Fotos gepostet
-@tipp
-# V8.5: zu Hause hat man diese Bilder noch nie gesehen, auf den Party-Wegen andere (keine Wiederholungen)
-@wenn typ=="zuhause"
-  @handy story lena.mln N32d
-  @warte 1.1
-  @handy story lena.mln MIA_SELFIE
-  @warte 1.1
-  @handy story lena.mln N32c
-  @warte 1.1
-  @handy story lena.mln N32a
-  @warte 1.4
-  @handy story lena.mln N13
-  @warte .9
-  @handy story lena.mln B12A
-  @warte 1
-  … !2
-  Ich tipp aufs Herz.
-  … !2
-@sonst
-  @handy story lena.mln B12A
-  @warte 1.1
-  @handy story lena.mln N13L
-  @warte 1.1
-  @handy story lena.mln N32dA
-  @warte 1.4
-  ~ Da. Das bin ich.
-  … !2
-@ende
-@handy zu
 Es liegt da seit heute Morgen. Es ist still.
 ? „Umdrehen.“ -> SO3_UM +handy
 ? „Liegen lassen.“ -> SO4
@@ -3918,6 +4031,40 @@ Keine Benachrichtigung.
 Ich leg es wieder hin.
 
 == SO4
+# Lena postet den Foto-Dump
+@bild K10H
+@ton bzzz
+@handy sperr
+@benachrichtigung Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
+@tipp
+# V8.5: zu Hause hat man diese Bilder noch nie gesehen, auf den Party-Wegen andere (keine Wiederholungen)
+@wenn typ=="zuhause"
+  @handy story lena.xo N32d
+  @warte 1.1
+  @handy story lena.xo MIA_SELFIE
+  @warte 1.1
+  @handy story lena.xo N32c
+  @warte 1.1
+  @handy story lena.xo N32a
+  @warte 1.4
+  @handy story lena.xo N13
+  @warte .9
+  @handy story lena.xo B12A
+  @warte 1
+  … !2
+  Ich tipp aufs Herz.
+  … !2
+@sonst
+  @handy story lena.xo B12A
+  @warte 1.1
+  @handy story lena.xo N13L
+  @warte 1.1
+  @handy story lena.xo N32dA
+  @warte 1.4
+  # V8.7 (D15): kein „Da. Das bin ich.“ – nur Pause
+  … !2
+@ende
+@handy zu
 Ich krieg das hin.
 @loop uhr an
 … !5
@@ -3931,11 +4078,14 @@ Ich krieg das hin.
 @loop regen an
 @bild SO
 …
-@handy notizen
-…
-@handy notizen datum
-@warte 2
-@handy zu
+# V8.7 (D13): nur, wer am Freitag den Lernplan getippt hat
+@wenn notiz
+  @handy notizen
+  …
+  @handy notizen datum
+  @warte 2
+  @handy zu
+@ende
 @lernplan an
 @lernplan haken 1
 @warte .4
@@ -3964,7 +4114,7 @@ Ich krieg das hin.
 @raum nacht
 @bild K10H schnitt
 @loop lampe an
-@ton bzzz_tisch
+@ton bzzz
 @handy sperr
 @benachrichtigung WhatsApp | Lerngruppe Schuldrecht | Paul: hat jemand noch ne zusammenfassung bereicherungsrecht?? 😩
 @tipp
@@ -4026,11 +4176,19 @@ Ich krieg das hin.
   @handy zu
   … !3
   @effekt einschlafen
-  @uhr Mo 07:05
+  # V8.7 (D24): Wecker 6:30
+  @stille
+  @schwarz schnitt
+  @uhr Mo 06:30
+  @handy sperr
+  @ton! wecker
+  @ton display_klick
   -> EN2
 @ende
 @loop herzschlag an
-@uhr Mo 01:12
+# V8.7 (D24): Wachliegen sichtbar – die Uhr läuft im Dunkeln
+@uhr zeigen
+@uhr laufen Mo 01:12
 @handy sperr
 @ton display_klick
 Wecker auf 6:30.
@@ -4048,7 +4206,10 @@ Noch einer auf 6:40.
 @ton decke1
 @handy sperr
 Ich schau nur, wie spät es ist.
-@benachrichtigung WhatsApp | Lerngruppe Schuldrecht | 14 neue Nachrichten
+# V8.7 (B11): stumm = kein Ton, keine Benachrichtigung. Die 14 sieht er erst in WhatsApp selbst.
+@warte 1.2
+@handy ungelesen Lerngruppe Schuldrecht | 14 | Paul: ich bin so am arsch
+@handy liste
 ? „Lesen.“ -> SN_LESEN +handy
 ? „Umdrehen.“ -> SN_UMDREHEN
 
@@ -4117,8 +4278,11 @@ Ich schau nur, wie spät es ist.
 @wenn typ=="zuhause" && weg=="B"
   @wohlbefinden Du hast dein Handy letzte Woche {ZEIT_B} Stunden mehr genutzt als zuvor.
 @ende
-@wenn typ!="zuhause"
+@wenn typ=="party" || typ=="afterparty"
   @wohlbefinden Du hast dein Handy letzte Woche {ZEIT_PARTY} Stunden mehr genutzt als zuvor.
+@ende
+@wenn typ=="gluecklich"
+  @wohlbefinden Du hast dein Handy letzte Woche {ZEIT_LYNN} Stunden weniger genutzt als zuvor.
 @ende
 @tipp
 @handy wegwischen
@@ -4139,7 +4303,8 @@ Ich schau nur, wie spät es ist.
 … !2
 Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
-  ~ Das hab ich durchgestrichen.
+  # V8.7 (Philip): statt „Das hab ich durchgestrichen.“
+  …
 @sonst
   ~ Hab ich.
 @ende
@@ -4251,6 +4416,24 @@ Senner: „Noch zehn Minuten.“
 @uhr aus
 @schwarz
 @loop halle an
+# V8.7 (D27): „Blaues Licht“ – noch in der Halle, Pings, das Handy ist sofort oben (kein Tippen)
+@wenn typ!="gluecklich" && punkte>HIER_ODER_DA_BIS
+  @warte .8
+  @ton bzzz
+  @handy sperr
+  @benachrichtigung WhatsApp | Jonas | bereit für heute abend? 😏
+  @warte .5
+  @ton bzzz
+  @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
+  @warte .4
+  @ton bzzz
+  @benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet
+  @warte .5
+  @handy chat Jonas
+  @nachricht! Jonas: bereit für heute abend? 😏
+  @loop halle aus
+  -> TWIST_SCHLUSS
+@ende
 @ton bzzz_doppel
 …
 … !4
@@ -4273,6 +4456,8 @@ Senner: „Noch zehn Minuten.“
 @ende
 @handy chat Jonas
 @nachricht! Jonas: bereit für heute abend? 😏
+
+== TWIST_SCHLUSS
 @warte 1.5
 @schreibt Jonas 3
 @nachricht! Jonas: du verpasst was.
@@ -4353,7 +4538,7 @@ Ich: „Und?“
 Lynn: „Hab’s wieder gelöscht.“
 @gesicht aus
 Ich: „… Kenn ich.“
-@ton bzzz_tisch
+@ton bzzz
 @banner WhatsApp | Jonas | bereit für heute abend? 😏
 @warte 1.8
 Lynn: „Musst du nicht schauen?“
@@ -4423,13 +4608,25 @@ const BILDER = {
   N38a: { datei: "img/N38a.webp", text: "Rückblende Seminar: mein zerknitterter, leerer Collegeblock (Gemini, V8.5)", stimmung: "traum" },
   N38b: { datei: "img/N38b.webp", text: "Rückblende Seminar: Lynn kichert hinter der Hand (V8)", stimmung: "traum", figur: true },
   N38:  { datei: "img/N38.webp", text: "Rückblende Seminar: Lynn hält mir den Vierfarb-Stift hin (V8)", stimmung: "traum", figur: true },
-  N26:  { datei: "img/N26.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten (V8)", stimmung: "foto", zoom: [.515, .5], scharf: "N26s" },
+  N26:  { datei: "img/N26.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten unscharf (V8.7: bleibt beim Ranzoomen unscharf)", stimmung: "foto", zoom: [.515, .5] },
   N26s: { datei: "img/N26s.webp", text: "Handyfoto Küche, Lynn scharf (beim Ranzoomen wird darauf überblendet)", stimmung: "foto", zoom: [.515, .5] },
   B07: { datei: "img/B07.webp", text: "Lenas Story: Selfie mit Konfetti, Lynn klein hinten", stimmung: "foto" },
   N27:  { datei: "img/N27.webp", text: "Handyfoto Gruppe auf dem Sofa, Lynn als Letzte, daneben ein Platz frei (V8)", stimmung: "foto", story: "ganz" },
   N28: { datei: "img/N28.webp", text: "Handyfoto: Tims Wohnzimmer voller Leute", stimmung: "foto" },
   N29:  { datei: "img/N29.webp", text: "Lynns Story: zwei Becher auf dem Balkongeländer, Lichterkette (V8)", stimmung: "balkon" },
   APS: { datei: "img/APS.webp", text: "Afterparty-Story bei Tim", stimmung: "foto" },
+
+  // ---------- V8.7: Mia (Person links entfernt) und Lena nah ----------
+  MIA_HANDY: { datei: "img/MIA_HANDY.webp", text: "Mia schaut aufs Handy, getroffen (V8.7)", stimmung: "party", figur: true },
+  MIA_HANDY_LEER: { datei: "img/MIA_HANDY_LEER.webp", text: "Mia aufs Handy, Raum leer, nur Konfetti (V8.7, stiller Moment)", stimmung: "party", figur: true },
+  MIA_GRINST: { datei: "img/MIA_GRINST.webp", text: "Mia lacht breit (V8.7)", stimmung: "party", figur: true },
+  MIA_GRINST_b: { datei: "img/MIA_GRINST_b.webp", text: "Mia lächelt, traurige Brauen – überspielt es (V8.7)", stimmung: "party", figur: true },
+  MIA_GRINST_c: { datei: "img/MIA_GRINST_c.webp", text: "Mia grinst (V8.7)", stimmung: "party", figur: true },
+  MIA_SMIRK: { datei: "img/MIA_SMIRK.webp", text: "Mia, freches kleines Lächeln (V8.7)", stimmung: "party", figur: true },
+  MIA_LEER: { datei: "img/MIA_LEER.webp", text: "Mia smirk, Raum leer (V8.7, Reserve)", stimmung: "party", figur: true },
+  MIA_LEER_TASCHE: { datei: "img/MIA_LEER_TASCHE.webp", text: "Mia smirk, Tasche über der Schulter, Raum leer (V8.7, Reserve)", stimmung: "party", figur: true },
+  MIA_STORY: { datei: "img/MIA_STORY.webp", text: "Mias letzte Story 05:12: nur Text „noch wer wach?“ (V8.7, Claude)", stimmung: "foto" },
+  LENA_NAH: { datei: "img/LENA_NAH.webp", text: "Küche: Lena ganz nah nach der Umarmung (V8.7)", stimmung: "party", figur: true },
 
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
@@ -4464,6 +4661,7 @@ const BILDER = {
   N17: { datei: "img/N17.webp", text: "Flur: meine Hand nimmt die Jacke vom Haken", stimmung: "flur" },
   N18: { datei: "img/N18.webp", text: "Flur: Lynn kommt aus der Badtür", stimmung: "flur", figur: true },
   N19: { datei: "img/N19.webp", text: "Flur: Lynn nah, strahlt", stimmung: "flur", figur: true },
+  N19n: { datei: "img/N19n.webp", text: "Flur: Lynn nah, normaler Blick, Mund zu (Gemini, V8.7)", stimmung: "flur", figur: true },
   N20: { datei: "img/N20.webp", text: "Flur: Lynn geht, schaut zurück", stimmung: "flur", figur: true },
   N21: { datei: "img/N21.webp", text: "Flur: Lynn geht in die Party (dunkler)", stimmung: "flur" },
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
@@ -4482,7 +4680,7 @@ const BILDER = {
   N14d: { datei: "img/LNL.webp", text: "Lynn nah, lächelt frech", stimmung: "balkon", figur: true },
   N14e: { datei: "img/LNN.webp", text: "Lynn nah, leise überrascht", stimmung: "balkon", figur: true },
   N15:  { datei: "img/N15.webp", text: "Balkon leer", stimmung: "balkon", lichterVon: "N14" },
-  N29b: { datei: "", ersatz: "BALKON_LEER", text: "Balkon leer, zwei Becher auf dem Geländer – fehlt, bis dahin BALKON_LEER", stimmung: "balkon" },
+  N29b: { datei: "img/N29b.webp", text: "Balkon leer, zwei Becher auf dem Geländer (Gemini, V8.7, abgedunkelt)", stimmung: "balkon" },
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, Leute drinnen (gespiegelt, V8)", stimmung: "balkon" },
   N34b: { datei: "img/N34b.webp", text: "Er und Lynn von hinten auf dem Balkonboden, drinnen leer (gespiegelt, V8)", stimmung: "balkon" },
@@ -4491,7 +4689,7 @@ const BILDER = {
   N36L: { datei: "img/N36L.webp", text: "Party-Hub ohne Lynn", stimmung: "party" },
   N36Z: { datei: "img/N36Z.webp", text: "Blick durch die Balkontür: Lynn allein am Geländer (Zuschnitt, V8)", stimmung: "balkon", figur: true },
   HB1: { datei: "img/HB1.webp", text: "Hub: Ben erzählt Lynn was, sie lacht", stimmung: "party" },
-  BR: { datei: "img/BR.webp", text: "Balkon-Gegenblick: allein draußen, drinnen die Party", stimmung: "balkon" },
+  BR: { datei: "img/N15.webp", lichterVon: "N14", alt: "img/BR.webp", text: "Balkon-Gegenblick: allein draußen, drinnen die Party", stimmung: "balkon" },
   B12T: { datei: "img/B12T.webp", text: "Begrüßung: Jonas kommt winkend durch die Tür", stimmung: "flur" },
   B12A: { datei: "img/B12A.webp", imHandy: "img/B12A_h.webp", text: "Begrüßung: Jonas und Lena lachen", stimmung: "flur" },
   B12B: { datei: "img/B12B.webp", text: "Begrüßung: Jonas mit offenen Armen", stimmung: "flur" },
@@ -4549,7 +4747,7 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
   B12: { blink: ["B12z"], spricht: { Jonas: "B12s" }, mimik: ["B12g"] },
@@ -4563,10 +4761,12 @@ const VARIANTEN = {
   N37: { blink: ["N37z"], spricht: { Jonas: "N37s" } },
   N38b: { blink: ["N38bz"] },
   TV1: { mimik: ["TV3"] },
+  LENA_NAH: { blink: ["LENA_NAH_z"], spricht: { Lena: "LENA_NAH_s" }, mimik: ["LENA_NAH_l"] },
 };
 const TOENE = {
   kerze:           { datei: "ton/kerze.mp3", vol: 1.1 },      // Wunderkerzen auspusten (kai_audio 446030)
   umarmung:        { datei: "ton/umarmung.mp3", vol: 1.2 },   // Jonas’ Umarmung (Philips Aufnahme)
+  feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: 1 },  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
   klopfen:         { datei: "ton/klopfen.mp3", vol: .9 },               // Sophie klopft (Pixabay, Philip)
   treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: .8 },     // Schritte im Treppenhaus
   strasse:         { datei: "ton/strasse_betrunken.mp3", vol: 1 },       // Leute unten auf der Straße
@@ -4955,7 +5155,7 @@ const Ton = (() => {
 
   // ---------- Musik ----------
   const STUFEN = {
-    laut: [1, 18000], leise: [.45, 2600], dumpf: [.6, 380], tuer: [.55, 650], fern: [.22, 300], telefon: [.3, 1300],
+    laut: [1, 18000], mittel: [.7, 9000], leise: [.45, 2600], dumpf: [.6, 380], tuer: [.55, 650], fern: [.22, 300], telefon: [.3, 1300],
     still: [0, 18000], strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
   };
   function stelle(art, langsam) {
@@ -5123,9 +5323,9 @@ const Handy = (() => {
       <div class="sp-stumm">🔕</div>
     </div>
     <div class="app" data-app="chat">
-      <div class="c-kopf"><span class="zur">←</span><span class="av"></span><div class="c-name"><b></b><small></small></div><span class="c-ic">▭&nbsp;&nbsp;✆&nbsp;&nbsp;⋮</span></div>
+      <div class="c-kopf"><span class="zur"><svg viewBox="0 0 24 24" class="ico"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></span><span class="av"></span><div class="c-name"><b></b><small></small></div><span class="c-ic"><svg viewBox="0 0 24 24" class="ico"><path d="M15 8.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1.5l5.2 3.4c.5.3 1.8.1 1.8-.9V6c0-1-1.3-1.2-1.8-.9z"/></svg><svg viewBox="0 0 24 24" class="ico"><path d="M19.9 15.4l-3.2-.4a1.7 1.7 0 0 0-1.4.5l-2.3 2.3a14 14 0 0 1-6.8-6.8L8.5 8.7a1.7 1.7 0 0 0 .5-1.4l-.4-3.2A1.7 1.7 0 0 0 6.9 2.6H4.6c-1 0-1.8.8-1.7 1.8A17.4 17.4 0 0 0 19.6 21c1 .1 1.8-.7 1.8-1.7v-2.2a1.7 1.7 0 0 0-1.5-1.7z"/></svg><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span></div>
       <div class="c-msgs"></div>
-      <div class="c-eingabe"><div class="pille"><span class="smi">☺</span><div class="feld"><span class="plh">Nachricht</span><span class="txt"></span><i class="cursor"></i></div><span class="clip">📎</span><span class="cam">📷</span></div><div class="mic">🎤</div></div>
+      <div class="c-eingabe"><div class="pille"><span class="smi"><svg viewBox="0 0 24 24" class="ico o"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r=".9" class="f"/><circle cx="15" cy="10" r=".9" class="f"/><path d="M8.3 14.2a4.4 4.4 0 0 0 7.4 0"/></svg></span><div class="feld"><span class="plh">Nachricht</span><span class="txt"></span><i class="cursor"></i></div><span class="clip"><svg viewBox="0 0 24 24" class="ico o"><path d="M16.5 7.5 9 15a2.1 2.1 0 0 1-3-3l7.8-7.8a3.6 3.6 0 0 1 5.1 5.1l-8.2 8.2a5.1 5.1 0 0 1-7.2-7.2L11 2.8" transform="rotate(45 12 12)"/></svg></span><span class="cam"><svg viewBox="0 0 24 24" class="ico o"><path d="M4 7.5h3l1.6-2.2h6.8L17 7.5h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.4"/></svg></span></div><div class="mic"><svg viewBox="0 0 24 24" class="ico mi"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5a7 7 0 0 0 6 6.9V21h2v-2.1a7 7 0 0 0 6-6.9z"/></svg></div></div>
       <div class="tastatur"></div>
       <div class="c-menue"><div>Gruppeninfo</div><div>Gruppenmedien</div><div>Suchen</div><div class="stummpunkt">Benachr. stummschalten</div><div>Selbstlöschende Nachrichten</div><div>Chatdesign</div><div class="mehr">Mehr <span>›</span></div></div>
       <div class="c-dialog"><div class="cd-box"><b>Benachrichtigungen zu Nachrichten stummschalten</b><p>Andere Mitglieder sehen nicht, dass du diesen Chat stummgeschaltet hast. Du wirst weiterhin benachrichtigt, wenn jemand dich erwähnt.</p>
@@ -5158,7 +5358,7 @@ const Handy = (() => {
       <div class="n-liste"><div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div></div>
     </div>
     <div class="app" data-app="feed"><div class="f-kopf">Instagram</div><div class="f-rolle"></div></div>
-    <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.mln</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
+    <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.xo</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
     <div class="app" data-app="karussell"><div class="f-kopf">Instagram</div><div class="ka-post"><div class="f-k"><span class="av" style="background:#6a5acd">s</span><b>studygram.de</b></div>
       <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div></div>
       <div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div><div class="f-a">♡ 💬 ➤</div></div></div>
@@ -5208,7 +5408,7 @@ const Handy = (() => {
   function renderListe(ziel) {
     const namen = Object.keys(meta).filter(n => meta[n].vorschau !== undefined && (meta[n].vorschau || n === ziel)).sort((a, b) => (meta[b].pin ? 1 : 0) - (meta[a].pin ? 1 : 0) || meta[b].n - meta[a].n);
     $('.l-zeilen').innerHTML = namen.map(n => { const m = meta[n]; const titel = n === 'gruppe' ? gruppe.name : n;
-      return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${esc(m.vorschau || '')}</span></div><div class="l-rechts"><small class="${m.ungelesen ? 'neu' : ''}">${m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
+      return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${esc(m.vorschau || '')}</span></div><div class="l-rechts"><small class="${m.ungelesen ? 'neu' : ''}">${m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.stumm ? '<u class="st">🔕</u>' : ''}${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i${m.stumm ? ' class="grau"' : ''}>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
   }
   function chatKey(titel) { if (titel === gruppe.name) return 'gruppe'; if (KONTAKTE[titel]) return titel; return null; }
 
@@ -5251,7 +5451,7 @@ const Handy = (() => {
     const n = aktChat; const kopf = $('.c-kopf');
     kopf.querySelector('.av').outerHTML = avatar(n);
     kopf.querySelector('b').textContent = n === 'gruppe' ? gruppe.name : n;
-    kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : (chatListe(n).length ? 'online' : '');
+    kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : '';
     kopf.classList.toggle('gr', istGruppe(n));
   }
   function eingabe(txt, beimLoeschen) {
@@ -5380,6 +5580,8 @@ const Handy = (() => {
       zeige('chat'); setzeKopf(); renderChat(); eingabe(''); tastatur(false);
     },
     liste() { oeffne(); renderListe(); zeige('liste'); },
+    // V8.7: ungelesene Nachrichten in einem (stummen) Chat, ohne Ton und ohne Benachrichtigung
+    ungelesen(n, zahl, vorschau) { const m = meta[n] || (meta[n] = { ungelesen: 0 }); m.ungelesen = zahl; m.vorschau = vorschau; m.zeit = uhrText(); m.tagIdx = heute(); m.n = ++zaehler; },
     // V8.6: Handy-Knopf – einen Chat nur ansehen (nichts schreiben). Zeigt den Verlauf bis jetzt; ungelesene Nachricht,
     // die bisher nur in der Liste stand, wird als letzte Blase gezeigt. Danach wird der Story-Chat wiederhergestellt.
     lesen(n) {
@@ -5528,13 +5730,14 @@ const Handy = (() => {
     },
     klingelAus() { if (klingelt) { Ton.loop('klingel', false); klingelt = false; } clearInterval(callTimer); },
     // ---- Story ----
-    async story(name, code, dauer = 5) {
+    async story(name, code, dauer = 5, zeit = null, aufrufe = null) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true);
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
       s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));
-      s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.startsWith('lena') ? '#e0558e' : name.startsWith('lynn') ? '#3d4a66' : '#22a39a'}">${name[0].toUpperCase()}</span>`;
-      s.querySelector('.st-zeit').textContent = name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.';
+      s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.includes('lena') ? '#e0558e' : name.includes('lynn') ? '#3d4a66' : '#22a39a'}">${name[0].toUpperCase()}</span>`;
+      s.querySelector('.st-zeit').textContent = zeit || (name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.');
+      s.classList.toggle('aufrufe', aufrufe != null); if (aufrufe != null) s.querySelector('.st-views b').textContent = aufrufe;
       s.classList.remove('post'); const b = s.querySelector('.st-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth;
       b.style.transition = `width ${dauer * (Spiel.schnell ? .15 : 1)}s linear`; b.style.width = '100%';
     },
@@ -5589,7 +5792,7 @@ const Handy = (() => {
     },
     // Storys fremder Leute im Schnelldurchlauf
     async storys(codes) {
-      const namen = ['tim.dreams', 'nightcrew', 'jule.mxn', 'paulfrnk', 'mia.chaos', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
+      const namen = ['tim_k97', 'nightcrew', 'jule.mxn', 'paulfrnk', 'x.mia.x', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
       for (let i = 0; i < codes.length; i++) { await this.story(namen[i % namen.length], codes[i], .9); await warteZ(20, 780 - Math.min(i * 60, 360)); }
     },
     async notizenDatum() {
@@ -5599,7 +5802,7 @@ const Handy = (() => {
     },
     feed() {
       oeffne(); zeige('feed'); const r = $('.f-rolle'); let h = '';
-      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.mln', 'mia.chaos', 'tim.dreams', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32c', 'N33', 'N32d', 'TORTE', 'A1', 'H36a', 'B12A', 'N32dA'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
+      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32c', 'N33', 'N32d', 'TORTE', 'A1', 'H36a', 'B12A', 'N32dA'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
       r.innerHTML = h + h; r.classList.remove('rollt'); void r.offsetWidth; r.classList.add('rollt');
     },
     video(code) { oeffne(); zeige('video'); $('.v-bild').innerHTML = Spiel.bildHTML(code, true); const b = $('.v-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth; b.style.transition = 'width 12s linear'; b.style.width = '100%'; },
@@ -6105,6 +6308,7 @@ const Spiel = (() => {
   let V = {}; let prog = [], labels = {}, pc = 0, stack = [];
   let gen = 0; let schnell = false; const DEBUG = /debug=1/.test(location.search) || location.hash === '#debug';
   let tippWarter = null, tippt = false, ueberspringen = false;
+  let letzteStory = '', storyMin = 0;
   let verlauf = [], kapitelZeiten = [], pfad = [], pfadPlus = false, abzQueue = [], abzNeu = [];
   let aktBild = null, partyAn = false, partyZaehler = 0, poolAktiv = null, t0 = performance.now();
   const ABBRUCH = Symbol('abbruch'); const besuchtL = new Set(); const fehlerLog = [];
@@ -6260,6 +6464,8 @@ const Spiel = (() => {
   }
   function blickAuf() {
     blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
+    // V8.7 (D2): von sich aus nachschauen zählt mit – jeder zweite Blick = 1 Handy-Punkt (höchstens 3)
+    if (blick.zahl % 2 === 0 && blick.zahl <= 6) V.punkte = (V.punkte || 0) + 1;
     Ton.spiele('display_klick');
     haendeTausch('sperr'); Handy.sperr();
     if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
@@ -6563,6 +6769,10 @@ const Spiel = (() => {
       case 'traum': if (arg.startsWith('aus')) { B.classList.remove('traum'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('traum'); Ton.spiele('flashback'); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
+      // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
+      case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
+        const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
+        setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
       case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('W_schritte'); await warte(.5); break;
       case 'schlummer': {
@@ -6867,7 +7077,8 @@ const Spiel = (() => {
       case 'shutdown': await shutdown(); break;
       case 'fenster_aus': await fensterAus(zeit(a)); break;
       case 'grossuhr': { const g = $('#grossuhr'); if (a === 'aus') g.classList.remove('an'); else { V.uhr = zeit(a); g.textContent = uhrText(); g.classList.add('an'); Ton.spiele('klick'); } break; }
-      case 'warte': await warte(+a || 1); break;
+      case 'leer': zeigeTextbox(false); break;  // V8.7: Textbox ausblenden (stille Momente ohne Text)
+      case 'warte': { let w = +a || 1; if (storyMin) { w = Math.max(w, storyMin); storyMin = 0; } await warte(w); break; }
       case 'analoguhr': await analoguhr(a); break;
       case 'film': await film(a); break;
       case 'schema': await schema(a); break;
@@ -6875,7 +7086,7 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') n = 'bzzz';
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
@@ -6901,7 +7112,7 @@ const Spiel = (() => {
       case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); effekt('handylicht', 'kurz'); kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
       case 'zettel_aus': break;
       // ---- Handy ----
-      case 'handy': await handyBefehl(teile, a); break;
+      case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
       case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!')); break; }
@@ -6922,7 +7133,7 @@ const Spiel = (() => {
       default: console.warn('Befehl?', ins.name);
     }
   }
-  const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim.dreams', 'tim.dreams hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'mia.chaos', 'mia.chaos hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
+  const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim_k97', 'tim_k97 hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'x.mia.x', 'x.mia.x hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
   // Schreibtisch-Ich-Sicht: hält er das Handy, liegen die Hände nicht auf dem Tisch.
   // Hat ein Bild „ohneHaende“ (eigene Datei vorhanden), wird beim Handy darauf gewechselt und beim Weglegen zurück.
   function haendeTausch(was) {
@@ -6949,10 +7160,11 @@ const Spiel = (() => {
       case 'liveloeschen': await Handy.liveLoeschen(); break;
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
+      case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
       case 'her': Handy.fotozoomWeg(); Handy.her(); await warte(.5); break;
-      case 'story': zeigeTextbox(false); await Handy.story(t[1], t[2]); break;
+      case 'story': { zeigeTextbox(false); storyMin = t[1] !== letzteStory ? 2.5 : 0; letzteStory = t[1]; const [zt, auf] = t.slice(3).join(' ').split('|').map(x => x.trim()); await Handy.story(t[1], t[2], 5, zt || null, auf || null); break; }  // V8.7: erste Story einer Person mind. 2,5 s
       case 'post': zeigeTextbox(false); Handy.post(t[1], t.slice(2).join(' ')); Ton.spiele('senden'); await warte(1.5); break;
       case 'anruf': {
         if (t[1] === 'an') Handy.anrufAn();

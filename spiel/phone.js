@@ -56,9 +56,9 @@ const Handy = (() => {
       <div class="sp-stumm">🔕</div>
     </div>
     <div class="app" data-app="chat">
-      <div class="c-kopf"><span class="zur">←</span><span class="av"></span><div class="c-name"><b></b><small></small></div><span class="c-ic">▭&nbsp;&nbsp;✆&nbsp;&nbsp;⋮</span></div>
+      <div class="c-kopf"><span class="zur"><svg viewBox="0 0 24 24" class="ico"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg></span><span class="av"></span><div class="c-name"><b></b><small></small></div><span class="c-ic"><svg viewBox="0 0 24 24" class="ico"><path d="M15 8.5V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1.5l5.2 3.4c.5.3 1.8.1 1.8-.9V6c0-1-1.3-1.2-1.8-.9z"/></svg><svg viewBox="0 0 24 24" class="ico"><path d="M19.9 15.4l-3.2-.4a1.7 1.7 0 0 0-1.4.5l-2.3 2.3a14 14 0 0 1-6.8-6.8L8.5 8.7a1.7 1.7 0 0 0 .5-1.4l-.4-3.2A1.7 1.7 0 0 0 6.9 2.6H4.6c-1 0-1.8.8-1.7 1.8A17.4 17.4 0 0 0 19.6 21c1 .1 1.8-.7 1.8-1.7v-2.2a1.7 1.7 0 0 0-1.5-1.7z"/></svg><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span></div>
       <div class="c-msgs"></div>
-      <div class="c-eingabe"><div class="pille"><span class="smi">☺</span><div class="feld"><span class="plh">Nachricht</span><span class="txt"></span><i class="cursor"></i></div><span class="clip">📎</span><span class="cam">📷</span></div><div class="mic">🎤</div></div>
+      <div class="c-eingabe"><div class="pille"><span class="smi"><svg viewBox="0 0 24 24" class="ico o"><circle cx="12" cy="12" r="9"/><circle cx="9" cy="10" r=".9" class="f"/><circle cx="15" cy="10" r=".9" class="f"/><path d="M8.3 14.2a4.4 4.4 0 0 0 7.4 0"/></svg></span><div class="feld"><span class="plh">Nachricht</span><span class="txt"></span><i class="cursor"></i></div><span class="clip"><svg viewBox="0 0 24 24" class="ico o"><path d="M16.5 7.5 9 15a2.1 2.1 0 0 1-3-3l7.8-7.8a3.6 3.6 0 0 1 5.1 5.1l-8.2 8.2a5.1 5.1 0 0 1-7.2-7.2L11 2.8" transform="rotate(45 12 12)"/></svg></span><span class="cam"><svg viewBox="0 0 24 24" class="ico o"><path d="M4 7.5h3l1.6-2.2h6.8L17 7.5h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.4"/></svg></span></div><div class="mic"><svg viewBox="0 0 24 24" class="ico mi"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3zm5.3-3a5.3 5.3 0 0 1-10.6 0H5a7 7 0 0 0 6 6.9V21h2v-2.1a7 7 0 0 0 6-6.9z"/></svg></div></div>
       <div class="tastatur"></div>
       <div class="c-menue"><div>Gruppeninfo</div><div>Gruppenmedien</div><div>Suchen</div><div class="stummpunkt">Benachr. stummschalten</div><div>Selbstlöschende Nachrichten</div><div>Chatdesign</div><div class="mehr">Mehr <span>›</span></div></div>
       <div class="c-dialog"><div class="cd-box"><b>Benachrichtigungen zu Nachrichten stummschalten</b><p>Andere Mitglieder sehen nicht, dass du diesen Chat stummgeschaltet hast. Du wirst weiterhin benachrichtigt, wenn jemand dich erwähnt.</p>
@@ -91,7 +91,7 @@ const Handy = (() => {
       <div class="n-liste"><div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div></div>
     </div>
     <div class="app" data-app="feed"><div class="f-kopf">Instagram</div><div class="f-rolle"></div></div>
-    <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.mln</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
+    <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.xo</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
     <div class="app" data-app="karussell"><div class="f-kopf">Instagram</div><div class="ka-post"><div class="f-k"><span class="av" style="background:#6a5acd">s</span><b>studygram.de</b></div>
       <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div></div>
       <div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div><div class="f-a">♡ 💬 ➤</div></div></div>
@@ -141,7 +141,7 @@ const Handy = (() => {
   function renderListe(ziel) {
     const namen = Object.keys(meta).filter(n => meta[n].vorschau !== undefined && (meta[n].vorschau || n === ziel)).sort((a, b) => (meta[b].pin ? 1 : 0) - (meta[a].pin ? 1 : 0) || meta[b].n - meta[a].n);
     $('.l-zeilen').innerHTML = namen.map(n => { const m = meta[n]; const titel = n === 'gruppe' ? gruppe.name : n;
-      return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${esc(m.vorschau || '')}</span></div><div class="l-rechts"><small class="${m.ungelesen ? 'neu' : ''}">${m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
+      return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${esc(m.vorschau || '')}</span></div><div class="l-rechts"><small class="${m.ungelesen ? 'neu' : ''}">${m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.stumm ? '<u class="st">🔕</u>' : ''}${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i${m.stumm ? ' class="grau"' : ''}>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
   }
   function chatKey(titel) { if (titel === gruppe.name) return 'gruppe'; if (KONTAKTE[titel]) return titel; return null; }
 
@@ -184,7 +184,7 @@ const Handy = (() => {
     const n = aktChat; const kopf = $('.c-kopf');
     kopf.querySelector('.av').outerHTML = avatar(n);
     kopf.querySelector('b').textContent = n === 'gruppe' ? gruppe.name : n;
-    kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : (chatListe(n).length ? 'online' : '');
+    kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : '';
     kopf.classList.toggle('gr', istGruppe(n));
   }
   function eingabe(txt, beimLoeschen) {
@@ -313,6 +313,8 @@ const Handy = (() => {
       zeige('chat'); setzeKopf(); renderChat(); eingabe(''); tastatur(false);
     },
     liste() { oeffne(); renderListe(); zeige('liste'); },
+    // V8.7: ungelesene Nachrichten in einem (stummen) Chat, ohne Ton und ohne Benachrichtigung
+    ungelesen(n, zahl, vorschau) { const m = meta[n] || (meta[n] = { ungelesen: 0 }); m.ungelesen = zahl; m.vorschau = vorschau; m.zeit = uhrText(); m.tagIdx = heute(); m.n = ++zaehler; },
     // V8.6: Handy-Knopf – einen Chat nur ansehen (nichts schreiben). Zeigt den Verlauf bis jetzt; ungelesene Nachricht,
     // die bisher nur in der Liste stand, wird als letzte Blase gezeigt. Danach wird der Story-Chat wiederhergestellt.
     lesen(n) {
@@ -461,13 +463,14 @@ const Handy = (() => {
     },
     klingelAus() { if (klingelt) { Ton.loop('klingel', false); klingelt = false; } clearInterval(callTimer); },
     // ---- Story ----
-    async story(name, code, dauer = 5) {
+    async story(name, code, dauer = 5, zeit = null, aufrufe = null) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true);
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
       s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));
-      s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.startsWith('lena') ? '#e0558e' : name.startsWith('lynn') ? '#3d4a66' : '#22a39a'}">${name[0].toUpperCase()}</span>`;
-      s.querySelector('.st-zeit').textContent = name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.';
+      s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.includes('lena') ? '#e0558e' : name.includes('lynn') ? '#3d4a66' : '#22a39a'}">${name[0].toUpperCase()}</span>`;
+      s.querySelector('.st-zeit').textContent = zeit || (name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.');
+      s.classList.toggle('aufrufe', aufrufe != null); if (aufrufe != null) s.querySelector('.st-views b').textContent = aufrufe;
       s.classList.remove('post'); const b = s.querySelector('.st-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth;
       b.style.transition = `width ${dauer * (Spiel.schnell ? .15 : 1)}s linear`; b.style.width = '100%';
     },
@@ -522,7 +525,7 @@ const Handy = (() => {
     },
     // Storys fremder Leute im Schnelldurchlauf
     async storys(codes) {
-      const namen = ['tim.dreams', 'nightcrew', 'jule.mxn', 'paulfrnk', 'mia.chaos', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
+      const namen = ['tim_k97', 'nightcrew', 'jule.mxn', 'paulfrnk', 'x.mia.x', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
       for (let i = 0; i < codes.length; i++) { await this.story(namen[i % namen.length], codes[i], .9); await warteZ(20, 780 - Math.min(i * 60, 360)); }
     },
     async notizenDatum() {
@@ -532,7 +535,7 @@ const Handy = (() => {
     },
     feed() {
       oeffne(); zeige('feed'); const r = $('.f-rolle'); let h = '';
-      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.mln', 'mia.chaos', 'tim.dreams', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32c', 'N33', 'N32d', 'TORTE', 'A1', 'H36a', 'B12A', 'N32dA'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
+      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32c', 'N33', 'N32d', 'TORTE', 'A1', 'H36a', 'B12A', 'N32dA'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
       r.innerHTML = h + h; r.classList.remove('rollt'); void r.offsetWidth; r.classList.add('rollt');
     },
     video(code) { oeffne(); zeige('video'); $('.v-bild').innerHTML = Spiel.bildHTML(code, true); const b = $('.v-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth; b.style.transition = 'width 12s linear'; b.style.width = '100%'; },

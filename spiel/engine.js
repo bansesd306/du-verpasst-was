@@ -11,6 +11,7 @@ const Spiel = (() => {
   let V = {}; let prog = [], labels = {}, pc = 0, stack = [];
   let gen = 0; let schnell = false; const DEBUG = /debug=1/.test(location.search) || location.hash === '#debug';
   let tippWarter = null, tippt = false, ueberspringen = false;
+  let letzteStory = '', storyMin = 0;
   let verlauf = [], kapitelZeiten = [], pfad = [], pfadPlus = false, abzQueue = [], abzNeu = [];
   let aktBild = null, partyAn = false, partyZaehler = 0, poolAktiv = null, t0 = performance.now();
   const ABBRUCH = Symbol('abbruch'); const besuchtL = new Set(); const fehlerLog = [];
@@ -166,6 +167,8 @@ const Spiel = (() => {
   }
   function blickAuf() {
     blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
+    // V8.7 (D2): von sich aus nachschauen zählt mit – jeder zweite Blick = 1 Handy-Punkt (höchstens 3)
+    if (blick.zahl % 2 === 0 && blick.zahl <= 6) V.punkte = (V.punkte || 0) + 1;
     Ton.spiele('display_klick');
     haendeTausch('sperr'); Handy.sperr();
     if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
@@ -469,6 +472,10 @@ const Spiel = (() => {
       case 'traum': if (arg.startsWith('aus')) { B.classList.remove('traum'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('traum'); Ton.spiele('flashback'); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
+      // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
+      case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
+        const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
+        setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
       case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('W_schritte'); await warte(.5); break;
       case 'schlummer': {
@@ -773,7 +780,8 @@ const Spiel = (() => {
       case 'shutdown': await shutdown(); break;
       case 'fenster_aus': await fensterAus(zeit(a)); break;
       case 'grossuhr': { const g = $('#grossuhr'); if (a === 'aus') g.classList.remove('an'); else { V.uhr = zeit(a); g.textContent = uhrText(); g.classList.add('an'); Ton.spiele('klick'); } break; }
-      case 'warte': await warte(+a || 1); break;
+      case 'leer': zeigeTextbox(false); break;  // V8.7: Textbox ausblenden (stille Momente ohne Text)
+      case 'warte': { let w = +a || 1; if (storyMin) { w = Math.max(w, storyMin); storyMin = 0; } await warte(w); break; }
       case 'analoguhr': await analoguhr(a); break;
       case 'film': await film(a); break;
       case 'schema': await schema(a); break;
@@ -781,7 +789,7 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') n = 'bzzz';
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
@@ -807,7 +815,7 @@ const Spiel = (() => {
       case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); effekt('handylicht', 'kurz'); kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
       case 'zettel_aus': break;
       // ---- Handy ----
-      case 'handy': await handyBefehl(teile, a); break;
+      case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
       case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!')); break; }
@@ -828,7 +836,7 @@ const Spiel = (() => {
       default: console.warn('Befehl?', ins.name);
     }
   }
-  const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim.dreams', 'tim.dreams hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'mia.chaos', 'mia.chaos hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
+  const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim_k97', 'tim_k97 hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'x.mia.x', 'x.mia.x hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
   // Schreibtisch-Ich-Sicht: hält er das Handy, liegen die Hände nicht auf dem Tisch.
   // Hat ein Bild „ohneHaende“ (eigene Datei vorhanden), wird beim Handy darauf gewechselt und beim Weglegen zurück.
   function haendeTausch(was) {
@@ -855,10 +863,11 @@ const Spiel = (() => {
       case 'liveloeschen': await Handy.liveLoeschen(); break;
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
+      case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
       case 'her': Handy.fotozoomWeg(); Handy.her(); await warte(.5); break;
-      case 'story': zeigeTextbox(false); await Handy.story(t[1], t[2]); break;
+      case 'story': { zeigeTextbox(false); storyMin = t[1] !== letzteStory ? 2.5 : 0; letzteStory = t[1]; const [zt, auf] = t.slice(3).join(' ').split('|').map(x => x.trim()); await Handy.story(t[1], t[2], 5, zt || null, auf || null); break; }  // V8.7: erste Story einer Person mind. 2,5 s
       case 'post': zeigeTextbox(false); Handy.post(t[1], t.slice(2).join(' ')); Ton.spiele('senden'); await warte(1.5); break;
       case 'anruf': {
         if (t[1] === 'an') Handy.anrufAn();
