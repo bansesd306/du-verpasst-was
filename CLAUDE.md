@@ -30,7 +30,12 @@
 ## Regeln (Philip)
 - Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
-- Stand: V8.7 gebaut (22.11., ca. 03:40), siehe Projekt-Doc `claude/v8-7-stand-bau.md`; davor `claude/v8-6-stand-bau.md`, `claude/v8-5-stand-bau.md`. Ziele: `claude/ziele.md`.
+- Stand: V8.8 gebaut (22.11. abends), siehe Projekt-Doc `claude/v8-8-stand-bau.md`; davor `claude/v8-7-stand-bau.md`. Ziele: `claude/ziele.md`.
+- V8.8-Bildwerkzeug: `proc/v88_bilder.py [a1|a2|neu|tim|handy|balkon|ov]` (wiederholbar; Originale vor dem Aufhellen in `bilder_neu/v88_vorhell/`). Balkonboden: N34/N34a1/N34a2/N34b auf den Bildausschnitt des Videos `dist/vid/N34v.mp4` gebracht (4-s-Schleife, Ton aus).
+- V8.8-Technik: Bildliste kennt `video:` (bewegter Hintergrund über dem Standbild), Bildmodus `sehrlangsam` (8 s), `@handy laut`, `@handy livesprich A B SEK`, `@handy story NAME CODE ZEIT | AUFRUFE | TEXT` (Text auf der Story), `@handy storys name=CODE …`, `@effekt heranzoomen 3.5`. Verschreiber `⌫ynn` passiert jetzt mitten im Tippen. `lernstand` (G27, Schwellen LERN_MITTEL/LERN_HOCH). Lena heißt im Handy „Lena 🌻“ (KONTAKTE.name).
+- Test-Protokoll (`protokoll.js`, nur TESTMODUS): schreibt in die Artefakt-Datenbank des Test-Links, Sammlung `protokoll` (Dokumente `protokoll/<sitzung>_<nr>`), Knopf ⚑ = Fehler markieren. Lesen: db_list slug 5d6f857a…, collection `protokoll`.
+- Öffentliche Fassung bauen: `ABGABE=1 python3 build.py` (TESTMODUS aus: keine Stoppuhr, kein Sprungmenü, kein Protokoll).
+- Sprünge/Tests: `Spiel._debug.neustart(LABEL, V => {...})` setzt Variablen vor dem Start (G61); `t_film.py` nutzt das.
 - V8.7-Bildwerkzeug: `proc/v87_bilder.py [mia|mia35|lena|dunkel|einzeln]` (wiederholbar: Originale vor dem Abdunkeln in `bilder_neu/v87_vordunkel/`, vor dem Entfernen der Person links in `bilder_neu/v87_vorlinks/`). Mias Text-Story: `proc/v87_mia_story.py`.
 - Neue Skript-Befehle (V8.7): `@leer` (Textbox weg), `@effekt lebendig` (Fensterblick), `@handy ungelesen NAME | ZAHL | VORSCHAU`, `@handy story NAME CODE ZEIT | AUFRUFE`, `@ton NAME lp1400 vol1.7`, Musikstufe `mittel`. Erste Story einer Person bleibt mind. 2,5 s. Jeder zweite Handy-Knopf-Blick = 1 Handy-Punkt (max. 3).
 - Offen nach V8.7: D10, D26, „MORITZ!“-Aufnahme, N38c-Ausschnitt (Vorschau `quellen/vorschau/N38c_ausschnitte.jpg`), Bilder von Tims Feier (A7), „Umarmung trotzdem“-Bild (A5), BR neu (A4), Gedanken zu den Fotos, Fokuslicht, Lernkarten Sonntag.

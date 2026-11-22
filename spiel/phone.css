@@ -20,11 +20,24 @@
 /* WhatsApp-Chatliste */
 [data-app=liste]{background:#0b141a;display:flex;flex-direction:column;padding-top:64px}
 .l-kopf{display:flex;justify-content:space-between;align-items:center;padding:14px 30px 8px}
-.l-kopf b{font:600 44px system-ui;color:#fff}.l-kopf span{font-size:30px;color:#ddd}
-.l-suche{margin:10px 24px 6px;padding:18px 26px;border-radius:40px;background:#202c33;color:#8696a0;font:400 26px system-ui}
-.l-chips{display:flex;gap:12px;padding:12px 24px 10px}
-.l-chips span{padding:9px 20px;border-radius:30px;background:#202c33;color:#aebac1;font:500 24px system-ui}
-.l-chips span.an{background:#103629;color:#d9fdd3}
+.l-kopf b{font:700 46px system-ui;color:#fff;letter-spacing:-.5px}
+.l-kic{display:flex;gap:30px}.l-kic .ico{width:36px;height:36px}
+[data-app=liste] .ico{fill:currentColor}[data-app=liste] .ico.o{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.l-kopf .ico,.l-suche .ico,.l-chips .ico,.l-nav .ico,.l-fab .ico{color:#e9edef}
+.l-suche{display:flex;align-items:center;gap:16px;margin:12px 22px 8px;padding:17px 24px;border-radius:40px;background:#23282c;color:#8696a0;font:400 26px system-ui}
+.l-suche .lupe{width:30px;height:30px;color:#8696a0!important}
+.l-chips{display:flex;gap:10px;padding:12px 22px 10px;white-space:nowrap;overflow:hidden}
+.l-chips span{display:inline-flex;align-items:center;gap:8px;padding:8px 18px;border-radius:30px;border:1px solid #2c3439;color:#aebac1;font:500 23px system-ui;flex:none}
+.l-chips span em{font-style:normal;color:#8696a0}
+.l-chips span.an{background:#0a332c;border-color:#0a332c;color:#d9fdd3}
+.l-chips .l-filter{padding:6px 12px}.l-chips .l-filter .ico{width:26px;height:26px}
+.hk-blau{width:26px;height:18px;margin-right:6px;vertical-align:-2px}
+.l-nav span i{position:relative}.l-nav .ico{width:34px;height:34px}
+.l-nbadge{position:absolute;right:6px;top:-6px;min-width:26px;height:26px;border-radius:13px;background:#21c063;color:#0b141a;font:700 16px/26px system-ui;text-align:center;font-style:normal;padding:0 6px}
+.l-punkt{position:absolute;right:16px;top:0;width:12px;height:12px;border-radius:50%;background:#21c063}
+.l-meta{position:absolute;right:42px;bottom:262px;width:76px;height:76px;border-radius:22px;background:#23282c;box-shadow:0 4px 14px rgba(0,0,0,.4)}
+.l-meta::after{content:"";position:absolute;inset:20px;border-radius:50%;background:conic-gradient(#3b82f6,#a855f7,#ec4899,#3b82f6);-webkit-mask:radial-gradient(circle,transparent 9px,#000 10px);mask:radial-gradient(circle,transparent 9px,#000 10px)}
+.l-fab .ico{width:44px;height:44px;color:#0b141a!important}
 .l-zeilen{flex:1;overflow:hidden}
 .l-zeile{display:flex;align-items:center;gap:20px;padding:16px 26px;transition:background .2s}
 .l-zeile .av{width:70px;height:70px}
@@ -35,7 +48,7 @@
 .l-rechts{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
 .l-rechts small{font:400 22px system-ui;color:#8696a0}.l-rechts small.neu{color:#21c063}
 .l-rechts i{font:700 20px system-ui;font-style:normal;color:#0b141a;background:#21c063;border-radius:20px;min-width:34px;height:34px;display:flex;align-items:center;justify-content:center;padding:0 8px}
-.l-fab{position:absolute;right:34px;bottom:150px;width:96px;height:96px;border-radius:26px;background:#21c063;color:#0b141a;font:600 48px system-ui;display:flex;align-items:center;justify-content:center}
+.l-fab{position:absolute;right:34px;bottom:142px;width:100px;height:100px;border-radius:28px;background:#21c063;color:#0b141a;font:600 48px system-ui;display:flex;align-items:center;justify-content:center}
 .l-nav{display:flex;justify-content:space-around;padding:14px 0 26px;border-top:1px solid #222d34;background:#0b141a}
 .l-nav span{display:flex;flex-direction:column;align-items:center;gap:4px;font:500 20px system-ui;color:#aebac1}
 .l-nav span i{font-style:normal;font-size:28px;padding:2px 22px;border-radius:20px}
@@ -180,6 +193,7 @@
 .st-musik{width:100%;padding-left:62px;font-size:21px;margin-top:-10px}
 .st-bild{position:absolute;top:56px;left:0;right:0;bottom:120px;border-radius:18px;overflow:hidden}
 .st-text{position:absolute;left:0;right:0;top:44%;text-align:center;font:700 44px system-ui;color:#fff;text-shadow:0 2px 8px #000}
+.st-text-story{top:auto;bottom:22%;left:12%;right:12%;padding:10px 18px;font:600 38px system-ui;background:rgba(0,0,0,.45);border-radius:14px;text-shadow:none;width:max-content;max-width:76%;margin:0 auto}
 .st-fuss{position:absolute;left:16px;right:16px;bottom:30px;display:flex;align-items:center;gap:22px;font-size:40px;color:#fff}
 .st-pille{flex:1;border:2px solid rgba(255,255,255,.6);border-radius:40px;padding:16px 26px;font:400 26px system-ui}
 .st-views{display:none;position:absolute;left:30px;bottom:44px;font:600 30px system-ui;color:#fff}
@@ -195,7 +209,37 @@
 
 /* Feed */
 [data-app=feed]{background:#000}
-.f-kopf{margin-top:60px;padding:10px 26px;font:600 40px system-ui;flex:none}
+.f-kopf{display:none}
+/* V8.8 (C15): Instagram wie die echte App – feste Kopfzeile, darunter ein Fenster, in dem gescrollt wird */
+[data-app=feed],[data-app=karussell]{background:#000;padding-top:56px}
+.ig-kopf{flex:none;height:84px;display:flex;align-items:center;justify-content:space-between;padding:0 24px 0 26px;background:#000;position:relative;z-index:2}
+.ig-logo{font:italic 600 44px/1 "Snell Roundhand","Segoe Script","Brush Script MT",cursive;color:#f5f5f5;letter-spacing:.5px}
+.ig-kic{display:flex;gap:26px;align-items:center}
+.ig-dm{position:relative;display:inline-flex}.ig-dm i{position:absolute;right:-10px;top:-8px;min-width:24px;height:24px;border-radius:12px;background:#ff3040;color:#fff;font:700 15px/24px system-ui;text-align:center;font-style:normal}
+.igi{width:40px;height:40px;fill:none;stroke:#f5f5f5;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round;flex:none}
+.igi.voll{fill:#f5f5f5;stroke:none}.igi.klein{width:32px;height:32px}.igi .f{fill:#f5f5f5;stroke:none}
+.ig-fenster{flex:1;min-height:0;overflow:hidden;position:relative}
+.ig-nav{flex:none;height:96px;display:flex;align-items:center;justify-content:space-around;padding:0 10px 14px;background:#000;border-top:1px solid #1c1c1c;position:relative;z-index:2}
+.ig-ich{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#566,#334);border:2px solid #f5f5f5}
+.ig-av{position:relative;display:inline-flex;align-items:center;justify-content:center;width:58px;height:58px;border-radius:50%;background:var(--c,#444);color:#fff;font:600 26px system-ui;flex:none}
+.ig-av b{font-weight:600}
+.ig-av.ring{box-shadow:0 0 0 3px #000,0 0 0 6px #d62976}
+.ig-av.ring::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5,#feda75);z-index:-1}
+.ig-av.gross{width:110px;height:110px;font-size:42px}
+.ig-storys{display:flex;gap:22px;padding:14px 18px 18px;overflow:hidden;border-bottom:1px solid #1c1c1c}
+.ig-st{display:flex;flex-direction:column;align-items:center;gap:10px;width:118px;flex:none;isolation:isolate}
+.ig-st small{font:400 20px system-ui;color:#f5f5f5;max-width:118px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ig-st.ich .ig-av{background:#2a2f3a}
+.ig-post{padding-bottom:22px}
+.ig-pk{display:flex;align-items:center;gap:16px;padding:14px 16px 12px 20px;isolation:isolate}
+.ig-pk .ig-av{width:52px;height:52px;font-size:22px}
+.ig-pn{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}.ig-pn b{font:600 25px system-ui;color:#f5f5f5}.ig-pn small{font:400 20px system-ui;color:#a8a8a8}
+.ig-bild{position:relative;width:100%;aspect-ratio:4/5;background:#111;overflow:hidden}
+.ig-bild>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ig-ak{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 8px}
+.ig-ak>span{display:flex;gap:24px}
+.ig-tx{padding:2px 20px;font:400 23px/1.35 system-ui;color:#f5f5f5}.ig-tx b{font-weight:600}.ig-tx.grau{color:#a8a8a8;font-size:19px;padding-top:6px}
+.f-rolle{will-change:transform}
 .f-rolle.rollt{animation:roll 24s linear infinite}
 @keyframes roll{to{transform:translateY(-50%)}}
 .f-post{padding:10px 0 24px}
@@ -238,10 +282,11 @@
 .l-mitte span.gruen{color:#21c063;font-weight:500}
 
 /* V6: Karussell-Post (Lerntipps) */
-[data-app=karussell]{background:#000;padding:120px 0 0}
 .ka-post{transition:transform .35s cubic-bezier(.5,0,.8,.3),opacity .35s}
 [data-app=karussell].weg .ka-post{transform:translateY(-120%);opacity:.3}
-.ka-fenster{width:100%;aspect-ratio:1/1;overflow:hidden;margin-top:14px}
+.ka-fenster{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden}
+.ka-zahl{position:absolute;right:18px;top:18px;padding:4px 14px;border-radius:16px;background:rgba(0,0,0,.65);color:#fff;font:500 20px system-ui}
+.ka-post .ig-ak{position:relative}.ka-post .ig-ak .ka-punkte{position:absolute;left:50%;transform:translateX(-50%);margin:0}
 .ka-band{display:flex;width:300%;height:100%;transition:transform .45s cubic-bezier(.3,.8,.3,1)}
 [data-app=karussell].wisch .ka-band{transform:translateX(-33.333%)}
 [data-app=karussell].wisch2 .ka-band{transform:translateX(-66.666%)}
@@ -250,8 +295,8 @@
 .ka-seite{width:33.333%;height:100%;display:flex;align-items:center;justify-content:center;padding:60px;text-align:center;background:#f7d24c;color:#1d1d1d;font:800 60px/1.15 system-ui}
 .ka-seite.b{background:#2fbf8f;color:#fff}
 .ka-seite.c{background:#e85d75;color:#fff}
-.ka-punkte{display:flex;justify-content:center;gap:10px;margin:18px 0 6px}
-.ka-punkte i{width:12px;height:12px;border-radius:50%;background:#555}
+.ka-punkte{display:flex;justify-content:center;gap:8px;margin:18px 0 6px}
+.ka-punkte i{width:10px;height:10px;border-radius:50%;background:#555}
 .ka-punkte i.an{background:#3897f0}
 
 /* V7: Übersicht – neue Nachricht leuchtet kurz */

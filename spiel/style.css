@@ -15,6 +15,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .ebene.an{opacity:1}
 .ebene img,.ebene .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ebene img{filter:saturate(.94) contrast(1.03)}
+.ebene video.bv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.94) contrast(1.03);pointer-events:none}
 .ebene .blink{opacity:0;transition:none}
 .ebene .blink.zu{opacity:1}
 .f-dunkel{filter:brightness(.42) saturate(.6) hue-rotate(12deg) contrast(1.05)!important}
@@ -30,6 +31,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .schwenk{animation:schwenk 14s ease-in-out infinite alternate}
 @keyframes schwenk{0%{transform:scale(1.12) translateX(-60px)}100%{transform:scale(1.12) translateX(60px)}}
 .zoomrein{transition:transform 7s ease-out!important;transform:scale(1.18)!important}
+.zoomrein.kurz{transition-duration:3.5s!important}
 
 /* Platzhalter */
 .ph{display:block;border:3px solid rgba(255,255,255,.18);overflow:hidden}
@@ -65,13 +67,16 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .traum #traumglow,.traum #traumrand{opacity:1}
 .traum #welt{filter:sepia(.35) saturate(1.25) brightness(1.1) blur(.6px)}
 .einfrieren #welt{filter:grayscale(.75) brightness(.78) contrast(.95)!important}
+.handyoffen.einfrieren #welt{filter:grayscale(.75) brightness(.55) blur(2.5px)!important}
 .einfrieren .atmen,.einfrieren .drift,.einfrieren .schwenk,.einfrieren #licht,.einfrieren #koernung{animation-play-state:paused!important}
 .waermer #welt{filter:sepia(.32) saturate(1.3) brightness(1.08) hue-rotate(-10deg)!important;transition:filter 9s ease!important}
 #tunnel{opacity:0;transition:opacity .3s;background:radial-gradient(circle at 50% 50%,transparent var(--t,70%),#000 calc(var(--t,70%) + 12%))}
-#lider-o,#lider-u{position:absolute;left:-5%;width:110%;height:52%;background:#000;transition:transform 2.6s ease-in-out}
+#lider-o,#lider-u{position:absolute;left:-5%;width:110%;height:60%;transition:transform 2.6s ease-in-out}
+#lider-o{background:linear-gradient(to bottom,#000 0,#000 84%,rgba(0,0,0,.55) 92%,rgba(0,0,0,0) 100%)}
+#lider-u{background:linear-gradient(to top,#000 0,#000 84%,rgba(0,0,0,.55) 92%,rgba(0,0,0,0) 100%)}
 #lider-o{top:0;border-radius:0 0 50% 50%/0 0 30% 30%;transform:translateY(-102%)}
 #lider-u{bottom:0;border-radius:50% 50% 0 0/30% 30% 0 0;transform:translateY(102%)}
-#lider.halb #lider-o{transform:translateY(-55%)}#lider.halb #lider-u{transform:translateY(55%)}
+#lider.halb #lider-o{transform:translateY(-62%)}#lider.halb #lider-u{transform:translateY(62%)}
 #lider.zu #lider-o{transform:translateY(0)}#lider.zu #lider-u{transform:translateY(0)}
 #licht{opacity:0;transition:opacity 1s}
 #licht.an{opacity:1}
@@ -262,6 +267,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #menuabz,#credits{background:rgba(6,6,10,.97);z-index:55}
 /* Vibration: Bild zittert kurz, Handy ruckelt */
 #kamera.zittern{animation:zittern .55s linear}
+#kamera.wackeln{animation:wackelbild .5s linear}
 @keyframes zittern{0%,100%{translate:0 0}10%{translate:-3px 1px}20%{translate:3px -1px}30%{translate:-3px 0}40%{translate:2px 1px}50%{translate:-2px -1px}60%{translate:3px 0}70%{translate:-2px 1px}80%{translate:2px 0}90%{translate:-1px 0}}
 #handy.zittert .geraet{animation:hzittern .6s linear}
 @keyframes hzittern{0%,100%{transform:none}15%{transform:translateX(-4px) rotate(-.6deg)}30%{transform:translateX(4px) rotate(.6deg)}45%{transform:translateX(-3px) rotate(-.4deg)}60%{transform:translateX(3px) rotate(.4deg)}75%{transform:translateX(-2px)}90%{transform:translateX(1px)}}
@@ -328,7 +334,6 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #stoppuhr{z-index:58}
 
 /* ================= V6 ================= */
-@font-face{font-family:'Bricolage Grotesque';src:url(fonts/bricolage.woff2) format('woff2');font-weight:200 800;font-stretch:75% 100%;font-display:swap}
 #schwarz.schnell{transition:opacity .1s}
 #weiss{background:#fff;opacity:0}
 #strobo{background:#fff;opacity:0;z-index:6}
@@ -458,7 +463,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #karte .k-inhalt{left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:1600px}
 #karte::after{background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(11,17,33,.9),rgba(11,17,33,.55) 70%,rgba(11,17,33,.3))}
 /* Gesichts-Varianten über dem Bild */
-.ebene .innen img.ov-v{position:absolute;inset:auto;object-fit:fill;opacity:0;transition:opacity .38s ease;pointer-events:none}
+.ebene .innen img.ov-v{position:absolute;inset:auto;object-fit:fill;opacity:0;transition:opacity .18s ease;pointer-events:none}
 .ebene .innen img.ov-v.blink{transition:opacity .06s linear}
 .ebene .innen img.ov-v.zu,.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.fest{opacity:1}
 .ebene .innen img.ov-v.mimik{opacity:1;transition:opacity .9s ease}
@@ -562,3 +567,14 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @media (prefers-reduced-motion:reduce){#weiter,#start .tippen,#schema.wartet .th,#karteikarten.wartet::after,#handyknopf.puls,#koernung{animation:none!important}}
 /* V8.6: § 823-Zettel – Kästchen links nicht mehr abgeschnitten */
 #schema{width:820px;padding-left:112px}
+
+/* V8.8 (H): Test-Protokoll – Knopf ⚑ und Eingabe (nur Testversion) */
+#fehlerknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 96px);right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:0;border:none;border-radius:12px;
+  background:rgba(120,20,30,.55);color:rgba(255,220,220,.9);font:600 20px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+@media (orientation:portrait){#fehlerknopf{display:none}}
+#fehlerbox{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55)}
+#fehlerbox.an{display:flex}
+#fehlerbox .fb-in{width:min(560px,92vw);display:flex;flex-direction:column;gap:10px;padding:18px;border-radius:16px;background:#141a28;color:#e9edf7;font:400 15px/1.35 system-ui,sans-serif}
+#fehlerbox small{color:#9aa6c0}#fehlerbox textarea{width:100%;font:400 17px system-ui;padding:10px;border-radius:10px;border:1px solid #33405c;background:#0b101b;color:#fff}
+#fehlerbox .fb-k{display:flex;gap:8px;flex-wrap:wrap}#fehlerbox button{font:600 15px system-ui;padding:9px 14px;border-radius:10px;border:1px solid #33405c;background:#1e2740;color:#fff}
+#fehlerbox .ok{background:#2d5bd6;border-color:#2d5bd6}

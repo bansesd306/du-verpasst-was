@@ -350,7 +350,10 @@ const Rahmen = (() => {
       return;
     }
     const f = $('b-frage'), ja = $('b-ja'), nein = $('b-nein');
-    const zweit = offen > 1 ? T('beenden_2', 'Ganz sicher? Da waren noch {n} Enden. Und Lynn.').replace('{n}', offen) : offen === 1 ? 'Ganz sicher? Da war noch ein Ende. Und Lynn.' : 'Ganz sicher? Alle Enden, okay. Aber Lynn?';
+    // V8.8 (G45): wer das Lynn-Ende schon hatte, wird nicht mehr nach Lynn gefragt
+    const lynnGesehen = (S().abz || []).includes('Montagabend');
+    const zweit = lynnGesehen ? (offen > 1 ? T('beenden_2', 'Ganz sicher? Da waren noch {n} Enden. Und Lynn.').replace('{n}', offen).replace(/\s*Und Lynn\.?$/, '') : offen === 1 ? 'Ganz sicher? Da war noch ein Ende.' : 'Ganz sicher?')
+      : offen > 1 ? T('beenden_2', 'Ganz sicher? Da waren noch {n} Enden. Und Lynn.').replace('{n}', offen) : offen === 1 ? 'Ganz sicher? Da war noch ein Ende. Und Lynn.' : 'Ganz sicher? Alle Enden, okay. Aber Lynn?';
     f.textContent = stufe === 1 ? T('beenden_1', 'Sicher, dass du nichts verpasst hast?') : zweit;
     nein.textContent = stufe === 1 ? T('beenden_1_nein', 'Nein, nochmal') : T('beenden_2_nein', 'Okay, nochmal');
     ja.textContent = stufe === 1 ? T('beenden_1_ja', 'Ja … glaub schon') : T('beenden_2_ja', 'Ja. Ich hoff’s.');

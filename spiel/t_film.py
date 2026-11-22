@@ -11,8 +11,7 @@ async def main():
         pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and '404' not in m.text else None)
         await pg.goto('http://localhost:8765/index.html'); await pg.wait_for_timeout(500)
         await pg.mouse.click(640,360); await pg.wait_for_timeout(300); await pg.evaluate("document.querySelector('#z-menue .spielen').click()"); await pg.wait_for_timeout(1500)
-        await pg.evaluate(f"Spiel._debug.neustart('{LABEL}')"); await pg.wait_for_timeout(80)
-        await pg.evaluate(f"Object.assign(Spiel.V, {json.dumps(V)})")
+        await pg.evaluate(f"Spiel._debug.neustart('{LABEL}', V => Object.assign(V, {json.dumps(V)}))"); await pg.wait_for_timeout(80)
         letzte=None
         for i in range(MAX):
             await pg.wait_for_timeout(1700)

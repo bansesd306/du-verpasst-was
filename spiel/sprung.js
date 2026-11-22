@@ -23,21 +23,22 @@
   const PARTY = { zugesagt: true, aufbruch: '21:20', ankunft: '21:40', besucht: 2, kueche: true, balkon: true };
   const WEGE = {
     'Zuhause A': { v: { weg: 'A', flow: true, phantom: true, punkte: 0 }, typ: 'zuhause' },
-    'Zuhause B': { v: { weg: 'B', punkte: 7 }, typ: 'zuhause' },
+    'Zuhause B': { v: { weg: 'B', punkte: 7, notiz: true }, typ: 'zuhause' },
     'Party': { v: Object.assign({ tanz: true, punkte: 4 }, PARTY), typ: 'party', lynn: 'geschaut' },
     'Afterparty': { v: Object.assign({ punkte: 4, afterpartyStory: true }, PARTY), typ: 'afterparty', lynn: 'geschaut' },
     'Lynn glücklich': { v: Object.assign({ tanz: true, mittanzen: true, punkte: 3 }, PARTY), typ: 'gluecklich', lynn: 'gm' },
   };
   // Uhr beim Springen: Uhrzeit aus der Abschnitts-Überschrift, sonst Kapitelbeginn
-  const KAPUHR = { K1: '21:07', K2: '21:20', KNOTEN: '21:20', K3: '21:40', K4: null, K5: null };
+  const KAPUHR = { K1: '21:07', K2: '21:20', KNOTEN: '21:20', K3: '21:40', K4: null, K5: 'Sa 10:32', K6: 'So 09:00', EPILOG: 'Mo 07:30' };
   let wegWahl = 'Zuhause A';
   try { wegWahl = localStorage.getItem('dvw-sprung-weg') || wegWahl; } catch (e) { }
 
   function springen(label, kapId, absName) {
     const w = WEGE[wegWahl], z = zeileVon[label];
     if (window.Ton) Ton.init();
-    Spiel._debug.neustart(label);
-    const V = Spiel.V, setze = o => Object.entries(o).forEach(([k, v]) => V[k] = (typeof v === 'string' && /\d:\d\d$/.test(v)) ? Spiel._debug.zeit(v) : v);
+    // V8.8 (G61): Weg-Variablen setzen, BEVOR das Skript losläuft (sonst nimmt es an der Sprungstelle falsche Zweige)
+    Spiel._debug.neustart(label, V => {
+    const setze = o => Object.entries(o).forEach(([k, v]) => V[k] = (typeof v === 'string' && /\d:\d\d$/.test(v)) ? Spiel._debug.zeit(v) : v);
     const partyWeg = wegWahl !== 'Zuhause A' && wegWahl !== 'Zuhause B';
     const vw = Object.assign({}, w.v);
     if (partyWeg && z < SETZT.kap3) { delete vw.ankunft; delete vw.kueche; delete vw.balkon; delete vw.besucht; delete vw.tanz; delete vw.mittanzen; delete vw.punkte; delete vw.afterpartyStory; }
@@ -48,8 +49,14 @@
     // Uhr
     let uhr = (absName.match(/(\d{1,2}:\d{2})/) || [])[1] || KAPUHR[kapId];
     if (kapId === 'K4') uhr = partyWeg ? 'Sa 01:00' : '23:40';
+    if (kapId === 'K5') {   // V8.8: Kapitel 5 läuft über drei Tage – Tag aus der Abschnitts-Überschrift
+      const tag = /Sonntag/.test(absName) ? 'So' : /Montag|Prüfung|Ende/.test(absName) ? 'Mo' : 'Sa';
+      const fest = { So: 'So 09:00', Mo: /Ende/.test(absName) ? 'Mo 18:30' : /Prüfung/.test(absName) ? 'Mo 11:00' : 'Mo 06:30', Sa: /abend/.test(absName) ? 'Sa 19:00' : 'Sa 10:32' };
+      uhr = uhr && !/^(Sa|So|Mo) /.test(uhr) ? tag + ' ' + uhr : fest[tag];
+    }
     if (uhr) { V.uhr = Spiel._debug.zeit(uhr); V.uhr_zeigen = true; }
     Spiel._debug.zeigeUhr();
+    });
     panel.classList.remove('an');
   }
 

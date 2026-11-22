@@ -14,6 +14,7 @@ const Spiel = (() => {
   let letzteStory = '', storyMin = 0;
   let verlauf = [], kapitelZeiten = [], pfad = [], pfadPlus = false, abzQueue = [], abzNeu = [];
   let aktBild = null, partyAn = false, partyZaehler = 0, poolAktiv = null, t0 = performance.now();
+  const PR = (t, x) => { if (window.Protokoll) try { Protokoll.log(t, x); } catch (e) { } };   // V8.8 (H): Test-Protokoll
   const ABBRUCH = Symbol('abbruch'); const besuchtL = new Set(); const fehlerLog = [];
 
   // ---------------- Speicher ----------------
@@ -154,6 +155,8 @@ const Spiel = (() => {
     if (tippWarter) tippWarter();
   }
   B.addEventListener('pointerdown', aufTippen);
+  // V8.8 (G66): am Laptop mit Leertaste/Enter weitertippen
+  addEventListener('keydown', e => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat && !(window.Rahmen && Rahmen.sichtbar) && !e.target.closest('input,textarea,select,button')) { e.preventDefault(); aufTippen({ target: B }); } });
 
   // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
   // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
@@ -169,11 +172,11 @@ const Spiel = (() => {
     blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
     // V8.7 (D2): von sich aus nachschauen zählt mit – jeder zweite Blick = 1 Handy-Punkt (höchstens 3)
     if (blick.zahl % 2 === 0 && blick.zahl <= 6) V.punkte = (V.punkte || 0) + 1;
-    Ton.spiele('display_klick');
-    haendeTausch('sperr'); Handy.sperr();
-    if (aktBild && aktBild.stimmung === 'pruefung') Handy.aus();   // Prüfung: Handy ist aus
+    Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
+    haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
+    if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu() { if (!blick.offen) return; blick.offen = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); Ton.spiele('display_klick', { vol: .5 }); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
@@ -200,13 +203,18 @@ const Spiel = (() => {
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
   let lynnHand = 0, lynnHaende = -1;
-  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz'];
+  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k'];
+  let gesteGeskriptet = false;
   async function lynnGeste(ins) {
+    if (gesteGeskriptet) { gesteGeskriptet = false; return; }
     if (!aktBild || !LYNN_POSEN.includes(aktBild.code) || Handy.offen) return;
     // V8.2: seltener und langsamer wechseln (nur jede dritte Lynn-Zeile mit Händen, weiche Überblendung)
     // V8.5: Zwischenposen aus Gemini: N14m (redet, ohne Hände), Hände wechseln zwischen N14r, N14h, N14rz
+    // V8.8 (A3): mehr Gesichter (N14t, N14s, N14k) – Lynn wechselt flüssiger, Hände nur jede dritte Zeile
     let ziel = 'N14';
-    if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % 3; if (lynnHand === 2) { lynnHaende = (lynnHaende + 1) % 3; ziel = ['N14r', 'N14h', 'N14rz'][lynnHaende]; } else if (lynnHand === 0) ziel = 'N14m'; }
+    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14k', 'H'];
+    if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % FOLGE.length; ziel = FOLGE[lynnHand]; if (ziel === 'H') { lynnHaende = (lynnHaende + 1) % 3; ziel = ['N14r', 'N14h', 'N14rz'][lynnHaende]; } }
+    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
     if (BILDER[ziel] && !BILDER[ziel].datei) ziel = 'N14';
     if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
@@ -222,36 +230,39 @@ const Spiel = (() => {
     textbox.classList.toggle('schwarzmodus', $('#schwarz').classList.contains('an') && !Handy.offen);
     if (ins.sprecher) { nameEl.textContent = ins.sprecher; nameEl.style.background = SPRECHERFARBE[ins.sprecher] || '#2d3550'; nameEl.classList.add('an'); } else nameEl.classList.remove('an');
     zeigeTextbox(true); textEl.textContent = '';
-    verlauf.push({ n: ins.sprecher, t: voll, g: !!ins.stil }); if (verlauf.length > 60) verlauf.shift();
+    verlauf.push({ n: ins.sprecher, t: voll, g: !!ins.stil }); PR('text', (ins.sprecher ? ins.sprecher + ': ' : ins.stil ? '~ ' : '') + voll); if (verlauf.length > 60) verlauf.shift();
     rueck.push({ ins, voll, bild: aktBild && aktBild.code !== 'film' ? (aktBild.ersatzFuer || aktBild.code) : null, gesicht: gesichtFest, schwarz: $('#schwarz').classList.contains('an'), handy: B.classList.contains('handyoffen'), uhr: $('#uhr').textContent });
     tippt = true; ueberspringen = false; let s = '';
+    const vtIdx = ins.vertipp ? voll.indexOf(ins.vertipp) : -1; let vtFertig = false, zeichenNr = 0;
     const vSp = aktBild && typeof VARIANTEN !== 'undefined' && VARIANTEN[aktBild.code] && VARIANTEN[aktBild.code].spricht;
     const spEl = vSp && ins.sprecher && vSp[ins.sprecher] && !gesichtFest ? ovEl(vSp[ins.sprecher]) : null;
     if (spEl) spEl.classList.add('spricht');
     for (let i = 0; i < teile.length; i++) {
       const t = teile[i];
       if (t.cue) { if (!ueberspringen) Ton.spiele(t.cue); continue; }
-      s += t.ch; if (!ueberspringen) { textEl.textContent = s; const ch = t.ch; const nx = teile[i + 1] && teile[i + 1].ch;
+      s += t.ch; zeichenNr++;
+      if (vtIdx >= 0 && !vtFertig && zeichenNr === vtIdx + ins.vertipp.length) {
+        // V8.8 (K): er tippt den Namen, merkt es nach ~0,6 s, löscht „ynn“ und schreibt normal weiter
+        vtFertig = true;
+        if (!ueberspringen && !schnell) { textEl.textContent = s; await warte(.6); for (let k = ins.vertipp.length; k > 0; k--) { s = s.slice(0, -1); textEl.textContent = s; Ton.spiele('tipp', { rate: .8, vol: .45 }); await warte(.11); } await warte(.25); }
+        else { s = s.slice(0, -ins.vertipp.length); if (schnell) vz += .9 + ins.vertipp.length * .11; }
+        continue;
+      }
+      if (!ueberspringen) { textEl.textContent = s; const ch = t.ch; const nx = teile[i + 1] && teile[i + 1].ch;
         let d = 40; if (ch === '…') d = 460; else if (/\p{L}/u.test(ch) && ch === s.slice(-2, -1)) d = 200; else if ('.?!'.includes(ch) && nx !== '“' && nx !== '.') d = 300; else if (ch === ',' || ch === '–') d = 160; else if (ch === '“' && '.?!'.includes(s.slice(-2, -1))) d = 250;
         vz += d / 1000; if (schnell) d = 2; await new Promise(r => setTimeout(r, d)); await pause(); pruef(g); }
     }
-    textEl.textContent = voll; tippt = false;
-    if (spEl) setTimeout(() => spEl.classList.remove('spricht'), 350);
-    if (ins.vertipp && schnell) vz += .9 + ins.vertipp.length * .11;
-    if (ins.vertipp && !schnell) {
-      // Er tippt sich vertan („Lynn“), es bleibt kurz stehen, dann wird es Buchstabe für Buchstabe zurückgelöscht.
-      await warte(.6); let w = voll; const i = w.indexOf(ins.vertipp);
-      if (i >= 0) for (let k = ins.vertipp.length; k > 0; k--) { w = w.slice(0, i + k - 1) + w.slice(i + k); textEl.textContent = w; Ton.spiele('tipp', { rate: .8, vol: .45 }); await warte(.11); }
-      const r = rueck[rueck.length - 1]; if (r) r.voll = w; verlauf[verlauf.length - 1].t = w;
-      await warte(.3);
-    }
+    const endText = vtIdx >= 0 ? voll.slice(0, vtIdx) + voll.slice(vtIdx + ins.vertipp.length) : voll;
+    textEl.textContent = endText; tippt = false;
+    if (vtIdx >= 0) { const r = rueck[rueck.length - 1]; if (r) r.voll = endText; verlauf[verlauf.length - 1].t = endText; }
+    if (spEl) setTimeout(() => spEl.classList.remove('spricht'), 220);
     if (ins.sperre && schnell) vz += ins.sperre;
     if (ins.sperre && !schnell) { sperreEl.classList.add('an'); const i = sperreEl.querySelector('i'); i.style.transition = 'none'; i.style.width = '0'; void i.offsetWidth; i.style.transition = `width ${ins.sperre}s linear`; i.style.width = '100%'; await warte(ins.sperre); sperreEl.classList.remove('an'); }
     if (ins.auto) { await warte(.35); return; }
     vz += 1.0; await tipp();
   }
   function gedankeKurz(t) { textEl.className = 'gedanke'; textEl.textContent = t; nameEl.classList.remove('an'); zeigeTextbox(true); }
-  const SPRECHERFARBE = { Jonas: '#b5652a', Lena: '#b03f6e', Tim: '#1f857e', Mia: '#7a4fb8', Lynn: '#46557a', Ich: '#3a4250', Ben: '#3b6aa8', Mama: '#8f7745' };
+  const SPRECHERFARBE = { Jonas: '#b5652a', Lena: '#b03f6e', Tim: '#1f857e', Mia: '#7a4fb8', Lynn: '#46557a', Ich: '#3a4250', Ben: '#3b6aa8', Mama: '#8f7745', Paul: '#5e8f2e', Sophie: '#2a8a96', Senner: '#5a5a66', Mara: '#b0567e' };
 
   // ---------------- Wahl ----------------
   function knoepfe(liste) {
@@ -270,7 +281,7 @@ const Spiel = (() => {
     while (true) {
       weiterEl.classList.remove('an');
       const o = await knoepfe(opts);
-      rueck = []; rueckZu();
+      rueck = []; rueckZu(); PR('wahl', o.label + (opts.length > 1 ? '  [von: ' + opts.map(x => x.label).join(' / ') + ']' : ''));
       S.entsch[ins.id + ':' + o.idx] = 1; speichere(S);
       if (o.tipp) {
         const ok = await tippWahl(o);
@@ -322,13 +333,18 @@ const Spiel = (() => {
   function vorladenAlle() {
     // in Spielreihenfolge: die Bilder, die als Erstes kommen, zuerst
     const reihe = []; prog.forEach(p => { if (p.t === 'cmd' && p.name === 'bild') { const c = p.arg.split(/\s+/)[0]; const e = eintrag(c); if (e.datei && !reihe.includes(e.datei)) reihe.push(e.datei); if (e.blinzeln && BILDER[e.blinzeln]) reihe.push(BILDER[e.blinzeln].datei); } });
-    Object.values(BILDER).forEach(e => { if (e.datei && !reihe.includes(e.datei)) reihe.push(e.datei); });
+    // V8.8 (G52): nur Bilder, die das Skript irgendwo nennt (auch im Handy), nicht die ganze Liste
+    const roh = document.getElementById('story').textContent;
+    Object.keys(BILDER).forEach(k => { const e = eintrag(k); if (e.datei && !reihe.includes(e.datei) && new RegExp('(^|[\\s|])' + k + '($|[\\s|])', 'm').test(roh)) reihe.push(e.datei); });
     let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 30)); };
     for (let k = 0; k < 3; k++) naechstes();
   }
+  let bildNr = 0;
   async function zeigeBild(code, modus = '') {
-    const e = eintrag(code); aktCodeNeu = code; gesichtFest = null;
+    const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
     if (e.datei) { const ok = lade(e.datei); await Promise.race([ok, new Promise(r => setTimeout(r, 2500))]); }
+    if (nr !== bildNr) return;   // V8.8 (G63): inzwischen kam ein neueres Bild – dieses nicht mehr zeigen
+    PR('bild', code + (modus ? ' ' + modus : ''));
     $('#schwarz').classList.remove('an', 'langsam');
     if (modus !== 'gesicht' && modus !== 'pool' && modus !== 'pose' && modus !== 'geste') { zeigeTextbox(false); kamera.classList.remove('zoomrein'); kamera.style.transform = ''; poolAktiv = null; }
     if (modus === 'traum') { B.classList.add('traum'); Ton.spiele('flashback'); }
@@ -337,27 +353,28 @@ const Spiel = (() => {
     const innen = document.createElement('div'); innen.className = 'innen';
     let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
+    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
     innen.innerHTML = html + overlayHTML(code);
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
-    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${(Math.random() * 2.4).toFixed(2)}s;animation-duration:${(1.6 + Math.random() * 1.8).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
+    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
     if (e.funken && e.datei) { const f = document.createElement('div'); f.className = 'funken'; f.innerHTML = e.funken.map((q, i) => `<i style="left:${q[0] * 100}%;top:${q[1] * 100}%;animation-delay:${-i * .13}s"></i>`).join(''); innen.appendChild(f); }
     if (e.figur) { innen.classList.add('atmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 4.6) + 's'; }
     // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)
     if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
-    if (partyAn && e.stimmung === 'party') huelle.classList.add('schwenk');
+    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add('f-dunkel'));
     huelle.appendChild(innen); neu.appendChild(huelle);
-    if (modus === 'ran') { huelle.style.transform = 'scale(.9)'; huelle.style.transition = 'transform .9s cubic-bezier(.2,.7,.2,1)'; }
-    if (modus === 'ruck') { huelle.style.transform = 'scale(1.09)'; huelle.style.transition = 'transform .32s cubic-bezier(.2,.9,.3,1)'; }
-    const dauer = modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
+    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
+    if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
+    if (modus === 'ruck') { neu.style.transform = 'scale(1.09)'; neu.style.transition += ', transform .32s cubic-bezier(.2,.9,.3,1)'; }
     welt.appendChild(neu); void neu.offsetWidth; neu.classList.add('an');
-    if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { huelle.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
+    if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
     if (modus === 'ran') alt.forEach(a => { const h = a.querySelector('.innen'); if (h) { h.style.transition = 'transform .7s ease-in'; h.style.transform = 'scale(1.1)'; } });
     umgebung(e);
-    B.classList.toggle('tanzflaeche', /^(N35|MM|MK|N32b)/.test(code));
+    B.classList.toggle('tanzflaeche', /^(N35|MM|MK|N32b|MIA_(?!HANDY_LEER))/.test(code));
     alt.forEach(a => { a.style.transition = `opacity ${dauer}s ease`; if (modus === 'halb') { const h = a.querySelector('.innen'); h.style.transition = 'transform 1.6s ease-in'; h.style.transform = 'scale(1.18)'; } a.classList.remove('an'); setTimeout(() => a.remove(), dauer * 1000 + 80); });
     aktBild = Object.assign({ code }, e, { el: neu });
     // Fenster-Overlay und Handylicht
@@ -451,6 +468,7 @@ const Spiel = (() => {
 
   // ---------------- Uhr-Animationen ----------------
   async function uhrSpringe(ziel) {
+    if (!(ziel > V.uhr)) return;   // V8.8 (G15): nie rückwärts
     const von = V.uhr; const g = gen; uhrEl.classList.add('springt');
     const n = 14; for (let i = 1; i <= n; i++) { V.uhr = Math.round(von + (ziel - von) * (1 - Math.pow(1 - i / n, 2))); zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 5 : 70)); pruef(g); }
     V.uhr = ziel; zeigeUhr(); uhrEl.classList.remove('springt');
@@ -462,7 +480,7 @@ const Spiel = (() => {
 
   // ---------------- Effekte ----------------
   const lider = $('#lider');
-  async function augen(zu) { lider.classList.remove('halb'); lider.classList.toggle('zu', zu); await warte(2.7); }
+  async function augen(zu, kurz) { lider.classList.remove('halb'); lider.classList.toggle('zu', zu); await warte(kurz ? 1.8 : 2.7); }
   async function effekt(name, arg) {
     switch (name) {
       case 'einfrieren':
@@ -471,16 +489,16 @@ const Spiel = (() => {
         break;
       case 'traum': if (arg.startsWith('aus')) { B.classList.remove('traum'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('traum'); Ton.spiele('flashback'); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
-      case 'heranzoomen': void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
+      case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
       case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
         const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
-      case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('W_schritte'); await warte(.5); break;
+      case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('schritte', { dauer: .6, vol: .7 }); await warte(.5); break;
       case 'schlummer': {
-        const min = +arg || 10; lider.classList.add('halb'); await warte(1); await augen(true); Ton.lautMaster(.2, 1);
-        await uhrSpringe(V.uhr + min); await warte(1); Ton.lautMaster(.9, .5); await augen(false); break;
+        const min = +arg || 10; lider.classList.add('halb'); await warte(.7); await augen(true, true); Ton.lautMaster(.2, 1);
+        await uhrSpringe(V.uhr + min); await warte(.6); Ton.lautMaster(.9, .5); await augen(false, true); break;
       }
       case 'einschlafen': {
         Ton.lautMaster(.3, 2); lider.classList.add('halb'); await warte(2); lider.classList.remove('halb'); await warte(.9);
@@ -488,7 +506,7 @@ const Spiel = (() => {
       }
       case 'tunnel': {
         const t = $('#tunnel'); t.style.opacity = 1; let p = 75; const g = gen;
-        (async () => { while (p > 0 && g === gen && t.style.opacity === '1') { p -= 1.2; t.style.setProperty('--t', p + '%'); await new Promise(r => setTimeout(r, 70)); } })();
+        (async () => { while (p > 0 && g === gen && t.style.opacity === '1') { p -= 1.2; t.style.setProperty('--t', p + '%'); await new Promise(r => setTimeout(r, 70)); await pause(); } })();
         break;
       }
       case 'tanzen': B.classList.toggle('tanzen', arg !== 'aus'); if (arg !== 'aus') { welt.style.filter = 'saturate(1.4) blur(1.5px)'; kamera.style.transform = 'scale(1.08)'; } else { welt.style.filter = ''; kamera.style.transform = ''; } break;
@@ -536,13 +554,12 @@ const Spiel = (() => {
   let letzteVib = 0;
   function bzzz(o = {}) {
     const jetzt = performance.now(); if (o.entprellen && jetzt - letzteVib < 1400) return 0; letzteVib = jetzt;
-    let ort = 'normal';
+    // V8.8 (G1): überall derselbe Klang wie am Anfang (Bett); nur Party/Straße gedämpft (Hosentasche)
+    let ort = 'bett';
     if (o.dumpf) ort = 'tasche';
     else if (aktBild && ['party', 'flur', 'balkon', 'bad', 'strasse'].includes(aktBild.stimmung)) ort = 'tasche';
-    else if (aktBild && BETT.includes(aktBild.code)) ort = 'bett';
-    else if (aktBild && TISCH.includes(aktBild.code)) ort = 'tisch';
     const d = Ton.vibration(ort, o);
-    if (!o.leise && (ort !== 'tasche' || o.phantom)) { kamera.classList.remove('zittern'); void kamera.offsetWidth; kamera.classList.add('zittern'); }
+    if (!o.leise && (ort !== 'tasche' || o.phantom)) { kamera.classList.remove('zittern'); void kamera.offsetWidth; kamera.classList.add('zittern'); clearTimeout(bzzz.t); bzzz.t = setTimeout(() => kamera.classList.remove('zittern'), 600); }   // G62
     const h = document.getElementById('handy'); if (Handy.offen) { h.classList.remove('zittert'); void h.offsetWidth; h.classList.add('zittert'); }
     return d;
   }
@@ -616,8 +633,8 @@ const Spiel = (() => {
   }
   async function lernplan(t) {
     const el = $('#lernplan');
-    if (t[0] === 'an') { el.querySelectorAll('li').forEach(l => l.classList.remove('ok', 'durch')); el.classList.add('an'); Ton.spiele('blaettern', { vol: .5 }); await warte(.6); return; }
-    if (t[0] === 'aus') { el.classList.remove('an'); await warte(.5); return; }
+    if (t[0] === 'an') { el.querySelectorAll('li').forEach(l => l.classList.remove('ok', 'durch', 'blick')); el.classList.add('an'); Ton.spiele('blaettern', { vol: .5 }); await warte(.6); return; }
+    if (t[0] === 'aus') { el.classList.remove('an'); el.querySelectorAll('li').forEach(l => l.classList.remove('blick')); await warte(.5); return; }
     // V8.5: Stand zeigen, ohne neu zu schreiben: @lernplan stand ok1 ok2 durch3 … / @lernplan blick 4
     if (t[0] === 'stand') { el.querySelectorAll('li').forEach(l => l.classList.remove('ok', 'durch', 'blick')); t.slice(1).forEach(x => { const m = x.match(/^(ok|durch)(\d)$/); const li = m && el.querySelectorAll('li')[+m[2] - 1]; if (li) li.classList.add(m[1]); }); el.classList.add('an'); Ton.spiele('blaettern', { vol: .4 }); await warte(.6); return; }
     if (t[0] === 'blick') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) li.classList.add('blick'); await warte(.4); return; }
@@ -668,14 +685,15 @@ const Spiel = (() => {
   let aktCodeNeu = '';
   function umgebung(e) {
     const st = (e && e.stimmung) || '';
-    pModus = st === 'strasse' ? 'regen' : st === 'pruefung' ? 'staub' : st === 'balkon' ? 'atem' : (e && /^(N35|MM|MK)/.test(e.code || aktCodeNeu)) ? 'konfetti' : '';
+    pModus = st === 'strasse' ? 'regen' : st === 'pruefung' ? 'staub' : st === 'balkon' ? 'atem' : (e && /^(N35|MM|MK|MIA_)/.test(e.code || aktCodeNeu)) ? 'konfetti' : '';
     if (pModus && !pLauf) { pLauf = true; requestAnimationFrame(pSchritt); }
     clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt');
     if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); autoT = setTimeout(f, 22000 + Math.random() * 26000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
   }
   function pSchritt() {
     const W = 960, H = 540; pctx.clearRect(0, 0, W, H);
-    if (!pModus || Handy.offen && pModus !== 'regen') { pTeile = []; pLauf = false; return; }
+    if (!pModus) { pTeile = []; pLauf = false; return; }
+    if (Handy.offen && pModus !== 'regen') { pTeile = []; requestAnimationFrame(pSchritt); return; }   // V8.8 (G20): Schleife läuft weiter
     const ziel = pModus === 'regen' ? 90 : pModus === 'staub' ? 26 : pModus === 'konfetti' ? 70 : 0;
     while (pTeile.length < ziel) pTeile.push({ x: Math.random() * W, y: Math.random() * H, v: pModus === 'regen' ? 7 + Math.random() * 5 : .08 + Math.random() * .15, a: Math.random(), w: Math.random() * 6.28 });
     if (pTeile.length > ziel) pTeile.length = ziel;
@@ -708,7 +726,7 @@ const Spiel = (() => {
     tag.textContent = m ? m[1] : t; uhr.innerHTML = m ? [...m[2]].map((c, i) => `<span style="animation-delay:${.25 + i * .07}s">${c}</span>`).join('') : '';
     const zahl = m && m[4] ? +m[4] : null, einheit = m && m[5] ? m[5] : '';
     noch.textContent = zahl !== null ? `Noch ${zahl} ${einheit}` : '';
-    const erste = ersteKarte; ersteKarte = false;
+    const erste = ersteKarte && pc < labels['K1']; ersteKarte = false;   // V8.8 (G5): Vorspann nur am echten Anfang, nicht nach einem Sprung
     k.classList.remove('an', 'langsam'); void k.offsetWidth;
     if (erste && schnell) vz += 5.5;
     if (erste && !schnell) {
@@ -725,7 +743,7 @@ const Spiel = (() => {
     await abzeichenZeigen();
     await warte(erste ? 2.2 : 1.2); await tipp(); Ton.introAus(erste ? 6 : 2.4); k.classList.remove('an', 'vorspann'); await warte(erste ? 1.6 : .8);
   }
-  function abzeichen(name) { if (!S.abz.includes(name)) { S.abz.push(name); speichere(S); abzQueue.push(name); } if (!abzNeu.includes(name)) abzNeu.push(name); }
+  function abzeichen(name) { if (!S.abz.includes(name)) { S.abz.push(name); speichere(S); abzQueue.push(name); if (!abzNeu.includes(name)) abzNeu.push(name); } }
   async function abzeichenZeigen() {
     while (abzQueue.length) {
       const n = abzQueue.shift(); const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f']; t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}</div>`;
@@ -737,7 +755,7 @@ const Spiel = (() => {
   // ---------------- Befehle ----------------
   async function befehl(ins) {
     const a = ersetze(ins.arg || ''); const teile = a.split(/\s+/).filter(Boolean);
-    if (/^(benachrichtigung|nachricht!?|foto|video|schreibt|tippe)$/.test(ins.name)) { blick.neu++; if (blick.offen) { blick.offen = false; Handy.zu(); } }
+    if (/^(benachrichtigung|nachricht!?|foto|video|schreibt|tippe)$/.test(ins.name)) { blick.neu++; if (blick.offen) blickZu(true); }
     switch (ins.name) {
       case 'setze': {
         const m = a.match(/^([\wÄÖÜäöüß]+)\s*(=|\+|-)?\s*(.*)$/); if (!m) break;
@@ -761,8 +779,8 @@ const Spiel = (() => {
         if (a.startsWith('+')) { V.uhr += +wert(a.slice(1)) || 0; zeigeUhr(); break; }
         V.uhr = zeit(a); zeigeUhr(); break;
       }
-      case 'karte': await karte(a); break;
-      case 'bild': await zeigeBild(teile[0], teile[1] || ''); break;
+      case 'karte': PR('karte', a); await karte(a); break;
+      case 'bild': if (teile[1] === 'geste' && LYNN_POSEN.includes(teile[0])) gesteGeskriptet = true; await zeigeBild(teile[0], teile[1] || ''); break;
       case 'schwarz': zeigeTextbox(false); $('#schwarz').classList.toggle('langsam', a === 'langsam'); $('#schwarz').style.transition = a === 'schnitt' ? 'none' : ''; $('#schwarz').classList.add('an'); await warte(a === 'langsam' ? 1.8 : a === 'schnitt' ? .05 : .5); $('#schwarz').style.transition = ''; break;
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
@@ -775,7 +793,7 @@ const Spiel = (() => {
       case 'senden': zeigeTextbox(false); await Handy.abschicken(); await warte(.6); break;
       case 'loeschen': zeigeTextbox(false); await Handy.wegloeschen(); await warte(.3); break;
       case 'zettel': { const z = $('#zettel'); if (a === 'aus') z.classList.remove('an'); else { z.textContent = a; z.classList.add('an'); } break; }
-      case 'effekt': await effekt(teile[0], teile.slice(1).join(' ')); break;
+      case 'effekt': PR('effekt', a); await effekt(teile[0], teile.slice(1).join(' ')); break;
       case 'party': party(a !== 'aus'); break;
       case 'shutdown': await shutdown(); break;
       case 'fenster_aus': await fensterAus(zeit(a)); break;
@@ -791,7 +809,7 @@ const Spiel = (() => {
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
         teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
-        if (n === 'bzzz_doppel') n = 'bzzz';
+        if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
@@ -808,10 +826,11 @@ const Spiel = (() => {
       case 'banner': {
         const b = $('#banner'); if (a === 'aus') { b.classList.remove('an'); break; }
         const [app, t, x] = a.split('|').map(s => s.trim());
+        if (app === 'WhatsApp') Handy.merkeNachricht(t, x || '');   // V8.8 (G65)
         b.innerHTML = `<span class="nic" style="width:64px;height:64px;font-size:32px;background:${app === 'Instagram' ? 'linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)' : '#25d366'}">${app === 'Instagram' ? '◎' : '✆'}</span><div><div class="t">${t}</div><div class="x">${x || ''}</div></div>`;
         b.classList.add('an'); await warte(.5); break;
       }
-      case 'anruf_unbemerkt': { const m = $('#anrufmini'); if (a === 'aus') { m.classList.remove('an'); Ton.loop('klingel', false); } else { m.innerHTML = `<span style="font-size:40px">✆</span><span>${a}<br><small style="opacity:.7;font-size:24px">Eingehender Anruf</small></span>`; m.classList.add('an'); Ton.spiele('anruf', { dumpf: true, leise: true, dauer: 5.5 }); } break; }
+      case 'anruf_unbemerkt': { const m = $('#anrufmini'); if (a === 'aus') { m.classList.remove('an'); Ton.loop('klingel', false); Ton.stoppe('anruf'); } else { m.innerHTML = `<span style="font-size:40px">✆</span><span>${a}<br><small style="opacity:.7;font-size:24px">Eingehender Anruf</small></span>`; m.classList.add('an'); Ton.spiele('anruf', { dumpf: true, leise: true, dauer: 5.5, merke: true }); } break; }
       case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); effekt('handylicht', 'kurz'); kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
       case 'zettel_aus': break;
       // ---- Handy ----
@@ -826,10 +845,10 @@ const Spiel = (() => {
       case 'foto': await Handy.foto(teile[0], teile[1] || 'Mia'); break;
       case 'video': await Handy.foto(teile[0], teile[1] || 'Mia', 'video'); break;
       case 'entwurf': zeigeTextbox(false); await Handy.entwurf(a); break;
-      case 'aufrufe': Handy.aufrufe(a); Ton.spiele('empfang'); break;
+      case 'aufrufe': Handy.aufrufe(a); Ton.spiele('tipp', { vol: .3, rate: 1.3 }); break;
       // ---- Ablauf ----
       case 'rufe': stack.push(pc + 1); springe(a.trim()); return 'sprung';
-      case 'zurueck': pc = stack.pop(); return 'sprung';
+      case 'zurueck': if (!stack.length) { console.warn('@zurueck ohne @rufe'); return 'stopp'; } pc = stack.pop(); return 'sprung';
       case 'titel': await titel(a); break;
       case 'laehmung': await laehmung(a.split('|').map(x => x.trim().replace(/^„|“$/g, ''))); break;
       case 'ende_spiel': await endeSpiel(); return 'stopp';
@@ -839,15 +858,16 @@ const Spiel = (() => {
   const NACHSCHUB = [['WhatsApp', 'Lenas Geburtstag 🎂', 'Mia: WO BIST DU'], ['Instagram', 'tim_k97', 'tim_k97 hat eine Story gepostet'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Jonas: 🎥 Video'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Lena: ich liebe euch 😭'], ['Instagram', 'x.mia.x', 'x.mia.x hat dich in einem Beitrag markiert'], ['WhatsApp', 'Lenas Geburtstag 🎂', 'Tim: afterparty bei mir??']];
   // Schreibtisch-Ich-Sicht: hält er das Handy, liegen die Hände nicht auf dem Tisch.
   // Hat ein Bild „ohneHaende“ (eigene Datei vorhanden), wird beim Handy darauf gewechselt und beim Weglegen zurück.
+  let haendeVon = null;
   function haendeTausch(was) {
     if (!aktBild) return;
     const zu = was === 'zu' || was === 'weg';
-    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) zeigeBild(aktBild.ohneHaende, 'geste');
-    else if (zu && aktBild.mitHaenden) zeigeBild(aktBild.mitHaenden, 'geste');
+    if (!zu && aktBild.ohneHaende && BILDER[aktBild.ohneHaende] && BILDER[aktBild.ohneHaende].datei) { haendeVon = aktBild.code; zeigeBild(aktBild.ohneHaende, 'geste'); }
+    else if (zu && aktBild.mitHaenden) { const z = haendeVon && BILDER[haendeVon] && BILDER[haendeVon].ohneHaende === aktBild.code ? haendeVon : aktBild.mitHaenden; haendeVon = null; zeigeBild(z, 'geste'); }   // V8.8: zurück zu K10P (mit Handy auf dem Tisch), wenn er von dort kam
   }
   async function handyBefehl(t, a) {
     const was = t[0];
-    if (blick.offen) { blick.offen = false; Handy.zu(); }
+    if (blick.offen) blickZu(true);
     if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
     switch (was) {
@@ -867,7 +887,10 @@ const Spiel = (() => {
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
       case 'her': Handy.fotozoomWeg(); Handy.her(); await warte(.5); break;
-      case 'story': { zeigeTextbox(false); storyMin = t[1] !== letzteStory ? 2.5 : 0; letzteStory = t[1]; const [zt, auf] = t.slice(3).join(' ').split('|').map(x => x.trim()); await Handy.story(t[1], t[2], 5, zt || null, auf || null); break; }  // V8.7: erste Story einer Person mind. 2,5 s
+      case 'story': { zeigeTextbox(false); storyMin = t[1] !== letzteStory ? 2.5 : 0; letzteStory = t[1]; const [zt, auf, stxt] = t.slice(3).join(' ').split('|').map(x => x.trim());
+        // V8.8 (G66): Balken so lang, wie die Story wirklich zu sehen ist (nächstes @warte)
+        const nx = prog[pc + 1]; const dauer = Math.max(storyMin, nx && nx.t === 'cmd' && nx.name === 'warte' ? (+nx.arg || 1) : 5);
+        await Handy.story(t[1], t[2], dauer, zt || null, auf || null, stxt || null); break; }  // V8.7: erste Story einer Person mind. 2,5 s
       case 'post': zeigeTextbox(false); Handy.post(t[1], t.slice(2).join(' ')); Ton.spiele('senden'); await warte(1.5); break;
       case 'anruf': {
         if (t[1] === 'an') Handy.anrufAn();
@@ -884,6 +907,7 @@ const Spiel = (() => {
       case 'karussell': zeigeTextbox(false); await Handy.karussell(t[1]); break;
       case 'allesweg': zeigeTextbox(false); await Handy.allesWegwischen(NACHSCHUB); break;
       case 'livedrehen': await Handy.liveDrehen(t[1]); break;
+      case 'livesprich': await Handy.liveSprich(t[1], t[2], +t[3] || 2); break;
       case 'storys': zeigeTextbox(false); await Handy.storys(t.slice(1)); break;
       case 'feed': Handy.feed(); break;
       case 'video': Handy.video(t[1]); break;
@@ -892,6 +916,7 @@ const Spiel = (() => {
       case 'pdfweiter': await Handy.pdfWeiter(t[1]); break;
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
+      case 'laut': Handy.laut(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
       case 'wegwischen': await Handy.wegwischen(); break;
       default: console.warn('Handy?', was);
@@ -903,11 +928,11 @@ const Spiel = (() => {
     await new Promise(res => {
       let fertig = false; const pruefe = () => { if (!fertig && knoepfe.every(b => b.classList.contains('grau'))) { fertig = true; res(); } };
       labels.forEach((l, i) => { const b = document.createElement('button'); b.textContent = l; b.style.animationDelay = (i * .07) + 's';
-        b.onclick = ev => { ev.stopPropagation(); if (g !== gen || b.classList.contains('grau')) return; Ton.spiele('klick'); b.classList.add('grau'); pruefe(); };
+        b.onclick = ev => { ev.stopPropagation(); if (g !== gen || b.classList.contains('grau')) return; Ton.spiele('klick'); b.classList.add('grau'); welt.style.transition = 'filter 1.2s ease'; welt.style.filter = `saturate(${1 - .35 * knoepfe.filter(x => x.classList.contains('grau')).length})`; pruefe(); };
         wahlEl.appendChild(b); knoepfe.push(b); });
       setTimeout(() => { knoepfe.forEach(b => b.classList.add('grau')); pruefe(); }, schnell ? 300 : 10000);
     });
-    pruef(g); await warte(3); wahlEl.innerHTML = '';
+    pruef(g); await warte(3); wahlEl.innerHTML = ''; welt.style.filter = ''; welt.style.transition = '';
   }
   async function titel(art) {
     const ti = $('#titel'), sp = ti.querySelector('span');
@@ -920,13 +945,13 @@ const Spiel = (() => {
       zeigeTextbox(false); Ton.stille(); sp.style.transition = 'opacity 1.6s ease'; sp.style.opacity = 1; await warte(2.4);
       sp.classList.add('zieh'); Ton.spiele('PR3_stift', { dauer: .7, vol: 1.1 }); await warte(.9);
       await warte(2); Ton.outro('warm');
-      setTimeout(() => { Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 1600);
+      { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 1600); }
       await warte(4); await tipp(); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
     zeigeTextbox(false); Ton.outro();
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
-    setTimeout(() => { Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600);
+    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
     await warte(4); await tipp();
   }
 
@@ -956,18 +981,19 @@ const Spiel = (() => {
           }
         }
       }
-    } catch (e) { if (e !== ABBRUCH) { console.error(e); fehlerLog.push(String(e && e.stack || e)); toast('Fehler: ' + e.message); } }
+    } catch (e) { if (e !== ABBRUCH) { console.error(e); fehlerLog.push(String(e && e.stack || e)); PR('js-fehler', String(e && e.message || e)); toast('Fehler: ' + e.message); } }
   }
   function grundzustand() {
     V = { punkte: 0, besucht: 0, lynn: '', weg: '', typ: '', ankunft: 0, aufbruch: 0, abmarsch: 0, uhr: zeit('20:04'), uhr_zeigen: false };
     verlauf = []; kapitelZeiten = []; pfad = []; pfadPlus = false; abzNeu = []; abzQueue = []; stack = [];
     blick.offen = false; blick.zahl = 0; blick.leer = 0; blick.neu = 0;
-    welt.innerHTML = ''; aktBild = null; party(false); effekt('alles_aus');
+    welt.innerHTML = ''; aktBild = null; party(false); effekt('alles_aus'); gesteGeskriptet = false; letzteStory = ''; storyMin = 0; pausiert = false; welt.style.filter = '';
+    B.classList.remove('tanzflaeche', 'handyoffen'); kamera.classList.remove('zittern', 'wackeln', 'ruck', 'zoomrein'); kamera.style.transform = ''; $('#titel').classList.remove('an'); $('#verlauf').classList.remove('an');
     ['#schwarz', '#karte', '#zettel', '#banner', '#anrufmini', '#grossuhr', '#titel', '#toast', '#klausur', '#karteikarten', '#lernplan', '#handylicht'].forEach(s => $(s).classList.remove('an'));
     $('#karte').classList.remove('vorspann', 'langsam'); ersteKarte = true; letzterCountdown = null; pModus = '';
     $('#schwarz').classList.add('an'); wahlEl.innerHTML = ''; zeigeTextbox(false); Handy.reset(); Ton.stille(); fensterOverlay(false); zeigeUhr();
   }
-  function neustart(label) {
+  function neustart(label, vorab) {
     gen++; if (tippWarter) tippWarter(); tippt = false; Rahmen.weg();
     document.querySelectorAll('.schirm').forEach(s => s.classList.remove('an'));
     Ton.outroAus(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
@@ -975,14 +1001,15 @@ const Spiel = (() => {
       const ende = labels['PROLOG']; prog.slice(0, ende).forEach(p => { if (p.t === 'cmd' && ['setze', 'text', 'abzeichenliste', 'gruppe', 'verlauf'].includes(p.name)) befehl(p); });
       springe(label);
     }
+    if (vorab) vorab(V);   // V8.8 (G61): Weg-Variablen setzen, bevor das Skript losläuft
     lauf();
   }
 
   // ---------------- Ende ----------------
   async function endeSpiel() {
-    const p = V.punkte || 0; const ende = p <= V.LEISER_BIS ? 'Leiser' : p <= V.HIER_ODER_DA_BIS ? 'Hier oder da' : 'Blaues Licht';
+    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Leiser' : p <= V.LEISER_BIS ? 'Leiser' : p <= V.HIER_ODER_DA_BIS ? 'Hier oder da' : 'Blaues Licht';   // V8.8 (G60)
     kapitelZeiten.push({ n: 'Ende', t: performance.now() });
-    pfad.push(ende); abzeichen(ende); if (!S.enden.includes(ende)) S.enden.push(ende); speichere(S);
+    pfad.push(ende); abzeichen(ende); PR('ende', ende + ' · Punkte ' + p + ' · Weg ' + pfad.join(' → ')); if (!S.enden.includes(ende)) S.enden.push(ende); speichere(S);
     abzQueue = [];   // die neuen Abzeichen zeigt der Rahmen selbst (gestempelt)
     const neu = abzNeu.slice();
     await warte(.6); $('#titel').classList.remove('an');
@@ -1007,7 +1034,7 @@ const Spiel = (() => {
     if (pos > 0 && rueck.length && !wahlEl.children.length) { rueckPos = pos - 1; pausiert = true; rb.classList.add('an'); rb.classList.toggle('links', document.getElementById('buehne').classList.contains('handyoffen')); zeigeRueck(rueck[rueckPos]); return; }
     b.classList.remove('wackelt'); void b.offsetWidth; b.classList.add('wackelt'); toast(TEXTE.zurueck || 'Hättest du wohl gern, oder?');
   };
-  $('#verlaufknopf').onclick = e => { e.stopPropagation(); const v = $('#verlauf'); v.innerHTML = '<button class="zu">✕</button>' + verlauf.map(z => `<div class="zeile${z.g ? ' g' : ''}">${z.n ? `<b>${z.n}</b>` : ''}${z.t}</div>`).join(''); v.classList.add('an'); v.scrollTop = v.scrollHeight; v.querySelector('.zu').onclick = ev => { ev.stopPropagation(); v.classList.remove('an'); }; };
+  $('#verlaufknopf').onclick = e => { e.stopPropagation(); const v = $('#verlauf'); v.innerHTML = '<button class="zu">✕</button>' + verlauf.map(z => `<div class="zeile${z.g ? ' g' : ''}">${z.n ? `<b>${z.n}</b>` : ''}${z.t}</div>`).join(''); v.classList.add('an'); pausiert = true; v.scrollTop = v.scrollHeight; v.querySelector('.zu').onclick = ev => { ev.stopPropagation(); v.classList.remove('an'); if (rueckPos < 0 && !blick.offen) pausiert = false; }; };
   let uhrKlicks = 0; uhrEl.onclick = () => { uhrKlicks++; clearTimeout(uhrEl.t); uhrEl.t = setTimeout(() => uhrKlicks = 0, 1500); if (uhrKlicks >= 5) debugAn(); };
   function debugAn() { $('#dbgknopf').style.display = 'block'; }
   function dbgInfo(ins) {
@@ -1049,8 +1076,8 @@ const Spiel = (() => {
       <button id="dbgplus">+1 Handy</button> <button id="dbgminus">−1 Handy</button> <button id="dbgreset">Abzeichen/Enden löschen</button>
       <div id="dbgfehler" style="color:#f88;margin-top:10px"></div>`;
     const setze = obj => { for (const [k, v] of Object.entries(obj)) V[k] = typeof v === 'string' && /\d:\d\d$/.test(v) ? zeit(v) : v; zeigeUhr(); };
-    $('#dbgvgo').onclick = e => { e.stopPropagation(); const [l, o] = VORLAGEN[$('#dbgvorlage').value]; neustart(l); setze(o); };
-    $('#dbgsgo').onclick = e => { e.stopPropagation(); neustart($('#dbgszene').value); V.uhr_zeigen = true; zeigeUhr(); };
+    $('#dbgvgo').onclick = e => { e.stopPropagation(); const [l, o] = VORLAGEN[$('#dbgvorlage').value]; neustart(l, () => setze(o)); };
+    $('#dbgsgo').onclick = e => { e.stopPropagation(); neustart($('#dbgszene').value, () => { V.uhr_zeigen = true; zeigeUhr(); }); };
     $('#dbgschnell').onchange = e => schnell = e.target.checked;
     $('#dbgplus').onclick = () => V.punkte++; $('#dbgminus').onclick = () => V.punkte--;
     $('#dbgreset').onclick = () => { S = { abz: [], enden: [], entsch: {}, durchgaenge: 0, laeufe: 0, nachr: 0, endenGezeigt: 0 }; speichere(S); toast('gelöscht'); };
@@ -1087,11 +1114,12 @@ const Spiel = (() => {
   vbKnopf.addEventListener('click', e => {
     e.stopPropagation(); e.preventDefault();
     if (IPHONE && !fsGeht()) { toast('iPhone: Safari erlaubt kein Vollbild.<br>Quer halten, dann ist die Leiste fast weg.'); return; }
-    if (fsEl()) vollbildAus(); else vollbildAn();
+    if (fsEl()) { vollbildAbgewaehlt = true; vollbildAus(); } else { vollbildAbgewaehlt = false; vollbildAn(); }
   });
   ['fullscreenchange', 'webkitfullscreenchange'].forEach(t => document.addEventListener(t, () => { vbIcon(); setTimeout(passe, 120); setTimeout(passe, 500); }));
   // jeder Tipp am Handy: zurück ins Vollbild (pointerup/touchend zählen als Nutzer-Geste)
-  const tippVollbild = e => { if (e.pointerType === 'mouse') return; if (e.target && e.target.closest && e.target.closest('#vollbildknopf')) return; if (!fsEl()) vollbildAn(); };
+  let vollbildAbgewaehlt = false;   // V8.8 (G67): wer es per Knopf beendet, wird nicht zurückgezwungen
+  const tippVollbild = e => { if (e.pointerType === 'mouse' || vollbildAbgewaehlt) return; if (e.target && e.target.closest && e.target.closest('#vollbildknopf')) return; if (!fsEl()) vollbildAn(); };
   addEventListener('pointerup', tippVollbild, true); addEventListener('touchend', tippVollbild, true);
   vbIcon();
   // Körnung
@@ -1108,7 +1136,7 @@ const Spiel = (() => {
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
       TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
-      entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
+      entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.filter(o => o.ziel !== '!wackeln').length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
         Ton.init();
@@ -1124,6 +1152,6 @@ const Spiel = (() => {
   return {
     init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v },
+    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };
 })();

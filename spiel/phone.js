@@ -3,7 +3,7 @@
 // =====================================================================
 const KONTAKTE = {
   Jonas: { farbe: '#e8833a', name: 'Jonas' },
-  Lena: { farbe: '#e0558e', name: 'Lena' },
+  Lena: { farbe: '#e0558e', name: 'Lena 🌻' },
   Tim: { farbe: '#22a39a', name: 'Tim' },
   Mia: { farbe: '#9b6ad8', name: 'Mia' },
   Lynn: { farbe: '#3d4a66', name: 'Lynn', info: 'Seminar Gesprächsführung' },
@@ -13,6 +13,14 @@ const KONTAKTE = {
 };
 const GRUPPENFARBE = { Mara: '#f48fb1', Paul: '#9ccc65', Sophie: '#4dd0e1', Max: '#ff8a65', Leo: '#ba68c8', Jonas: '#f5a623', Lena: '#ff6b9a', Tim: '#35c9b0', Mia: '#b48cff', Ben: '#6fb3ff', Lynn: '#ffd166' };
 
+// V8.8 (C15): Instagram wie die echte App (Dunkelmodus): Kopf mit Logo, Story-Ringe, Posts, Aktionszeile, untere Leiste
+const IG = {"herz": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><path d=\"M12 20.3s-7.6-4.6-9.1-9.3C1.8 7.6 4 4.6 7.2 4.6c2 0 3.6 1.1 4.8 2.8 1.2-1.7 2.8-2.8 4.8-2.8 3.2 0 5.4 3 4.3 6.4-1.5 4.7-9.1 9.3-9.1 9.3z\"/></svg>", "sprech": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><path d=\"M20.6 16.9A9.2 9.2 0 1 0 17 20.4L21.5 21.5z\"/></svg>", "senden": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><path d=\"M21.6 2.6 10.3 13.9M21.6 2.6 14.4 21.4l-4.1-7.5-7.6-4.1z\"/></svg>", "merken": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><path d=\"M19 21.5 12 15.3l-7 6.2V3.2h14z\"/></svg>", "home": "<svg viewBox=\"0 0 24 24\" class=\"igi voll\"><path d=\"M3.5 10.6 12 3.2l8.5 7.4V21h-6v-6.2h-5V21h-6z\"/></svg>", "reels": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"/><path d=\"M3 8.5h18M8.5 3l3 5.5M14 3l3 5.5\"/><path d=\"M10 12.3v5.2l4.6-2.6z\" class=\"f\"/></svg>", "suche": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><circle cx=\"10.5\" cy=\"10.5\" r=\"7\"/><path d=\"M15.6 15.6 21 21\"/></svg>", "plus": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><rect x=\"3\" y=\"3\" width=\"18\" height=\"18\" rx=\"5\"/><path d=\"M12 7.5v9M7.5 12h9\"/></svg>", "punkte": "<svg viewBox=\"0 0 24 24\" class=\"igi voll klein\"><circle cx=\"5\" cy=\"12\" r=\"1.7\"/><circle cx=\"12\" cy=\"12\" r=\"1.7\"/><circle cx=\"19\" cy=\"12\" r=\"1.7\"/></svg>"};
+const IG_KOPF = `<div class="ig-kopf"><span class="ig-logo">Instagram</span><span class="ig-kic">${IG.plus}${IG.herz}<span class="ig-dm">${IG.senden}<i>2</i></span></span></div>`;
+const IG_NAV = `<div class="ig-nav">${IG.home}${IG.reels}${IG.senden}${IG.suche}<span class="ig-ich"></span></div>`;
+// Feed nach Uhrzeit: nur, was es zu dem Zeitpunkt schon gibt (Minuten ab Freitag 0:00), neueste oben
+const IG_FEED = [['tim_k97', 'N32c', 1305, 'vorglühen 🍻'], ['jonas.k', 'B12A', 1305, 'BIRTHDAY GIRL 🎂'], ['lena.xo', 'N13', 1320, 'meine lieblingsmenschen ❤️'], ['x.mia.x', 'N35M1', 1325, 'party nr. 3 🪩'],
+  ['nightcrew', 'N32a', 1350, 'friday mood'], ['x.mia.x', 'N32d', 1367, 'HAPPY BDAY LENAAA'], ['lena.xo', 'TORTE', 1372, 'die torte 😭🎂'], ['tim_k97', 'FEUER', 1402, 'ich sag nix 🧯'],
+  ['x.mia.x', 'TIM_FEIER_4', 1470, 'nummer 4 🫶'], ['lena.xo', 'A1', 1480, 'noch nicht müde'], ['tim_k97', 'TIM_FEIER_1', 1500, 'afterparty 🔥']];
 const Handy = (() => {
   const el = document.getElementById('handy');
   const $ = s => el.querySelector(s);
@@ -36,9 +44,9 @@ const Handy = (() => {
   const TAG_AUS_TEXT = { Gestern: -1, Mittwoch: -2, Dienstag: -3, Donnerstag: -1, Heute: 0 };
   function heute() { try { return Math.floor(Spiel.V.uhr / 1440); } catch (e) { return 0; } }
   function tagLabel(i) { const d = heute() - i; return d <= 0 ? 'Heute' : d === 1 ? 'Gestern' : (WTAG[i] || ''); }
-  function merke(n, vorschau, zeit, ungelesen, tagIdx) { const m = meta[n] || (meta[n] = { ungelesen: 0 }); m.vorschau = vorschau; m.zeit = zeit; m.tagIdx = tagIdx == null ? heute() : tagIdx; m.n = ++zaehler; if (ungelesen) m.ungelesen += ungelesen; }
+  function merke(n, vorschau, zeit, ungelesen, tagIdx) { const m = meta[n] || (meta[n] = { ungelesen: 0 }); m.vorschau = vorschau; m.zeit = zeit; m.tagIdx = tagIdx == null ? heute() : tagIdx; m.tagText = null; m.n = ++zaehler; if (ungelesen) m.ungelesen += ungelesen; }
   const istGruppe = n => n === 'gruppe' || !!(meta[n] && meta[n].gruppe);
-  function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : m.text; return (m.von === 'Ich' ? '✓✓ ' : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
+  function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : m.text; return (m.von === 'Ich' ? (istGruppe(aktChat) ? '✓✓ Du: ' : '✓✓ ') : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
   let gruppe = { name: 'Gruppe', mitglieder: 'Jonas, Lena, Tim' };
   let offen = false, app = null, aktChat = null, notifs = [], callTimer = null, klingelt = false;
   const warteZ = (f, r) => { if (!Spiel.schnell) return warte(r); Spiel._debug && Spiel._debug.vzPlus((r - f) / 1000); return warte(f); };
@@ -66,12 +74,13 @@ const Handy = (() => {
         <div class="cd-knoepfe"><span>Abbrechen</span><span class="ok">OK</span></div></div></div>
     </div>
     <div class="app" data-app="liste">
-      <div class="l-kopf"><b>WhatsApp</b><span>📷&nbsp;&nbsp;⋮</span></div>
-      <div class="l-suche">🔍&nbsp; Fragen Sie Meta AI oder suchen Sie</div>
-      <div class="l-chips"><span class="an">Alle</span><span>Ungelesen</span><span>Favoriten</span><span>Gruppen</span></div>
+      <div class="l-kopf"><b>WhatsApp</b><span class="l-kic"><svg viewBox="0 0 24 24" class="ico o"><path d="M4 7.5h3l1.6-2.2h6.8L17 7.5h3a1 1 0 0 1 1 1V18a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V8.5a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.4"/></svg><svg viewBox="0 0 24 24" class="ico"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></span></div>
+      <div class="l-suche"><svg viewBox="0 0 24 24" class="ico o lupe"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg><span class="l-st">Meta AI fragen oder suchen</span></div>
+      <div class="l-chips"><span class="an">Alle</span><span>Ungelesen <em class="l-unz"></em></span><span>Archiviert ›</span><span>Favoriten</span><span class="l-filter"><svg viewBox="0 0 24 24" class="ico o"><path d="M4 7h16M7 12h10M10 17h4"/></svg></span></div>
       <div class="l-zeilen"></div>
-      <div class="l-fab">＋</div>
-      <div class="l-nav"><span class="an"><i>💬</i>Chats</span><span><i>◌</i>Aktuelles</span><span><i>👥</i>Communities</span><span><i>✆</i>Anrufe</span></div>
+      <div class="l-meta"></div>
+      <div class="l-fab"><svg viewBox="0 0 24 24" class="ico"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4V6a2 2 0 0 1 1-2z"/><path d="M12 7.5v6M9 10.5h6" stroke="#0b141a" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+      <div class="l-nav"><span class="an"><i><svg viewBox="0 0 24 24" class="ico"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9l-5 4V6a2 2 0 0 1 1-2z"/></svg><em class="l-nbadge"></em></i>Chats</span><span><i><svg viewBox="0 0 24 24" class="ico o"><circle cx="12" cy="12" r="7.5"/><circle cx="12" cy="12" r="3"/></svg><em class="l-punkt"></em></i>Aktuelles</span><span><i><svg viewBox="0 0 24 24" class="ico o"><circle cx="12" cy="9" r="3"/><circle cx="5.5" cy="11" r="2.2"/><circle cx="18.5" cy="11" r="2.2"/><path d="M6.5 19a5.5 5.5 0 0 1 11 0M1.5 18a4 4 0 0 1 4-3.5M22.5 18a4 4 0 0 0-4-3.5"/></svg></i>Communitys</span><span><i><svg viewBox="0 0 24 24" class="ico o"><path d="M19.9 15.4l-3.2-.4a1.7 1.7 0 0 0-1.4.5l-2.3 2.3a14 14 0 0 1-6.8-6.8L8.5 8.7a1.7 1.7 0 0 0 .5-1.4l-.4-3.2A1.7 1.7 0 0 0 6.9 2.6H4.6c-1 0-1.8.8-1.7 1.8A17.4 17.4 0 0 0 19.6 21c1 .1 1.8-.7 1.8-1.7v-2.2a1.7 1.7 0 0 0-1.5-1.7z"/></svg></i>Anrufe</span></div>
     </div>
     <div class="app" data-app="anruf">
       <div class="a-bg"></div>
@@ -90,11 +99,12 @@ const Handy = (() => {
       <div class="n-titel">Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i></div>
       <div class="n-liste"><div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div></div>
     </div>
-    <div class="app" data-app="feed"><div class="f-kopf">Instagram</div><div class="f-rolle"></div></div>
+    <div class="app" data-app="feed">${IG_KOPF}<div class="ig-fenster"><div class="f-rolle"></div></div>${IG_NAV}</div>
     <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.xo</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
-    <div class="app" data-app="karussell"><div class="f-kopf">Instagram</div><div class="ka-post"><div class="f-k"><span class="av" style="background:#6a5acd">s</span><b>studygram.de</b></div>
-      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div></div>
-      <div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div><div class="f-a">♡ 💬 ➤</div></div></div>
+    <div class="app" data-app="karussell">${IG_KOPF}<div class="ig-fenster"><div class="ka-post"><div class="ig-pk"><span class="ig-av" style="--c:#6a5acd"><b>s</b></span><div class="ig-pn"><b>studygram.de</b><small>Gesponsert</small></div>${IG.punkte}</div>
+      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div><span class="ka-zahl">1/5</span></div>
+      <div class="ig-ak"><span>${IG.herz}${IG.sprech}${IG.senden}</span><div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div>${IG.merken}</div>
+      <div class="ig-tx"><b>Gefällt 2.318 Mal</b></div><div class="ig-tx"><b>studygram.de</b> Speichern für die Prüfungsphase 📌</div></div></div>${IG_NAV}</div>
     <div class="app" data-app="pdf"><div class="pdf-kopf"><span>←</span><b class="pdf-name"></b><span>⋮</span></div><div class="pdf-fenster"><div class="pdf-rolle"></div></div><div class="pdf-seite">1 / 34</div></div>
     <div class="app" data-app="video"><div class="v-bild"></div><div class="v-balken"><i></i></div><div class="v-ton">🔊</div></div>
     <div class="hhinweis"><span class="h-ic"></span><div><b></b><div class="h-x"></div></div></div>
@@ -140,10 +150,26 @@ const Handy = (() => {
   // ---------- Chatliste (WhatsApp-Übersicht) ----------
   function renderListe(ziel) {
     const namen = Object.keys(meta).filter(n => meta[n].vorschau !== undefined && (meta[n].vorschau || n === ziel)).sort((a, b) => (meta[b].pin ? 1 : 0) - (meta[a].pin ? 1 : 0) || meta[b].n - meta[a].n);
-    $('.l-zeilen').innerHTML = namen.map(n => { const m = meta[n]; const titel = n === 'gruppe' ? gruppe.name : n;
-      return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${esc(m.vorschau || '')}</span></div><div class="l-rechts"><small class="${m.ungelesen ? 'neu' : ''}">${m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.stumm ? '<u class="st">🔕</u>' : ''}${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i${m.stumm ? ' class="grau"' : ''}>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
+    const unz = namen.filter(n => meta[n].ungelesen && !meta[n].stumm).length; const ue = $('.l-unz'); if (ue) ue.textContent = unz || ''; const nb = $('.l-nbadge'); if (nb) { nb.textContent = unz || ''; nb.style.display = unz ? '' : 'none'; }
+    const vorschauHTML = v => { v = esc(v || ''); return v.startsWith('✓✓ ') ? `<svg viewBox="0 0 18 12" class="hk-blau"><path d="M1 6.5 4.5 10 11 2.5M7 10l.6.6L14 2.5" fill="none" stroke="#53bdeb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>${v.slice(3)}` : v; };   // V8.8 (C16)
+    $('.l-zeilen').innerHTML = namen.map(n => { const m = meta[n]; const titel = anzeige(n);
+      return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${vorschauHTML(m.vorschau)}</span></div><div class="l-rechts"><small class="${m.ungelesen && !m.stumm ? 'neu' : ''}">${m.tagText ? m.tagText : m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.stumm ? '<u class="st">🔕</u>' : ''}${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i${m.stumm ? ' class="grau"' : ''}>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
   }
-  function chatKey(titel) { if (titel === gruppe.name) return 'gruppe'; if (KONTAKTE[titel]) return titel; return null; }
+  function chatKey(titel) {
+    if (titel === gruppe.name) return 'gruppe'; if (KONTAKTE[titel]) return titel;
+    const k = Object.keys(KONTAKTE).find(n => KONTAKTE[n].name === titel); if (k) return k;
+    if (meta[titel] || chats[titel]) return titel;   // V8.8 (G3): z. B. Lerngruppe
+    return null;
+  }
+  const anzeige = n => n === 'gruppe' ? gruppe.name : (KONTAKTE[n] && KONTAKTE[n].name) || n;
+  // V8.8 (G3/G65): eine Benachrichtigung landet auch als Nachricht im Chat (Gruppen: „Name: Text“ trennen)
+  function speichere(k, text, zeit) {
+    if (!k || !text || /^\d+ neue Nachrichten$/.test(text)) return;
+    const g = istGruppe(k) && text.match(/^([^:]{1,20}):\s(.*)$/); const von = g ? g[1] : k, txt = g ? g[2] : text;
+    const l = chatListe(k); const h = heute();
+    if (l.some(m => m.von === von && m.text === txt && m.tagIdx === h)) return;
+    l.push({ von, text: txt, zeit: zeit || uhrText(), tagIdx: h, vorab: true });
+  }
 
   // ---------- Chat ----------
   function chatListe(n) { return chats[n] || (chats[n] = []); }
@@ -151,9 +177,10 @@ const Handy = (() => {
     const n = aktChat, liste = chatListe(n), box = $('.c-msgs'); box.innerHTML = '';
     let vorher = null, tag = null;
     if (!liste.length) box.insertAdjacentHTML('beforeend', '<div class="c-system">🔒 Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen.</div>');
-    liste.forEach(m => { const t = tagLabel(m.tagIdx == null ? 0 : m.tagIdx); if (t !== tag) { box.insertAdjacentHTML('beforeend', `<div class="c-tag"><span>${esc(t)}</span></div>`); tag = t; vorher = null; } box.appendChild(bubble(m, vorher)); vorher = m; });
+    liste.forEach(m => { const t = tagVon(m); if (t !== tag) { box.insertAdjacentHTML('beforeend', `<div class="c-tag"><span>${esc(t)}</span></div>`); tag = t; vorher = null; } box.appendChild(bubble(m, vorher)); vorher = m; });
     box.scrollTop = box.scrollHeight;
   }
+  const tagVon = m => m.tagText || tagLabel(m.tagIdx == null ? 0 : m.tagIdx);
   function bubble(m, vorher) {
     const d = document.createElement('div');
     const ich = m.von === 'Ich'; const reihe = vorher && vorher.von === m.von;
@@ -183,9 +210,10 @@ const Handy = (() => {
   function setzeKopf() {
     const n = aktChat; const kopf = $('.c-kopf');
     kopf.querySelector('.av').outerHTML = avatar(n);
-    kopf.querySelector('b').textContent = n === 'gruppe' ? gruppe.name : n;
+    kopf.querySelector('b').textContent = anzeige(n);
     kopf.querySelector('small').textContent = n === 'gruppe' ? gruppe.mitglieder : istGruppe(n) ? 'tippe hier für Gruppeninfo' : '';
     kopf.classList.toggle('gr', istGruppe(n));
+    $('[data-app=chat]').classList.toggle('chatstumm', !!(meta[n] && meta[n].stumm));   // V8.8 (G2): 🔕 nur am stummen Chat
   }
   function eingabe(txt, beimLoeschen) {
     const f = $('.c-eingabe'); f.querySelector('.txt').textContent = txt; f.classList.toggle('voll', txt.length > 0);
@@ -226,12 +254,12 @@ const Handy = (() => {
     const mic = $('.mic'); mic.classList.remove('pop'); void mic.offsetWidth; mic.classList.add('pop');
     eingabe(''); tastatur(false); Ton.spiele('senden');
     const m = anhaengen({ von: 'Ich', text: txt, zeit: uhrText(), haken: 'grau1' });
-    setTimeout(() => setHaken(m, 'grau2'), Spiel.schnell ? 50 : 1100);
+    m._t = setTimeout(() => setHaken(m, 'grau2'), Spiel.schnell ? 50 : 1100);
     return m;
   }
   function setHaken(m, h) {
     if (!m) { const l = chatListe(aktChat); for (let i = l.length - 1; i >= 0; i--) if (l[i].von === 'Ich') { m = l[i]; break; } }
-    if (!m) return; m.haken = h; if (m.el) { const e = m.el.querySelector('.hk'); if (e) { e.className = 'hk ' + h; e.textContent = h === 'grau1' ? '✓' : '✓✓'; } }
+    if (!m) return; clearTimeout(m._t); m.haken = h; if (m.el) { const e = m.el.querySelector('.hk'); if (e) { e.className = 'hk ' + h; e.textContent = h === 'grau1' ? '✓' : '✓✓'; } }
   }
   async function schreibt(name, sek) {
     if (app === 'liste' && warteAuf) {
@@ -240,10 +268,11 @@ const Handy = (() => {
       await warte(sek * 1000); sp.textContent = alt; sp.classList.remove('gruen'); return;
     }
     const kopf = $('.c-kopf small'); const alt = kopf.textContent;
-    kopf.textContent = aktChat === 'gruppe' ? name + ' schreibt …' : 'schreibt …'; kopf.classList.add('gruen');
+    const gr = istGruppe(aktChat);
+    kopf.textContent = gr ? name + ' schreibt …' : 'schreibt …'; kopf.classList.add('gruen');
     const box = $('.c-msgs'); const d = document.createElement('div');
-    d.className = 'msg du tippen' + (aktChat === 'gruppe' ? ' gr' : '');
-    d.innerHTML = (aktChat === 'gruppe' ? avatar(name) : '') + '<div class="blase"><span class="punkte"><i></i><i></i><i></i></span></div>';
+    d.className = 'msg du tippen' + (gr ? ' gr' : '');
+    d.innerHTML = (gr ? avatar(name) : '') + '<div class="blase"><span class="punkte"><i></i><i></i><i></i></span></div>';
     box.appendChild(d); box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
     await warte(sek * 1000);
     d.remove(); kopf.textContent = alt; kopf.classList.remove('gruen');
@@ -262,7 +291,14 @@ const Handy = (() => {
     weg() { el.classList.add('weg'); document.getElementById('buehne').classList.remove('handyoffen'); },
     her() { el.classList.remove('weg'); if (offen) document.getElementById('buehne').classList.add('handyoffen'); },
     sperr() { oeffne(); zeige('sperr'); },
+    merkeNachricht(titel, text, zeit) { const k = chatKey(titel); if (k) speichere(k, text, zeit); return k; },
     benachrichtigung(appName, titel, text, zeit) {
+      if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) titel = anzeige(k); if (k && !(offen && app === 'chat' && aktChat === k && !el.classList.contains('weg'))) speichere(k, text || '', zeit);
+        if (k && meta[k] && meta[k].stumm) { if (!/^\d+ neue Nachrichten$/.test(text || '')) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste' && offen) renderListe(); return; } }   // V8.8 (G2): stummer Chat – kein Banner, keine Karte
+      if (offen && ['video', 'anruf', 'story', 'live', 'pdf', 'feed', 'karussell'].includes(app) && !el.classList.contains('weg')) {   // V8.8 (G13): kein App-Wechsel, nur Banner oben
+        if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) merke(k, text || '', zeit || uhrText(), 1); }
+        this.hinweis(appName, titel, text || ''); return;
+      }
       if (offen && (app === 'chat' || app === 'liste') && !el.classList.contains('weg')) {
         if (appName === 'WhatsApp') { const k = chatKey(titel); if (k && k === aktChat && app === 'chat') return; if (k) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste') renderListe(); }
         this.hinweis(appName, titel, text || ''); return;
@@ -284,7 +320,7 @@ const Handy = (() => {
       while (true) {
         const n = $('.sp-notifs .nk'); if (!n) break;
         n.classList.add('wisch'); Ton.spiele('whoosh_kurz', { vol: .18, rate: 1.6 }); await warteZ(60, tempo); n.remove();
-        if (neu.length && Math.random() < .75) { const [a, t, x] = neu.shift(); this.benachrichtigung(a, t, x); Ton.spiele('bzzz', { vol: .45 }); await warteZ(60, 220); }
+        if (neu.length && Math.random() < .75) { const [a, t, x] = neu.shift(); this.benachrichtigung(a, t, x); Spiel.bzzz({ leise: true }); await warteZ(60, 220); }
         tempo = Math.max(170, tempo * .78);
       }
       await warteZ(60, 300);
@@ -301,9 +337,9 @@ const Handy = (() => {
         if (!zeile) {
           const s = $('.l-suche'); s.classList.add('aktiv'); s.textContent = '🔍  ';
           await warte(300);
-          for (const ch of (name === 'gruppe' ? gruppe.name : name)) { s.textContent += ch; Ton.spiele('tipp', { vol: .5 }); await warte(150); }
+          for (const ch of anzeige(name)) { s.textContent += ch; Ton.spiele('tipp', { vol: .5 }); await warte(150); }
           const info = (KONTAKTE[name] && KONTAKTE[name].info) || '';
-          $('.l-zeilen').innerHTML = `<div class="l-treffer">Kontakte</div><div class="l-zeile" data-n="${name}">${avatar(name)}<div class="l-mitte"><b>${esc(name)}</b><span>${esc(info)}</span></div></div>`;
+          $('.l-zeilen').innerHTML = `<div class="l-treffer">Kontakte</div><div class="l-zeile" data-n="${name}">${avatar(name)}<div class="l-mitte"><b>${esc(anzeige(name))}</b><span>${esc(info)}</span></div></div>`;
           await warte(600); zeile = $(`.l-zeile[data-n="${name}"]`);
         }
         if (zeile) { zeile.classList.add('druck'); await warte(260); }
@@ -331,7 +367,7 @@ const Handy = (() => {
       }
       let vorher = null, tag = null;
       if (!liste.length) box.insertAdjacentHTML('beforeend', '<div class="c-system">🔒 Nachrichten und Anrufe sind Ende-zu-Ende-verschlüsselt. Niemand außerhalb dieses Chats kann sie lesen.</div>');
-      liste.forEach(m => { const t = tagLabel(m.tagIdx == null ? 0 : m.tagIdx); if (t !== tag) { box.insertAdjacentHTML('beforeend', `<div class="c-tag"><span>${esc(t)}</span></div>`); tag = t; vorher = null; } box.appendChild(bubble(m, vorher)); vorher = m; });
+      liste.forEach(m => { const t = tagVon(m); if (t !== tag) { box.insertAdjacentHTML('beforeend', `<div class="c-tag"><span>${esc(t)}</span></div>`); tag = t; vorher = null; } box.appendChild(bubble(m, vorher)); vorher = m; });
       zeige('chat'); box.scrollTop = box.scrollHeight;
     },
     lesenZuListe() { renderListe(); zeige('liste'); },
@@ -357,7 +393,7 @@ const Handy = (() => {
       d.innerHTML = `<b>${esc(frage)}</b>` + optionen.map((o, i) => `<div class="uo" data-i="${i}"><span class="ukreis"></span><span class="utext">${esc(o)}</span><span class="uzahl">0</span><div class="ubalken"><i></i></div><div class="uavs"></div></div>`).join('');
       const bl = m.el ? m.el.querySelector('.blase') : null; if (bl) { bl.innerHTML = ''; bl.appendChild(d); bl.classList.add('ublase'); }
       this._umfrage = { d, n: optionen.map(() => 0), avs: optionen.map(() => []) };
-      $('.c-msgs').scrollTop = 1e6; Spiel.bzzz({ entprellen: true }); await warteZ(20, 600);
+      $('.c-msgs').scrollTop = 1e6; Ton.spiele('tipp', { vol: .28, rate: 1.5 }); await warteZ(20, 600);
     },
     async stimme(i, wer) {
       const u = this._umfrage; if (!u) return; u.n[i]++; if (wer) u.avs[i].push(wer);
@@ -375,6 +411,8 @@ const Handy = (() => {
       await warteZ(20, 900);
     },
     async liveDrehen(code) { const b = $('[data-app=live] .lv-bild'); b.classList.add('dreht'); Ton.spiele('whoosh_kurz', { vol: .25 }); await warteZ(60, 260); b.innerHTML = Spiel.bildHTML(code, true); await warteZ(60, 40); b.classList.remove('dreht'); await warteZ(60, 500); },
+    // V8.8 (7b B): Lena spricht ins Live – zwei Bilder wechseln wie beim Reden
+    async liveSprich(a, b, sek) { const el2 = $('[data-app=live] .lv-bild'); const n = Math.round((sek || 2) / .28); for (let i = 0; i < n; i++) { el2.innerHTML = Spiel.bildHTML(i % 2 ? b : a, true); await warteZ(20, 280); } el2.innerHTML = Spiel.bildHTML(b, true); },
     async liveKommentar(name, text) {
       const k = $('[data-app=live] .lv-k'); const d = document.createElement('div'); d.className = 'lvk'; d.innerHTML = `<b>${esc(name)}</b> ${esc(text)}`;
       k.appendChild(d); while (k.children.length > 6) k.firstChild.remove();
@@ -391,7 +429,7 @@ const Handy = (() => {
       if (Math.random() < .2) await warteZ(20, lang * 700);
       else if (lang > 2.5 && Math.random() < .35) { await schreibt(von, lang * .45); await warteZ(20, 1100 + Math.random() * 900); await schreibt(von, lang * .6); }
       else await schreibt(von, lang);
-      merke(n, ((n === 'gruppe' || (meta[n] && meta[n].gruppe)) ? von + ': ' : '') + vorschau, uhrText(), 1); renderListe(); Spiel.bzzz({ entprellen: true });
+      merke(n, ((n === 'gruppe' || (meta[n] && meta[n].gruppe)) ? von + ': ' : '') + vorschau, uhrText(), 1); renderListe(); if (!(meta[n] && meta[n].stumm)) Spiel.bzzz({ entprellen: true });
       const z = $(`.l-zeile[data-n="${n}"]`); if (z) { z.classList.remove('neuda'); void z.offsetWidth; z.classList.add('neuda'); }
       await warteZ(20, 1300 + Math.random() * 1100); await this.chat(n, true);
     },
@@ -400,15 +438,20 @@ const Handy = (() => {
       if (name === gruppe.name) name = 'gruppe';
       const g = von !== 'Ich' && von !== name && name !== 'gruppe';
       const m = meta[name] || (meta[name] = { ungelesen: 0 }); if (g) m.gruppe = true; if (name === 'Jonas') m.pin = true;
-      const ti = TAG_AUS_TEXT[tag] != null ? TAG_AUS_TEXT[tag] : -2;
-      chatListe(name).push({ von, text, zeit, tag, tagIdx: ti, haken: von === 'Ich' ? 'blau' : null });
-      merke(name, (von === 'Ich' ? '✓✓ ' : ((g || name === 'gruppe') ? von + ': ' : '')) + text, zeit, 0, ti);
+      // V8.8 (G14): unbekannte Tage (z. B. „12. Juli“, „02.12.“) bleiben so stehen, wie sie im Skript stehen
+      const bek = TAG_AUS_TEXT[tag] != null; const ti = bek ? TAG_AUS_TEXT[tag] : -30;
+      chatListe(name).push({ von, text, zeit, tag, tagIdx: ti, tagText: bek ? null : tag, haken: von === 'Ich' ? 'blau' : null });
+      merke(name, (von === 'Ich' ? ((g || name === 'gruppe') ? '✓✓ Du: ' : '✓✓ ') : ((g || name === 'gruppe') ? von + ': ' : '')) + text, zeit, 0, ti); meta[name].tagText = bek ? null : tag;
     },
     gruppeOeffnen() { return this.chat('gruppe'); },
     async nachricht(von, text, sofort) {
       let schonGewartet = false;
+      { const ziel = app === 'liste' && warteAuf ? warteAuf : app === 'chat' ? aktChat : von; const h = heute();
+        const dup = chatListe(ziel).find(x => x.vorab && x.von === von && x.text === text && x.tagIdx === h); if (dup) { dup.vorab = false;   // V8.8 (G3): kam schon als Benachrichtigung – nicht doppelt
+          if (app === 'liste' && warteAuf) await this.chat(warteAuf, true); else if (app !== 'chat') await this.chat(von); else renderChat();
+          if (meta[aktChat]) meta[aktChat].ungelesen = 0; await warte(450); return; } }
       if (app === 'liste' && warteAuf && !sofort) { await this.geier(von, text, Math.min(4.5, 1.1 + text.length * .05)); schonGewartet = true; }
-      if (app === 'liste' && warteAuf) { const n = warteAuf; merke(n, ((n === 'gruppe' || (meta[n] && meta[n].gruppe)) ? von + ': ' : '') + text, uhrText(), 1); renderListe(); if (!schonGewartet) Spiel.bzzz({ entprellen: true }); await warteZ(20, 1100 + Math.random() * 700); await this.chat(n, true); schonGewartet = true; }
+      if (app === 'liste' && warteAuf) { const n = warteAuf; merke(n, ((n === 'gruppe' || (meta[n] && meta[n].gruppe)) ? von + ': ' : '') + text, uhrText(), 1); renderListe(); if (!schonGewartet && !(meta[n] && meta[n].stumm)) Spiel.bzzz({ entprellen: true }); await warteZ(20, 1100 + Math.random() * 700); await this.chat(n, true); schonGewartet = true; }
       if (app !== 'chat') await this.chat(von);
       if (!sofort && !schonGewartet) {
         const offeneHaken = chatListe(aktChat).filter(x => x.von === 'Ich' && x.haken !== 'blau');
@@ -419,14 +462,17 @@ const Handy = (() => {
         else await schreibt(von, lang);
       }
       const m = anhaengen({ von, text, zeit: uhrText() });
-      if (!sofort && !schonGewartet) Spiel.bzzz({ entprellen: true });
+      if (!sofort && !schonGewartet) Ton.spiele('tipp', { vol: .28, rate: 1.5 });   // V8.8 (G2): offener Chat vibriert nicht
       // Antwort → eigene Nachrichten blau
       chatListe(aktChat).forEach(x => { if (x.von === 'Ich' && x.haken !== 'blau') setHaken(x, 'blau'); });
       
       await warte(450);
     },
     async ich(text, haken) { await this.rein(); if (app !== 'chat') return; anhaengen({ von: 'Ich', text, zeit: uhrText(), haken: haken || 'grau2' }); },
-    async foto(code, von, typ = 'foto') { if (app === 'liste' && warteAuf) await this.geier(von, typ === 'video' ? '🎥 Video' : '📷 Foto', 1.3); else { if (app !== 'chat') await this.chat('gruppe'); await warte(400); await schreibt(von, 1.3); } anhaengen({ von, typ, bild: code, zeit: uhrText() });  await warte(500); },
+    async foto(code, von, typ = 'foto') { if (app === 'liste' && warteAuf) await this.geier(von, typ === 'video' ? '🎥 Video' : '📷 Foto', 1.3); else { if (app !== 'chat') await this.chat('gruppe'); await warte(400); await schreibt(von, 1.3); }
+      // V8.8: der Platzhalter aus der Benachrichtigung („🎥 Video“) wird durch das echte Foto/Video ersetzt
+      { const l = chatListe(aktChat); const i = l.findIndex(x => x.vorab && x.von === von && /^(📷|🎥)/.test(x.text)); if (i >= 0) { const alt = l.splice(i, 1)[0]; if (alt.el) alt.el.remove(); } }
+      anhaengen({ von, typ, bild: code, zeit: uhrText() });  await warte(500); },
     async fotozoom() {
       const f = [...el.querySelectorAll('.mfoto')].pop(); if (!f) return; const r = f.cloneNode(true); r.className = 'fotogross'; $('.screen').appendChild(r);
       // Zoom-Ziel aus der Bildliste (z. B. Lynn hinten in der Küche), damit der Ausschnitt im Hochformat auf ihr liegt
@@ -463,19 +509,19 @@ const Handy = (() => {
     },
     klingelAus() { if (klingelt) { Ton.loop('klingel', false); klingelt = false; } clearInterval(callTimer); },
     // ---- Story ----
-    async story(name, code, dauer = 5, zeit = null, aufrufe = null) {
+    async story(name, code, dauer = 5, zeit = null, aufrufe = null, text = null) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
-      s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true);
+      s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + (text ? `<div class="st-text st-text-story">${esc(text)}</div>` : '');   // V8.8: Text auf der Story
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
       s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));
-      s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.includes('lena') ? '#e0558e' : name.includes('lynn') ? '#3d4a66' : '#22a39a'}">${name[0].toUpperCase()}</span>`;
+      s.querySelector('.av').outerHTML = `<span class="av" style="background:${name.includes('lena') ? '#e0558e' : name.includes('lynn') ? '#3d4a66' : name.includes('mia') ? '#9b6ad8' : name.includes('tim') ? '#22a39a' : `hsl(${[...name].reduce((h, c) => (h * 31 + c.charCodeAt(0)) % 360, 0)},38%,42%)`}">${name.replace(/[^a-z]/i, '')[0].toUpperCase()}</span>`;
       s.querySelector('.st-zeit').textContent = zeit || (name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.');
-      s.classList.toggle('aufrufe', aufrufe != null); if (aufrufe != null) s.querySelector('.st-views b').textContent = aufrufe;
+      s.classList.toggle('aufrufe', aufrufe != null && aufrufe !== ''); if (aufrufe) s.querySelector('.st-views b').textContent = aufrufe;
       s.classList.remove('post'); const b = s.querySelector('.st-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth;
       b.style.transition = `width ${dauer * (Spiel.schnell ? .15 : 1)}s linear`; b.style.width = '100%';
     },
     post(code, text) {
-      oeffne(); zeige('story'); const s = $('[data-app=story]'); s.classList.add('post');
+      oeffne(); zeige('story'); const s = $('[data-app=story]'); s.classList.add('post'); s.classList.remove('aufrufe'); s.querySelector('.st-bild').classList.remove('ganz');
       s.querySelector('.st-name').textContent = 'Deine Story'; s.querySelector('.st-zeit').textContent = 'Gerade eben';
       s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + `<div class="st-text">${esc(text)}</div>`;
       s.querySelector('.st-views b').textContent = '0';
@@ -518,15 +564,16 @@ const Handy = (() => {
       const k = $('[data-app=karussell]'); const p = k.querySelectorAll('.ka-punkte i');
       if (modus === 'weiter') { k.classList.add('weg'); Ton.spiele('whoosh_kurz', { vol: .35 }); await warteZ(20, 350); this.feed(); await warteZ(20, 1600); return; }
       oeffne(); zeige('karussell'); k.classList.remove('wisch', 'wisch2', 'weg');
+      const zl = k.querySelector('.ka-zahl'); zl.textContent = '1/5';
       p.forEach((x, i) => x.classList.toggle('an', i === 0)); await warteZ(20, 2200);
-      k.classList.add('wisch'); p[0].classList.remove('an'); p[1].classList.add('an'); await warteZ(20, 1500);
-      if (modus === 'zwei') { k.classList.add('wisch2'); p[1].classList.remove('an'); p[2].classList.add('an'); await warteZ(20, 1300); return; }
+      k.classList.add('wisch'); p[0].classList.remove('an'); p[1].classList.add('an'); zl.textContent = '2/5'; await warteZ(20, 1500);
+      if (modus === 'zwei') { k.classList.add('wisch2'); p[1].classList.remove('an'); p[2].classList.add('an'); zl.textContent = '3/5'; await warteZ(20, 1300); return; }
       k.classList.add('weg'); Ton.spiele('whoosh_kurz', { vol: .35 }); await warteZ(20, 350); this.feed(); await warteZ(20, 1600);
     },
     // Storys fremder Leute im Schnelldurchlauf
     async storys(codes) {
       const namen = ['tim_k97', 'nightcrew', 'jule.mxn', 'paulfrnk', 'x.mia.x', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
-      for (let i = 0; i < codes.length; i++) { await this.story(namen[i % namen.length], codes[i], .9); await warteZ(20, 780 - Math.min(i * 60, 360)); }
+      for (let i = 0; i < codes.length; i++) { const m = codes[i].match(/^(.+)=(.+)$/); await this.story(m ? m[1] : namen[i % namen.length], m ? m[2] : codes[i], .9); await warteZ(20, 780 - Math.min(i * 60, 360)); }
     },
     async notizenDatum() {
       const t = $('.n-tag'); if (!t) return; let s = t.textContent; const ziel = 'Sonntag';
@@ -534,9 +581,16 @@ const Handy = (() => {
       for (const z of ziel) { s += z; t.textContent = s; Ton.spiele('tipp'); await warte(110); }
     },
     feed() {
-      oeffne(); zeige('feed'); const r = $('.f-rolle'); let h = '';
-      for (let i = 0; i < 8; i++) h += `<div class="f-post"><div class="f-k"><span class="av" style="background:hsl(${i * 47},50%,45%)">${'lmtjsbna'[i]}</span><b>${['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'streamz', 'ben.r', 'nightcrew', 'jura.memes'][i]}</b></div><div class="f-b">${Spiel.bildHTML(['N32c', 'N33', 'N32d', 'TORTE', 'A1', 'H36a', 'B12A', 'N32dA'][i], true)}</div><div class="f-a">♡ 💬 ➤</div></div>`;
-      r.innerHTML = h + h; r.classList.remove('rollt'); void r.offsetWidth; r.classList.add('rollt');
+      oeffne(); zeige('feed'); const r = $('.f-rolle'); const jetzt = Spiel.V.uhr || 0;
+      const farbe = n => n.includes('lena') ? '#e0558e' : n.includes('mia') ? '#9b6ad8' : n.includes('tim') ? '#22a39a' : n.includes('jonas') ? '#e8833a' : '#5a6a8a';
+      const posts = IG_FEED.filter(p => p[2] <= jetzt).reverse();
+      const storys = ['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'nightcrew', 'ben.r'];
+      const zeitText = t => { const d = Math.max(1, jetzt - t); return d < 60 ? d + ' Min.' : Math.round(d / 60) + ' Std.'; };
+      let h = `<div class="ig-storys"><div class="ig-st ich"><span class="ig-av gross"><b>Du</b></span><small>Deine Story</small></div>${storys.map(n => `<div class="ig-st"><span class="ig-av gross ring" style="--c:${farbe(n)}"><b>${n[0]}</b></span><small>${n}</small></div>`).join('')}</div>`;
+      posts.forEach((p, i) => { const likes = 37 + ((p[1].length * 97 + i * 53) % 260);
+        h += `<div class="ig-post"><div class="ig-pk"><span class="ig-av ring" style="--c:${farbe(p[0])}"><b>${p[0][0]}</b></span><div class="ig-pn"><b>${p[0]}</b></div>${IG.punkte}</div><div class="ig-bild">${Spiel.bildHTML(p[1], true)}</div>
+        <div class="ig-ak"><span>${IG.herz}${IG.sprech}${IG.senden}</span>${IG.merken}</div><div class="ig-tx"><b>Gefällt ${likes} Mal</b></div><div class="ig-tx"><b>${p[0]}</b> ${esc(p[3])}</div><div class="ig-tx grau">Vor ${zeitText(p[2])}</div></div>`; });
+      r.innerHTML = h + h.replace('ig-storys', 'ig-storys nb'); r.classList.remove('rollt'); void r.offsetWidth; r.classList.add('rollt');
     },
     video(code) { oeffne(); zeige('video'); $('.v-bild').innerHTML = Spiel.bildHTML(code, true); const b = $('.v-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth; b.style.transition = 'width 12s linear'; b.style.width = '100%'; },
     async stumm() {
@@ -544,6 +598,15 @@ const Handy = (() => {
       Ton.spiele('klick'); const t = $('.stummtoast'); t.classList.add('an'); $('.sp-stumm').classList.add('an'); el.classList.add('handy-stumm'); await warte(1300);
     },
     aus() { Ton.spiele('klick'); $('.displayaus').classList.add('an'); },
+    laut() { $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); },   // V8.8 (G19)
+    // V8.8 (G29): beim Selbst-Nachschauen zeigt der Sperrbildschirm die ungelesenen Chats (außer stummen)
+    sperrUngelesen() {
+      const box = $('.sp-notifs'); if (box.children.length) return;
+      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).sort((a, b) => meta[b].n - meta[a].n).slice(0, 5).forEach(n => {
+        const m = meta[n]; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = 'WhatsApp|' + anzeige(n);
+        d.innerHTML = `<span class="nic" style="background:#25d366">✆</span><div class="ntx"><div class="nkopf"><b>${esc(anzeige(n))}</b><span>${m.zeit || ''}</span></div><div class="nt">${esc(m.vorschau)}${m.ungelesen > 1 ? ` <small style="opacity:.6">(${m.ungelesen})</small>` : ''}</div></div><span class="npf">⌄</span>`;
+        box.appendChild(d); });
+    },
     // ---- V8.5 Sonntagnacht: PDF öffnen und durchscrollen ----
     async pdf(name, seiten) {
       oeffne(); zeige('pdf'); this._pdf = { seiten: +seiten || 34, seite: 1, y: 0 };

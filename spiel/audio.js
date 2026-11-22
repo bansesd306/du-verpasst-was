@@ -7,9 +7,9 @@ const Ton = (() => {
   const P = {};           // Name -> AudioBuffer
   const R = {};           // rückwärts
   const loops = {};
-  let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false;
+  let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false, outroNr = 0;
 
-  let analyser = null, fftDaten = null, pegelSchnitt = 0;
+  let analyser = null, fftDaten = null, pegelSchnitt = 0; const gemerkt = {}; let introSoll = false;
   function init() {
     if (ctx) { if (ctx.state === 'suspended') ctx.resume(); return; }
     // iPhone: ohne das schweigt Web Audio, wenn der Stumm-Schalter an ist (Safari 16.4+)
@@ -23,8 +23,13 @@ const Ton = (() => {
     musikBus = ctx.createGain(); musikBus.connect(musikFilter); musikFilter.connect(musikGain); musikGain.connect(master);
     analyser = ctx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = .55; musikGain.connect(analyser); fftDaten = new Uint8Array(analyser.frequencyBinCount);
     // kurze Töne zuerst, Musik danach
-    const namen = Object.keys(TOENE).filter(k => eintrag(k).datei).sort((a, b) => /^M\d|Outro|lofi|restaurant|club2|ende_warm|tippen_laptop/.test(a) - /^M\d|Outro|lofi|restaurant|club2|ende_warm|tippen_laptop/.test(b) || (b === 'muffled_party') - (a === 'muffled_party'));
-    namen.forEach(k => lade(k));
+    const MUSIK = /^M\d|^mia$|Outro|lofi|restaurant|club2|ende_warm|tippen_laptop|lied/;
+    const namen = Object.keys(TOENE).filter(k => eintrag(k).datei).sort((a, b) => (b === 'muffled_party') - (a === 'muffled_party') || MUSIK.test(a) - MUSIK.test(b));
+    // V8.8 (G47): nicht alle ~45 Dateien gleichzeitig – Warteschlange mit 3 gleichzeitig
+    let i = 0; const naechste = () => { if (i >= namen.length) return; lade(namen[i++]).then(naechste); };
+    for (let k = 0; k < 3; k++) naechste();
+    // V8.8 (G67): App-Wechsel/Bildschirmsperre – Ton anhalten und danach weiter
+    document.addEventListener('visibilitychange', () => { if (!ctx) return; if (document.hidden) ctx.suspend().catch(() => { }); else ctx.resume().catch(() => { }); });
   }
   function eintrag(k) { const e = TOENE[k]; return typeof e === 'string' ? { datei: e } : (e || {}); }
   const ladend = {};
@@ -136,7 +141,7 @@ const Ton = (() => {
   function musikStopp(sofort) {
     if (!musik) return; const m = musik; musik = null;
     if (sofort) { m.qs.forEach(q => q.stop()); return; }
-    musikGain.gain.setTargetAtTime(0, now(), .5); setTimeout(() => m.qs.forEach(q => q.stop()), 1800);
+    m.qs.forEach(q => q.stop(1.2));   // V8.8 (G33): jede alte Spur einzeln ausblenden (neue Musik dreht den Bus sonst wieder hoch)
   }
   function lied(modus) {
     liedStopp();
@@ -165,12 +170,15 @@ const Ton = (() => {
     // spielt einen Ton; gibt die Länge in Sekunden zurück (0, wenn es ihn nicht gibt)
     spiele(name, o = {}) {
       if (!ctx || gesperrt) return 0;
-      if (name === 'tinnitus') { tinnitus(); return 4; }
+      if (name === 'tinnitus') { if (P.tinnitus) { const q = quelle('tinnitus', master, { vol: .6 }); return q ? q.laenge : 4; } tinnitus(); return 4; }   // V8.8 (G36): Datei (7,4 kHz mit Unterton) statt reinem Sinus
       if (name === 'tipp' && P.tipp) { const i = Math.floor(Math.random() * 8); return (quelle('tipp', sfx, Object.assign({ ab: i * .25, dauer: .09 }, o)) || {}).laenge || 0; }
       const sp = eintrag(name).sprite; if (sp && P[name]) { const [ab, d] = sp[Math.floor(Math.random() * sp.length)]; return (quelle(name, sfx, Object.assign({ ab, dauer: d }, o)) || {}).laenge || 0; }
       if (name === 'bzzz') vibriere(o.dumpf ? [] : [300, 120, 300]);
       const q = quelle(name, o.ziel === 'master' ? master : sfx, o);
+      if (q && o.merke) gemerkt[name] = q;
       return q ? q.laenge : 0;
+    },
+    stoppe(name) { const q = gemerkt[name]; if (q) { q.stop(.2); delete gemerkt[name]; }
     },
     loop,
     musik(art, opt) {
@@ -209,13 +217,19 @@ const Ton = (() => {
       vibriere(dumpf ? [180] : [350, 90, 350]); return d;
     },
     // Titelmusik im Hauptmenü: ab Sekunde 0, ohne Einblenden
-    intro() { if (!ctx || introNode) return; const go = () => { if (!introNode) introNode = quelle('Outro', master, { vol: .8 }); }; if (P.Outro) go(); else lade('Outro').then(go); },
+    intro() { if (!ctx || introNode) return; introSoll = true; const go = () => { if (!introNode && introSoll) introNode = quelle('Outro', master, { vol: .8 }); }; if (P.Outro) go(); else lade('Outro').then(go); },
     get introLaeuft() { return !!introNode; },
-    introAus(weich = 2.4) { if (introNode) { introNode.stop(weich); introNode = null; } },
+    introAus(weich = 2.4) { introSoll = false; if (introNode) { introNode.stop(weich); introNode = null; } },
     // echtes Tippen: Abschnitt der Aufnahme abspielen
     tippLauf(ab, dauer) { if (!ctx || gesperrt || !P.tipplauf) return null; return quelle('tipplauf', sfx, { ab, dauer }); },
     get anschlaege() { return (TOENE.tipplauf && TOENE.tipplauf.anschlaege) || []; },
-    outro(welche) { if (!ctx) return; musikStopp(true); this.introAus(); if (welche === 'warm') { outroNode = quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }); return; } outroNode = quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); },
-    outroAus() { if (outroNode) { outroNode.stop(3); outroNode = null; } },
+    outro(welche) {
+      if (!ctx) return; musikStopp(true); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
+      const k = welche === 'warm' ? 'ende_warm' : 'Outro'; const nr = ++outroNr;
+      const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
+      if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten
+    },
+    outroAus() { outroNr++; if (outroNode) { outroNode.stop(3); outroNode = null; } },
+    get outroLaeuft() { return !!outroNode; },
   };
 })();

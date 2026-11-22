@@ -35,7 +35,7 @@ async def spiel(pg, name, prefs):
         t+=1
         st = await pg.evaluate("""()=>{const s=[...document.querySelectorAll('.schirm.an, #zimmer.an .schirm2.an')].map(x=>x.id);const b=[...document.querySelectorAll('#wahl button')].map(x=>x.textContent);return {s,b}}""")
         if 'z-s-abz' in st['s']:
-            r=await pg.evaluate("({vz:Math.round(Spiel._debug.vz), texte:Spiel._debug.textZahl, punkte:Spiel.V.punkte, typ:Spiel.V.typ, ankunft:Spiel.V.ankunft, lynn:Spiel.V.lynn, pfad:Spiel.pfad.join(' → ')})"); r['wahlen']=len(log); r['log']=log
+            r=await pg.evaluate("({vz:Math.round(Spiel._debug.vz), texte:Spiel._debug.textZahl, punkte:Spiel.V.punkte, lern:Spiel.V.lernstand, typ:Spiel.V.typ, ankunft:Spiel.V.ankunft, lynn:Spiel.V.lynn, pfad:Spiel.pfad.join(' → ')})"); r['wahlen']=len(log); r['log']=log
             r['rest']=prefs; return r
         if st['s']:
             await pg.evaluate("()=>{const s=document.querySelector('.schirm.an button, #zimmer.an .schirm2.an button'); if(s) s.click();}")

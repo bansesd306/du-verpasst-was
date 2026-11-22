@@ -80,8 +80,14 @@ Spiel.init();
 <script>
 {r('sprung.js')}
 </script>
+<script>
+{r('protokoll.js')}
+</script>
 </body>
 </html>
 '''
+import os
+if os.environ.get('ABGABE') == '1':   # V8.8 (G53): öffentliche Fassung ohne Stoppuhr, Sprungmenü, Protokoll
+    assert 'const TESTMODUS = true;' in html; html = html.replace('const TESTMODUS = true;', 'const TESTMODUS = false;')
 (H / 'dist' / 'index.html').write_text(html, encoding='utf-8')
 print('ok', len(html))
