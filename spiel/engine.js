@@ -820,7 +820,7 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; m = x.match(/^ein(\d+(?:\.\d+)?)$/); if (m) o.einblenden = +m[1]; });   // V8.9: ein4 = 4 s einblenden
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();

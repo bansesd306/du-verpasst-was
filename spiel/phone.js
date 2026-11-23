@@ -513,6 +513,7 @@ const Handy = (() => {
     // ---- Story ----
     async story(name, code, dauer = 5, zeit = null, aufrufe = null, text = null) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
+      { const h = s.querySelector('.st-fuss span'); if (h) { h.textContent = '♡'; h.classList.remove('rot'); } }   // V8.9: Herz bei jeder neuen Story wieder leer
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + (text ? `<div class="st-text st-text-story">${esc(text)}</div>` : '');   // V8.8: Text auf der Story
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
       s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));

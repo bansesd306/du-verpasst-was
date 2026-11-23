@@ -702,14 +702,14 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 
 /* Chat (WhatsApp dunkel) */
 [data-app=chat]{background:#0b1014}
-.c-kopf{margin-top:56px;height:96px;display:flex;align-items:center;gap:14px;padding:0 18px;background:#0b1014;flex:none;border-bottom:1px solid #1a2024}
+.c-kopf{margin-top:56px;height:96px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#0b1014;flex:none;border-bottom:1px solid #1a2024}
 .c-kopf .zur{font-size:34px;color:#e9edef}
 .c-kopf .av{width:58px;height:58px;font-size:28px}
 .c-name{flex:1;min-width:0}
 .c-name b{display:block;font:600 34px system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.c-name small{display:block;font:400 24px system-ui;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-name small{display:block;font:400 23px system-ui;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-name small.gruen{color:#25d366}
-.c-ic{color:#e9edef;display:flex;gap:34px;align-items:center;padding:6px 8px;border-radius:30px}
+.c-ic{color:#e9edef;display:flex;gap:22px;align-items:center;padding:6px 8px;border-radius:30px}
 .c-ic .ico{width:40px;height:40px;fill:currentColor}
 .c-kopf .zur .ico{width:40px;height:40px;fill:#e9edef;display:block}
 .c-kopf .zur{padding:6px}
@@ -863,7 +863,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .v-ton{position:absolute;right:26px;bottom:60px;font-size:36px}
 
 /* Hinweis im Handy, Display aus */
-.hhinweis{position:absolute;left:14px;right:14px;top:60px;padding:20px 22px;border-radius:30px;background:rgba(40,40,44,.97);display:flex;gap:16px;align-items:center;transform:translateY(-160%);transition:transform .45s cubic-bezier(.2,.9,.3,1.2);z-index:9}
+.hhinweis{position:absolute;left:14px;right:14px;top:60px;padding:20px 22px;border-radius:30px;background:rgba(40,40,44,.97);display:flex;gap:16px;align-items:center;transform:translateY(calc(-100% - 80px));transition:transform .45s cubic-bezier(.2,.9,.3,1.2);z-index:9}
 .hhinweis.an{transform:none}
 .hhinweis b{font:600 26px system-ui;color:#fff}.h-x{font:400 24px system-ui;color:#ccc}
 .h-ic{width:46px;height:46px;border-radius:50%;flex:none}
@@ -3449,9 +3449,16 @@ Sie geht. Ich stehe im Gang mit der Jacke in der Hand.
 @bild FL1 langsam
 @musik club dumpf
 … !3
-? „Eine Stunde. EINE.“ -> AFTERPARTY
-? „Lynn kennt sich bestimmt mit Recht aus.“ -> AFTERPARTY
+? „Eine Stunde. EINE.“ -> A_NAGUT
+? „Lynn kennt sich bestimmt mit Recht aus.“ -> A_NAGUT
 ? „Nein. Jetzt geh ich wirklich …“ -> A13
+
+# V8.9 (Philip, Fehlerprotokoll): Schwarz, kurze Pause, „Na gut …“, dann erst Tims Feier
+== A_NAGUT
+@schwarz
+@warte 1.5
+Na gut …
+-> AFTERPARTY
 
 == A13
 …
@@ -3641,6 +3648,9 @@ Hm.
 @pfad Afterparty
 @abzeichen Eine Stunde
 @party aus
+# V8.9 (Philip, Fehlerprotokoll): erst kurz schwarz, dann das Bild von Tims Feier
+@schwarz
+@warte 1
 # V8.8 (A5/J1-12): Tims Feier (Mia ist auch da – „Die vierte“)
 @bild TIM_FEIER_1 langsam
 @musik spaet leise
@@ -4122,9 +4132,9 @@ Ich bin auf keinem Foto. !3
 @schwarz
 # V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
 @ton tinnitus
-@warte 3.5
-@ton voegel
-@warte 1.5
+# V8.9 (Fehlerprotokoll): Vögel leise parallel zum Pfeifen einblenden
+@ton voegel ein4
+@warte 5
 @bild SO schnitt
 @raum tag
 ~ … mein Kopf …
@@ -4321,7 +4331,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @ende
 # V8.8 (M): Jonas mittags
 @lernplan aus
-@uhr So 12:40
+@uhr springe So 12:40
 @ton bzzz
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
@@ -4440,7 +4450,7 @@ Ich krieg das hin.
 ~ Kommt eh nicht dran.
 @lernplan aus
 # V8.8 (M): Jonas mittags
-@uhr So 12:40
+@uhr springe So 12:40
 @ton bzzz
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
@@ -4449,7 +4459,7 @@ Ich krieg das hin.
 @warte 1
 @handy zu
 # V8.5: 23:12 → 22:31, weil danach die Sonntagnacht um 22:40 beginnt
-@uhr So 22:31
+@uhr springe So 22:31
 @handy sperr
 … Ich krieg das hin.
 -> SONNTAGNACHT
@@ -4553,7 +4563,7 @@ Ich krieg das hin.
   # V8.7 (D24): Wecker 6:30
   @stille
   @schwarz schnitt
-  @warte 2.5
+  @warte 4.5
   @uhr Mo 06:30
   @handy sperr
   @ton! wecker 3.5s
@@ -4619,7 +4629,8 @@ Ich schau nur, wie spät es ist.
 # Morgen (wer schlecht geschlafen hat): drei Wecker
 @stille
 @schwarz schnitt
-@warte 2.5
+# V8.9: längere Pause vor dem Wecker
+@warte 4.5
 @uhr Mo 06:30
 @handy sperr
 @ton! wecker 3.5s
@@ -6252,6 +6263,7 @@ const Handy = (() => {
     // ---- Story ----
     async story(name, code, dauer = 5, zeit = null, aufrufe = null, text = null) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
+      { const h = s.querySelector('.st-fuss span'); if (h) { h.textContent = '♡'; h.classList.remove('rot'); } }   // V8.9: Herz bei jeder neuen Story wieder leer
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + (text ? `<div class="st-text st-text-story">${esc(text)}</div>` : '');   // V8.8: Text auf der Story
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
       s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));
@@ -7659,7 +7671,7 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; m = x.match(/^ein(\d+(?:\.\d+)?)$/); if (m) o.einblenden = +m[1]; });   // V8.9: ein4 = 4 s einblenden
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();

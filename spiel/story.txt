@@ -2145,9 +2145,16 @@ Sie geht. Ich stehe im Gang mit der Jacke in der Hand.
 @bild FL1 langsam
 @musik club dumpf
 … !3
-? „Eine Stunde. EINE.“ -> AFTERPARTY
-? „Lynn kennt sich bestimmt mit Recht aus.“ -> AFTERPARTY
+? „Eine Stunde. EINE.“ -> A_NAGUT
+? „Lynn kennt sich bestimmt mit Recht aus.“ -> A_NAGUT
 ? „Nein. Jetzt geh ich wirklich …“ -> A13
+
+# V8.9 (Philip, Fehlerprotokoll): Schwarz, kurze Pause, „Na gut …“, dann erst Tims Feier
+== A_NAGUT
+@schwarz
+@warte 1.5
+Na gut …
+-> AFTERPARTY
 
 == A13
 …
@@ -2337,6 +2344,9 @@ Hm.
 @pfad Afterparty
 @abzeichen Eine Stunde
 @party aus
+# V8.9 (Philip, Fehlerprotokoll): erst kurz schwarz, dann das Bild von Tims Feier
+@schwarz
+@warte 1
 # V8.8 (A5/J1-12): Tims Feier (Mia ist auch da – „Die vierte“)
 @bild TIM_FEIER_1 langsam
 @musik spaet leise
@@ -2818,9 +2828,9 @@ Ich bin auf keinem Foto. !3
 @schwarz
 # V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
 @ton tinnitus
-@warte 3.5
-@ton voegel
-@warte 1.5
+# V8.9 (Fehlerprotokoll): Vögel leise parallel zum Pfeifen einblenden
+@ton voegel ein4
+@warte 5
 @bild SO schnitt
 @raum tag
 ~ … mein Kopf …
@@ -3017,7 +3027,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @ende
 # V8.8 (M): Jonas mittags
 @lernplan aus
-@uhr So 12:40
+@uhr springe So 12:40
 @ton bzzz
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
@@ -3136,7 +3146,7 @@ Ich krieg das hin.
 ~ Kommt eh nicht dran.
 @lernplan aus
 # V8.8 (M): Jonas mittags
-@uhr So 12:40
+@uhr springe So 12:40
 @ton bzzz
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
@@ -3145,7 +3155,7 @@ Ich krieg das hin.
 @warte 1
 @handy zu
 # V8.5: 23:12 → 22:31, weil danach die Sonntagnacht um 22:40 beginnt
-@uhr So 22:31
+@uhr springe So 22:31
 @handy sperr
 … Ich krieg das hin.
 -> SONNTAGNACHT
@@ -3249,7 +3259,7 @@ Ich krieg das hin.
   # V8.7 (D24): Wecker 6:30
   @stille
   @schwarz schnitt
-  @warte 2.5
+  @warte 4.5
   @uhr Mo 06:30
   @handy sperr
   @ton! wecker 3.5s
@@ -3315,7 +3325,8 @@ Ich schau nur, wie spät es ist.
 # Morgen (wer schlecht geschlafen hat): drei Wecker
 @stille
 @schwarz schnitt
-@warte 2.5
+# V8.9: längere Pause vor dem Wecker
+@warte 4.5
 @uhr Mo 06:30
 @handy sperr
 @ton! wecker 3.5s
