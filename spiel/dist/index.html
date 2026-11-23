@@ -592,6 +592,17 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #stempel{position:absolute;left:50%;top:46%;z-index:60;font:400 380px/1 'Permanent Marker',cursive;color:#c4161c;border:18px solid #c4161c;border-radius:26px;padding:0 54px;opacity:0;pointer-events:none;mix-blend-mode:multiply;text-shadow:3px 2px 0 rgba(120,0,0,.55);transform:translate(-50%,-50%) rotate(-11deg) scale(3.2)}
 #stempel.an{opacity:.93;transform:translate(-50%,-50%) rotate(-11deg) scale(1);transition:transform .22s cubic-bezier(.5,0,.9,.4),opacity .1s}
 
+/* V9.0 Sprungmenü: Reiter + lesbare Szenennamen */
+#sprungmenue .reiter{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid #253049;overflow-x:auto;white-space:nowrap}
+#sprungmenue .reiter button{border:1px solid #33405e;background:#141b2c;border-radius:8px 8px 0 0;padding:5px 10px;font-size:13px}
+#sprungmenue .reiter button.an{background:#7fb0ff;border-color:#7fb0ff;color:#06101f;font-weight:700}
+#sprungmenue .tabtitel{font-weight:700;color:#7fb0ff;padding:8px 0 2px}
+#sprungmenue .szenen button{font:500 13px system-ui,sans-serif;text-align:left;display:flex;flex-direction:column;gap:1px;max-width:100%}
+#sprungmenue .szenen button b{font-weight:600}
+#sprungmenue .szenen button i{font:italic 400 10px ui-monospace,monospace;color:#7a88a8}
+#sprungmenue .reiter,#sprungmenue .wege,#sprungmenue .kopf{flex:none}
+#fehlerbox .mik.an{background:#c0392b;color:#fff}
+
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 #handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,.85,.25,1);z-index:5}
 #handy.an{transform:none}
@@ -2834,6 +2845,8 @@ Mia: „Sag was für die Story.“
 Ich: „Was denn?“
 @bild N35cL gesicht
 Mia: „Egal. Ist eh schon gepostet.“
+Ich: „Wow. Wie nett.“
+… !1.5
 @bild N35t gesicht
 Mia: „Ich war heute schon auf drei Partys.“
 Ich: „Gleichzeitig?“
@@ -2889,7 +2902,9 @@ Mia: „Aber ist ja nicht bindend.“
 … !2
 Mia: „Zumindest nicht für mich.“
 Ich: „Und die drei ghostest du dann alle?“
-@bild N35s schnitt
+@bild N35n gesicht
+@warte .9
+@bild N35s langsam
 Mia: „Denkst du, ich mach sowas?“
 … !1.5
 @bild MIA_SMIRK schnitt
@@ -5093,7 +5108,7 @@ const BILDER = {
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
 
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
-  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral)", stimmung: "balkon", figur: true, blinzeln: "N14z",
+  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral)", stimmung: "balkon", figur: true,
           lichter: [[0.28,0.606],[0.296,0.616],[0.264,0.646],[0.314,0.676],[0.854,0.678],[0.01,0.684],[0.131,0.681],[0.349,0.69],[0.241,0.699],[0.881,0.705],[0.216,0.728],[0.914,0.729],[0.997,0.731],[0.029,0.736],[0.939,0.74],[0.365,0.748],[0.401,0.751],[0.972,0.754],[0.066,0.753],[0.154,0.752],[0.182,0.757],[0.09,0.767],[0.121,0.768],[0.484,0.78],[0.423,0.789],[0.457,0.796]] },
   N14r: { datei: "img/N14r.webp", text: "Lynn redet mit den Händen", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14m: { datei: "img/N14m.webp", text: "Lynn redet, Mund offen, ohne Hände (Gemini, V8.5)", stimmung: "balkon", figur: true, lichterVon: "N14" },
@@ -5217,9 +5232,10 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "LNz": {"basis": "N14c", "box": [0.275, 0.0, 0.55, 0.5373]}, "LNLz": {"basis": "N14d", "box": [0.275, 0.0, 0.55, 0.5289]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "LNz": {"basis": "N14c", "box": [0.275, 0.0, 0.55, 0.5373]}, "LNLz": {"basis": "N14d", "box": [0.275, 0.0, 0.55, 0.5289]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
+  N14: { blink: ["N14zo"] },
   B12: { blink: ["B12z"], spricht: { Jonas: "B12s" }, mimik: ["B12g"] },
   N13L: { blink: ["N13Lz1", "N13Lz2"], spricht: { Jonas: "N13Ls" } },
   B12A: { blink: ["B12Az"], mimik: ["B12Ag"] },
@@ -8038,13 +8054,19 @@ Spiel.init();
   if (typeof TESTMODUS === 'undefined' || !TESTMODUS) return;
   const src = document.getElementById('story').textContent.split('\n');
   // Kapitel, Abschnitte (# ---- … ----) und Szenen (== NAME) in Skript-Reihenfolge
-  const kapitel = []; let kap = null, abs = null; const zeileVon = {};
+  const kapitel = []; let kap = null, abs = null; const zeileVon = {}; const titel = {};
+  // V9.0: lesbarer Name je Szene: Kommentar direkt über „== NAME“, sonst erste Textzeile der Szene
+  const szenenTitel = (i, name) => {
+    for (let k = i - 1; k >= Math.max(0, i - 3); k--) { const z = src[k].trim(); if (!z) continue; if (/^#/.test(z) && !/^#\s*[-=]{3,}/.test(z) && !/^#\s*V\d/.test(z)) return z.replace(/^#\s*/, '').replace(/[-–—]{2,}/g, '').slice(0, 46); break; }
+    for (let k = i + 1; k < Math.min(src.length, i + 30); k++) { const z = src[k].trim(); if (/^==/.test(z)) break; if (!z || /^[@?~#!\-]|^\.\.\.|^…/.test(z)) continue; return z.replace(/\s*!\d.*$/, '').slice(0, 42); }
+    return '';
+  };
   src.forEach((z, i) => {
     let m;
     if ((m = z.match(/^#\s{2,}((PROLOG|KAPITEL|KNOTEN|EPILOG)[^\n]*)/))) { kap = { name: m[1].trim(), id: m[2] === 'KAPITEL' ? 'K' + (m[1].match(/\d+/) || [''])[0] : m[2], abs: [] }; kapitel.push(kap); abs = null; return; }
     if (!kap) return;
     if ((m = z.match(/^# -{3,}\s*(.+?)\s*-{3,}\s*$/))) { abs = { name: m[1], szenen: [] }; kap.abs.push(abs); return; }
-    if ((m = z.match(/^== (\S+)/))) { if (!abs) { abs = { name: '', szenen: [] }; kap.abs.push(abs); } abs.szenen.push(m[1]); zeileVon[m[1]] = i; }
+    if ((m = z.match(/^== (\S+)/))) { if (!abs) { abs = { name: '', szenen: [] }; kap.abs.push(abs); } abs.szenen.push(m[1]); zeileVon[m[1]] = i; titel[m[1]] = szenenTitel(i, m[1]); }
   });
   // Ab welcher Zeile das Skript selbst typ/lynn setzt – davor wird der Wert beim Springen nicht vorweggenommen
   const ab = re => { const i = src.findIndex(z => re.test(z)); return i < 0 ? 1e9 : i; };
@@ -8062,6 +8084,7 @@ Spiel.init();
   };
   // Uhr beim Springen: Uhrzeit aus der Abschnitts-Überschrift, sonst Kapitelbeginn
   const KAPUHR = { K1: '21:07', K2: '21:20', KNOTEN: '21:20', K3: '21:40', K4: null, K5: 'Sa 10:32', K6: 'So 09:00', EPILOG: 'Mo 07:30' };
+  const TABNAME = { PROLOG: 'Prolog', K1: '1 Start', K2: '2 Zuhause', KNOTEN: 'Aufbruch + Weg', K3: '3 Party', K4: '4 Nacht', K5: '5 Sa–Mo', EPILOG: 'Epilog' };
   let wegWahl = 'Zuhause A';
   try { wegWahl = localStorage.getItem('dvw-sprung-weg') || wegWahl; } catch (e) { }
 
@@ -8099,16 +8122,21 @@ Spiel.init();
   const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="zu" aria-label="Schließen">✕</button></div>
     <div class="wege">${Object.keys(WEGE).map(w => `<button type="button" data-weg="${esc(w)}">${esc(w)}</button>`).join('')}</div>
-    <div class="liste">${kapitel.map((k, ki) => `<details${ki === 2 ? ' open' : ''}><summary>${esc(k.name)}</summary>${k.abs.map(a => `${a.name ? `<div class="abs">${esc(a.name)}</div>` : ''}<div class="szenen">${a.szenen.map(s => `<button type="button" data-l="${s}" data-k="${k.id}" data-a="${esc(a.name)}">${s}</button>`).join('')}</div>`).join('')}</details>`).join('')}</div>`;
+    <div class="reiter">${kapitel.map((k, ki) => `<button type="button" data-tab="${ki}">${esc(TABNAME[k.id] || k.name)}</button>`).join('')}</div>
+    <div class="liste">${kapitel.map((k, ki) => `<div class="tab" data-t="${ki}"><div class="tabtitel">${esc(k.name)}</div>${k.abs.map(a => `${a.name ? `<div class="abs">${esc(a.name)}</div>` : ''}<div class="szenen">${a.szenen.map(s => `<button type="button" data-l="${s}" data-k="${k.id}" data-a="${esc(a.name)}"><b>${esc(titel[s] || s)}</b>${titel[s] ? `<i>${s}</i>` : ''}</button>`).join('')}</div>`).join('')}</div>`).join('')}</div>`;
   document.body.appendChild(knopf); document.body.appendChild(panel);
   const wegeZeigen = () => panel.querySelectorAll('[data-weg]').forEach(b => b.classList.toggle('an', b.dataset.weg === wegWahl));
   wegeZeigen();
+  let tabNr = 2; try { tabNr = +localStorage.getItem('dvw-sprung-tab') || 2; } catch (e) { }
+  const tabsZeigen = () => { panel.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('an', +b.dataset.tab === tabNr)); panel.querySelectorAll('.tab').forEach(t => t.style.display = +t.dataset.t === tabNr ? '' : 'none'); };
+  tabsZeigen();
   const halt = e => e.stopPropagation();
   [knopf, panel].forEach(el => ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click'].forEach(t => el.addEventListener(t, halt)));
   knopf.addEventListener('click', () => panel.classList.toggle('an'));
   panel.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.classList.contains('zu')) panel.classList.remove('an');
+    else if (b.dataset.tab) { tabNr = +b.dataset.tab; try { localStorage.setItem('dvw-sprung-tab', tabNr); } catch (x) { } tabsZeigen(); }
     else if (b.dataset.weg) { wegWahl = b.dataset.weg; try { localStorage.setItem('dvw-sprung-weg', wegWahl); } catch (x) { } wegeZeigen(); }
     else if (b.dataset.l) springen(b.dataset.l, b.dataset.k, b.dataset.a || '');
   });
@@ -8176,7 +8204,7 @@ Spiel.init();
   const knopf = document.createElement('button'); knopf.id = 'fehlerknopf'; knopf.type = 'button'; knopf.textContent = '⚑'; knopf.title = 'Fehler markieren (Testversion)';
   const box = document.createElement('div'); box.id = 'fehlerbox';
   box.innerHTML = `<div class="fb-in"><b>Fehler markieren</b><small></small><textarea rows="3" placeholder="Was war falsch? (Tippen oder Mikrofon der Tastatur)"></textarea>
-    <div class="fb-k"><button type="button" class="ok">Speichern</button><button type="button" class="ab">Abbrechen</button><button type="button" class="kopie">Protokoll kopieren</button></div><small class="st"></small></div>`;
+    <div class="fb-k"><button type="button" class="ok">Speichern</button><button type="button" class="ab">Abbrechen</button><button type="button" class="mik">🎤 Sprechen</button><button type="button" class="kopie">Protokoll kopieren</button></div><small class="st"></small></div>`;
   document.body.appendChild(knopf); document.body.appendChild(box);
   const halt = e => e.stopPropagation();
   [knopf, box].forEach(el => ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click', 'keydown'].forEach(t => el.addEventListener(t, halt)));
@@ -8191,6 +8219,20 @@ Spiel.init();
   const zu = () => { box.classList.remove('an'); try { Spiel._debug.pausieren(false); } catch (e) { } };
   box.querySelector('.ok').addEventListener('click', () => { log('FEHLER', Object.assign({ satz: box.querySelector('textarea').value.trim() }, markiert || {})); zu(); });
   box.querySelector('.ab').addEventListener('click', zu);
+  // V9.0: Spracheingabe (Web Speech API). Wo der Browser sie nicht erlaubt, bleibt das Mikrofon der Tastatur.
+  { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const mik = box.querySelector('.mik'); let rec = null, laeuft = false;
+    if (!SR) mik.style.display = 'none';
+    else mik.addEventListener('click', () => {
+      const ta = box.querySelector('textarea'), st = box.querySelector('.st');
+      if (laeuft && rec) { rec.stop(); return; }
+      try {
+        rec = new SR(); rec.lang = 'de-DE'; rec.interimResults = true; rec.continuous = true; const basis = ta.value ? ta.value.trim() + ' ' : '';
+        rec.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = basis + t; };
+        rec.onerror = e => { st.textContent = 'Spracheingabe nicht möglich (' + e.error + ') – bitte das Mikrofon der Tastatur nutzen.'; };
+        rec.onend = () => { laeuft = false; mik.textContent = '🎤 Sprechen'; mik.classList.remove('an'); };
+        rec.start(); laeuft = true; mik.textContent = '⏹ Fertig'; mik.classList.add('an'); st.textContent = 'Ich höre zu … zum Beenden „Fertig“ tippen.';
+      } catch (err) { st.textContent = 'Spracheingabe hier nicht verfügbar – bitte das Mikrofon der Tastatur nutzen.'; }
+    }); }
   box.querySelector('.kopie').addEventListener('click', async () => {
     const t = alle.map(e => JSON.stringify(e)).join('\n');
     try { await navigator.clipboard.writeText(t); box.querySelector('.st').textContent = `${alle.length} Einträge kopiert.`; }

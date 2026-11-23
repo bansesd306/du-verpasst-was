@@ -1542,6 +1542,8 @@ Mia: „Sag was für die Story.“
 Ich: „Was denn?“
 @bild N35cL gesicht
 Mia: „Egal. Ist eh schon gepostet.“
+Ich: „Wow. Wie nett.“
+… !1.5
 @bild N35t gesicht
 Mia: „Ich war heute schon auf drei Partys.“
 Ich: „Gleichzeitig?“
@@ -1597,7 +1599,9 @@ Mia: „Aber ist ja nicht bindend.“
 … !2
 Mia: „Zumindest nicht für mich.“
 Ich: „Und die drei ghostest du dann alle?“
-@bild N35s schnitt
+@bild N35n gesicht
+@warte .9
+@bild N35s langsam
 Mia: „Denkst du, ich mach sowas?“
 … !1.5
 @bild MIA_SMIRK schnitt
