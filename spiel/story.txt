@@ -1594,7 +1594,9 @@ Ich: „Muss ich mir Sorgen machen?“
 @bild N35f ruck
 Mia: „Wieso Sorgen? Dass ich dich auch noch heirate?“
 Mia: „Vielleicht.“
-@bild N35fz gesicht
+@bild N35fz schnitt
+@warte .5
+@bild N35f gesicht
 Mia: „Aber ist ja nicht bindend.“
 … !2
 Mia: „Zumindest nicht für mich.“

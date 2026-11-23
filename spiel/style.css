@@ -593,3 +593,4 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #sprungmenue .szenen button i{font:italic 400 10px ui-monospace,monospace;color:#7a88a8}
 #sprungmenue .reiter,#sprungmenue .wege,#sprungmenue .kopf{flex:none}
 #fehlerbox .mik.an{background:#c0392b;color:#fff}
+#sperre.an{opacity:0!important}
