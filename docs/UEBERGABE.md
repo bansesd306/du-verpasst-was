@@ -7,7 +7,7 @@ Antworten auf Deutsch, kurz. Bei jeder Option sagen, welche am wenigsten Limit k
 
 ## Stand Etappe 5b (Commit 4bc785c + Folgecommit)
 Gebaut: Mama einmal vor dem Haus (W4, Flag `mama`); Lynn-Posen neu (`proc/v90_lynn.py`); Lynn-Blinzeln nur Augen-Overlay `N14zo`; Mia-Lichtshow ohne Spiegeln; Mia „Wow. Wie nett.“ + Pause, N35n → N35s langsam; Mia zwinkert nur kurz (N35fz → N35f); Ladebalken bei Pausen ausgeblendet (CSS `#sperre.an{opacity:0!important}`); Sprungmenü mit Reitern + lesbaren Titeln (159 Szenen); Fehlerfeld mit Mikrofon-Knopf; Overlays werden vorgeladen. t8 (alle 23 Wege) ohne Fehler.
-Test-Link zuletzt veröffentlicht 21:33 (Slug `5d6f857a-23db-4da8-8501-add017b70699`, Alter Account!). Neuer Stand liegt nur im Repo.
+Test-Link (Slug `5d6f857a-23db-4da8-8501-add017b70699`, ALTER Account) zuletzt veröffentlicht 23.11. 23:05 = Version 1795471401-20a0 = dieser Stand. Lena-Blinzeln (N13L) ist jetzt nur die Augenpartie (Haarfarbe/Kopf springen nicht mehr).
 Philip entschied: KEIN zusätzlicher Dialog nach „Wow. Wie nett.“ (zu offensichtlich).
 
 ## Noch offen – Fragen an Philip
