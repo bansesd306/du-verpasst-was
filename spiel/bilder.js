@@ -337,6 +337,7 @@ const ABZ_STIL = {
   'Senden?': ['✉️', '#b77cff', '#5b2aa8', 'Getippt. Und dann doch gelöscht.', 'Ein paar Wörter. Nie angekommen.'],
   'Stumm': ['🔕', '#9aa4b6', '#4a5262', 'Du hast das Handy nachts stumm geschaltet.', 'Manchmal reicht ein Schalter.'],
   'Eine Stunde': ['⏳', '#ffad5c', '#c0571b', 'Afterparty. Nur eine Stunde. Klar.', 'Es gab noch ein Danach.'],
+  'Fotograf des Jahres': ['📷', '#ffd36b', '#8a5a14', 'Kein einziges Foto gemacht. Warst ja nicht da.', 'Ein Preis für Bilder, die andere gemacht haben.'],
   'Zwischen den Jacken': ['🧥', '#cf9a6a', '#6e4424', 'So spät da, dass nur die Jacken gewartet haben.', 'Zu spät ist auch eine Uhrzeit.'],
   'Musst du dabei gewesen sein': ['🎉', '#ff6fb3', '#a81e66', 'Den Feuerlöscher-Moment verpasst.', 'Alle reden noch davon. Du nicht.'],
   '§ 827': ['⚖️', '#ef5a5f', '#8f1d22', 'Auf der Party an Jura gedacht. Tim haftet.', 'Dein Studium war plötzlich nützlich.'],

@@ -490,6 +490,7 @@ const Handy = (() => {
     tippe, sende, loesche,
     async eintippen(text) { await tippe(text); },
     async abschicken() { await sende(); },
+    async tippeUndLoesche(text) { await this.rein(); if (app !== 'chat') return; await tippe(text); await warte(900); await loesche(); await warte(400); tastatur(false); },   // V8.9: tippt, überlegt, löscht alles – nichts wird gesendet
     async wegloeschen() { await loesche(); await warte(400); tastatur(false); },
     async entwurf(text) { await this.rein(); await tippe(text); await warte(900); await loesche(); await warte(500); tastatur(false); },
     schreibt,

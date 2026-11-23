@@ -786,6 +786,11 @@ const Spiel = (() => {
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
       case 'montage': await montage(); break;
+      case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
+        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; B.appendChild(st);
+        void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
+        await warte(1.4); setTimeout(() => st.remove(), 4000); break;
+      }
       case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
@@ -841,6 +846,7 @@ const Spiel = (() => {
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
       case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 9000; bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
       case 'ich': await Handy.ich(a); await warte(.2); break;
+      case 'tippeweg': zeigeTextbox(false); await Handy.tippeUndLoesche(a); await warte(.4); break;
       case 'tippe': zeigeTextbox(false); await Handy.rein(); await Handy.tippeUndSende(a); await warte(.5); break;
       case 'schreibt': await Handy.schreibt(teile[0], +teile[1] || 2); break;
       case 'haken': Handy.haken(a); break;
