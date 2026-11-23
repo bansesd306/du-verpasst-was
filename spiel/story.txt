@@ -2201,7 +2201,7 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik club dumpf
 @setze treppe
 @bild TREPPE schnitt
-@ton treppenhaus_runter
+@ton treppe
 … !2
 @bild HAUS langsam
 … !1.5
@@ -2306,7 +2306,7 @@ Hm.
 @wenn !treppe
   @setze treppe
   @bild TREPPE schnitt
-  @ton treppenhaus_runter
+  @ton treppe
   … !2
   @bild HAUS langsam
   … !1.5
@@ -3544,41 +3544,6 @@ Und jetzt wieder warten, bis – >>
 @ende
 @ton bzzz_doppel
 @warte 1.5
-@wenn typ=="gluecklich" && OPTION_LYNN_UND==1
-  -> ENDE_TWIST
-@ende
-@wenn punkte<=LEISER_BIS
-  -> ENDE_PIZZA
-@ende
--> ENDE_TWIST
-
-# ---- Nach der Prüfung: der Twist ----
-== ENDE_TWIST
-@uhr aus
-@schwarz
-@loop halle an
-# V8.7 (D27): „Blaues Licht“ – noch in der Halle, Pings, das Handy ist sofort oben (kein Tippen)
-@wenn typ!="gluecklich" && punkte>HIER_ODER_DA_BIS
-  @warte .8
-  @ton bzzz
-  @handy sperr
-  @benachrichtigung WhatsApp | Jonas | bereit für heute abend? 😏
-  @warte .5
-  @ton bzzz
-  @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
-  @warte .4
-  @ton bzzz
-  @benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet
-  @warte .5
-  @handy chat Jonas
-  @nachricht! Jonas: bereit für heute abend? 😏
-  @loop halle aus
-  -> TWIST_SCHLUSS
-@ende
-@ton bzzz_doppel
-…
-… !4
-@loop halle aus
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   # (Option aus dem Dokument, noch offen)
   @handy sperr

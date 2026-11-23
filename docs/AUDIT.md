@@ -16,7 +16,7 @@ Referenzbilder liegen in den Projektdateien unter `audit/`: `ov_lynn.jpg`, `ov_r
 
 ## KRITISCH
 
-### K1. Das neue V8.9-Ende („wie Pizza, dann Bzzz“) wird nie gespielt
+### K1. ✅ behoben (23.11.) – Das neue V8.9-Ende („wie Pizza, dann Bzzz“) wird nie gespielt
 `story.txt` definiert `== ENDE_TWIST` zweimal: in Z. 3509 und in Z. 3556. Die Engine nimmt immer die **letzte** Definition einer Sprungmarke.
 - Der V8.9-Block (Z. 3509–3555) ist damit toter Code: Halle aus, N09T, „Zu Hause … Endlich.“, „Und jetzt wieder warten, bis –“, dann Bzzz.
 - Alle Spieler sehen weiter das alte Twist-Ende in der Prüfungshalle (Z. 3556 ff.).
@@ -24,7 +24,7 @@ Referenzbilder liegen in den Projektdateien unter `audit/`: `ov_lynn.jpg`, `ov_r
 
 **Behebung:** nur die Struktur, kein Text: den alten Block oder den alten Kopf entfernen und die doppelte Verteilung streichen. Danach prüfen, dass Blaues Licht, Lynn-Twist und „Hier oder da“ jeweils richtig enden.
 
-### K2. Treppenhaus-Schritte (V8.9) bleiben stumm
+### K2. ✅ behoben (23.11.) – Treppenhaus-Schritte (V8.9) bleiben stumm
 `@ton treppenhaus_runter` (Z. 2204 und 2309) sucht in `TOENE` nach dem Schlüssel `treppenhaus_runter`. Die Datei ist dort aber unter dem Schlüssel **`treppe`** eingetragen (`bilder.js` Z. 257). Dadurch ist auf jedem Weg aus dem Haus nichts zu hören.
 
 **Behebung:** im Skript `@ton treppe` schreiben oder in `bilder.js` einen zweiten Schlüssel anlegen.
