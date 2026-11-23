@@ -1193,6 +1193,7 @@ Alter, singt der schief.
 ? „Umdrehen“ -> UMDREHEN wenn !umgedreht
 
 == W4
+@setze wo = 4
 @ton schritte 1.8s
 @uhr +4
 @loop wind aus
@@ -1200,6 +1201,22 @@ Alter, singt der schief.
 @effekt heranzoomen
 @musik party strasse 4
 @warte 2.2
+# V9.0: Mama schreibt vor dem Haus (einmal auf jedem Weg; man kann noch umdrehen). Text unverändert, der Spieler zeigt nur „…“.
+@wenn !mama
+  @setze mama
+  @ton bzzz
+  @handy sperr
+  @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+  @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+  @tipp
+  ~ …
+  … !2
+  @handy zu
+  ? „Reingehen.“ -> W4_REIN
+  ? „Umdrehen.“ -> UMDREHEN wenn !umgedreht
+@ende
+
+== W4_REIN
 @bild TREPPE_HELL schnitt
 Die Bässe gehen bis auf die Treppe.
 -> PARTY_ANKUNFT
@@ -1304,7 +1321,6 @@ Oh Mann …
 Jonas hat nicht zu viel versprochen.
 @wenn ankunft>22:45
   @setze lied
-  @rufe MAMA
 @ende
 @bild B12T schnitt
 Jonas!: „NA ALSO!“
@@ -1467,15 +1483,18 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
   … !3
   @bild N32dC gesicht
   Ich singe mit.
-  @setze mama
-  @ton bzzz
-  @handy sperr
-  @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
-  @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
-  @tipp
-  ~ Noch 58 Stunden.
-  … !2
-  @handy zu
+  # V9.0: Mama kommt nur noch einmal, vor dem Haus (W4); hier nur, falls sie noch nicht kam
+  @wenn !mama
+    @setze mama
+    @ton bzzz
+    @handy sperr
+    @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+    @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+    @tipp
+    ~ Noch 58 Stunden.
+    … !2
+    @handy zu
+  @ende
   @musik lied aus
   @bild N32dP gesicht
   @warte .8
@@ -2191,7 +2210,9 @@ Fast draußen. Ich dreh mich nochmal um.
 Ich leg meine dazu.
 @abzeichen Zwischen den Jacken
 @setze lied
-@rufe MAMA
+@wenn !mama
+  @rufe MAMA
+@ende
 @musik party leise
 # V8.8 (J1-5): kurz nach dem Feuerlöscher, alle reden noch davon
 @bild FEUER

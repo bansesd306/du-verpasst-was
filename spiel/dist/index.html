@@ -2485,6 +2485,7 @@ Alter, singt der schief.
 ? „Umdrehen“ -> UMDREHEN wenn !umgedreht
 
 == W4
+@setze wo = 4
 @ton schritte 1.8s
 @uhr +4
 @loop wind aus
@@ -2492,6 +2493,22 @@ Alter, singt der schief.
 @effekt heranzoomen
 @musik party strasse 4
 @warte 2.2
+# V9.0: Mama schreibt vor dem Haus (einmal auf jedem Weg; man kann noch umdrehen). Text unverändert, der Spieler zeigt nur „…“.
+@wenn !mama
+  @setze mama
+  @ton bzzz
+  @handy sperr
+  @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+  @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+  @tipp
+  ~ …
+  … !2
+  @handy zu
+  ? „Reingehen.“ -> W4_REIN
+  ? „Umdrehen.“ -> UMDREHEN wenn !umgedreht
+@ende
+
+== W4_REIN
 @bild TREPPE_HELL schnitt
 Die Bässe gehen bis auf die Treppe.
 -> PARTY_ANKUNFT
@@ -2596,7 +2613,6 @@ Oh Mann …
 Jonas hat nicht zu viel versprochen.
 @wenn ankunft>22:45
   @setze lied
-  @rufe MAMA
 @ende
 @bild B12T schnitt
 Jonas!: „NA ALSO!“
@@ -2759,15 +2775,18 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
   … !3
   @bild N32dC gesicht
   Ich singe mit.
-  @setze mama
-  @ton bzzz
-  @handy sperr
-  @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
-  @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
-  @tipp
-  ~ Noch 58 Stunden.
-  … !2
-  @handy zu
+  # V9.0: Mama kommt nur noch einmal, vor dem Haus (W4); hier nur, falls sie noch nicht kam
+  @wenn !mama
+    @setze mama
+    @ton bzzz
+    @handy sperr
+    @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+    @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+    @tipp
+    ~ Noch 58 Stunden.
+    … !2
+    @handy zu
+  @ende
   @musik lied aus
   @bild N32dP gesicht
   @warte .8
@@ -3483,7 +3502,9 @@ Fast draußen. Ich dreh mich nochmal um.
 Ich leg meine dazu.
 @abzeichen Zwischen den Jacken
 @setze lied
-@rufe MAMA
+@wenn !mama
+  @rufe MAMA
+@ende
 @musik party leise
 # V8.8 (J1-5): kurz nach dem Feuerlöscher, alle reden noch davon
 @bild FEUER
@@ -7499,7 +7520,9 @@ const Spiel = (() => {
     if (schnell) vz += 6.2 + (MIA_BEATS[MIA_BEATS.length - 1] - MIA_BEATS[0]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
     const schritte = []; let i = 0, f = 0;
-    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); schritte.push([MIA_BEATS[i], folge[f++ % folge.length]]); i += doppel ? 2 : 1; }
+    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
+        const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
+        schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); f++; } i += doppel ? 2 : 1; }
     const weiss = $('#weiss'); const strobo = $('#strobo');
     for (const [zeit, code] of schritte) {
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
@@ -7508,7 +7531,7 @@ const Spiel = (() => {
       const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
-      welt.classList.toggle('spiegel', Math.random() < .3 && !code.startsWith('MK'));
+      welt.classList.remove('spiegel');   // V9.0: Mia nicht mehr spiegeln (wirkte wie Doppelbild)
       if (Math.random() < .6) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
       // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze
       if (!schnell && Math.random() < .42) { const n = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= n; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
