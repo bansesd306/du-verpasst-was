@@ -378,3 +378,5 @@
 /* V8.7: Aufrufe bei fremder Story (Mias Text-Story) über der Fußleiste */
 .aufrufe .st-views{bottom:132px;left:34px;font:600 26px system-ui;opacity:.85}
 .aufrufe .st-musik{display:none}
+
+.st-fuss span.rot{color:#ff3040;animation:herzpop .5s ease-out}@keyframes herzpop{0%{transform:scale(1)}40%{transform:scale(1.55)}100%{transform:scale(1)}}

@@ -969,6 +969,8 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .aufrufe .st-views{bottom:132px;left:34px;font:600 26px system-ui;opacity:.85}
 .aufrufe .st-musik{display:none}
 
+.st-fuss span.rot{color:#ff3040;animation:herzpop .5s ease-out}@keyframes herzpop{0%{transform:scale(1)}40%{transform:scale(1.55)}100%{transform:scale(1)}}
+
 #zimmer{
   --nacht:#0b1121;
   --kalt:#7fb0ff;
@@ -1316,7 +1318,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 # =====================================================================
 
 # ---------------- Einstellungen (vorläufig, Philip entscheidet) ----------------
-@setze LEISER_BIS = 2
+@setze LEISER_BIS = 3
 @setze HIER_ODER_DA_BIS = 5
 # V8.8 (G27): Lernstand – ab wie viel echtem Lernen Montag „mittel“ bzw. „hoch“ läuft
 @setze LERN_MITTEL = 3
@@ -2385,7 +2387,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 # ---- Der Weg (drei Bilder, je Tipp ein Schritt) ----
 == W0
 @setze wo = 0
-@ton schritte
+@ton schritte 1.8s
 @bild W0 langsam
 @warte 1.5
 ? „Nach vorne gehen“ -> W1
@@ -2393,7 +2395,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W1
 @setze wo = 1
-@ton schritte
+@ton schritte 1.8s
 @uhr +2
 @bild B15
 @musik party fern
@@ -2403,7 +2405,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W2
 @setze wo = 2
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @bild N11
 @musik party strasse 2
@@ -2419,7 +2421,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W3
 @setze wo = 3
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @bild N12
 @musik party strasse 3
@@ -2430,7 +2432,7 @@ Alter, singt der schief.
 ? „Umdrehen“ -> UMDREHEN wenn !umgedreht
 
 == W4
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @loop wind aus
 @bild B16
@@ -4221,6 +4223,7 @@ Ich leg es wieder hin.
   @warte 1
   … !2
   Ich tipp aufs Herz.
+  @handy herz
   … !2
 @sonst
   @handy story lena.xo B12A 2 Min.
@@ -4376,6 +4379,7 @@ Ich krieg das hin.
   # V8.7 (D24): Wecker 6:30
   @stille
   @schwarz schnitt
+  @warte 2.5
   @uhr Mo 06:30
   @handy sperr
   @ton! wecker 3.5s
@@ -4441,6 +4445,7 @@ Ich schau nur, wie spät es ist.
 # Morgen (wer schlecht geschlafen hat): drei Wecker
 @stille
 @schwarz schnitt
+@warte 2.5
 @uhr Mo 06:30
 @handy sperr
 @ton! wecker 3.5s
@@ -4448,14 +4453,14 @@ Ich schau nur, wie spät es ist.
 @warte 1.5
 @uhr Mo 06:35
 @handy sperr
-@ton wecker 2.6s
+@ton wecker 2.6s rate1.15 vol1.3
 @warte 2.8
 @ton display_klick
 @handy zu
 @warte 1.2
 @uhr Mo 06:40
 @handy sperr
-@ton wecker 2.2s
+@ton wecker 2.2s rate1.4 vol1.6
 @warte 2.4
 @ton display_klick
 -> EN2
@@ -5513,7 +5518,7 @@ const Ton = (() => {
     tippLauf(ab, dauer) { if (!ctx || gesperrt || !P.tipplauf) return null; return quelle('tipplauf', sfx, { ab, dauer }); },
     get anschlaege() { return (TOENE.tipplauf && TOENE.tipplauf.anschlaege) || []; },
     outro(welche) {
-      if (!ctx) return; musikStopp(true); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
+      if (!ctx) return; musikStopp(true); liedStopp(); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
       const k = welche === 'warm' ? 'ende_warm' : 'Outro'; const nr = ++outroNr;
       const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
       if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten
@@ -5971,8 +5976,9 @@ const Handy = (() => {
       merke(name, (von === 'Ich' ? ((g || name === 'gruppe') ? '✓✓ Du: ' : '✓✓ ') : ((g || name === 'gruppe') ? von + ': ' : '')) + text, zeit, 0, ti); meta[name].tagText = bek ? null : tag;
     },
     gruppeOeffnen() { return this.chat('gruppe'); },
-    async nachricht(von, text, sofort) {
+    async nachricht(von, text, sofort, nachBzzz) {
       let schonGewartet = false;
+      if (nachBzzz && app === 'chat') sofort = true;   // V8.9: Handy hat gerade vibriert und der Chat ist offen → Nachricht muss da sein
       { const ziel = app === 'liste' && warteAuf ? warteAuf : app === 'chat' ? aktChat : von; const h = heute();
         const dup = chatListe(ziel).find(x => x.vorab && x.von === von && x.text === text && x.tagIdx === h); if (dup) { dup.vorab = false;   // V8.8 (G3): kam schon als Benachrichtigung – nicht doppelt
           if (app === 'liste' && warteAuf) await this.chat(warteAuf, true); else if (app !== 'chat') await this.chat(von); else renderChat();
@@ -6098,6 +6104,8 @@ const Handy = (() => {
       k.classList.add('weg'); Ton.spiele('whoosh_kurz', { vol: .35 }); await warteZ(20, 350); this.feed(); await warteZ(20, 1600);
     },
     // Storys fremder Leute im Schnelldurchlauf
+    // V8.9: Herz auf der Story wird rot und poppt kurz
+    async storyHerz() { const h = el.querySelector('.st-fuss span'); if (!h) return; h.textContent = '❤'; h.classList.add('rot'); await warte(600); },
     async storys(codes) {
       const namen = ['tim_k97', 'nightcrew', 'jule.mxn', 'paulfrnk', 'x.mia.x', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
       for (let i = 0; i < codes.length; i++) { const m = codes[i].match(/^(.+)=(.+)$/); await this.story(m ? m[1] : namen[i % namen.length], m ? m[2] : codes[i], .9); await warteZ(20, 780 - Math.min(i * 60, 360)); }
@@ -6397,7 +6405,7 @@ const Rahmen = (() => {
     sp.classList.remove('gelesen');
     bzzzZaehler = 0; besuch(); uhrzeitSetzen();
     if (nachWeg && laeufe() > 0) { S().nachr = (S().nachr || 0) + 6 + Math.floor(Math.random() * 7); zaehlerText(); kopf.classList.add('an'); sichern(); }
-    if (nachWeg && window.Ton) Ton.outroAus();
+    if (window.Ton) Ton.outroAus();   // V8.9: auch beim Zurückkommen ins Menü nach dem Ende (Endmusik lief doppelt mit)
     ton('party_fern');   // beim allerersten Laden: Autoplay-Versuch (Browser blockt evtl. bis zum ersten Tippen)
     bw.classList.remove('anlauf'); void bw.offsetWidth; bw.classList.add('anlauf');
     bw.classList.add('tippbar'); tippAb = Date.now() + 500;
@@ -6784,6 +6792,7 @@ const Spiel = (() => {
   // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
   // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
   const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
+  let bzzzMs = 0;   // V8.9: Zeitpunkt des letzten Vibrierens (erste Nachricht danach ist sofort da)
   const blickKnopf = $('#handyknopf');
   function blickMoeglich() {
     // V8.5: nur, wenn das Handy griffbereit ist (Skript setzt `handyweit`, wenn es weg/aus ist)
@@ -7430,9 +7439,10 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
+        if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
@@ -7460,7 +7470,7 @@ const Spiel = (() => {
       case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
-      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!')); break; }
+      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 9000; bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
       case 'ich': await Handy.ich(a); await warte(.2); break;
       case 'tippe': zeigeTextbox(false); await Handy.rein(); await Handy.tippeUndSende(a); await warte(.5); break;
       case 'schreibt': await Handy.schreibt(teile[0], +teile[1] || 2); break;
@@ -7540,6 +7550,7 @@ const Spiel = (() => {
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
       case 'laut': Handy.laut(); break;
+      case 'herz': await Handy.storyHerz(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
       case 'wegwischen': await Handy.wegwischen(); break;
       default: console.warn('Handy?', was);

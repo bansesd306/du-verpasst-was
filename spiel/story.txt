@@ -30,7 +30,7 @@
 # =====================================================================
 
 # ---------------- Einstellungen (vorläufig, Philip entscheidet) ----------------
-@setze LEISER_BIS = 2
+@setze LEISER_BIS = 3
 @setze HIER_ODER_DA_BIS = 5
 # V8.8 (G27): Lernstand – ab wie viel echtem Lernen Montag „mittel“ bzw. „hoch“ läuft
 @setze LERN_MITTEL = 3
@@ -1099,7 +1099,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 # ---- Der Weg (drei Bilder, je Tipp ein Schritt) ----
 == W0
 @setze wo = 0
-@ton schritte
+@ton schritte 1.8s
 @bild W0 langsam
 @warte 1.5
 ? „Nach vorne gehen“ -> W1
@@ -1107,7 +1107,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W1
 @setze wo = 1
-@ton schritte
+@ton schritte 1.8s
 @uhr +2
 @bild B15
 @musik party fern
@@ -1117,7 +1117,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W2
 @setze wo = 2
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @bild N11
 @musik party strasse 2
@@ -1133,7 +1133,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W3
 @setze wo = 3
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @bild N12
 @musik party strasse 3
@@ -1144,7 +1144,7 @@ Alter, singt der schief.
 ? „Umdrehen“ -> UMDREHEN wenn !umgedreht
 
 == W4
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @loop wind aus
 @bild B16
@@ -2935,6 +2935,7 @@ Ich leg es wieder hin.
   @warte 1
   … !2
   Ich tipp aufs Herz.
+  @handy herz
   … !2
 @sonst
   @handy story lena.xo B12A 2 Min.
@@ -3090,6 +3091,7 @@ Ich krieg das hin.
   # V8.7 (D24): Wecker 6:30
   @stille
   @schwarz schnitt
+  @warte 2.5
   @uhr Mo 06:30
   @handy sperr
   @ton! wecker 3.5s
@@ -3155,6 +3157,7 @@ Ich schau nur, wie spät es ist.
 # Morgen (wer schlecht geschlafen hat): drei Wecker
 @stille
 @schwarz schnitt
+@warte 2.5
 @uhr Mo 06:30
 @handy sperr
 @ton! wecker 3.5s
@@ -3162,14 +3165,14 @@ Ich schau nur, wie spät es ist.
 @warte 1.5
 @uhr Mo 06:35
 @handy sperr
-@ton wecker 2.6s
+@ton wecker 2.6s rate1.15 vol1.3
 @warte 2.8
 @ton display_klick
 @handy zu
 @warte 1.2
 @uhr Mo 06:40
 @handy sperr
-@ton wecker 2.2s
+@ton wecker 2.2s rate1.4 vol1.6
 @warte 2.4
 @ton display_klick
 -> EN2
