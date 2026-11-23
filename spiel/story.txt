@@ -659,10 +659,10 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 @tippe nö. du?
 @nachricht Paul: nee auch am lernen 😅
 … !2
-@nachricht Paul: hast du mias story gesehen?? krass 🔥
+@nachricht Paul: hast du ihre story gesehen?? krass 🔥
 @tipp
 @handy zu
-@handy story x.mia.x N35M2 3 Min.
+@handy story lena.xo LENA_SELFIE 3 Min.
 @warte 3
 ~ … Was ist daran krass?
 @handy chat Lerngruppe Schuldrecht
@@ -2174,6 +2174,7 @@ Fast draußen. Ich dreh mich nochmal um.
 … !3
 @ton schloss leise
 @musik club dumpf
+@setze treppe
 @bild TREPPE schnitt
 @ton treppenhaus_runter
 … !2
@@ -2274,6 +2275,15 @@ Hm.
 @party aus
 @musik aus langsam
 @effekt alles_aus
+# V8.9: jeder Ausgang führt erst durch das Treppenhaus (nicht direkt auf die Straße); nur einmal
+@wenn !treppe
+  @setze treppe
+  @bild TREPPE schnitt
+  @ton treppenhaus_runter
+  … !2
+  @bild HAUS langsam
+  … !1.5
+@ende
 @bild B14
 @loop wind an
 @ton schritte
