@@ -264,6 +264,29 @@ Lynn: „Behalt ihn.“ !2
 …
 Die Frau muss wirklich viel von mir halten.
 … Der hat sogar einen Laserpointer.
+# V8.9: Laserpointer-Flashback (Lynn ist frech, nicht nur lieb)
+@bild LP3 gesicht
+@warte 1
+@ton display_klick
+@bild LP5 schnitt
+… !2
+@bild LP6 langsam
+… !1.5
+@bild LP7 gesicht
+Lynn: „Pass auf. Gleich isser wieder weg.“
+Ich: „Schenkung ist Schenkung.“
+@bild LP4 gesicht
+Lynn: „Spar dir deine Jura-Scheiße.“
+@bild LP8 ruck
+@ton stift leise
+… !1
+@bild LP9 schnitt
+… !2
+Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
+@bild LP2 gesicht
+… !1.5
+@bild LP3 langsam
+… !2
 @loop seminar aus
 @effekt traum aus weich
 @raum nacht
@@ -570,8 +593,8 @@ Geht doch.
 @ton bzzz
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
-# V8.8 (J1-2): wieder B07 (das Live hat jetzt eigene Bilder)
-@handy story lena.xo B07
+# V8.9: Selfie von Lena (Kussmund)
+@handy story lena.xo LENA_SELFIE
 @warte 5
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
 ? „Noch fünf Minuten.“ -> S3_SCHLUMMER +handy
@@ -636,7 +659,22 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 @tippe nö. du?
 @nachricht Paul: nee auch am lernen 😅
 … !2
-@nachricht Paul: ihre story sieht aber krass aus
+@nachricht Paul: hast du mias story gesehen?? krass 🔥
+@tipp
+@handy zu
+@handy story x.mia.x N35M2 3 Min.
+@warte 3
+~ … Was ist daran krass?
+@handy chat Lerngruppe Schuldrecht
+@tippe was ist daran krass?
+@nachricht Paul: also sie 💀
+… !2
+~ Was hab ich auch erwartet.
+@handy zu
+… !2
+@ton bzzz
+@handy story x.mia.x JONAS_TISCH 1 Min.
+@warte 3.5
 … !3
 @handy zu
 -> L4_WEITER
@@ -1161,6 +1199,8 @@ Alter, singt der schief.
 @bild B16
 @effekt heranzoomen
 @musik party strasse 4
+@warte 2.2
+@bild TREPPE_HELL schnitt
 Die Bässe gehen bis auf die Treppe.
 -> PARTY_ANKUNFT
 
@@ -1650,6 +1690,7 @@ Ich: „Rot ist fast leer.“
 @bild N14b gesicht
 @ton lynn_lacht1
 … !2
+Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 @abzeichen Rot ist fast leer
 @bild N14 gesicht
 @wenn gesungen
@@ -1999,7 +2040,7 @@ Umarmung trotzdem.
 ~ … Langweiler.
 … !1.5
 @musik club laut
-@bild TV1
+@bild TV0
 Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
 @bild TV2 pose
 Tim: „Alle Wege führen nach –“ !3.5
@@ -2122,6 +2163,22 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik party tuer
 @bild N29b
 … !3
+@bild N29n langsam
+… halb voll.
+@ton haustuer leise dumpf
+@loop wind aus
+@musik club laut
+@ton johlen leise
+@bild HW_TUER langsam
+~ Ein Lied noch.
+… !3
+@ton schloss leise
+@musik club dumpf
+@bild TREPPE schnitt
+@ton treppenhaus_runter
+… !2
+@bild HAUS langsam
+… !1.5
 -> HEIMWEG
 
 # ---- Spät auf der Party (Ankunft nach 23:30) ----
@@ -2584,7 +2641,7 @@ Ich bin auf keinem Foto. !3
 @bild SO schnitt
 @raum tag
 @handy sperr
-@ton klick
+@ton display_klick
 …
 # V8.7 (Philip): Mias letzte Story, 05:12 – nur Text, 2 Aufrufe, kein Gedanke
 @wenn tanz

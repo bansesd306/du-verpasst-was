@@ -1556,6 +1556,29 @@ Lynn: „Behalt ihn.“ !2
 …
 Die Frau muss wirklich viel von mir halten.
 … Der hat sogar einen Laserpointer.
+# V8.9: Laserpointer-Flashback (Lynn ist frech, nicht nur lieb)
+@bild LP3 gesicht
+@warte 1
+@ton display_klick
+@bild LP5 schnitt
+… !2
+@bild LP6 langsam
+… !1.5
+@bild LP7 gesicht
+Lynn: „Pass auf. Gleich isser wieder weg.“
+Ich: „Schenkung ist Schenkung.“
+@bild LP4 gesicht
+Lynn: „Spar dir deine Jura-Scheiße.“
+@bild LP8 ruck
+@ton stift leise
+… !1
+@bild LP9 schnitt
+… !2
+Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
+@bild LP2 gesicht
+… !1.5
+@bild LP3 langsam
+… !2
 @loop seminar aus
 @effekt traum aus weich
 @raum nacht
@@ -1862,8 +1885,8 @@ Geht doch.
 @ton bzzz
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
-# V8.8 (J1-2): wieder B07 (das Live hat jetzt eigene Bilder)
-@handy story lena.xo B07
+# V8.9: Selfie von Lena (Kussmund)
+@handy story lena.xo LENA_SELFIE
 @warte 5
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
 ? „Noch fünf Minuten.“ -> S3_SCHLUMMER +handy
@@ -1928,7 +1951,22 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 @tippe nö. du?
 @nachricht Paul: nee auch am lernen 😅
 … !2
-@nachricht Paul: ihre story sieht aber krass aus
+@nachricht Paul: hast du mias story gesehen?? krass 🔥
+@tipp
+@handy zu
+@handy story x.mia.x N35M2 3 Min.
+@warte 3
+~ … Was ist daran krass?
+@handy chat Lerngruppe Schuldrecht
+@tippe was ist daran krass?
+@nachricht Paul: also sie 💀
+… !2
+~ Was hab ich auch erwartet.
+@handy zu
+… !2
+@ton bzzz
+@handy story x.mia.x JONAS_TISCH 1 Min.
+@warte 3.5
 … !3
 @handy zu
 -> L4_WEITER
@@ -2453,6 +2491,8 @@ Alter, singt der schief.
 @bild B16
 @effekt heranzoomen
 @musik party strasse 4
+@warte 2.2
+@bild TREPPE_HELL schnitt
 Die Bässe gehen bis auf die Treppe.
 -> PARTY_ANKUNFT
 
@@ -2942,6 +2982,7 @@ Ich: „Rot ist fast leer.“
 @bild N14b gesicht
 @ton lynn_lacht1
 … !2
+Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 @abzeichen Rot ist fast leer
 @bild N14 gesicht
 @wenn gesungen
@@ -3291,7 +3332,7 @@ Umarmung trotzdem.
 ~ … Langweiler.
 … !1.5
 @musik club laut
-@bild TV1
+@bild TV0
 Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
 @bild TV2 pose
 Tim: „Alle Wege führen nach –“ !3.5
@@ -3414,6 +3455,22 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik party tuer
 @bild N29b
 … !3
+@bild N29n langsam
+… halb voll.
+@ton haustuer leise dumpf
+@loop wind aus
+@musik club laut
+@ton johlen leise
+@bild HW_TUER langsam
+~ Ein Lied noch.
+… !3
+@ton schloss leise
+@musik club dumpf
+@bild TREPPE schnitt
+@ton treppenhaus_runter
+… !2
+@bild HAUS langsam
+… !1.5
 -> HEIMWEG
 
 # ---- Spät auf der Party (Ankunft nach 23:30) ----
@@ -3876,7 +3933,7 @@ Ich bin auf keinem Foto. !3
 @bild SO schnitt
 @raum tag
 @handy sperr
-@ton klick
+@ton display_klick
 …
 # V8.7 (Philip): Mias letzte Story, 05:12 – nur Text, 2 Aufrufe, kein Gedanke
 @wenn tanz
@@ -4969,10 +5026,10 @@ const BILDER = {
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
   W0:   { datei: "img/B14.webp", text: "Straße, Partyhaus noch im Nebel", stimmung: "strasse" },
-  B15:  { datei: "img/B15.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
-  N11:  { datei: "img/N11.webp", text: "Straße, Haus näher", stimmung: "strasse" },
-  N12:  { datei: "img/N12.webp", text: "Straße, Haus ganz nah, Fenster bunt", stimmung: "strasse" },
-  B16:  { datei: "img/N12.webp", imHandy: "img/N12_h.webp", text: "Haus mit leuchtenden Fenstern, Treppe", stimmung: "strasse" },
+  B15:  { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
+  N11:  { datei: "img/HAUS_WEIT.webp", text: "Straße, Haus näher", stimmung: "strasse" },
+  N12:  { datei: "img/HAUS.webp", text: "Straße, Haus ganz nah, Fenster bunt", stimmung: "strasse" },
+  B16:  { datei: "img/HAUS.webp", imHandy: "img/N12_h.webp", text: "Haus mit leuchtenden Fenstern, Treppe", stimmung: "strasse" },
   B14:  { datei: "img/B14.webp", text: "Leere Straße, Laternen (Heimweg)", stimmung: "strasse" },
 
   // ---------- Party ----------
@@ -5022,6 +5079,25 @@ const BILDER = {
   N14k: { datei: "img/N14k.webp", text: "Lynn schaut, Mund leicht offen (Gemini, V8.8)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N15:  { datei: "img/N15.webp", text: "Balkon leer", stimmung: "balkon", lichterVon: "N14" },
   N29b: { datei: "img/N29b.webp", text: "Balkon (Fenster-Fassung) leer, zwei rote Becher auf dem Geländer, drinnen Party (Gemini, V8.8)", stimmung: "balkon" },
+  HAUS: { datei: "img/HAUS.webp", text: "Partyhaus von vorn, 5 Stockwerke, Party oben + Balkon mit Lichterkette (Gemini V8.9)", stimmung: "strasse" },
+  HAUS_WEIT: { datei: "img/HAUS_WEIT.webp", text: "Straße, Partyhaus näher, Balkon deutlich (Gemini V8.9)", stimmung: "strasse" },
+  HAUS_WEIT_a: { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg (Gemini V8.9)", stimmung: "strasse" },
+  TREPPE_HELL: { datei: "img/TREPPE_HELL.webp", text: "Treppenhaus von unten, Partylicht von oben (Hinweg)", stimmung: "flur" },
+  TREPPE: { datei: "img/TREPPE.webp", text: "Treppenhaus dunkel (Rückweg, 2 Uhr)", stimmung: "flur" },
+  N29n: { datei: "img/N29n.webp", text: "Balkon: Becher nah, Lippenstift an einem (Gemini V8.9)", stimmung: "balkon" },
+  HW_TUER: { datei: "img/HW_TUER.webp", text: "Hand an der Balkontür-Klinke (Gemini V8.9)", stimmung: "balkon" },
+  TV0: { datei: "img/TV0.webp", text: "Tim zeigt auf sich: „Schon vergessen? Afterparty. Bei mir.“ (Gemini V8.9)", stimmung: "party", figur: true },
+  JONAS_TISCH: { datei: "img/JONAS_TISCH.webp", text: "Jonas steht auf dem Tisch, Becher hoch, alle grölen (Story, 9:16, V8.9)", stimmung: "foto" },
+  LENA_SELFIE: { datei: "img/LENA_SELFIE.webp", text: "Lena-Selfie auf der Party, Kussmund (Weg B, V8.9)", stimmung: "foto" },
+  LP3: { datei: "img/LP3.webp", text: "Rückblende Hörsaal: Lynn neutral, schaut nach vorn", stimmung: "traum", figur: true },
+  LP3z: { datei: "img/LP3z.webp", text: "Rückblende Hörsaal: Lynn Augen zu (Blinzeln)", stimmung: "traum", figur: true },
+  LP4: { datei: "img/LP4.webp", text: "Rückblende Hörsaal: Lynn, Braue hoch, schelmisch", stimmung: "traum", figur: true },
+  LP5: { datei: "img/LP5.webp", text: "Rückblende Hörsaal: roter Laserpunkt auf Lynns Wange", stimmung: "traum", figur: true },
+  LP6: { datei: "img/LP6.webp", text: "Rückblende Hörsaal: Lynn Nahaufnahme mit Laser", stimmung: "traum", figur: true },
+  LP7: { datei: "img/LP7.webp", text: "Rückblende Hörsaal: Lynn redet, Laser auf der Wange", stimmung: "traum", figur: true },
+  LP8: { datei: "img/LP8.webp", text: "Rückblende Hörsaal: Lynn greift nach dem Pointer", stimmung: "traum", figur: true },
+  LP9: { datei: "img/LP9.webp", text: "Rückblende Hörsaal: Lynns Stinkefinger", stimmung: "traum", figur: true },
+  LP2: { datei: "img/LP2.webp", text: "Rückblende Hörsaal: Lynn lächelt kurz", stimmung: "traum", figur: true },
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, großes Fenster, Party drinnen (V8.8)", stimmung: "balkon" },
   N34v: { datei: "img/N34.webp", video: "vid/N34v.mp4", text: "Wie N34, als bewegter Hintergrund (Veo-Video, 4-s-Schleife, V8.8)", stimmung: "balkon" },
