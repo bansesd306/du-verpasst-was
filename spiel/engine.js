@@ -176,7 +176,7 @@ const Spiel = (() => {
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu(still) { if (!blick.offen) return; blick.offen = false; if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
@@ -193,10 +193,13 @@ const Spiel = (() => {
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
-  let blickErstmals = true;
+  let blickErstmals = true, blickZahl = -1;
   setInterval(() => {
     const an = blick.offen || blickMoeglich();
     blickKnopf.classList.toggle('aus', !an);
+    // V8.9: Zahl = ungelesene Nachrichten + Meldungen; 0 = grau und still, mehr als vorher = kurz pulsieren
+    const z = Handy.zahl(); const ze = blickKnopf.querySelector('.zahl');
+    if (z !== blickZahl) { ze.textContent = z > 99 ? '99+' : z || ''; blickKnopf.classList.toggle('leer', !z); if (z > blickZahl && !blick.offen) { blickKnopf.classList.remove('puls'); void blickKnopf.offsetWidth; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); } blickZahl = z; }
     if (an && blickErstmals) { blickErstmals = false; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); }
   }, 250);
 
@@ -883,6 +886,7 @@ const Spiel = (() => {
       case 'liveloeschen': await Handy.liveLoeschen(); break;
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
+      case 'meldung': { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); break; }   // V8.9: stille Meldung, zählt am Handy-Knopf
       case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
