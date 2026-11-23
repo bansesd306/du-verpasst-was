@@ -2878,11 +2878,6 @@ Ich leg das Handy weg. Zwei Tage noch.
 @lernplan haken 4
 @bild SO1d schnitt
 @warte 1.2
-@wenn typ=="party" && lernstand<LERN_HOCH
-  @lernplan blick 3
-  @warte .8
-@ende
-@lernplan blick 5
 @warte 1.4
 @wenn typ=="zuhause" && weg=="A"
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
@@ -3054,13 +3049,13 @@ Ich krieg das hin.
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   ~ … kenn ich nicht.
 @sonst
-  ~ … das stand so nicht im Skript.
+  ~ … Kenn ich. Das hab ich heute durch.
 @ende
 @handy pdfweiter 11
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   ~ … nie gehört.
 @sonst
-  ~ … Saldotheorie? Warte.
+  ~ … Saldotheorie. Hatte ich auch.
 @ende
 @handy pdfweiter 19
 ~ … die trollt doch.
