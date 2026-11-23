@@ -182,7 +182,7 @@ const Rahmen = (() => {
     }
     ton('bzzz');
     // V8.6: Lampe flackert nur noch bei jeder dritten Nachricht, weich
-    if (!reduziert && (++flackZ % 3 === 1)) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
+    if (!reduziert) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
     sichern();
   }
   function nachrichtenStart(verz) { nachrichtenStopp(); nStart = setTimeout(() => { neu(); nTimer = setInterval(neu, 3600); }, verz); }
@@ -421,7 +421,7 @@ const Rahmen = (() => {
         b.querySelector('.mt').textContent = T(k, b.dataset.t);
       });
       $('tippen').textContent = T('start_tippen', 'Tippen zum Starten');
-      $('iosnote').textContent = a.iosHinweis || '';
+      $('iosnote').textContent = [a.iosHinweis, 'Tipp: Dunkelmodus für Webseiten ausschalten.'].filter(Boolean).join(' ');
       zaehlerText();
     },
     start: startZeigen,
