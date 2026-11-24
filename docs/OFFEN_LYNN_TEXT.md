@@ -12,7 +12,7 @@ Später nachdenken über:
 Ziel: auflockern, damit der Monolog nicht zu schwer wird. Statt „Haha.“:
 - **Innen:** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `dann hab ich das alles nie gedacht.`
 - **Zum Spieler (Patricks Idee):** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `dann vergesst einfach alles, was ich gerade gesagt hab.`
-- **Zum Spieler, Patricks Favorit (er ertappt sich selbst beim Kitsch):** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `Okay. Stopp.` / `Das habt ihr jetzt nicht gehört.`
+- **Zum Spieler, andere Formulierung (Patrick findet die Spieler-Fassung besser: er ertappt sich selbst beim Kitsch):** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `Okay. Stopp.` / `Das habt ihr jetzt nicht gehört.`
 
 ## 3. Umarmung zum Abschied (Z. 1969)
 Idee: „Länger als nötig.“ weg, stattdessen `Zum Abschied umarmt sie mich.` → Schwarzbild, leise Nachtgeräusche (Wind), Umarmungs-Ton, ca. 4–5 s nicht wegtippbar.
