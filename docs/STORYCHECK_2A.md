@@ -88,7 +88,7 @@ Plus/Minus = Tendenz. Reine Pausen (`…`) und Technik bewerte ich nicht einzeln
 |---|---|---|---|
 | 200 | „Das war vor einer Stunde.“ | **1** | Ein Schnitt, und man spürt, wie das Handy Zeit frisst. Ohne Erklärung. |
 | 205–207 | „Jonas. Mein bester Freund. Manchmal zumindest. Seit der Fünften. Nach beiden 5,0 stand er mit Pizza vor meiner Tür. Ungefragt.“ | 2 | In fünf Sätzen eine ganze Figur. „Ungefragt.“ ist das beste Wort. Legt das Pizza-Ende an. |
-| 208 | „Der hält es halt nicht lange ohne seine große Liebe aus.“ | **4** | Unklar: Wer ist die große Liebe? Er selbst? Die Party? Eine Freundin von Jonas? Beim Lesen stolpert man. Vorschlag: „Der hält es halt nicht lange ohne mich aus.“ (gut) oder streichen (geht so). |
+| 208 | „Der hält es halt nicht lange ohne seine große Liebe aus.“ | **2−** | *Nach Philips Erklärung korrigiert (vorher 4):* Direkt nach „Mein bester Freund … Pizza vor meiner Tür“ ist klar, dass er selbst gemeint ist. Selbstironischer Witz, funktioniert. Bleibt so. |
 | 215–218 | „Junge. Du weißt ganz genau, dass ich lernen muss…“ / „klar“ / „so wie die letzten 2 male? 😂“ / „EINE stunde. du kommst eh nicht weiter heute. glaub mir, du verpasst was“ | **1−** | „so wie die letzten 2 male?“ ist gemein und doppeldeutig (hast du damals auch gelernt, hat ja super geklappt). Der Titelsatz kommt beiläufig, genau richtig. |
 | 223 | „Rechts: der Schreibtisch. Die zwei 5,0 liegen obendrauf.“ | 2 | Gegenstand statt Gefühl. |
 | 229 | „Ich weiß, dass das nur die Stadt ist. Aber irgendwie sieht es lebendig aus.“ | 3 | „irgendwie lebendig“ ist weich. Vorschlag: „Nur die Stadt. Aber hinter jedem Fenster sieht’s aus, als wär grad was los.“ (gut, FoMO statt Stimmung) |
@@ -331,7 +331,7 @@ Plus/Minus = Tendenz. Reine Pausen (`…`) und Technik bewerte ich nicht einzeln
 | Z. | Zitat | Note | Warum |
 |---|---|---|---|
 | 3598–3603 | „Zu Hause … Endlich. … Oh Mann. Ich …“ | 2 | |
-| 3606–3611 / 3681–3686 | „… fass es kaum. Ich glaub, es lief gut. Und nein, … Die letzten zwei Male hab ich mich nicht getraut, das zu sagen.“ | **4** | „Und nein, …“ hängt in der Luft. Man weiß nicht, worauf „nein“ antwortet. An der wichtigsten Stelle des guten Endes. Vorschlag A: „Und nein, das sag ich nicht nur so.“ (gut). Vorschlag B: „Und nein, …“ streichen (gut). |
+| 3606–3611 / 3681–3686 | „… fass es kaum. Ich glaub, es lief gut. Und nein, … Die letzten zwei Male hab ich mich nicht getraut, das zu sagen.“ | **2−** | *Nach Philips Erklärung korrigiert (vorher 4):* „Und nein“ antwortet auf den Gedanken, den jeder bei „lief gut“ hat („sagt doch jeder“ / „redest du dir schön“). Mit dem Satz danach versteht man es. Kleines Risiko: Wer schnell tippt, liest die Pause nicht als Frage. Bleibt so. |
 | 3613 | „… weiß nicht mal, wie’s gelaufen ist.“ | 2 | |
 | 3616 | „Und jetzt wieder warten, bis – >>“ (Handy unterbricht) | **1−** | Der Satz wird wörtlich vom Handy abgeschnitten. |
 | 3657 | Jonas: „du verpasst was.“ | **1** | Kreis geschlossen, und er beginnt von vorn. |
@@ -372,9 +372,7 @@ Knapp dahinter (alle Note 1): „Das war vor einer Stunde.“ (200), „Was, wen
 | # | Z. | Zitat | Note | Vorschlag | Wie gut finde ich den Vorschlag |
 |---|---|---|---|---|---|
 | 1 | 2664–2668 | „Manchmal fühlt sich ein Moment einfach unendlich an. Obwohl man weiß, dass er irgendwann aufhören muss. Aber vielleicht vergisst man eben genau das. … Oder will es vergessen. Und lässt es einfach zu.“ | **5** | streichen | sehr gut |
-| 2 | 2674–2675 | „Verdammte Scheiße, aber wenn’s nichts wird … will ich mich vielleicht doch nicht dran erinnern. Haha.“ | **5** | streichen | sehr gut |
-| 3 | 3609 / 3684 | „Und nein, …“ | 4 | „Und nein, das sag ich nicht nur so.“ oder streichen | gut |
-| 4 | 208 | „Der hält es halt nicht lange ohne seine große Liebe aus.“ | 4 | „Der hält es halt nicht lange ohne mich aus.“ | gut |
+| 2 | 2674–2675 | „Verdammte Scheiße, aber wenn’s nichts wird … will ich mich vielleicht doch nicht dran erinnern. Haha.“ | **4** | Der Gedanke (Angst, dass es nichts wird) ist ehrlich und gut. Nur „Haha.“ streichen. *(korrigiert, vorher 5 / ganz streichen)* | sehr gut |
 | 5 | 1448 | „Sorry, dass ich mir noch nicht die halbe Bar hinter den Schädel gekippt hab.“ | 4 | „Frag mich in drei Bier nochmal.“ | gut |
 | 6 | 1934 | „Jetzt schon.“ | 4 | siehe Teil 7, Stelle 2 | sehr gut |
 | 7 | 1969 | „Länger als nötig.“ | 4 | siehe Teil 7, Stelle 3 | sehr gut |
@@ -383,6 +381,8 @@ Knapp dahinter (alle Note 1): „Das war vor einer Stunde.“ (200), „Was, wen
 | 10 | 1869 | „Kann ich mir vorstellen.“ | 4 | streichen, Pause `… !2` reicht | gut |
 
 Weitere 4er: „Wir lachen beide.“ (1838), „Und irgendwie bin ich ein bisschen stolz auf mich…“ (2660), „Ich freu mich so drauf.“ (2676), „Und bestimmt nicht nur wild.“ (2619).
+
+*Korrektur 24.11., 03:15: „seine große Liebe“ und „Und nein, …“ nach Philips Erklärung hochgestuft und aus dieser Liste genommen.*
 
 ## 5. Füllsätze
 
