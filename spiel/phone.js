@@ -145,7 +145,7 @@ const Handy = (() => {
   // V8.9 (Patrick 24.11., Animation 2): das Handylicht im Raum nimmt die Farbe dessen an, was gerade auf dem Display ist
   const APPFARBE = { chat: [205, 225, 205], liste: [232, 238, 240], sperr: [120, 160, 255], anruf: [90, 170, 120], wecker: [150, 170, 255], notizen: [245, 238, 205], pdf: [240, 240, 240] };
   const farbCanvas = document.createElement('canvas'); farbCanvas.width = farbCanvas.height = 8;
-  function setzeLicht(r, g, b) { const h = document.getElementById('handylicht'); if (!h) return; h.style.setProperty('--hr', r); h.style.setProperty('--hg', g); h.style.setProperty('--hb', b); }
+  function setzeLicht(r, g, b) { [document.getElementById('handylicht'), el].forEach(h => { if (!h) return; h.style.setProperty('--hr', r); h.style.setProperty('--hg', g); h.style.setProperty('--hb', b); }); }
   function displayFarbe() {
     clearTimeout(displayFarbe.t);
     displayFarbe.t = setTimeout(() => {

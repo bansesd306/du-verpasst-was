@@ -521,7 +521,7 @@ const Spiel = (() => {
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
       case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
-        clearTimeout(autoT); autoFahrt(700);
+        clearTimeout(autoT);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
       case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('schritte', { dauer: .6, vol: .7 }); await warte(.5); break;
@@ -727,6 +727,7 @@ const Spiel = (() => {
   let aktCodeNeu = '';
   function umgebung(e) {
     const st = (e && e.stimmung) || '';
+    B.classList.toggle('nachtlicht', ['nacht', 'zimmer', 'balkon', 'strasse', 'flur', 'party', 'bad'].includes(st));   // V8.9: Handyschein im Dunkeln stärker
     pModus = st === 'strasse' ? 'regen' : st === 'pruefung' ? 'staub' : st === 'balkon' ? 'atem' : (e && /^(N35|MM|MK|MIA_)/.test(e.code || aktCodeNeu)) ? 'konfetti' : '';
     if (pModus && !pLauf) { pLauf = true; requestAnimationFrame(pSchritt); }
     clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt'); al.querySelectorAll('i').forEach(x => x.getAnimations().forEach(a => a.cancel()));
@@ -746,8 +747,8 @@ const Spiel = (() => {
   }
   function lichtEreignis(st) {
     const r = Math.random();
-    if (st === 'nacht' && r < .18) { welt.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.9)', offset: .35 }, { filter: 'brightness(.92)', offset: .65 }, { filter: 'brightness(1)' }], { duration: 7000 + Math.random() * 4000, easing: 'ease-in-out' }); return; }
-    autoFahrt(); if (r > .8) autoFahrt(900 + Math.random() * 1800);   // manchmal ein zweites Auto
+    if (st === 'nacht' && r < .35) { welt.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.9)', offset: .35 }, { filter: 'brightness(.92)', offset: .65 }, { filter: 'brightness(1)' }], { duration: 7000 + Math.random() * 4000, easing: 'ease-in-out' }); return; }
+    // Autolicht automatisch aus (Patrick 24.11.: ergibt im Bild keinen Sinn)
   }
   function pSchritt() {
     const W = 960, H = 540; pctx.clearRect(0, 0, W, H);
