@@ -939,6 +939,16 @@ Aber auch nicht nichts.
 @warte 0.3
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Lena: 🎂🎂🎂
 @warte 0.3
+@benachrichtigung System | Datennutzung | 95 % deines Datenvolumens verbraucht
+@warte 0.3
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 📷 Foto
+@warte 0.3
+# V8.9 (Patrick): die eine wichtige Nachricht mitten im Müll – bleibt etwas länger stehen
+@ton bzzz
+@benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
+@warte 1.2
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 😂😂😂
+@warte 0.3
 @benachrichtigung YouNow | drachenlordofficial | drachenlordofficial ist jetzt live 🔴
 @warte 1.4
 @setze handyweit = 1
@@ -2979,27 +2989,40 @@ Ich leg das Handy weg. Zwei Tage noch.
 @sonst
   @bild K10P schnitt
   @loop lampe an
-  @setze lernstand + 1
   @karteikarten auto
   @ton bzzz
   @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @warte 1.6
-  # V8.8 (M2): Mias Story von der Samstagsparty
-  @handy story x.mia.x SA2 12 Min. | | party nummer 5
-  @warte 3.5
-  @handy zu
-  @ton handy_ablegen
-  @karteikarten aus
-  … !2
-  ~ Montag.
-  @wenn typ=="gluecklich"
-    ~ Letzter.
-  @sonst
-    ~ Meine Entscheidung.
-  @ende
-  @loop lampe aus
+  # V8.9 (Storycheck 2B, K2): die zweite Party lockt – Lernpunkt nur, wenn man weiterlernt
+  @ton bzzz
+  @benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet
+  ? „Story anschauen.“ -> SA_STORY +handy
+  ? „Weiterlernen.“ -> SA_LERNEN
 @ende
+-> UEBER_SONNTAG
+
+== SA_STORY
+# V8.8 (M2): Mias Story von der Samstagsparty
+@handy story x.mia.x SA2 12 Min. | | party nummer 5
+@warte 3.5
+-> SA_REST
+
+== SA_LERNEN
+@setze lernstand + 1
+
+== SA_REST
+@handy zu
+@ton handy_ablegen
+@karteikarten aus
+… !2
+~ Montag.
+@wenn typ=="gluecklich"
+  ~ Letzter.
+@sonst
+  ~ Meine Entscheidung.
+@ende
+@loop lampe aus
 -> UEBER_SONNTAG
 
 # V8.9: Samstag → Sonntag nicht abrupt: Bett, Handy leuchtet, er dreht es um, schwarz, Uhr läuft, Regen
@@ -3059,8 +3082,9 @@ Ich leg das Handy weg. Zwei Tage noch.
 ~ Sonntag.
 ~ Keiner postet was.
 ~ Alle liegen im Bett und bereuen.
-… !2
-~ Endlich verpass ich mal nichts.
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause (Ton „Ausatmen“ sucht Patrick)
+… !3
+~ Ruhe.
 … !2
 @wenn typ!="party" || lernstand>=LERN_HOCH
   @lernplan stand ok1 ok2 ok3
@@ -3191,8 +3215,9 @@ Ich krieg das hin.
 ~ Sonntag.
 ~ Keiner postet was.
 ~ Alle liegen im Bett und bereuen.
-… !2
-~ Endlich verpass ich mal nichts.
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause (Ton „Ausatmen“ sucht Patrick)
+… !3
+~ Ruhe.
 … !2
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
