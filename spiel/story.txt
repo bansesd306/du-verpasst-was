@@ -1887,6 +1887,12 @@ Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
 … !2
 Lynn: „… Naja.“
 … !4
+# V8.9 (Philip 24.11.): Lynn verpasst Tims Afterparty mit Absicht; Tim ruft nur sie
+Tim!: „Lynn! Wir gehen!“
+… !1.5
+@bild N14 gesicht
+Lynn: „Geht schon mal.“
+… !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
 @bild N34v langsam
 @effekt waermer
