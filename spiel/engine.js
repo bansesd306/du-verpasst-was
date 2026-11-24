@@ -1197,6 +1197,11 @@ const Spiel = (() => {
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
       TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
+      // V8.9 (Patrick 24.11.): was man auf genau diesem Weg verpasst hat (Endbildschirm)
+      verpasst() { if (!V.typ) return []; const L = [], party = V.typ !== 'zuhause';
+        if (!party) L.push('Lenas Geburtstag'); else if (!V.gesungen) L.push('das Lied');
+        L.push('den Feuerlöscher'); if (party && !V.tanz) L.push('Mias Lied');
+        if (V.typ !== 'afterparty') L.push('Tims Afterparty'); if (V.lynn !== 'gm') L.push('Lynn'); return L; },
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.filter(o => o.ziel !== '!wackeln').length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
