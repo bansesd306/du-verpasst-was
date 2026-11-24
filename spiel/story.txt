@@ -1967,8 +1967,7 @@ Lynn: „Höchstens beim zweiten Date.“
 Lynn: „Oh.“
 Lynn: „Alle weg.“
 # V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
-@analoguhr 23:25 ecke sanft
-@warte .6
+@analoguhr 23:25 ecke ploetzlich
 @analoguhr Sa 01:58
 ~ Zwei?
 @analoguhr aus langsam
