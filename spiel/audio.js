@@ -132,7 +132,8 @@ const Ton = (() => {
     musikStopp(true);
     const qs = [];
     if (welche === 'party') { const a = quelle('M1_party', musikBus, { loop: true }); if (a) qs.push(a); [['gemurmel', .62], ['gemurmel2', .3], ['frauen', .34]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); if (!a) lade('M1_party').then(() => { if (musik && musik.art === 'party' && !musik.qs.length) { const q = quelle('M1_party', musikBus, { loop: true }); q && musik.qs.push(q); } }); }
-    if (welche === 'spaet') { const a = quelle('M3_spaet', musikBus, { loop: true, vol: 1.4 }); if (a) qs.push(a); }
+    if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
+      if (a) qs.push(a); }
     if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
     if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }

@@ -58,6 +58,7 @@
 @text gefuehl_3 = Weiß nicht.
 @text enden_verpasst = Du hast {n} von 3 Enden verpasst. Schade.
 @text entscheidungen = Du hast {x} von {y} Entscheidungen nie getroffen.
+@text verpasst_liste = Du hast verpasst: {liste}.
 @text beenden = Beenden
 @text nochmal_knopf = Nochmal
 @text beenden_1 = Sicher, dass du nichts verpasst hast?
@@ -74,7 +75,7 @@
 @text menue_credits = Mitwirkende
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
-@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
+@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Club Trance“ (HumanStudioed), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
 @abzeichenliste Leiser | Blaues Licht | Montagabend | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Fotograf des Jahres
 @gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
@@ -1932,7 +1933,8 @@ Lynn: „Geht schon mal.“
 @effekt waermer
 @musik aus langsam
 @warte 1.2
-@musik lofi leise
+# V8.9 (Patrick 24.11.): drinnen läuft jetzt ein ruhiger Song, gedämpft durch die Balkontür
+@musik lofi tuer
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -2621,8 +2623,9 @@ Ich bin auf keinem Foto. !3
 == NP_SCROLL
 # V8.8 (A5/J1-12): dazwischen Tims Feier (Tim filmt, Mias Selfies)
 @handy storys lena.xo=H36a tim_k97=TIM_FEIER_1 nightcrew=N32a x.mia.x=TIM_FEIER_3 jule.mxn=B16 lena.xo=TORTE x.mia.x=TIM_FEIER_4 lena.xo=A1
-@uhr springe Sa 01:52
 @handy zu
+# V8.9 (Patrick 24.11.): die Uhr rast sichtbar hoch – das Scrollen hat Zeit gefressen
+@uhr laufen Sa 01:52
 … !2
 -> MONOLOG
 

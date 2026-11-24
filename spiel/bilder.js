@@ -338,6 +338,7 @@ const TOENE = {
   abzeichen:       { datei: "ton/abzeichen.mp3" },
   // Musik
   M3_spaet:        { datei: "ton/M3_spaet.mp3" },          // Late Night Breeze
+  tim_party:       { datei: "ton/tim_party.mp3" },         // Tims Afterparty: Club Trance (HumanStudioed, Patrick 24.11.)
   Outro:           { datei: "ton/Outro.mp3", endeAb: 65 }, // Lost in FOMO – Anfang ab 0:00, Ende ab 1:05
   // fehlt noch (bleibt still):
   jonas_lacht: "", buegel: "", husten: "", stuhl: "",

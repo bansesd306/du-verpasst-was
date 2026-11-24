@@ -308,7 +308,7 @@ const Rahmen = (() => {
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
       $('p-entsch').innerHTML = 'Also auch noch nichts verpasst. Noch.';
-      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; }
+      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; const pv = $('p-verpasst'); if (pv) pv.innerHTML = ''; }
     } else {
       $('p-enden').innerHTML = offen > 0 ? T('enden_verpasst', 'Du hast {n} von 3 Enden verpasst. Schade.').replace('{n} von 3 Enden', '<b>{n} von 3 Enden</b>').replace('{n}', offen) : 'Du hast alle Enden gesehen. Und trotzdem.';
       const [nie, gesamt] = api.entscheidungen();
@@ -317,6 +317,9 @@ const Rahmen = (() => {
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
       if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
         : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+      // V8.9: Verpasst-Liste dieses Durchgangs
+      const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
+      if (pv) pv.innerHTML = !vl.length ? '' : T('verpasst_liste', 'Du hast verpasst: {liste}.').replace('{liste}', vl.length === 1 ? '<b>' + vl[0] + '</b>' : vl.slice(0, -1).map(x => '<b>' + x + '</b>').join(', ') + ' und <b>' + vl[vl.length - 1] + '</b>');
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');

@@ -1429,6 +1429,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @text gefuehl_3 = Weiß nicht.
 @text enden_verpasst = Du hast {n} von 3 Enden verpasst. Schade.
 @text entscheidungen = Du hast {x} von {y} Entscheidungen nie getroffen.
+@text verpasst_liste = Du hast verpasst: {liste}.
 @text beenden = Beenden
 @text nochmal_knopf = Nochmal
 @text beenden_1 = Sicher, dass du nichts verpasst hast?
@@ -1445,7 +1446,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @text menue_credits = Mitwirkende
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
-@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
+@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Club Trance“ (HumanStudioed), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
 @abzeichenliste Leiser | Blaues Licht | Montagabend | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Fotograf des Jahres
 @gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
@@ -3303,7 +3304,8 @@ Lynn: „Geht schon mal.“
 @effekt waermer
 @musik aus langsam
 @warte 1.2
-@musik lofi leise
+# V8.9 (Patrick 24.11.): drinnen läuft jetzt ein ruhiger Song, gedämpft durch die Balkontür
+@musik lofi tuer
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -3992,8 +3994,9 @@ Ich bin auf keinem Foto. !3
 == NP_SCROLL
 # V8.8 (A5/J1-12): dazwischen Tims Feier (Tim filmt, Mias Selfies)
 @handy storys lena.xo=H36a tim_k97=TIM_FEIER_1 nightcrew=N32a x.mia.x=TIM_FEIER_3 jule.mxn=B16 lena.xo=TORTE x.mia.x=TIM_FEIER_4 lena.xo=A1
-@uhr springe Sa 01:52
 @handy zu
+# V8.9 (Patrick 24.11.): die Uhr rast sichtbar hoch – das Scrollen hat Zeit gefressen
+@uhr laufen Sa 01:52
 … !2
 -> MONOLOG
 
@@ -4109,7 +4112,8 @@ Ich bin auf keinem Foto. !3
 @handy laut
 # M1
 @schwarz
-@ton voegel
+# V8.9: Vögel blenden leise ein (wie Samstag 14:20)
+@ton voegel ein4
 @warte 3
 @bild SO schnitt
 @raum tag
@@ -5564,6 +5568,7 @@ const TOENE = {
   abzeichen:       { datei: "ton/abzeichen.mp3" },
   // Musik
   M3_spaet:        { datei: "ton/M3_spaet.mp3" },          // Late Night Breeze
+  tim_party:       { datei: "ton/tim_party.mp3" },         // Tims Afterparty: Club Trance (HumanStudioed, Patrick 24.11.)
   Outro:           { datei: "ton/Outro.mp3", endeAb: 65 }, // Lost in FOMO – Anfang ab 0:00, Ende ab 1:05
   // fehlt noch (bleibt still):
   jonas_lacht: "", buegel: "", husten: "", stuhl: "",
@@ -5726,7 +5731,7 @@ const FILME = { weg: 'vid/weg.mp4' };
   <section class="schirm2" id="z-s-abz">
    <div class="kopf"><h2 class="gross" id="z-a-titel">Abzeichen</h2><span class="zaehler" id="z-zaehler"></span></div>
    <div id="z-raster"></div>
-   <div class="bilanz" id="z-bilanz"><p id="z-p-enden"></p><p id="z-p-entsch"></p><p id="z-p-handy"></p></div>
+   <div class="bilanz" id="z-bilanz"><p id="z-p-enden"></p><p id="z-p-entsch"></p><p id="z-p-handy"></p><p id="z-p-verpasst"></p></div>
    <div class="knopfreihe nur-lauf">
     <button class="knopf warm" type="button" id="z-k-nochmal"></button>
     <button class="knopf" type="button" id="z-k-beenden"></button>
@@ -5896,7 +5901,8 @@ const Ton = (() => {
     musikStopp(true);
     const qs = [];
     if (welche === 'party') { const a = quelle('M1_party', musikBus, { loop: true }); if (a) qs.push(a); [['gemurmel', .62], ['gemurmel2', .3], ['frauen', .34]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); if (!a) lade('M1_party').then(() => { if (musik && musik.art === 'party' && !musik.qs.length) { const q = quelle('M1_party', musikBus, { loop: true }); q && musik.qs.push(q); } }); }
-    if (welche === 'spaet') { const a = quelle('M3_spaet', musikBus, { loop: true, vol: 1.4 }); if (a) qs.push(a); }
+    if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
+      if (a) qs.push(a); }
     if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
     if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
@@ -7026,7 +7032,7 @@ const Rahmen = (() => {
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
       $('p-entsch').innerHTML = 'Also auch noch nichts verpasst. Noch.';
-      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; }
+      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; const pv = $('p-verpasst'); if (pv) pv.innerHTML = ''; }
     } else {
       $('p-enden').innerHTML = offen > 0 ? T('enden_verpasst', 'Du hast {n} von 3 Enden verpasst. Schade.').replace('{n} von 3 Enden', '<b>{n} von 3 Enden</b>').replace('{n}', offen) : 'Du hast alle Enden gesehen. Und trotzdem.';
       const [nie, gesamt] = api.entscheidungen();
@@ -7035,6 +7041,9 @@ const Rahmen = (() => {
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
       if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
         : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+      // V8.9: Verpasst-Liste dieses Durchgangs
+      const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
+      if (pv) pv.innerHTML = !vl.length ? '' : T('verpasst_liste', 'Du hast verpasst: {liste}.').replace('{liste}', vl.length === 1 ? '<b>' + vl[0] + '</b>' : vl.slice(0, -1).map(x => '<b>' + x + '</b>').join(', ') + ' und <b>' + vl[vl.length - 1] + '</b>');
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');
@@ -8362,6 +8371,11 @@ const Spiel = (() => {
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
       TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
+      // V8.9 (Patrick 24.11.): was man auf genau diesem Weg verpasst hat (Endbildschirm)
+      verpasst() { if (!V.typ) return []; const L = [], party = V.typ !== 'zuhause';
+        if (!party) L.push('Lenas Geburtstag'); else if (!V.gesungen) L.push('das Lied');
+        L.push('den Feuerlöscher'); if (party && !V.tanz) L.push('Mias Lied');
+        if (V.typ !== 'afterparty') L.push('Tims Afterparty'); if (V.lynn !== 'gm') L.push('Lynn'); return L; },
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.filter(o => o.ziel !== '!wackeln').length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
