@@ -2005,6 +2005,8 @@ Lynn: „Geht schon mal.“
 @warte 1.2
 # V8.9 (Patrick 24.11.): ruhiger Song leise über der Szene (gedämpft passte nicht, ist kein Party-Song)
 @musik lofi leise
+# Storycheck 3 (Patrick 24.11.): Schnitt – man soll merken, dass dazwischen Zeit vergangen ist
+Irgendwann sitzen wir auf dem Boden.
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -3263,7 +3265,10 @@ Ich leg das Handy weg. Zwei Tage noch.
 # Storycheck 3 (Z15, Patrick 24.11.): seit Mittag (12:40 „lern grad“); statt „Es ist still.“ eine Pause, Regen und Zimmer laufen weiter
 Es liegt da seit Mittag.
 @leer
+# Patrick 24.11.: Regen in der Pause nur minimal leiser, danach wieder normal
+@loop regen laut 0.8 1.5
 @warte 4
+@loop regen laut 1 1.5
 ? „Umdrehen.“ -> SO3_UM +handy
 ? „Liegen lassen.“ -> SO4
 

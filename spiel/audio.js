@@ -6,7 +6,7 @@ const Ton = (() => {
   let ctx = null, master, sfx, musikBus, musikFilter, musikGain, loopsBus;
   const P = {};           // Name -> AudioBuffer
   const R = {};           // rückwärts
-  const loops = {};
+  const loops = {}, loopGain = {};
   let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false, outroNr = 0;
 
   let analyser = null, fftDaten = null, pegelSchnitt = 0; const gemerkt = {}; let introSoll = false;
@@ -104,6 +104,7 @@ const Ton = (() => {
     if (!an || gesperrt) return;
     const g = ctx.createGain(); g.connect(loopsBus); g.gain.setValueAtTime(0, now()); g.gain.linearRampToValueAtTime(1, now() + .4);
     const def = LOOPS[name]; if (!def) return;
+    loopGain[name] = g;
     let stops = [];
     if (def === 'pruefung') {
       const r = quelle('raum_tag', g, { loop: true, vol: .35 }); if (r) stops.push(() => r.stop());
@@ -185,6 +186,8 @@ const Ton = (() => {
     stoppe(name, weich = .2) { const q = gemerkt[name]; if (q) { q.stop(weich); delete gemerkt[name]; }
     },
     loop,
+    // Storycheck 3 (Patrick 24.11.): laufende Schleife weich lauter/leiser (1 = normal), z. B. Regen in der Sonntagspause minimal leiser
+    loopLaut(name, v, sek = 1.5) { const g = loopGain[name]; if (!ctx || !g || !loops[name]) return; try { g.gain.cancelScheduledValues(now()); g.gain.setValueAtTime(g.gain.value, now()); g.gain.linearRampToValueAtTime(v, now() + sek); } catch (e) { } },
     musik(art, opt) {
       if (!ctx) return;
       if (art === 'aus') { liedStopp(); return musikStopp(false); }

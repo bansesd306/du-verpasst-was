@@ -874,7 +874,7 @@ const Spiel = (() => {
         break;
       }
       case 'raum': Ton.loop('raum_nacht', a === 'nacht'); Ton.loop('raum_tag', a === 'tag'); break;
-      case 'loop': Ton.loop(teile[0], teile[1] !== 'aus'); break;
+      case 'loop': if (teile[1] === 'laut') { Ton.loopLaut && Ton.loopLaut(teile[0], +teile[2] || 1, +teile[3] || 1.5); break; } Ton.loop(teile[0], teile[1] !== 'aus'); break;   // @loop NAME laut 0.8 [SEK]
       case 'stille': Ton.stille(); break;
       case 'musik': {
         if (teile[0] === 'aus') { Ton.musik('aus', teile[1]); break; }
