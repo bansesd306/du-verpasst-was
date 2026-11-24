@@ -316,6 +316,7 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 
 == S18_A
 @pfad A
+@setze k1 = "raus"
 # V8.7 (D35)
 @nachricht Jonas: schwach 😕
 @warte 1.2
@@ -323,11 +324,13 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 
 == S18_B
 @pfad B
+@setze k1 = "mal"
 @abzeichen Mal schauen
 -> KAP2_B
 
 == S18_C
 @pfad C
+@setze k1 = "komm"
 # V8.7 (D35)
 @nachricht Jonas: JAAAA 🔥
 @warte 1.2
@@ -1484,7 +1487,17 @@ Ich steck es wieder ein.
 @setze kueche
 @uhr +5
 @bild N13
-Jonas: „Ich hab echt gedacht, du kommst nicht.“
+# Storycheck 3 (Patrick 24.11.): Jonas äfft nach, was der Ich ihm geschrieben hat, dann ehrlich
+@wenn k1=="raus"
+  Jonas: „‚Ich bin raus. Muss eeecht noch leeernen.‘“
+@ende
+@wenn k1=="mal"
+  Jonas: „‚Weiß noch nicht … mal schauuun.‘“
+@ende
+@wenn k1!="raus" && k1!="mal"
+  Jonas: „‚Geh mir nicht auf den Sack, ich muss leeernen.‘“
+@ende
+… !1.5
 Jonas: „Schön, dass du da bist. Glaub mir.“
 Ich: „Du bist so hacke.“
 @bild B12 gesicht
@@ -2743,10 +2756,7 @@ Ich bin auf keinem Foto. !3
   Ich freu mich so drauf.
   Ich hab jetzt sogar ein bisschen mehr Bock zu lernen.
   Und falls das alles schiefgeht …
-  hab ich immer noch Jonas.
-  Der kommt dann wieder mit Pizza.
-  Vielleicht handel ich ihm diesmal sogar zwei raus.
-  Der wird mich jedenfalls nicht mehr so schnell los.
+  kommt Jonas wieder mit Pizza.
 @ende
 … !2
 @effekt einschlafen
@@ -3880,6 +3890,9 @@ Lynn: „Dass du kommst.“
 Ich: „Und gegen wen?“
 @gesicht LDa
 Lynn: „Jonas.“
+… !1.5
+# Storycheck 3 (Patrick 24.11.): kurzer Rückgriff – Jonas hat so gedrängt, weil er wollte, dass er kommt
+Lynn: „Ich glaub, der wollte verlieren.“
 … !1.5
 @gesicht LDh
 Lynn: „Ich wollt dir übrigens schreiben. Zweimal.“

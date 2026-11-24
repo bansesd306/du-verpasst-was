@@ -4,6 +4,8 @@ Nur Prüfbericht, **nichts am Spiel geändert.** Zeilen = `spiel/story.txt` (Zwe
 Bewertung der Vorschläge: schwach / geht so / gut / sehr gut / hervorragend / Meisterwerk.
 Was STORYCHECK_1, 2A, 2B und OFFEN_LYNN_TEXT schon sagen, steht hier nur als Verweis.
 
+**Eingebaut 24.11. abends (Patrick):** Küche: Jonas äfft nach, was der Ich ihm in Kapitel 1 geschrieben hat (raus: „‚Ich bin raus. Muss eeecht noch leeernen.‘“, mal schauen: „‚Weiß noch nicht … mal schauuun.‘“, zugesagt: „‚Geh mir nicht auf den Sack, ich muss leeernen.‘“), Pause, dann „Schön, dass du da bist. Glaub mir.“ (ersetzt „Ich hab echt gedacht, du kommst nicht.“; neue Variable `k1`). Monolog Lynn-Weg gekürzt auf „Und falls das alles schiefgeht … / kommt Jonas wieder mit Pizza.“ Ende Lynn nach „Jonas.“: Lynn „Ich glaub, der wollte verlieren.“ Alles andere unten ist noch offen.
+
 ## Kurzfazit
 
 - **Die Figuren springen fast nie.** Jede hat eine klare Stimme, die auf allen Wegen hält: Jonas laut und klein geschrieben, Lena mit Herzchen und schlechtem Gewissen, Lynn trocken und kurz, Mia chaotisch mit traurigem Kern, Tim Sprücheklopfer, Mara Streberin, Mama korrekt und lieb. Note für die Figurenführung insgesamt: **2+**.
