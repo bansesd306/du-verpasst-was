@@ -161,6 +161,7 @@ const Spiel = (() => {
   // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
   // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
   const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
+  let bzzzMs = 0;   // V8.9: Zeitpunkt des letzten Vibrierens (erste Nachricht danach ist sofort da)
   const blickKnopf = $('#handyknopf');
   function blickMoeglich() {
     // V8.5: nur, wenn das Handy griffbereit ist (Skript setzt `handyweit`, wenn es weg/aus ist)
@@ -176,7 +177,7 @@ const Spiel = (() => {
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu(still) { if (!blick.offen) return; blick.offen = false; if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
@@ -193,10 +194,13 @@ const Spiel = (() => {
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
-  let blickErstmals = true;
+  let blickErstmals = true, blickZahl = -1;
   setInterval(() => {
     const an = blick.offen || blickMoeglich();
     blickKnopf.classList.toggle('aus', !an);
+    // V8.9: Zahl = ungelesene Nachrichten + Meldungen; 0 = grau und still, mehr als vorher = kurz pulsieren
+    const z = Handy.zahl(); const ze = blickKnopf.querySelector('.zahl');
+    if (z !== blickZahl) { ze.textContent = z > 99 ? '99+' : z || ''; blickKnopf.classList.toggle('leer', !z); if (z > blickZahl && !blick.offen) { blickKnopf.classList.remove('puls'); void blickKnopf.offsetWidth; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); } blickZahl = z; }
     if (an && blickErstmals) { blickErstmals = false; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); }
   }, 250);
 
@@ -336,13 +340,18 @@ const Spiel = (() => {
     // V8.8 (G52): nur Bilder, die das Skript irgendwo nennt (auch im Handy), nicht die ganze Liste
     const roh = document.getElementById('story').textContent;
     Object.keys(BILDER).forEach(k => { const e = eintrag(k); if (e.datei && !reihe.includes(e.datei) && new RegExp('(^|[\\s|])' + k + '($|[\\s|])', 'm').test(roh)) reihe.push(e.datei); });
-    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 30)); };
-    for (let k = 0; k < 3; k++) naechstes();
+    // V8.9: Gesichts-Overlays (blinzeln, sprechen, Mimik) mitladen – sonst poppen sie erst nach dem Bild auf
+    if (typeof OVERLAYS !== 'undefined') Object.keys(OVERLAYS).forEach(k => { const d = 'img/' + k + '.webp'; if (!reihe.includes(d)) reihe.push(d); });
+    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 10)); };
+    for (let k = 0; k < 6; k++) naechstes();
   }
   let bildNr = 0;
   async function zeigeBild(code, modus = '') {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
-    if (e.datei) { const ok = lade(e.datei); await Promise.race([ok, new Promise(r => setTimeout(r, 2500))]); }
+    if (e.datei) {   // V8.9: Bild und seine Gesichts-Overlays zusammen abwarten
+      const ovs = typeof OVERLAYS !== 'undefined' ? Object.keys(OVERLAYS).filter(k => OVERLAYS[k].basis === code).map(k => lade('img/' + k + '.webp')) : [];
+      await Promise.race([Promise.all([lade(e.datei), ...ovs]), new Promise(r => setTimeout(r, 4000))]);
+    }
     if (nr !== bildNr) return;   // V8.8 (G63): inzwischen kam ein neueres Bild – dieses nicht mehr zeigen
     PR('bild', code + (modus ? ' ' + modus : ''));
     $('#schwarz').classList.remove('an', 'langsam');
@@ -659,7 +668,9 @@ const Spiel = (() => {
     if (schnell) vz += 6.2 + (MIA_BEATS[MIA_BEATS.length - 1] - MIA_BEATS[0]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
     const schritte = []; let i = 0, f = 0;
-    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); schritte.push([MIA_BEATS[i], folge[f++ % folge.length]]); i += doppel ? 2 : 1; }
+    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
+        const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
+        schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); f++; } i += doppel ? 2 : 1; }
     const weiss = $('#weiss'); const strobo = $('#strobo');
     for (const [zeit, code] of schritte) {
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
@@ -668,7 +679,7 @@ const Spiel = (() => {
       const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
-      welt.classList.toggle('spiegel', Math.random() < .3 && !code.startsWith('MK'));
+      welt.classList.remove('spiegel');   // V9.0: Mia nicht mehr spiegeln (wirkte wie Doppelbild)
       if (Math.random() < .6) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
       // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze
       if (!schnell && Math.random() < .42) { const n = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= n; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
@@ -785,6 +796,11 @@ const Spiel = (() => {
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
       case 'montage': await montage(); break;
+      case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
+        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; B.appendChild(st);
+        void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
+        await warte(1.4); setTimeout(() => st.remove(), 4000); break;
+      }
       case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
@@ -807,9 +823,10 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; m = x.match(/^ein(\d+(?:\.\d+)?)$/); if (m) o.einblenden = +m[1]; });   // V8.9: ein4 = 4 s einblenden
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
+        if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
@@ -837,8 +854,9 @@ const Spiel = (() => {
       case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
-      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!')); break; }
+      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 9000; bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
       case 'ich': await Handy.ich(a); await warte(.2); break;
+      case 'tippeweg': zeigeTextbox(false); await Handy.tippeUndLoesche(a); await warte(.4); break;
       case 'tippe': zeigeTextbox(false); await Handy.rein(); await Handy.tippeUndSende(a); await warte(.5); break;
       case 'schreibt': await Handy.schreibt(teile[0], +teile[1] || 2); break;
       case 'haken': Handy.haken(a); break;
@@ -883,6 +901,7 @@ const Spiel = (() => {
       case 'liveloeschen': await Handy.liveLoeschen(); break;
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
+      case 'meldung': { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); break; }   // V8.9: stille Meldung, zählt am Handy-Knopf
       case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
@@ -917,6 +936,7 @@ const Spiel = (() => {
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
       case 'laut': Handy.laut(); break;
+      case 'herz': await Handy.storyHerz(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
       case 'wegwischen': await Handy.wegwischen(); break;
       default: console.warn('Handy?', was);
@@ -1146,7 +1166,7 @@ const Spiel = (() => {
     });
     grundzustand();
     Rahmen.start(false);
-    setTimeout(vorladenAlle, 800);
+    setTimeout(vorladenAlle, 200);
   }
 
   return {

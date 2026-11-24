@@ -57,7 +57,7 @@
   const knopf = document.createElement('button'); knopf.id = 'fehlerknopf'; knopf.type = 'button'; knopf.textContent = '⚑'; knopf.title = 'Fehler markieren (Testversion)';
   const box = document.createElement('div'); box.id = 'fehlerbox';
   box.innerHTML = `<div class="fb-in"><b>Fehler markieren</b><small></small><textarea rows="3" placeholder="Was war falsch? (Tippen oder Mikrofon der Tastatur)"></textarea>
-    <div class="fb-k"><button type="button" class="ok">Speichern</button><button type="button" class="ab">Abbrechen</button><button type="button" class="kopie">Protokoll kopieren</button></div><small class="st"></small></div>`;
+    <div class="fb-k"><button type="button" class="ok">Speichern</button><button type="button" class="ab">Abbrechen</button><button type="button" class="mik">🎤 Sprechen</button><button type="button" class="kopie">Protokoll kopieren</button></div><small class="st"></small></div>`;
   document.body.appendChild(knopf); document.body.appendChild(box);
   const halt = e => e.stopPropagation();
   [knopf, box].forEach(el => ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click', 'keydown'].forEach(t => el.addEventListener(t, halt)));
@@ -72,6 +72,20 @@
   const zu = () => { box.classList.remove('an'); try { Spiel._debug.pausieren(false); } catch (e) { } };
   box.querySelector('.ok').addEventListener('click', () => { log('FEHLER', Object.assign({ satz: box.querySelector('textarea').value.trim() }, markiert || {})); zu(); });
   box.querySelector('.ab').addEventListener('click', zu);
+  // V9.0: Spracheingabe (Web Speech API). Wo der Browser sie nicht erlaubt, bleibt das Mikrofon der Tastatur.
+  { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const mik = box.querySelector('.mik'); let rec = null, laeuft = false;
+    if (!SR) mik.style.display = 'none';
+    else mik.addEventListener('click', () => {
+      const ta = box.querySelector('textarea'), st = box.querySelector('.st');
+      if (laeuft && rec) { rec.stop(); return; }
+      try {
+        rec = new SR(); rec.lang = 'de-DE'; rec.interimResults = true; rec.continuous = true; const basis = ta.value ? ta.value.trim() + ' ' : '';
+        rec.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = basis + t; };
+        rec.onerror = e => { st.textContent = 'Spracheingabe nicht möglich (' + e.error + ') – bitte das Mikrofon der Tastatur nutzen.'; };
+        rec.onend = () => { laeuft = false; mik.textContent = '🎤 Sprechen'; mik.classList.remove('an'); };
+        rec.start(); laeuft = true; mik.textContent = '⏹ Fertig'; mik.classList.add('an'); st.textContent = 'Ich höre zu … zum Beenden „Fertig“ tippen.';
+      } catch (err) { st.textContent = 'Spracheingabe hier nicht verfügbar – bitte das Mikrofon der Tastatur nutzen.'; }
+    }); }
   box.querySelector('.kopie').addEventListener('click', async () => {
     const t = alle.map(e => JSON.stringify(e)).join('\n');
     try { await navigator.clipboard.writeText(t); box.querySelector('.st').textContent = `${alle.length} Einträge kopiert.`; }
