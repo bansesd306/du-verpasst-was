@@ -58,6 +58,15 @@
 @text gefuehl_3 = Weiß nicht.
 @text enden_verpasst = Du hast {n} von 3 Enden verpasst. Schade.
 @text entscheidungen = Du hast {x} von {y} Entscheidungen nie getroffen.
+@text verpasst_liste = Du hast verpasst:
+# V8.9 (Patrick 24.11.): Schlagzeilen am Ende (erscheinen nur, wenn man es auf dem Weg verpasst hat); Lynn kommt zuletzt allein
+@text verpasst_geburtstag = Lenas Party des Jahres
+@text verpasst_lied = Lena heult bei Happy Birthday
+@text verpasst_feuerloescher = Die Feuerlöscher-Eskalation
+@text verpasst_mia = Mias Crashout auf der Tanzfläche
+@text verpasst_tim = Tims Absturz auf Lenas Teppich
+@text verpasst_afterparty = Tims Afterparty bis 3 Uhr
+@text verpasst_lynn = Lynn
 @text beenden = Beenden
 @text nochmal_knopf = Nochmal
 @text beenden_1 = Sicher, dass du nichts verpasst hast?
@@ -74,7 +83,7 @@
 @text menue_credits = Mitwirkende
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
-@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
+@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Club Trance“ (HumanStudioed), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
 @abzeichenliste Leiser | Blaues Licht | Montagabend | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Fotograf des Jahres
 @gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
@@ -334,6 +343,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 #   Weg A = lernen (Schreibtisch), Weg B = aufschieben (Bett)
 # =====================================================================
 == KAP2_A
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @kapitel Kapitel 2
 @setze weg = "A"
 @uhr 21:20
@@ -342,6 +353,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 -> L2
 
 == KAP2_B
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @kapitel Kapitel 2
 @setze weg = "B"
 @uhr 21:20
@@ -396,6 +409,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 
 # ---- Zurück zu Hause (nach „Doch bleiben“ oder Umdrehen): nächste Etappe nach Uhrzeit ----
 == WEITER_ZUHAUSE
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @wenn weg=="A"
   @rufe L1
   @wenn uhr<=21:30
@@ -448,6 +463,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 # ---- 21:30 – Erster Fall / erstes Schlummern ----
 == L2
 @uhr mind 21:30
+# V8.9 (Patrick 24.11.): unwichtige Meldungen, still – liegen beim Nachschauen auf dem Sperrbildschirm
+@handy meldung Kleinanzeigen | Kleinanzeigen | Neue Nachricht zu „Fahrrad“
 @setze lernstand + 1
 @rufe CHECK_WOBLEIBST
 @bild K10P
@@ -466,6 +483,7 @@ Drei von drei.
 
 == S2
 @uhr mind 21:30
+@handy meldung Kleinanzeigen | Kleinanzeigen | Neue Nachricht zu „Fahrrad“
 @rufe CHECK_WOBLEIBST
 @bild N02
 Gleich fang ich an.
@@ -1014,6 +1032,8 @@ Aber auch nicht nichts.
 
 # ---- 23:40 – Auftauchen (Weg A, aus dem Flow) ----
 == L5
+@loop bass_fern aus
+@loop bass_leiser an
 @uhr mind 23:40
 @setze lernstand + 1
 @bild K10P
@@ -1075,6 +1095,8 @@ Sie verschwindet ja nicht. !3
 
 # ---- 23:31 – wer bei 22:45 geblieben ist ----
 == L9
+@loop bass_fern aus
+@loop bass_leiser an
 @uhr mind 23:31
 @wenn !l9
   @setze l9
@@ -1088,6 +1110,8 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 ? „Licht aus.“ -> L9_LICHTAUS
 
 == L9_LICHTAUS
+@loop bass_leiser aus
+@loop bass_fern aus
 @handy zu
 @ton! lichtschalter
 @schwarz schnitt
@@ -1115,6 +1139,8 @@ Fuck.
 #   KNOTEN AUFBRUCH (immer gleich)
 # =====================================================================
 == AUFBRUCH
+@loop bass_fern aus
+@loop bass_leiser aus
 @setze aufbruch = uhr
 @setze uhr_zeigen
 @uhr zeigen
@@ -1341,6 +1367,7 @@ Die Bässe gehen bis auf die Treppe.
 @kapitel Kapitel 3
 @setze ankunft = uhr
 @setze typ = "party"
+@handy meldung Kleinanzeigen | Kleinanzeigen | Neue Nachricht zu „Fahrrad“
 @wenn ankunft>23:30
   -> SP1
 @ende
@@ -1932,7 +1959,8 @@ Lynn: „Geht schon mal.“
 @effekt waermer
 @musik aus langsam
 @warte 1.2
-@musik lofi leise
+# V8.9 (Patrick 24.11.): drinnen läuft jetzt ein ruhiger Song, gedämpft durch die Balkontür
+@musik lofi tuer
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -2451,6 +2479,8 @@ Und eine ist ja keine. !3
 #   KAPITEL 4 – Die Nacht
 # =====================================================================
 == NACHT_ZUHAUSE
+@loop bass_fern aus
+@loop bass_leiser aus
 @loop oben aus
 @setze typ = "zuhause"
 @kapitel Kapitel 4
@@ -2621,8 +2651,9 @@ Ich bin auf keinem Foto. !3
 == NP_SCROLL
 # V8.8 (A5/J1-12): dazwischen Tims Feier (Tim filmt, Mias Selfies)
 @handy storys lena.xo=H36a tim_k97=TIM_FEIER_1 nightcrew=N32a x.mia.x=TIM_FEIER_3 jule.mxn=B16 lena.xo=TORTE x.mia.x=TIM_FEIER_4 lena.xo=A1
-@uhr springe Sa 01:52
 @handy zu
+# V8.9 (Patrick 24.11.): die Uhr rast sichtbar hoch – das Scrollen hat Zeit gefressen
+@uhr laufen Sa 01:52
 … !2
 -> MONOLOG
 
@@ -2734,6 +2765,7 @@ Ich bin auf keinem Foto. !3
 @stille
 @karte Samstag. 10:32. Noch 46 Stunden.
 @uhr Sa 10:32
+@handy meldung Instagram | Instagram | ben.r gefällt dein Beitrag | 09:47
 # V8.8 (G19): das Stumm-Symbol vom Freitag ist weg (Wecker/neuer Tag)
 @handy laut
 # M1
@@ -2884,6 +2916,7 @@ Ich bin auf keinem Foto. !3
 @karte Samstag. 14:20. Noch 42 Stunden.
 @uhr Sa 14:20
 @handy laut
+@handy meldung Instagram | Instagram | ben.r gefällt dein Beitrag | 09:47
 @schwarz
 # V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
 @ton tinnitus
@@ -3080,6 +3113,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @stille
 @karte Sonntag. 09:00. Noch 24 Stunden.
 @uhr So 09:00
+@handy meldung Outlook | Uni | Erinnerung: Prüfung Mo 9:00 | 08:15
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   -> SB
 @ende
@@ -3150,7 +3184,9 @@ Ich leg das Handy weg. Zwei Tage noch.
 # V8.8 (K): Verschreiber, ganz kurz, kein Gedanke dazu
 „Lynn kauft bei V einen gebrauchten Laptop …“ ⌫ynn
 @schwarz
+# V8.9: erst schreibt der Stift, der erste Haken beendet ihn
 @ton PR3_stift
+@warte 1.4
 {haken}Check. {haken}Check. {haken}Check.
 # V8.7 (D11): erst das stille Handy, dann der Foto-Dump
 @bild K10P
@@ -3262,19 +3298,40 @@ Ich krieg das hin.
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
 # V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
+@setze jonasliegen = 0
 @ton bzzz
 @warte 1.4
 @handy sperr
 @benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
-@warte 1.6
+@warte 1.2
+# V8.9 (Patrick 24.11., Punkt 6): selbst entscheiden, ob er nachschaut
+? „Nachschauen.“ -> SB_JONAS +handy
+? „Liegen lassen.“ -> SB_JONAS_LIEGEN
+
+== SB_JONAS
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
 @tippe lern
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
+-> SB_ABEND
+
+== SB_JONAS_LIEGEN
+@setze jonasliegen = 1
+@handy zu
+
+== SB_ABEND
 # V8.5: 23:12 → 22:31, weil danach die Sonntagnacht um 22:40 beginnt
 @uhr springe So 22:31
+# V8.9: wer mittags liegen gelassen hat, liest Jonas erst jetzt
+@wenn jonasliegen
+  @handy chat Jonas
+  @warte 1.4
+  @tippe lern
+  @nachricht Jonas: ok 😔 dann montag
+  @warte 1
+@ende
 @handy sperr
 … Ich krieg das hin.
 -> SONNTAGNACHT
@@ -3582,7 +3639,6 @@ Blau.
 @sonst
   @schema 2 phantom
   … !2
-  ~ … Das ist aus.
   ~ Das liegt da vorne. Aus.
   … !2
   ~ … Wo war ich?

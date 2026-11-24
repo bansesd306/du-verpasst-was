@@ -860,7 +860,7 @@ const Spiel = (() => {
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
-        if (n === 'wecker') o.merke = true;   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
+        if (n === 'wecker' || n === 'PR3_stift') o.merke = true;   // V8.9: der Haken beendet den Stift   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
         if (n === 'aufbau_shutdown') aufbauEnde = performance.now() + (d || 8) * 1000;
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
@@ -920,6 +920,8 @@ const Spiel = (() => {
   }
   async function handyBefehl(t, a) {
     const was = t[0];
+    // V8.9 (Patrick 24.11.): stille, unwichtige Meldung (Kleinanzeigen, Mail …) – kein Vibrieren, zählt nicht als „Neues“
+    if (was === 'meldung') { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); if (blick.offen) Handy.sperrUngelesen(); return; }
     if (blick.offen) blickZu(true);
     if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
@@ -1195,6 +1197,11 @@ const Spiel = (() => {
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
       TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
+      // V8.9 (Patrick 24.11.): was man auf genau diesem Weg verpasst hat (Endbildschirm)
+      verpasst() { if (!V.typ) return []; const L = [], party = V.typ !== 'zuhause';
+        if (!party) L.push('geburtstag'); else if (!V.gesungen) L.push('lied');
+        L.push('feuerloescher'); if (!V.tanz) L.push('mia'); if (!V.kueche) L.push('tim');
+        if (V.typ !== 'afterparty') L.push('afterparty'); if (V.lynn !== 'gm') L.push('lynn'); return L; },
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.filter(o => o.ziel !== '!wackeln').length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {

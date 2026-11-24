@@ -323,6 +323,13 @@
 #s-abz .bilanz.da{opacity:1}
 #s-abz .bilanz p{font:400 30px/1.3 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6}
 #s-abz .bilanz b{color:#fff;font-weight:700}
+/* V8.9: Verpasst-Liste – Schlagzeilen blenden nacheinander ein, dann weg, „… und Lynn.“ bleibt */
+#s-abz .bilanz .vp{opacity:0;transition:opacity .7s}
+#s-abz .bilanz .vp.da{opacity:1}
+#s-abz .bilanz #p-verpasst{transition:opacity 1.2s;min-height:3.9em}
+#s-abz .bilanz #p-verpasst.weg{opacity:0}
+#s-abz .bilanz .vl{display:inline-block;opacity:0;transition:opacity 2.4s ease-in;font-size:36px}
+#s-abz .bilanz .vl.da{opacity:1}
 #s-abz .knopf{font-size:38px;padding:13px 24px 11px 28px}
 #s-abz .knopf.warm{font-size:42px}
 #s-abz.sammlung .nur-lauf,#s-abz:not(.sammlung) .nur-sammlung{display:none}
