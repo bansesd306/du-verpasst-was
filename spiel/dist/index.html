@@ -105,7 +105,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @property --hr{syntax:'<number>';inherits:true;initial-value:110}@property --hg{syntax:'<number>';inherits:true;initial-value:165}@property --hb{syntax:'<number>';inherits:true;initial-value:255}
 #handylicht{opacity:0;transition:opacity .5s,--hr .9s ease,--hg .9s ease,--hb .9s ease}
 #handylicht.kurz{animation:hlicht 2s ease-out}
-#handylicht.an{animation:hflacker 3.2s steps(1) infinite}
+/* V8.9 (Patrick 24.11.): kein Dauerflackern mehr – ruhiges Licht */
 @keyframes hlicht{0%{opacity:0}7%{opacity:1}22%{opacity:.82}40%{opacity:.95}100%{opacity:0}}
 @keyframes hflacker{0%{opacity:1}23%{opacity:.84}41%{opacity:.97}67%{opacity:.8}84%{opacity:1}}
 #handylicht.fern .g{display:none}
@@ -6211,7 +6211,7 @@ const Handy = (() => {
   // V8.9 (Patrick 24.11., Animation 2): das Handylicht im Raum nimmt die Farbe dessen an, was gerade auf dem Display ist
   const APPFARBE = { chat: [205, 225, 205], liste: [232, 238, 240], sperr: [120, 160, 255], anruf: [90, 170, 120], wecker: [150, 170, 255], notizen: [245, 238, 205], pdf: [240, 240, 240] };
   const farbCanvas = document.createElement('canvas'); farbCanvas.width = farbCanvas.height = 8;
-  function setzeLicht(r, g, b) { [document.getElementById('handylicht'), el].forEach(h => { if (!h) return; h.style.setProperty('--hr', r); h.style.setProperty('--hg', g); h.style.setProperty('--hb', b); }); }
+  function setzeLicht(r, g, b) { [el].forEach(h => { if (!h) return; h.style.setProperty('--hr', r); h.style.setProperty('--hg', g); h.style.setProperty('--hb', b); }); }
   function displayFarbe() {
     clearTimeout(displayFarbe.t);
     displayFarbe.t = setTimeout(() => {
@@ -8145,7 +8145,7 @@ const Spiel = (() => {
         b.classList.add('an'); await warte(.5); break;
       }
       case 'anruf_unbemerkt': { const m = $('#anrufmini'); if (a === 'aus') { m.classList.remove('an'); Ton.loop('klingel', false); Ton.stoppe('anruf'); } else { m.innerHTML = `<span style="font-size:40px">✆</span><span>${a}<br><small style="opacity:.7;font-size:24px">Eingehender Anruf</small></span>`; m.classList.add('an'); Ton.spiele('anruf', { dumpf: true, leise: true, dauer: 5.5, merke: true }); } break; }
-      case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); effekt('handylicht', 'kurz'); kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
+      case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); if (aktBild && (aktBild.handy || aktBild.fernLicht) && !Handy.offen) effekt('handylicht', 'kurz');   /* V8.9: Leuchten nur, wenn das Handy im Bild liegt */ kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
       case 'zettel_aus': break;
       // ---- Handy ----
       case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
