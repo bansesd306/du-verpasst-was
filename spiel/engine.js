@@ -607,13 +607,15 @@ const Spiel = (() => {
     const el = $('#analoguhr');
     // V8.9 (Philip 24.11.): „ecke“ = kleine warme Uhr links oben (Balkon), „aus langsam“ = blendet langsam aus (4 s, ohne zu warten), „sanft“ = kommt weich wieder
     if (/^aus\b/.test(arg)) { const ecke = el.classList.contains('ecke'); if (/langsam/.test(arg)) { el.classList.add('bleicht'); setTimeout(() => { el.classList.remove('bleicht'); if (ecke) el.classList.remove('ecke'); }, 4200); } else if (ecke) setTimeout(() => el.classList.remove('ecke'), 1100); el.classList.remove('an', 'sanft'); auMin = null; return; }
-    const ecke = /\becke\b/.test(arg), sanft = /\bsanft\b/.test(arg); arg = arg.replace(/\s+(ecke|sanft)\b/g, '').trim();
+    const ecke = /\becke\b/.test(arg), sanft = /\bsanft\b/.test(arg), ploetzlich = /\bploetzlich\b/.test(arg); arg = arg.replace(/\s+(ecke|sanft|ploetzlich)\b/g, '').trim();
     if (ecke) el.classList.add('ecke'); if (sanft) el.classList.add('sanft');
+    // „ploetzlich“ = Uhr ist auf einen Schlag da (kurzer warmer Blitz + Klick), Philip 24.11.
+    if (ploetzlich) { el.classList.remove('ploppt'); void el.offsetWidth; el.classList.add('ploppt'); Ton.spiele('uhr', { dauer: .3, vol: 1 }); setTimeout(() => el.classList.remove('ploppt'), 1200); }
     const ziel = zeit(arg); V.uhr = ziel; zeigeUhr();
     const tagMin = ziel % 1440; let gesamt = auMin == null ? tagMin : auMin + ((tagMin - auMin % 1440) + 1440) % 1440;
     const setz = (m, dauer) => { el.querySelectorAll('.zg').forEach(z => z.style.transition = `transform ${dauer}s cubic-bezier(.45,0,.2,1)`); el.querySelector('.zm').style.transform = `rotate(${m * 6}deg)`; el.querySelector('.zh').style.transform = `rotate(${m * .5}deg)`; el.querySelector('.ad').textContent = uhrText(); };
     zeigeTextbox(false);
-    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(el.classList.contains('sanft') ? 1.6 : .6); }
+    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(el.classList.contains('sanft') ? 1.6 : ploetzlich ? 1 : .6); }
     else { const ek = el.classList.contains('ecke'); Ton.spiele('uhr', { dauer: 2.2, vol: ek ? .4 : .8 }); setz(gesamt, 2.2); await warte(2.4); }
     auMin = gesamt;
   }
