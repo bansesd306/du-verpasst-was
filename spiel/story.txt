@@ -1806,9 +1806,11 @@ Bzzz. Nochmal.
 # ---- „Gar nicht gemerkt“ (wer zweimal ignoriert) ----
 == GM_START
 Ich lass es.
+# V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
-@uhr 23:25
+@analoguhr 23:25
 …
+@analoguhr aus
 @bild N14
 Lynn: „Drinnen erklärt Tim übrigens gerade schon wieder sein Krypto-Ding.“
 Ich: „Ist er schon Millionär?“
@@ -1953,6 +1955,11 @@ Lynn: „Höchstens beim zweiten Date.“
 @effekt heranzoomen 3.5
 Lynn: „Oh.“
 Lynn: „Alle weg.“
+# V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
+@analoguhr 23:25
+@analoguhr Sa 01:58
+~ Zwei?
+@analoguhr aus
 @uhr Sa 01:58
 @uhr zeigen sofort
 Drinnen fegt Lena schon Konfetti zusammen.
@@ -3046,6 +3053,13 @@ Ich leg das Handy weg. Zwei Tage noch.
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
+# V8.9 (Philip 24.11.): Sonntag, Regen – Erleichterung
+~ Sonntag.
+~ Keiner postet was.
+~ Alle liegen im Bett und bereuen.
+… !2
+~ Endlich verpass ich mal nichts.
+… !2
 @wenn typ!="party" || lernstand>=LERN_HOCH
   @lernplan stand ok1 ok2 ok3
 @sonst
@@ -3152,12 +3166,28 @@ Ich krieg das hin.
 @lernplan haken 1
 @warte .4
 @lernplan haken 2
+# V8.9 (Philip 24.11.): ein Fall, der nicht aufgeht
+@lernplan aus
+„K überweist aus Versehen 500 Euro an B …“
+…
+„K überweist aus Versehen …“
+„K überweist …“
+~ Was war nochmal eine Leistung?
+… !2
+~ Das wusste ich mal.
 … !3
+@lernplan stand ok1 ok2
 @lernplan streich 3
 @lernplan streich 4
 @lernplan streich 5
 ~ Kommt eh nicht dran.
 @lernplan aus
+~ Sonntag.
+~ Keiner postet was.
+~ Alle liegen im Bett und bereuen.
+… !2
+~ Endlich verpass ich mal nichts.
+… !2
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
 @ton bzzz
