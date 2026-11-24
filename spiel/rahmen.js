@@ -182,7 +182,7 @@ const Rahmen = (() => {
     }
     ton('bzzz');
     // V8.6: Lampe flackert nur noch bei jeder dritten Nachricht, weich
-    if (!reduziert && (++flackZ % 3 === 1)) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
+    if (!reduziert) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
     sichern();
   }
   function nachrichtenStart(verz) { nachrichtenStopp(); nStart = setTimeout(() => { neu(); nTimer = setInterval(neu, 3600); }, verz); }
@@ -223,7 +223,7 @@ const Rahmen = (() => {
     sp.classList.remove('gelesen');
     bzzzZaehler = 0; besuch(); uhrzeitSetzen();
     if (nachWeg && laeufe() > 0) { S().nachr = (S().nachr || 0) + 6 + Math.floor(Math.random() * 7); zaehlerText(); kopf.classList.add('an'); sichern(); }
-    if (nachWeg && window.Ton) Ton.outroAus();
+    if (window.Ton) Ton.outroAus();   // V8.9: auch beim Zurückkommen ins Menü nach dem Ende (Endmusik lief doppelt mit)
     ton('party_fern');   // beim allerersten Laden: Autoplay-Versuch (Browser blockt evtl. bis zum ersten Tippen)
     bw.classList.remove('anlauf'); void bw.offsetWidth; bw.classList.add('anlauf');
     bw.classList.add('tippbar'); tippAb = Date.now() + 500;
@@ -421,7 +421,7 @@ const Rahmen = (() => {
         b.querySelector('.mt').textContent = T(k, b.dataset.t);
       });
       $('tippen').textContent = T('start_tippen', 'Tippen zum Starten');
-      $('iosnote').textContent = a.iosHinweis || '';
+      $('iosnote').textContent = [a.iosHinweis, 'Tipp: Dunkelmodus für Webseiten ausschalten.'].filter(Boolean).join(' ');
       zaehlerText();
     },
     start: startZeigen,

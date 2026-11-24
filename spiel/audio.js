@@ -224,7 +224,7 @@ const Ton = (() => {
     tippLauf(ab, dauer) { if (!ctx || gesperrt || !P.tipplauf) return null; return quelle('tipplauf', sfx, { ab, dauer }); },
     get anschlaege() { return (TOENE.tipplauf && TOENE.tipplauf.anschlaege) || []; },
     outro(welche) {
-      if (!ctx) return; musikStopp(true); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
+      if (!ctx) return; musikStopp(true); liedStopp(); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
       const k = welche === 'warm' ? 'ende_warm' : 'Outro'; const nr = ++outroNr;
       const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
       if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten
