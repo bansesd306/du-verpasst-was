@@ -1,7 +1,17 @@
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
-#handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,.85,.25,1);z-index:5}
-#handy.an{transform:none}
-#handy.weg{transform:translateY(115%)!important}
+/* V8.9 (Patrick 24.11., Animation 3): Handy kommt leicht schräg aus der Hand unten rechts, richtet sich auf, liegt ruhig in der Hand (minimales Wackeln);
+   Display geht erst beim Ankommen an und beim Weglegen zuerst aus. Rein = weich abbremsen, raus = schneller beschleunigen. */
+#handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translate(7%,112%) rotate(6deg);transform-origin:70% 100%;transition:transform .42s cubic-bezier(.55,0,.8,.45);z-index:5}
+#handy.an{transform:none;transition:transform .62s cubic-bezier(.16,.84,.3,1.02)}
+#handy.weg{transform:translate(5%,112%) rotate(4deg)!important;transition:transform .42s cubic-bezier(.55,0,.8,.45)}
+#handy .geraet{transform-origin:60% 90%}
+#handy.an .geraet{animation:handhalten 9s ease-in-out infinite .7s}
+@keyframes handhalten{0%,100%{translate:0 0;rotate:0deg}23%{translate:1.5px -2px;rotate:.18deg}48%{translate:-1px -3px;rotate:-.12deg}71%{translate:-2px .5px;rotate:-.22deg}86%{translate:.5px 1.5px;rotate:.06deg}}
+.einfrieren #handy .geraet{animation-play-state:paused}
+@media (prefers-reduced-motion:reduce){#handy.an .geraet{animation:none}}
+#handy .screen::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:30;border-radius:inherit;transition:opacity .22s ease-in}
+#handy.aufwachen .screen::after{opacity:1;transition:none}
+#handy:not(.an) .screen::after{opacity:.85;transition:opacity .3s ease-in}
 #handy.schnapp{transition:transform .18s ease-out;transform:scale(1.04) rotate(-1.5deg)}
 .geraet{position:absolute;inset:0;border-radius:64px;background:#111;padding:14px;box-shadow:0 0 0 3px #2a2a2e,0 30px 80px rgba(0,0,0,.7)}
 .screen{position:relative;width:100%;height:100%;border-radius:52px;overflow:hidden;background:#000;font-family:"Samsung Sans","Roboto",system-ui,sans-serif;color:#e9edef}

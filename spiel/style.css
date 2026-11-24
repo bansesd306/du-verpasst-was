@@ -93,16 +93,20 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes ruf{0%{opacity:0;transform:translateY(30px) scale(.8)}15%{opacity:1}100%{opacity:0;transform:translateY(-120px) scale(1.1)}}
 .lichterbox .p{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,160,.95) 0,rgba(255,200,110,.45) 35%,transparent 70%);mix-blend-mode:screen;animation:funkeln 2.4s ease-in-out infinite alternate}
 @keyframes funkeln{0%{opacity:.15}100%{opacity:.85}}
-#handylicht{opacity:0;transition:opacity .5s}
+@property --hr{syntax:'<number>';inherits:true;initial-value:110}@property --hg{syntax:'<number>';inherits:true;initial-value:165}@property --hb{syntax:'<number>';inherits:true;initial-value:255}
+#handylicht{opacity:0;transition:opacity .5s,--hr .9s ease,--hg .9s ease,--hb .9s ease}
 #handylicht.kurz{animation:hlicht 2s ease-out}
 #handylicht.an{animation:hflacker 3.2s steps(1) infinite}
 @keyframes hlicht{0%{opacity:0}7%{opacity:1}22%{opacity:.82}40%{opacity:.95}100%{opacity:0}}
 @keyframes hflacker{0%{opacity:1}23%{opacity:.84}41%{opacity:.97}67%{opacity:.8}84%{opacity:1}}
 #handylicht.fern .g{display:none}
-#handylicht.fern .raum{background:radial-gradient(ellipse 45% 70% at var(--fx,-6%) var(--fy,58%),rgba(110,165,255,.26),rgba(80,130,255,.07) 55%,transparent 80%)}
-#handylicht .g{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(205,228,255,.62),rgba(120,175,255,.28) 45%,rgba(90,150,255,0));transform:scale(3.2)}
-#handylicht .raum{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at var(--hx,52%) var(--hy,66%),rgba(110,165,255,.20),rgba(80,130,255,.06) 50%,transparent 75%)}
+#handylicht.fern .raum{background:radial-gradient(ellipse 45% 70% at var(--fx,-6%) var(--fy,58%),rgba(var(--hr),var(--hg),var(--hb),.26),rgba(calc(var(--hr)*.8),calc(var(--hg)*.8),var(--hb),.07) 55%,transparent 80%)}
+#handylicht .g{position:absolute;border-radius:50%;background:radial-gradient(closest-side,rgba(calc(var(--hr)*.4 + 150),calc(var(--hg)*.4 + 150),calc(var(--hb)*.4 + 150),.62),rgba(var(--hr),var(--hg),var(--hb),.28) 45%,rgba(var(--hr),var(--hg),var(--hb),0));transform:scale(3.2)}
+#handylicht .raum{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at var(--hx,52%) var(--hy,66%),rgba(var(--hr),var(--hg),var(--hb),.20),rgba(calc(var(--hr)*.8),calc(var(--hg)*.8),var(--hb),.06) 50%,transparent 75%)}
 #handylicht.an{opacity:1}
+/* V8.9 (Animation 2): Handy offen = Display ist direkt vor mir – Licht fällt von unten Mitte in den Raum, in der Farbe des Bildschirms, aufhellend statt überdeckend */
+.handyoffen #handylicht .raum{mix-blend-mode:screen;background:radial-gradient(ellipse 48% 62% at 50% 102%,rgba(var(--hr),var(--hg),var(--hb),.5),rgba(var(--hr),var(--hg),var(--hb),.18) 50%,transparent 80%)}
+.handyoffen #handylicht .g{display:none}
 #fenster .w{position:absolute;background:#232a38;opacity:0;transition:opacity .4s}
 #fenster .w.aus{opacity:.96}
 #zettel{display:none;position:absolute;right:170px;top:120px;width:560px;padding:44px 40px;background:#f4ecd2;color:#222;font:600 40px/1.35 'Patrick Hand',"Segoe Print",cursive;transform:rotate(2.5deg);box-shadow:0 18px 40px rgba(0,0,0,.6);border-radius:3px}

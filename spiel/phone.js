@@ -140,7 +140,22 @@ const Handy = (() => {
   function zeige(name) {
     el.querySelectorAll('.app').forEach(a => a.classList.toggle('an', a.dataset.app === name)); app = name;
     el.classList.toggle('dunkelstatus', name === 'story' || name === 'video');
-    aktualisiereZeit();
+    aktualisiereZeit(); displayFarbe();
+  }
+  // V8.9 (Patrick 24.11., Animation 2): das Handylicht im Raum nimmt die Farbe dessen an, was gerade auf dem Display ist
+  const APPFARBE = { chat: [205, 225, 205], liste: [232, 238, 240], sperr: [120, 160, 255], anruf: [90, 170, 120], wecker: [150, 170, 255], notizen: [245, 238, 205], pdf: [240, 240, 240] };
+  const farbCanvas = document.createElement('canvas'); farbCanvas.width = farbCanvas.height = 8;
+  function setzeLicht(r, g, b) { const h = document.getElementById('handylicht'); if (!h) return; h.style.setProperty('--hr', r); h.style.setProperty('--hg', g); h.style.setProperty('--hb', b); }
+  function displayFarbe() {
+    clearTimeout(displayFarbe.t);
+    displayFarbe.t = setTimeout(() => {
+      const a = el.querySelector('.app.an'); const img = a && a.querySelector('img'); const f = APPFARBE[app] || [110, 165, 255];
+      if (!img || ['chat', 'liste', 'sperr'].includes(app)) { setzeLicht(...f); return; }
+      const nimm = () => { try { const c = farbCanvas.getContext('2d', { willReadFrequently: true }); c.drawImage(img, 0, 0, 8, 8); const d = c.getImageData(0, 0, 8, 8).data; let r = 0, g = 0, b = 0; for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; } const n = d.length / 4; r /= n; g /= n; b /= n;
+        // Display-Licht ist hell: Farbe behalten, aber auf Leuchtkraft anheben (sonst wird ein dunkles Bild zu grauem Licht)
+        const m = Math.max(r, g, b, 1), k = Math.min(255 / m, 2.2); setzeLicht(Math.round(r * k * .85 + 30), Math.round(g * k * .85 + 30), Math.round(b * k * .85 + 30)); } catch (e) { setzeLicht(...f); } };
+      if (img.complete && img.naturalWidth) nimm(); else img.addEventListener('load', nimm, { once: true });
+    }, 60);
   }
   function avatar(n, gross) {
     if (istGruppe(n)) return `<span class="av gr">👥</span>`;
@@ -148,7 +163,9 @@ const Handy = (() => {
     const k = KONTAKTE[n] || { farbe: `hsl(${h},38%,42%)` }; return `<span class="av" style="background:${k.farbe}">${(n || '?')[0]}</span>`;
   }
   function oeffne() {
-    if (!offen) { offen = true; el.classList.add('an'); document.getElementById('buehne').classList.add('handyoffen'); }
+    if (!offen) { offen = true; el.classList.add('an', 'aufwachen'); document.getElementById('buehne').classList.add('handyoffen');
+      // Display geht an, kurz nachdem das Handy in der Hand ist (nicht schon unterwegs)
+      clearTimeout(el.tw); void el.offsetWidth; el.tw = setTimeout(() => el.classList.remove('aufwachen'), Spiel.schnell ? 0 : 260); }
     el.classList.remove('weg'); $('.displayaus').classList.remove('an');
   }
 
@@ -564,13 +581,13 @@ const Handy = (() => {
       s.querySelector('.st-zeit').textContent = zeit || (name === 'lynn' ? '9 Std.' : (Math.floor(Math.random() * 40) + 3) + ' Min.');
       s.classList.toggle('aufrufe', aufrufe != null && aufrufe !== ''); if (aufrufe) s.querySelector('.st-views b').textContent = aufrufe;
       s.classList.remove('post'); const b = s.querySelector('.st-balken i'); b.style.transition = 'none'; b.style.width = '0'; void b.offsetWidth;
-      b.style.transition = `width ${dauer * (Spiel.schnell ? .15 : 1)}s linear`; b.style.width = '100%';
+      b.style.transition = `width ${dauer * (Spiel.schnell ? .15 : 1)}s linear`; b.style.width = '100%'; displayFarbe();
     },
     post(code, text) {
       oeffne(); zeige('story'); const s = $('[data-app=story]'); s.classList.add('post'); s.classList.remove('aufrufe'); s.querySelector('.st-bild').classList.remove('ganz');
       s.querySelector('.st-name').textContent = 'Deine Story'; s.querySelector('.st-zeit').textContent = 'Gerade eben';
       s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + `<div class="st-text">${esc(text)}</div>`;
-      s.querySelector('.st-views b').textContent = '0';
+      s.querySelector('.st-views b').textContent = '0'; displayFarbe();
     },
     aufrufe(n) { const b = $('.st-views b'); b.textContent = n; b.parentNode.classList.remove('pop'); void b.offsetWidth; b.parentNode.classList.add('pop'); },
     hinweis(appName, titel, text) {
