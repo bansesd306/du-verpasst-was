@@ -10,8 +10,9 @@ Später nachdenken über:
 
 ## 2. „… will ich mich vielleicht doch nicht dran erinnern. Haha.“ (Z. 2674–2675)
 Ziel: auflockern, damit der Monolog nicht zu schwer wird. Statt „Haha.“:
-- **Innen (Claude empfiehlt):** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `dann hab ich das alles nie gedacht.`
+- **Innen:** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `dann hab ich das alles nie gedacht.`
 - **Zum Spieler (Patricks Idee):** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `dann vergesst einfach alles, was ich gerade gesagt hab.`
+- **Zum Spieler, Patricks Favorit (er ertappt sich selbst beim Kitsch):** `Verdammte Scheiße, aber wenn’s nichts wird …` / `… !1.5` / `Okay. Stopp.` / `Das habt ihr jetzt nicht gehört.`
 
 ## 3. Umarmung zum Abschied (Z. 1969)
 Idee: „Länger als nötig.“ weg, stattdessen `Zum Abschied umarmt sie mich.` → Schwarzbild, leise Nachtgeräusche (Wind), Umarmungs-Ton, ca. 4–5 s nicht wegtippbar.
@@ -35,4 +36,4 @@ Lynn: „Ich frag.“
 Lynn: „Montagabend?“
 Ich: „Montagabend.“
 ```
-Offen: „Kommt drauf an, wer fragt.“ wortgleich wie bei Mia (Claude empfiehlt wortgleich) oder leicht abgeändert.
+Patrick findet „Ich frag.“ sehr süß. „Kommt drauf an, wer fragt.“ wortgleich wie bei Mia (Empfehlung).
