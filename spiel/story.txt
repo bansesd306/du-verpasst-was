@@ -2024,7 +2024,7 @@ Irgendwann sitzen wir auf dem Boden.
 @warte 2
 @handy zu
 @effekt waermer aus
-@bild N14
+@bild N34Ls
 Lynn sagt nichts mehr. Sie schaut in die Stadt.
 # V8.7 (D17)
 Irgendwann steht sie auf.
@@ -2035,11 +2035,13 @@ Lynn: „Ich geh mal rein.“
 
 == GM_STECKEN
 @effekt tasche aus
-@bild N14
+# Patrick 25.11.: nach dem Schnitt sitzen beide – Lynn sitzend in Ich-Sicht (drei deckungsgleiche Bilder)
+@bild N34L langsam
 Lynn: „Hast du eigentlich schon was vor? Nach deiner Prüfung?“
 Ich: „Jetzt schon.“
+@bild N34Lt
 … !1.5
-@bild N14d gesicht
+@bild N34L
 Lynn: „Montagabend?“
 Ich: „Montagabend.“
 # V8.8 (A6): drinnen werden es ganz langsam weniger

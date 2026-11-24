@@ -3406,7 +3406,7 @@ Irgendwann sitzen wir auf dem Boden.
 @warte 2
 @handy zu
 @effekt waermer aus
-@bild N14
+@bild N34Ls
 Lynn sagt nichts mehr. Sie schaut in die Stadt.
 # V8.7 (D17)
 Irgendwann steht sie auf.
@@ -3417,11 +3417,13 @@ Lynn: „Ich geh mal rein.“
 
 == GM_STECKEN
 @effekt tasche aus
-@bild N14
+# Patrick 25.11.: nach dem Schnitt sitzen beide – Lynn sitzend in Ich-Sicht (drei deckungsgleiche Bilder)
+@bild N34L langsam
 Lynn: „Hast du eigentlich schon was vor? Nach deiner Prüfung?“
 Ich: „Jetzt schon.“
+@bild N34Lt
 … !1.5
-@bild N14d gesicht
+@bild N34L
 Lynn: „Montagabend?“
 Ich: „Montagabend.“
 # V8.8 (A6): drinnen werden es ganz langsam weniger
@@ -5521,6 +5523,9 @@ const BILDER = {
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, großes Fenster, Party drinnen (V8.8)", stimmung: "balkon" },
   N34v: { datei: "img/N34.webp", video: "vid/N34v.mp4", text: "Wie N34, als bewegter Hintergrund (Veo-Video, 4-s-Schleife, V8.8)", stimmung: "balkon" },
+  N34L:  { datei: "img/N34L.webp",  text: "Lynn sitzt auf dem Balkonboden, schaut dich an, roter Becher (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
+  N34Lt: { datei: "img/N34Lt.webp", text: "Wie N34L, sie trinkt und lächelt hinter dem Becher (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
+  N34Ls: { datei: "img/N34Ls.webp", text: "Wie N34L, sie schaut in die Stadt (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
   N34a1: { datei: "img/N34a1.webp", text: "Balkonboden: drinnen schon weniger Leute (V8.8)", stimmung: "balkon" },
   N34a2: { datei: "img/N34a2.webp", text: "Balkonboden: drinnen fast leer (V8.8)", stimmung: "balkon" },
   N34b: { datei: "img/N34b.webp", text: "Er und Lynn von hinten auf dem Balkonboden, drinnen leer (Fenster-Fassung, V8.8)", stimmung: "balkon" },
