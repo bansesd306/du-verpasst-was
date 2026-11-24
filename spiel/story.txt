@@ -953,8 +953,15 @@ Aber auch nicht nichts.
 @warte 1.4
 @setze handyweit = 1
 @shutdown
-@warte 3
+@warte 4.6
+# V8.9 (Patrick): nach dem Pfeifen komplette Stille, lange – keine Musik, nichts von draußen. Dann kommt das Zimmerrauschen zurück.
+@stille
+@warte 6
+@raum nacht
+@warte 2.5
 … !3
+~ Hat sie?
+… !2
 # Lähmung: Tippt man einen Knopf an, wird er grau. Es passiert nichts. Bis beide grau sind.
 @laehmung „Hingehen.“ | „Hierbleiben.“
 ~ Soll ich nicht doch …
@@ -3539,6 +3546,10 @@ Blau.
 @uhr laufen Mo 11:50
 @bild N25L langsam
 Senner: „Noch zehn Minuten.“
+# V8.9 (Patrick): Spät-Weg – das Echo von „Zehn Minuten. Beide Male.“, egal wie die Prüfung läuft
+@wenn lynn=="" && ankunft>23:30
+  ~ Wie immer.
+@ende
 # V8.9: viel Handy kostet Lernen (je 2 Handy-Punkte -1)
 @wenn punkte>=2
   @setze lernstand - 1
@@ -3584,9 +3595,6 @@ Senner: „Noch zehn Minuten.“
   … !1
   ~ Zehn Minuten.
   @ton PR3_stift 0.7s
-  @wenn lynn=="" && ankunft>23:30
-    ~ Immer zehn Minuten.
-  @ende
   ~ Schreib einfach irgendwas.
   … !3
   ~ Alle guten Dinge sind drei.
