@@ -22,7 +22,9 @@ Plus/Minus = Tendenz. Reine Pausen (`…`) und Technik bewerte ich nicht einzeln
 
 **Gesamtnote des Spieltexts: 2 (gut).** Das beste Drittel ist eine glatte 1, das schwächste Zehntel liegt bei 4, eine Stelle bei 5.
 
-**Ein 1\* habe ich nicht vergeben.** Am nächsten dran sind „Zehn Minuten. … Beide Male.“ (Spät-Weg) und „Morgen 4 Grad.“ (Balkon, Handy geschaut). Was ihnen zum 1\* fehlt: Beide wirken erst, wenn man den Rest kennt, und sie werden an anderer Stelle schon halb erklärt (der Monolog wiederholt „Wegen dem Wetter“, die Prüfung wiederholt „Immer zehn Minuten“). Ein Meisterwerk-Satz würde beim ersten Lesen allein treffen.
+**Nachtrag 24.11. mittags:** Seit „~ Wie immer.“ nach „Noch zehn Minuten.“ eingebaut ist, läuft die „Zehn Minuten“-Kette bis in die Prüfung durch. **Die Kette als Ganzes ist jetzt 1\*** (siehe Teil 10). Einzelne Sätze bleiben bei höchstens 1.
+
+**Ursprünglich: Ein 1\* habe ich nicht vergeben.** Am nächsten dran sind „Zehn Minuten. … Beide Male.“ (Spät-Weg) und „Morgen 4 Grad.“ (Balkon, Handy geschaut). Was ihnen zum 1\* fehlt: Beide wirken erst, wenn man den Rest kennt, und sie werden an anderer Stelle schon halb erklärt (der Monolog wiederholt „Wegen dem Wetter“, die Prüfung wiederholt „Immer zehn Minuten“). Ein Meisterwerk-Satz würde beim ersten Lesen allein treffen.
 
 **Die Stärke des Texts:** kurze Sätze, trockener Humor, Gegenstände statt Gefühlswörter (Stift, Becher, Wetter, Pizza), und Motive, die über alle Tage laufen („Zehn Minuten“, „Check“, „Kausalität“, „⌫ynn“, „Rot ist fast leer“ → „Blau.“). Wenn der Text schweigt und das Handy spricht, ist er am besten.
 
@@ -464,3 +466,45 @@ Warum der Weg meist *nicht* kitschig ist: Fast jeder weiche Satz wird sofort geb
 4. Pausen auf dem Balkon kürzen.
 
 Alles davon ist reines Umsetzen und braucht kein Opus: **Sonnet Mittel reicht und kostet am wenigsten Limit.** Inhaltsstopp ist Do 26.11.
+
+---
+
+## 10. Rückgriffe, Ketten und versteckte Details (Nachtrag 24.11.)
+
+Alles, was früher gesagt oder gezeigt wird und später wiederkommt. Note gilt für die Kette als Ganzes.
+
+| # | Kette | Glieder (Zeile) | Note | Kommentar |
+|---|---|---|---|---|
+| 1 | **Zehn Minuten** | „Zehn Minuten Pause. Hab ich mir verdient.“ (183) → Spät-Weg „Vor zehn Minuten, du hättest ihn sehen sollen!“ / „Zehn Minuten.“ (2274–2277) → „Die ist vor zehn Minuten mit Tim los.“ (2282) → Nacht „Zehn Minuten. … Beide Male.“ (2654) → Prüfung „Noch zehn Minuten.“ + „~ Wie immer.“ (3555–3557) → wenig gelernt „~ Zehn Minuten.“ (3603) | **1\*** | Eine harmlose Pause im Prolog wird zum Schicksal. Jedes Glied ist kurz, keines erklärt. „Wie immer.“ ist besser als das alte „Immer zehn Minuten.“, weil es nicht wiederholt, sondern verallgemeinert. |
+| 2 | **Der Stift** | „Behalt ihn.“ (Flashback) → Laserpointer, „Schenkung ist Schenkung.“ → „Wie geht’s meinem Heiligtum?“ / „Rot ist fast leer.“ (Balkon) → „Einfach den Stift zurückgeben.“ (Nacht, ohne Lynn) → „Blau.“ (Prüfung) | **1** | Ein Gegenstand trägt die ganze Liebesgeschichte. „Blau.“ versteht nur, wer „Rot ist fast leer“ gehört hat, und genau so soll es sein. |
+| 3 | **Check / § 823** | Prolog-Schema mit Haken-Ton (142–147) → Tims Bier „Fremdes Eigentum. Kausal. Fahrlässig. Check, check.“ + § 827 → Sonntag „Check. Check. Check.“ → Prüfung „A könnte gegen B einen Anspruch aus § 823 I BGB haben.“ | **1** | Das Jura, das er im Prolog verstanden hat, kommt in der Prüfung dran. Fehlendes Glied: Auf Weg B/Afterparty streicht er Deliktsrecht am Sonntag durch und merkt es am Montag nicht (Chance C2). |
+| 4 | **Kausalität** | „~ Zeit. ~ Kausalität. ~ Partys.“ (Ausrede, 166) → Paul „kausalität ist der knackpunkt“ (Freitag) → Sonntag Weg A „~ Kausalität.“ → Montag Paul „Kausalität.“ „Ehrenmann.“ | **1−** | Dasselbe Wort als Ausrede, als Jura und als Dank. |
+| 5 | **⌫ynn** | „Lynn leiht sich …“ (Freitag, Weg A) → „Lynn kauft bei V …“ (Sonntag) → „LynnA könnte gegen B …“ (Prüfung, Lynn-Weg) | **1** | Gedanken ohne ein Wort Gedanke. |
+| 6 | **Wo war ich?** | Nach Lenas Story (L3) → Phantom-Vibration in der Prüfung | **1** | Zeigt zweimal, was ein Blick kostet. |
+| 7 | **Ausreden-Sprüche** | „Irgendwas war halt immer.“ (Prolog) → „Irgendwas ist halt immer.“ (Samstag, Kater) / „Alle guten Dinge sind drei. … Wer’s glaubt.“ → Prüfung, wenig gelernt: „~ Alle guten Dinge sind drei.“ | **1−** | Aus Spott wird ein Gebet. |
+| 8 | **Glaub mir, du verpasst was** | Jonas (K1) → Küche „Schön, dass du da bist. Glaub mir.“ → Ende „du verpasst was.“ → Menü „Sicher, dass du nichts verpasst hast?“ / „Glaub mir.“ / „Wusst ich’s doch.“ | **1** | Titel, Freundschaft und Spieler-Ansprache in einem Satz. |
+| 9 | **Pizza** | Alter Chat im Handy: Jonas, 12. Juli, „bin unten. mach auf 🍕“ (Verlauf, Z. 85) → „Nach beiden 5,0 stand er mit Pizza vor meiner Tür.“ → Umfrage „Ich bin nicht da“ → „ok 😔 dann montag“ → Monolog „Der kommt dann wieder mit Pizza.“ → Ende „Für alle Fälle.“ | **1** | Der Juli-Chat ist ein echtes verstecktes Detail: Wer im Handy zurückscrollt, sieht die Pizza nach dem zweiten Fehlversuch. |
+| 10 | **Die Wette** | „Jetzt bin ich ’nen Zehner reicher.“ → Spät-Weg „Schuldet mir übrigens ’nen Zehner.“ → „Hast du darauf auch gewettet?“ – „Kein Kommentar.“ → Ende „Dass du kommst.“ – „Jonas.“ | **1** | Erst am Ende erfährt man, dass Jonas gegen seinen besten Freund gewettet hat, während er ihn überredet. |
+| 11 | **Wichtig?** | Balkon „Wichtig?“ – „Nah.“ → Ende „Unwichtig?“ – „Ja.“ | **1** | |
+| 12 | **Mias Partys** | „drei Partys“ → „Party Nummer vieeer.“ → Afterparty „Die vierte war’s dann wohl.“ → Samstag „party nummer 5“ | **1** | |
+| 13 | **Feuerlöscher** | „MORITZ!“ durch die Badtür → „Ich seh nur noch das Ende.“ / Spät-Weg „Der Feuerlöscher!!“ → Lena „Und der Feuerlöscher?“ „… Okay. Den schon.“ → Samstag „DER FORSTER MORITZ 😭🧯“ / „musst du dabei gewesen sein 😂“ / Lynn-Weg „war ich nicht. war woanders“ → Prüfung „Ich denk an den Feuerlöscher.“ | **1** | Ein Ereignis, das man nie ganz sieht. Genau das Thema. Schwächstes Glied ist die Prüfung (Chance C4). |
+| 14 | **Rom** | Abschied: „Alle Wege führen nach –“ „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“ → bei „Vielleicht … ich schau mal“ führen alle drei Antworten zur Afterparty → Samstag „tja. alle wege führen wohl zu tim 😎“ … „zu lynn? 😏“ „~ … Der Wichser.“ | **1−** | Das Spiel selbst gibt Tim recht. Vorschlag zum letzten Glied siehe unten. |
+| 15 | **Eine Stunde** | Jonas „EINE stunde.“ → „Eine Stunde. EINE.“ → „Eine Stunde ist keine Stunde. Also sind zwei … eine.“ → Abzeichen „Afterparty. Nur eine Stunde. Klar.“ | **1** | |
+| 16 | **Zeit verschwindet** | „Das war vor einer Stunde.“ → Flow „~ Wann hab ich den gemacht?“ → Balkon-Uhr bleicht aus, „~ Zwei?“ → „Auf einmal war es zwei Uhr.“ → „~ Ich denk an zwei Uhr.“ → „Gefühlt hab ich an zwei Uhr gedacht.“ | **1** | Handy, Lernen und Lynn fressen alle Zeit, nur unterschiedlich. |
+| 17 | **Becher** | Jonas’ roter Becher (Gruppenfoto) → Lena drückt ihm einen in die Hand → Lynn dreht ihren Becher → „… halb voll.“ (Lippenstift) → Samstag „Der linke ist meiner.“ | **1** | |
+| 18 | **Auf keinem Foto** | „~ Ich bin doch hier.“ → „Ich bin auf keinem Foto.“ / „Egal.“ → „Dieser Laucharm.“ → Samstag „Da hinten. Das bin ich. … Glaub ich.“ | **1** | Chance C5 würde die Zuhause-Wege anschließen. |
+| 19 | **Heiraten** | Mia „drei Leute geheiratet“ → Nacht ohne Lynn „Musste ihr ja nicht gleich einen Antrag machen.“ → Lynn-Weg Knopf „Lynn, willst du mich heiraten?“ „Höchstens beim zweiten Date.“ | **2+** | Schön über drei Wege verteilt, man sieht nie alles in einem Durchgang. |
+| 20 | **Mal schauen** | Alter Chat Lena (Dienstag): „und freitag feierst du trotzdem ein bisschen mit, ja?“ – „mal schauen 😅“ → Freitag dieselbe Antwort an Jonas (Abzeichen „Mal schauen“) | **2** | Er sagt das offenbar immer. Verstecktes Detail im Handy. |
+| 21 | **schwach** | Alter Chat Tim (Silvester): „schwach 😤“ → Jonas „schwach 😕“ | **2** | Kleines Easter Egg: Alle sagen ihm das. |
+| 22 | **Fall 12** | Alter Chat Lerngruppe: „Wer hat die Lösung zu Fall 12?“ → Freitag Paul „hat irgendwer fall 12 gecheckt??“ → Montag „Fall 12 hab ich nur wegen dir gecheckt.“ | **1−** | |
+| 23 | **Mama und Papa** | Alter Chat „Hast du genug zu essen da?“ / Papa „👍“ → „Papa sagt auch toi toi toi 🍀“ (vor der Party oder auf ihr) → Montag „Viel Erfolg heute, mein Schatz ❤️“ | **2+** | Papa redet nur über Mama. Leise und traurig. |
+| 24 | **Schief singen** | W3 „Alter, singt der schief.“ → Nacht auf der Straße „~ Von Lena?“ „~ Genauso schief wie vorhin.“ / Balkon „Der so falsch gesungen hat?“ „Das tut weh.“ | **2** | |
+| 25 | **Lena kennt ihn** | Alter Chat „hab gehört montag ist dein großer tag??“ → „Ja. Aber du nicht.“ → Sonntagnacht „und diesmal nicht bis 4 uhr lernen 🙄“ | **1−** | „diesmal“ verrät, dass sie die letzten zwei Male mitbekommen hat. |
+
+**Fäden ohne Ende:** Jonas’ „bist du immer noch jede nacht in dem game drin“ (alter Chat, kommt nie wieder, Lauf 1 M8), Ben als Stachel (gewollt), Sophie nach „Aha.“ (Chance C3).
+
+### Rom-Witz: Vorschläge
+
+1. **Letztes Glied („~ … Der Wichser.“):** Das ist die naheliegende Reaktion. Stärker wäre, wenn *er* den Rom-Witz zurückspielt. Nach „zu lynn? 😏“: `~ … Der Wichser.` bleibt, dann tippt er `dann doch lieber rom`, Tim antwortet `😂`. So schließt er den Kreis selbst, verlegen und witzig zugleich. **Sehr gut.**
+2. **Ohne Lynn (dort steht nach Tims Nachricht nichts):** `@tippe rom wär mir lieber gewesen` → Tim `nächstes mal 😎`. **Gut**, optional.
+3. **„Ich will einfach nach Hause.“:** lassen. Meine Kritik war klein, und der Satz macht es lustiger, dass er danach trotzdem auf der Afterparty landet.
