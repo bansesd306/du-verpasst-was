@@ -860,7 +860,7 @@ const Spiel = (() => {
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
-        if (n === 'wecker') o.merke = true;   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
+        if (n === 'wecker' || n === 'PR3_stift') o.merke = true;   // V8.9: der Haken beendet den Stift   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
         if (n === 'aufbau_shutdown') aufbauEnde = performance.now() + (d || 8) * 1000;
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
@@ -920,6 +920,8 @@ const Spiel = (() => {
   }
   async function handyBefehl(t, a) {
     const was = t[0];
+    // V8.9 (Patrick 24.11.): stille, unwichtige Meldung (Kleinanzeigen, Mail …) – kein Vibrieren, zählt nicht als „Neues“
+    if (was === 'meldung') { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); if (blick.offen) Handy.sperrUngelesen(); return; }
     if (blick.offen) blickZu(true);
     if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);

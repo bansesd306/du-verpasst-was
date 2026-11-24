@@ -418,3 +418,6 @@
 /* V8.9: Trenner „214 ungelesene Nachrichten“ */
 .c-ungelesen{margin:14px -20px;padding:8px 0;text-align:center;background:rgba(255,255,255,.06)}
 .c-ungelesen span{display:inline-block;padding:6px 18px;border-radius:12px;background:#1d282f;color:#e9edef;font:500 22px system-ui}
+/* V8.9 (Patrick 24.11.): echte App-Zeichen als SVG in Meldung und Banner */
+.nic.svgi svg,.h-ic.svgi svg{width:56%;height:56%;display:block}
+.nic.svgi.gross svg,.h-ic.svgi.gross svg{width:74%;height:74%}

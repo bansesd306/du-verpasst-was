@@ -448,6 +448,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 # ---- 21:30 – Erster Fall / erstes Schlummern ----
 == L2
 @uhr mind 21:30
+# V8.9 (Patrick 24.11.): unwichtige Meldungen, still – liegen beim Nachschauen auf dem Sperrbildschirm
+@handy meldung Kleinanzeigen | Kleinanzeigen | Neue Nachricht zu „Fahrrad“
 @setze lernstand + 1
 @rufe CHECK_WOBLEIBST
 @bild K10P
@@ -466,6 +468,7 @@ Drei von drei.
 
 == S2
 @uhr mind 21:30
+@handy meldung Kleinanzeigen | Kleinanzeigen | Neue Nachricht zu „Fahrrad“
 @rufe CHECK_WOBLEIBST
 @bild N02
 Gleich fang ich an.
@@ -1341,6 +1344,7 @@ Die Bässe gehen bis auf die Treppe.
 @kapitel Kapitel 3
 @setze ankunft = uhr
 @setze typ = "party"
+@handy meldung Kleinanzeigen | Kleinanzeigen | Neue Nachricht zu „Fahrrad“
 @wenn ankunft>23:30
   -> SP1
 @ende
@@ -2734,6 +2738,7 @@ Ich bin auf keinem Foto. !3
 @stille
 @karte Samstag. 10:32. Noch 46 Stunden.
 @uhr Sa 10:32
+@handy meldung Instagram | Instagram | ben.r gefällt dein Beitrag | 09:47
 # V8.8 (G19): das Stumm-Symbol vom Freitag ist weg (Wecker/neuer Tag)
 @handy laut
 # M1
@@ -2884,6 +2889,7 @@ Ich bin auf keinem Foto. !3
 @karte Samstag. 14:20. Noch 42 Stunden.
 @uhr Sa 14:20
 @handy laut
+@handy meldung Instagram | Instagram | ben.r gefällt dein Beitrag | 09:47
 @schwarz
 # V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
 @ton tinnitus
@@ -3080,6 +3086,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @stille
 @karte Sonntag. 09:00. Noch 24 Stunden.
 @uhr So 09:00
+@handy meldung Outlook | Uni | Erinnerung: Prüfung Mo 9:00 | 08:15
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   -> SB
 @ende
@@ -3150,7 +3157,9 @@ Ich leg das Handy weg. Zwei Tage noch.
 # V8.8 (K): Verschreiber, ganz kurz, kein Gedanke dazu
 „Lynn kauft bei V einen gebrauchten Laptop …“ ⌫ynn
 @schwarz
+# V8.9: erst schreibt der Stift, der erste Haken beendet ihn
 @ton PR3_stift
+@warte 1.4
 {haken}Check. {haken}Check. {haken}Check.
 # V8.7 (D11): erst das stille Handy, dann der Foto-Dump
 @bild K10P
@@ -3262,19 +3271,40 @@ Ich krieg das hin.
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
 # V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
+@setze jonasliegen = 0
 @ton bzzz
 @warte 1.4
 @handy sperr
 @benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
-@warte 1.6
+@warte 1.2
+# V8.9 (Patrick 24.11., Punkt 6): selbst entscheiden, ob er nachschaut
+? „Nachschauen.“ -> SB_JONAS +handy
+? „Liegen lassen.“ -> SB_JONAS_LIEGEN
+
+== SB_JONAS
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
 @tippe lern
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
+-> SB_ABEND
+
+== SB_JONAS_LIEGEN
+@setze jonasliegen = 1
+@handy zu
+
+== SB_ABEND
 # V8.5: 23:12 → 22:31, weil danach die Sonntagnacht um 22:40 beginnt
 @uhr springe So 22:31
+# V8.9: wer mittags liegen gelassen hat, liest Jonas erst jetzt
+@wenn jonasliegen
+  @handy chat Jonas
+  @warte 1.4
+  @tippe lern
+  @nachricht Jonas: ok 😔 dann montag
+  @warte 1
+@ende
 @handy sperr
 … Ich krieg das hin.
 -> SONNTAGNACHT
@@ -3582,7 +3612,6 @@ Blau.
 @sonst
   @schema 2 phantom
   … !2
-  ~ … Das ist aus.
   ~ Das liegt da vorne. Aus.
   … !2
   ~ … Wo war ich?

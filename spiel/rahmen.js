@@ -316,7 +316,7 @@ const Rahmen = (() => {
       // V8.4: wie oft man von sich aus aufs Handy geschaut hat
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
       if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
-        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');
