@@ -27,6 +27,7 @@ const Rahmen = (() => {
 
   // Zeitpläne, damit Wechsel sauber abbrechen
   let plaene = [];
+  let verpasstPlan = null;
   function plan(fn, ms) { const id = setTimeout(fn, ms); plaene.push(id); return id; }
   function planStopp() { plaene.forEach(clearTimeout); plaene = []; }
 
@@ -317,9 +318,16 @@ const Rahmen = (() => {
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
       if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
         : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
-      // V8.9: Verpasst-Liste dieses Durchgangs
+      // V8.9 (Patrick 24.11.): Verpasst-Liste wie Schlagzeilen, eine nach der anderen; dann verschwindet alles, nur „… und Lynn.“ bleibt
       const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
-      if (pv) pv.innerHTML = !vl.length ? '' : T('verpasst_liste', 'Du hast verpasst: {liste}.').replace('{liste}', vl.length === 1 ? '<b>' + vl[0] + '</b>' : vl.slice(0, -1).map(x => '<b>' + x + '</b>').join(', ') + ' und <b>' + vl[vl.length - 1] + '</b>');
+      if (pv) { pv.innerHTML = ''; pv.classList.remove('weg'); }
+      if (pv && vl.length) {
+        const VT = { geburtstag: 'Lenas Party des Jahres', lied: 'Lena heult bei Happy Birthday', feuerloescher: 'Die Feuerlöscher-Eskalation', mia: 'Mias Crashout auf der Tanzfläche', tim: 'Tims Absturz auf Lenas Teppich', afterparty: 'Tims Afterparty bis 3 Uhr', lynn: 'Lynn' };
+        const tx = k => T('verpasst_' + k, VT[k]);
+        const lynn = vl.includes('lynn'), rest = vl.filter(k => k !== 'lynn');
+        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? ' · ' : '') + '<b>' + tx(k) + '</b></span>').join('');
+        verpasstPlan = { pv, lynn, tx };
+      } else verpasstPlan = null;
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');
@@ -333,6 +341,12 @@ const Rahmen = (() => {
     }, t + j * (reduziert ? 0 : 720)));
     t += frische.length * (reduziert ? 0 : 720) + (reduziert ? 0 : 250);
     plan(() => bil.classList.add('da'), t);
+    if (verpasstPlan) { const { pv, lynn, tx } = verpasstPlan; const sp = [...pv.querySelectorAll('.vp')];
+      if (reduziert) { sp.forEach(x => x.classList.add('da')); if (lynn) pv.insertAdjacentHTML('beforeend', ' <span class="vp da">… und <b>' + tx('lynn') + '</b>.</span>'); }
+      else {
+        let u = t + 700; sp.forEach((x, i) => plan(() => x.classList.add('da'), u + i * 450)); u += sp.length * 450 + 1800;
+        if (lynn) { plan(() => pv.classList.add('weg'), u); plan(() => { pv.classList.remove('weg'); pv.innerHTML = '<span class="vl">… und <b>' + tx('lynn') + '</b>.</span>'; void pv.offsetWidth; pv.querySelector('.vl').classList.add('da'); }, u + 1500); }
+      } }
     if (!reduziert && laeufe() > 0) zu.forEach((k, j) => plan(() => { k.classList.add('blick'); plan(() => k.classList.remove('blick'), 520); }, t + 500 + j * 190));
   }
 

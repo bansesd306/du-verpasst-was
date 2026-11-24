@@ -58,7 +58,15 @@
 @text gefuehl_3 = Weiß nicht.
 @text enden_verpasst = Du hast {n} von 3 Enden verpasst. Schade.
 @text entscheidungen = Du hast {x} von {y} Entscheidungen nie getroffen.
-@text verpasst_liste = Du hast verpasst: {liste}.
+@text verpasst_liste = Du hast verpasst:
+# V8.9 (Patrick 24.11.): Schlagzeilen am Ende (erscheinen nur, wenn man es auf dem Weg verpasst hat); Lynn kommt zuletzt allein
+@text verpasst_geburtstag = Lenas Party des Jahres
+@text verpasst_lied = Lena heult bei Happy Birthday
+@text verpasst_feuerloescher = Die Feuerlöscher-Eskalation
+@text verpasst_mia = Mias Crashout auf der Tanzfläche
+@text verpasst_tim = Tims Absturz auf Lenas Teppich
+@text verpasst_afterparty = Tims Afterparty bis 3 Uhr
+@text verpasst_lynn = Lynn
 @text beenden = Beenden
 @text nochmal_knopf = Nochmal
 @text beenden_1 = Sicher, dass du nichts verpasst hast?
@@ -335,6 +343,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 #   Weg A = lernen (Schreibtisch), Weg B = aufschieben (Bett)
 # =====================================================================
 == KAP2_A
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @kapitel Kapitel 2
 @setze weg = "A"
 @uhr 21:20
@@ -343,6 +353,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 -> L2
 
 == KAP2_B
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @kapitel Kapitel 2
 @setze weg = "B"
 @uhr 21:20
@@ -397,6 +409,8 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 
 # ---- Zurück zu Hause (nach „Doch bleiben“ oder Umdrehen): nächste Etappe nach Uhrzeit ----
 == WEITER_ZUHAUSE
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @wenn weg=="A"
   @rufe L1
   @wenn uhr<=21:30
@@ -1018,6 +1032,8 @@ Aber auch nicht nichts.
 
 # ---- 23:40 – Auftauchen (Weg A, aus dem Flow) ----
 == L5
+@loop bass_fern aus
+@loop bass_leiser an
 @uhr mind 23:40
 @setze lernstand + 1
 @bild K10P
@@ -1079,6 +1095,8 @@ Sie verschwindet ja nicht. !3
 
 # ---- 23:31 – wer bei 22:45 geblieben ist ----
 == L9
+@loop bass_fern aus
+@loop bass_leiser an
 @uhr mind 23:31
 @wenn !l9
   @setze l9
@@ -1092,6 +1110,8 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 ? „Licht aus.“ -> L9_LICHTAUS
 
 == L9_LICHTAUS
+@loop bass_leiser aus
+@loop bass_fern aus
 @handy zu
 @ton! lichtschalter
 @schwarz schnitt
@@ -1119,6 +1139,8 @@ Fuck.
 #   KNOTEN AUFBRUCH (immer gleich)
 # =====================================================================
 == AUFBRUCH
+@loop bass_fern aus
+@loop bass_leiser aus
 @setze aufbruch = uhr
 @setze uhr_zeigen
 @uhr zeigen
@@ -2457,6 +2479,8 @@ Und eine ist ja keine. !3
 #   KAPITEL 4 – Die Nacht
 # =====================================================================
 == NACHT_ZUHAUSE
+@loop bass_fern aus
+@loop bass_leiser aus
 @loop oben aus
 @setze typ = "zuhause"
 @kapitel Kapitel 4

@@ -85,6 +85,8 @@ const Ton = (() => {
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
     regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
     oben: [['M1_party', { vol: .5, lp: 160 }]],
+    bass_fern: [['M1_party', { vol: .16, lp: 110 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
+    bass_leiser: [['M1_party', { vol: .09, lp: 95 }]],   // ab ca. 23:30 noch leiser
     halle: [['halle', { vol: .75 }]],
     schritte: [['schritte_lauf', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
