@@ -505,6 +505,8 @@ Alles, was früher gesagt oder gezeigt wird und später wiederkommt. Note gilt f
 
 ### Rom-Witz: Vorschläge
 
+**Entschieden 24.11. (Patrick): Rom-Witz bleibt, wie er ist.** Die Pointe ist „zu lynn? 😏“, „Der Wichser.“ spricht nur hart aus, was der Spieler fühlt. Mehr wäre zu lang. Die Vorschläge unten sind damit erledigt.
+
 1. **Letztes Glied („~ … Der Wichser.“):** Das ist die naheliegende Reaktion. Stärker wäre, wenn *er* den Rom-Witz zurückspielt. Nach „zu lynn? 😏“: `~ … Der Wichser.` bleibt, dann tippt er `dann doch lieber rom`, Tim antwortet `😂`. So schließt er den Kreis selbst, verlegen und witzig zugleich. **Sehr gut.**
 2. **Ohne Lynn (dort steht nach Tims Nachricht nichts):** `@tippe rom wär mir lieber gewesen` → Tim `nächstes mal 😎`. **Gut**, optional.
 3. **„Ich will einfach nach Hause.“:** lassen. Meine Kritik war klein, und der Satz macht es lustiger, dass er danach trotzdem auf der Afterparty landet.
