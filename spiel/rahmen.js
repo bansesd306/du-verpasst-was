@@ -8,14 +8,14 @@ const Rahmen = (() => {
   const bw = document.getElementById('zimmer');
   const $ = id => document.getElementById(id === 'bw' ? 'zimmer' : 'z-' + id);
   const reduziert = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const ENDEN = ['Leiser', 'Hier oder da', 'Blaues Licht'];
+  const ENDEN = ['Leiser', 'Blaues Licht', 'Montagabend'];   // V8.9: ein Name pro Schluss (Pizza / Jonas schreibt / Lynn)
   const TOENUNG = {
     'Leiser': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(90,110,220,.18),transparent 70%)',
-    'Hier oder da': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(240,160,64,.14),transparent 70%)',
-    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)'
+    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)',
+    'Montagabend': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'
   };
   // Handy auf dem Tisch je Ende: umgedreht / meldet sich ab und zu / Display dauerhaft an
-  const HANDY = { 'Leiser': 'unten', 'Hier oder da': 'oben', 'Blaues Licht': 'hell' };
+  const HANDY = { 'Leiser': 'unten', 'Blaues Licht': 'hell', 'Montagabend': 'unten' };
   const T = (k, d) => (api && api.TEXTE[k] != null && api.TEXTE[k] !== '') ? api.TEXTE[k] : d;
   const S = () => api.S();
   // Abzeichen: [Name, Symbol, Farbe 1, Farbe 2, was man getan hat, vager Hinweis]
@@ -271,7 +271,7 @@ const Rahmen = (() => {
     $('e-nr').textContent = T('ende_nr', 'Ende {x} von 3').replace('{x}', ENDEN.indexOf(n) + 1);
     $('e-name').textContent = n;
     $('e-satz').textContent = s[4].replace('Ende: ', '');
-    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Montagabend. Das Handy liegt umgedreht auf dem Tisch.'; $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
+    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Das Handy liegt umgedreht auf dem Tisch.';   /* V8.9: Titel heißt jetzt selbst „Montagabend“ */ $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
     zeige(null); void bw.offsetWidth;
     zeige('s-ende');
   }

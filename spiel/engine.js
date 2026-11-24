@@ -22,6 +22,7 @@ const Spiel = (() => {
   function lade() { try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; } catch (e) { return {}; } }
   function speichere(d) { try { localStorage.setItem(SPEICHER, JSON.stringify(d)); } catch (e) { } }
   let S = Object.assign({ abz: [], enden: [], entsch: {}, durchgaenge: 0 }, lade());
+  S.enden = (S.enden || []).filter(e => ['Leiser', 'Blaues Licht', 'Montagabend'].includes(e));   // V8.9: alte Namen („Hier oder da“) aus früheren Läufen nicht mitzählen
 
   // ---------------- Zeit ----------------
   const TAGE = ['Freitag', 'Samstag', 'Sonntag', 'Montag'], TAGK = ['Fr', 'Sa', 'So', 'Mo'];
@@ -1035,7 +1036,7 @@ const Spiel = (() => {
 
   // ---------------- Ende ----------------
   async function endeSpiel() {
-    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Leiser' : p <= V.LEISER_BIS ? 'Leiser' : p <= V.HIER_ODER_DA_BIS ? 'Hier oder da' : 'Blaues Licht';   // V8.8 (G60)
+    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Montagabend' : p <= V.LEISER_BIS ? 'Leiser' : 'Blaues Licht';   // V8.9 (Storycheck 2B, E1): ein Name pro Schluss – Pizza / Jonas schreibt / Lynn
     kapitelZeiten.push({ n: 'Ende', t: performance.now() });
     pfad.push(ende); abzeichen(ende); PR('ende', ende + ' · Punkte ' + p + ' · Weg ' + pfad.join(' → ')); if (!S.enden.includes(ende)) S.enden.push(ende); speichere(S);
     abzQueue = [];   // die neuen Abzeichen zeigt der Rahmen selbst (gestempelt)
