@@ -95,6 +95,7 @@ const Ton = (() => {
     lampe: 'lampe', rauschen: 'rauschen',
   };
   const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
+  let ausklingNr = 0;
   function loop(name, an) {
     if (!ctx) return;
     if (loops[name]) { loops[name](); delete loops[name]; }
@@ -178,7 +179,7 @@ const Ton = (() => {
       if (q && o.merke) gemerkt[name] = q;
       return q ? q.laenge : 0;
     },
-    stoppe(name) { const q = gemerkt[name]; if (q) { q.stop(.2); delete gemerkt[name]; }
+    stoppe(name, weich = .2) { const q = gemerkt[name]; if (q) { q.stop(weich); delete gemerkt[name]; }
     },
     loop,
     musik(art, opt) {
@@ -204,6 +205,13 @@ const Ton = (() => {
     },
     stille() { if (!ctx) return; Object.keys(loops).forEach(k => loop(k, false)); musikStopp(true); liedStopp(); musikGain.gain.setValueAtTime(0, now()); },
     sperre(an) { gesperrt = an; if (an && ctx) this.stille(); },
+    klangZurueck() { if (!ctx) return; ausklingNr++; const t = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(1, t); }); },
+    // V8.9 (Patrick 24.11.): am Ende Raumton, Vögel & Co. langsam ausblenden, bis alles weg ist (Musik bleibt Sache von outro/outroAus)
+    ausklingen(sek = 5) {
+      if (!ctx) return; const t = now(); const nr = ++ausklingNr;
+      [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0.0001, t + sek); });
+      setTimeout(() => { if (nr !== ausklingNr) return; Object.keys(loops).forEach(k => loop(k, false)); setTimeout(() => { if (nr !== ausklingNr) return; const t2 = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t2); b.gain.setValueAtTime(1, t2); }); }, 2500); }, sek * 1000 + 100);
+    },
     lautMaster(v, zeit = .3) { if (ctx) master.gain.setTargetAtTime(v, now(), zeit); },
     vibriere,
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal

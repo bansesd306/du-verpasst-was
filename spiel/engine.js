@@ -191,8 +191,9 @@ const Spiel = (() => {
   B.addEventListener('pointerdown', e => {
     if (!blick.offen || e.target.closest('#handyknopf')) return;
     e.stopPropagation(); e.preventDefault();
-    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung')) {
-      if (Handy.app === 'sperr') { Handy.liste(); Ton.spiele('display_klick'); return; }
+    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V')) {
+      // V8.9 (Patrick 24.11.): Sperrbildschirm – wischen = Meldungen durchscrollen, Tippen auf einen Chat = lesen, sonst = WhatsApp
+      if (Handy.app === 'sperr') { blickDruck = { y: e.clientY, y0: e.clientY, ziel: e.target, zug: false }; return; }
       // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
       if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
       if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
@@ -200,6 +201,14 @@ const Spiel = (() => {
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  let blickDruck = null;
+  B.addEventListener('pointermove', e => { const d = blickDruck; if (!d || !blick.offen) return; e.stopPropagation(); const dy = e.clientY - d.y; d.y = e.clientY; if (Math.abs(e.clientY - d.y0) > 10) d.zug = true; if (d.zug) Handy.sperrScroll(-dy); }, true);
+  B.addEventListener('pointerup', e => {
+    const d = blickDruck; blickDruck = null; if (!d || !blick.offen) return; e.stopPropagation(); if (d.zug) return;
+    const nk = d.ziel && d.ziel.closest && d.ziel.closest('.nk'); const n = nk && Handy.chatVonKarte(nk);
+    if (aktBild && aktBild.stimmung === 'pruefung') { if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } return; }   // vor der Prüfung: nur Sperrbildschirm
+    if (n) { Handy.lesen(n); Ton.spiele('tipp', { vol: .5 }); } else if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } else { Handy.liste(); Ton.spiele('display_klick'); }
+  }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
   let blickErstmals = true, blickZahl = -1;
   setInterval(() => {
@@ -250,7 +259,8 @@ const Spiel = (() => {
     if (spEl) spEl.classList.add('spricht');
     for (let i = 0; i < teile.length; i++) {
       const t = teile[i];
-      if (t.cue) { if (!ueberspringen) Ton.spiele(t.cue); continue; }
+      // V8.9 (Patrick 24.11.): {schreib} = Stift kratzt, bis der Haken kommt – Schreiben und „Check“ überlappen nicht
+      if (t.cue) { if (t.cue === 'haken') Ton.stoppe('PR3_stift', .05); if (!ueberspringen) { if (t.cue === 'schreib') Ton.spiele('PR3_stift', { merke: true, vol: .8 }); else Ton.spiele(t.cue); } continue; }
       s += t.ch; zeichenNr++;
       if (vtIdx >= 0 && !vtFertig && zeichenNr === vtIdx + ins.vertipp.length) {
         // V8.8 (K): er tippt den Namen, merkt es nach ~0,6 s, löscht „ynn“ und schreibt normal weiter
@@ -357,6 +367,7 @@ const Spiel = (() => {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
     if (e.datei) {   // V8.9: Bild und seine Gesichts-Overlays zusammen abwarten
       const ovs = typeof OVERLAYS !== 'undefined' ? Object.keys(OVERLAYS).filter(k => OVERLAYS[k].basis === code).map(k => lade('img/' + k + '.webp')) : [];
+      if (e.fensterLichter) e.fensterLichter.forEach(k => ovs.push(lade('img/' + k + '.webp')));
       await Promise.race([Promise.all([lade(e.datei), ...ovs]), new Promise(r => setTimeout(r, 4000))]);
     }
     if (nr !== bildNr) return;   // V8.8 (G63): inzwischen kam ein neueres Bild – dieses nicht mehr zeigen
@@ -370,6 +381,8 @@ const Spiel = (() => {
     let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
     if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
+    if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
     if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
@@ -380,7 +393,7 @@ const Spiel = (() => {
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
-    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add('f-dunkel'));
+    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
     const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
@@ -507,7 +520,7 @@ const Spiel = (() => {
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
-      case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
+      case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
         const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
@@ -550,18 +563,24 @@ const Spiel = (() => {
       default: console.warn('Effekt?', name);
     }
   }
+  let aufbauEnde = 0;   // V8.9: wann der Woosh-Aufbau (aufbau_shutdown) zu Ende ist – genau dann wird es schwarz
   async function shutdown() {
+    // V8.9 (Patrick 24.11.): erst der ganze Woosh mit steigendem Piepen, am Ende schwarz und Stille (kein Piepen mehr danach)
+    if (aufbauEnde && !schnell) { console.log('[shutdown] Rest Aufbau s', ((aufbauEnde - performance.now()) / 1000).toFixed(2)); const rest = (aufbauEnde - performance.now()) / 1000; if (rest > 0 && rest < 10) await new Promise(r => setTimeout(r, rest * 1000)); }
+    const mitPiep = !aufbauEnde; aufbauEnde = 0;
     Handy.zu(); party(false); Ton.stille(); Ton.sperre(true); $('#tunnel').style.opacity = 0;
-    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); Ton.spiele('tinnitus');
+    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); if (mitPiep) Ton.spiele('tinnitus');
   }
   async function fensterAus(ziel) {
-    const ws = [...document.querySelectorAll('#fenster .w')]; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
+    // V8.9 (Patrick 24.11.): die Fenster gehen genau an ihren Stellen aus und bleiben aus (auch beim Szenenwechsel kein Aufhellen)
+    const ebene = aktBild && aktBild.el; const ws = ebene ? [...ebene.querySelectorAll('img.fw:not(.aus)')] : []; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
     await uhrLaufen(ziel, () => {
       const anteil = (V.uhr - start) / gesamt; const soll = Math.floor(anteil * (ws.length + 1));
-      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); }
-      if (anteil > .85) welt.style.filter = 'brightness(.5)';
+      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+      if (anteil > .85 && ebene && !ebene.style.filter) { ebene.style.transition += ', filter 1.5s ease'; ebene.style.filter = 'brightness(.62)'; }
     });
-    ws.forEach(w => w.classList.add('aus')); await warte(1.2); welt.style.filter = '';
+    while (n < ws.length) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+    await warte(1.2);
   }
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
@@ -809,11 +828,13 @@ const Spiel = (() => {
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
       case 'montage': await montage(); break;
       case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
-        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; B.appendChild(st);
+        // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
+        const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');
+        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; if (aufBlatt) { st.classList.add('blatt'); kl.appendChild(st); } else B.appendChild(st);
         void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
-        await warte(1.4); setTimeout(() => st.remove(), 4000); break;
+        await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
       }
-      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
+      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
       case 'zuruf': { Ton.spiele('jubel', { vol: .9 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); await text({ t: 'text', text: a, sprecher: 'Alle', schrei: true, auto: true, stil: '' }); await warte(.5); break; }
@@ -839,7 +860,9 @@ const Spiel = (() => {
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
+        if (n === 'wecker') o.merke = true;   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
+        if (n === 'aufbau_shutdown') aufbauEnde = performance.now() + (d || 8) * 1000;
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
         break;
@@ -914,6 +937,7 @@ const Spiel = (() => {
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
       case 'meldung': { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); break; }   // V8.9: stille Meldung, zählt am Handy-Knopf
+      case 'flut': await Handy.flut(+t[1] || 100); break;
       case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
@@ -947,6 +971,9 @@ const Spiel = (() => {
       case 'pdfweiter': await Handy.pdfWeiter(t[1]); break;
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
+      case 'wecker': zeigeTextbox(false); Handy.wecker(); await warte(.3); break;
+      case 'schlummern': await Handy.weckerDruck('schlummern'); break;
+      case 'weckeraus': await Handy.weckerDruck('stopp'); break;
       case 'laut': Handy.laut(); break;
       case 'herz': await Handy.storyHerz(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
@@ -981,7 +1008,7 @@ const Spiel = (() => {
       await warte(4); await tipp(); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
-    zeigeTextbox(false); Ton.outro();
+    zeigeTextbox(false); Ton.outro(); Ton.ausklingen(5);
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
     { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
     await warte(4); await tipp();
@@ -1028,7 +1055,7 @@ const Spiel = (() => {
   function neustart(label, vorab) {
     gen++; if (tippWarter) tippWarter(); tippt = false; Rahmen.weg();
     document.querySelectorAll('.schirm').forEach(s => s.classList.remove('an'));
-    Ton.outroAus(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
+    Ton.outroAus(); Ton.klangZurueck && Ton.klangZurueck(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
     if (label) { // Einstellungen am Anfang trotzdem ausführen
       const ende = labels['PROLOG']; prog.slice(0, ende).forEach(p => { if (p.t === 'cmd' && ['setze', 'text', 'abzeichenliste', 'gruppe', 'verlauf'].includes(p.name)) befehl(p); });
       springe(label);

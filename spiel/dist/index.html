@@ -627,6 +627,12 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #fehlerbox .mik.an{background:#c0392b;color:#fff}
 #sperre.an{opacity:0!important}
 
+/* V8.9 (Patrick 24.11.): Stempel auf der Klausur unten rechts – ersetzt die Rotstift-5,0 (Schicht s4 aus) */
+#klausur .s4{display:none}
+#stempel.blatt{left:735px;top:690px;font-size:150px;border-width:9px;border-radius:14px;padding:0 24px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
+.ebene .innen img.fw{opacity:0;transition:opacity 1.4s ease}
+.ebene .innen img.fw.aus{opacity:1}
+
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 #handy{position:absolute;left:675px;top:14px;width:570px;height:1052px;transform:translateY(115%);transition:transform .55s cubic-bezier(.2,.85,.25,1);z-index:5}
 #handy.an{transform:none}
@@ -706,7 +712,12 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .sp-oben{position:relative;margin-top:120px;text-align:center}
 .sp-uhr{font:200 160px/1 system-ui;color:#fff;letter-spacing:2px}
 .sp-datum{font:400 28px system-ui;color:#ddd;margin-top:10px}
-.sp-notifs{position:relative;margin:50px 18px 0;display:flex;flex-direction:column;gap:12px}
+.sp-notifs{position:relative;margin:50px 18px 30px;display:flex;flex-direction:column;gap:12px;flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;overscroll-behavior:contain;-webkit-mask-image:linear-gradient(#000 calc(100% - 50px),transparent);mask-image:linear-gradient(#000 calc(100% - 50px),transparent)}
+.sp-notifs::-webkit-scrollbar{display:none}
+.sp-notifs>.nk{flex:none}
+.napp{font:500 21px system-ui;color:#9aa0a6;letter-spacing:.3px;margin:-4px 0 4px}
+.nkopf em.nz{font:400 22px system-ui;color:#8a8a8a;font-style:normal;white-space:nowrap}
+.nkopf em.nz:empty{display:none}
 .nk{display:flex;gap:16px;align-items:flex-start;padding:22px 22px;border-radius:34px;background:rgba(32,32,36,.92);animation:nrein .4s cubic-bezier(.2,.9,.3,1.2)}
 @keyframes nrein{from{opacity:0;transform:translateY(-30px) scale(.95)}}
 .nk.wisch{transition:transform .5s,opacity .5s;transform:translateX(120%);opacity:0}
@@ -889,7 +900,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .hhinweis{position:absolute;left:14px;right:14px;top:60px;padding:20px 22px;border-radius:30px;background:rgba(40,40,44,.97);display:flex;gap:16px;align-items:center;transform:translateY(calc(-100% - 80px));transition:transform .45s cubic-bezier(.2,.9,.3,1.2);z-index:9}
 .hhinweis.an{transform:none}
 .hhinweis b{font:600 26px system-ui;color:#fff}.h-x{font:400 24px system-ui;color:#ccc}
-.h-ic{width:46px;height:46px;border-radius:50%;flex:none}
+.h-ic{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;overflow:hidden}
 .displayaus{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .08s;z-index:20}
 .displayaus.an{opacity:1}
 
@@ -921,9 +932,24 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 [data-app=karussell].wisch2 .ka-band{transform:translateX(-66.666%)}
 .lv-bild{transition:transform .26s ease-in,filter .26s}
 .lv-bild.dreht{transform:scaleX(.02);filter:blur(6px) brightness(1.6)}
-.ka-seite{width:33.333%;height:100%;display:flex;align-items:center;justify-content:center;padding:60px;text-align:center;background:#f7d24c;color:#1d1d1d;font:800 60px/1.15 system-ui}
-.ka-seite.b{background:#2fbf8f;color:#fff}
-.ka-seite.c{background:#e85d75;color:#fff}
+/* V8.9 (Patrick 24.11.): Lern-Karussell wie ein echter Studygram-Post (Pastell, Textmarker, Nummern, Sticker) */
+.ka-seite{position:relative;width:33.333%;height:100%;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;padding:60px 54px;text-align:left;color:#2a2233;font:800 58px/1.12 'Bricolage Grotesque',system-ui;overflow:hidden}
+.ka-seite.a{background:radial-gradient(circle at 85% 12%,#ffd9c7 0,transparent 45%),radial-gradient(circle at 10% 95%,#d9ccff 0,transparent 50%),#fff4ea}
+.ka-seite.b{background:#fbf7ef linear-gradient(#e9e2d3 1.5px,transparent 1.5px) 0 0/100% 46px}
+.ka-seite.c{background:linear-gradient(90deg,#d6e8df 1.5px,transparent 1.5px) 0 0/46px 46px,linear-gradient(#d6e8df 1.5px,transparent 1.5px) 0 0/46px 46px,#eef6f2}
+.ka-seite.c .ka-txt{font-size:60px}
+.ka-seite mark{background:linear-gradient(transparent 52%,#ffe45c 52%,#ffe45c 90%,transparent 90%);color:inherit;padding:0 4px;border-radius:3px}
+.ka-seite.c mark{background:linear-gradient(transparent 52%,#9fe3c4 52%,#9fe3c4 90%,transparent 90%)}
+.ka-chip{font:700 22px system-ui;letter-spacing:2px;color:#7a5af5;background:#fff;border:2px solid #7a5af5;padding:8px 18px;border-radius:30px;margin-bottom:28px}
+.ka-titel{font-size:62px;letter-spacing:-.5px}
+.ka-handle{position:absolute;left:54px;bottom:34px;font:600 22px system-ui;color:#8d7f99}
+.ka-swipe{position:absolute;right:46px;bottom:30px;font:700 32px 'Caveat',cursive;color:#7a5af5}
+.ka-deko{position:absolute;border-radius:50%}
+.ka-deko.d1{right:-40px;top:-40px;width:170px;height:170px;border:16px solid #ffb4a2;opacity:.7}
+.ka-deko.d2{left:40px;top:50px;width:26px;height:26px;background:#ffd166}
+.ka-nr{font:800 150px/1 'Bricolage Grotesque',system-ui;color:transparent;-webkit-text-stroke:3px #2a2233;margin-bottom:18px}
+.ka-txt{font-size:66px}
+.ka-sticker{position:absolute;right:46px;top:52px;font-size:84px;transform:rotate(12deg);filter:drop-shadow(0 6px 8px rgba(0,0,0,.15))}
 .ka-punkte{display:flex;justify-content:center;gap:8px;margin:18px 0 6px}
 .ka-punkte i{width:10px;height:10px;border-radius:50%;background:#555}
 .ka-punkte i.an{background:#3897f0}
@@ -1009,6 +1035,24 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .aufrufe .st-musik{display:none}
 
 .st-fuss span.rot{color:#ff3040;animation:herzpop .5s ease-out}@keyframes herzpop{0%{transform:scale(1)}40%{transform:scale(1.55)}100%{transform:scale(1)}}
+
+/* V8.9: Wecker (One UI) */
+[data-app=wecker]{background:linear-gradient(180deg,#1b2433 0,#0c1018 70%);transition:opacity .3s}
+[data-app=wecker].weg{opacity:0}
+.w-oben{margin-top:170px;text-align:center;color:#fff}
+.w-label{font:500 30px system-ui;color:#c9d3e0}
+.w-uhr{font:200 170px/1.05 system-ui;letter-spacing:2px;margin-top:20px;animation:wpuls 1s ease-in-out infinite}
+.w-datum{font:400 28px system-ui;color:#aab;margin-top:8px}
+@keyframes wpuls{50%{opacity:.75}}
+.w-knoepfe{position:absolute;left:0;right:0;bottom:140px;display:flex;flex-direction:column;align-items:center;gap:70px}
+.w-schl{font:500 34px system-ui;color:#fff;padding:22px 60px;border-radius:60px;background:rgba(255,255,255,.14);transition:transform .15s,background .15s}
+.w-stopp{width:150px;height:150px;border-radius:50%;background:#e8474a;display:flex;align-items:center;justify-content:center;color:#fff;font:300 66px system-ui;box-shadow:0 0 0 18px rgba(232,71,74,.25);transition:transform .15s}
+.w-schl.druck{transform:scale(.93);background:rgba(255,255,255,.32)}
+.w-stopp.druck{transform:scale(.9)}
+
+/* V8.9: Trenner „214 ungelesene Nachrichten“ */
+.c-ungelesen{margin:14px -20px;padding:8px 0;text-align:center;background:rgba(255,255,255,.06)}
+.c-ungelesen span{display:inline-block;padding:6px 18px;border-radius:12px;background:#1d282f;color:#e9edef;font:500 22px system-ui}
 
 #zimmer{
   --nacht:#0b1121;
@@ -1466,10 +1510,10 @@ Deliktsrecht. Ergibt plötzlich alles Sinn.
 @ton blaettern
 „A schießt im Hinterhof einen Ball gegen das Küchenfenster von B. Die Scheibe zerbricht.“
 @schwarz
-@ton PR3_stift
-Fremdes Eigentum verletzt. {haken}Check.
-Durch sein Handeln. Kausal. {haken}Check.
-Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
+# V8.9 (Patrick 24.11.): erst schreibt der Stift, dann kommt der Haken (nicht übereinander)
+{schreib}Fremdes Eigentum verletzt. {haken}Check.
+{schreib}Durch sein Handeln. Kausal. {haken}Check.
+{schreib}Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
 @bild K10H
 Schaden: eine Scheibe.
 § 823 Absatz 1.
@@ -1611,9 +1655,12 @@ Lynn: „Spar dir deine Jura-Scheiße.“
 @bild LP9 schnitt
 … !2
 Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
-@bild LP10 langsam
+# V8.9 (Patrick 24.11.): harter Schnitt statt Überblenden – LP10 ist näher dran, beim Überblenden sah der Wechsel komisch aus
+@bild LP4 gesicht
+@warte 1.1
+@bild LP10 schnitt
 … !1.5
-@bild LP2 gesicht
+@bild LP2 schnitt
 … !1.5
 @bild LP3 langsam
 … !2
@@ -1829,7 +1876,10 @@ Fünf Minuten.
 ~ Planen gehört ja auch zum Lernen dazu.
 … !3
 @abzeichen Planen gehört dazu
+# V8.9 (Patrick 24.11.): erst die Meldung oben, dann geht er rein
 @ton bzzz
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 📊 PIZZA 🍕 wer will was
+@warte 1.6
 @handy gruppe
 @handy umfrage PIZZA 🍕 wer will was | Salami | Margherita | Ich bin nicht da
 @handy stimme 0 Jonas
@@ -1919,8 +1969,10 @@ Geht doch.
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
 @bild N02
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
 # V8.9: Selfie von Lena (Kussmund)
@@ -2055,8 +2107,10 @@ Den Vorhang auch.
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
 @bild N02
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 # V8.8 (G22): Lenas Nachricht von 22:10 ist die älteste – zuerst
 @benachrichtigung WhatsApp | Lena | kommst du noch? 🥺 ist auch okay wenn nicht ❤️ | 22:10
 @warte 0.8
@@ -2119,7 +2173,8 @@ Weiter als letztes Mal bin ich schon.
 @handy kommentar jule.mxn | wer ist der typ hinten 😂
 @handy kommentar jonas.k | LENAAA
 @handy livedrehen LIVE2
-@handy livesprich LIVE3 LIVE2 2.4
+# V8.9 (Patrick 24.11.): nur Lenas Mund bewegt sich, Tim hebt den Becher nicht mehr ständig
+@handy livesprich LIVE3 LIVE3z 2.4
 Lena: „Leute, gleich kommt die Torte!“
 @handy liveeingabe alles gute 🎉
 ? „Senden.“ -> S4_LIVE_SENDEN
@@ -2250,7 +2305,8 @@ Aber auch nicht nichts.
 @ton bzzz
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
-@ton aufbau_lang
+# V8.9 (Patrick 24.11.): Woosh mit steigendem Piepen, schwarz erst am Ende des Wooshs (@shutdown wartet darauf)
+@ton aufbau_shutdown
 @warte 0.9
 @handy video N32b
 # V8.8 (G13): das Video bleibt kurz stehen, danach kommt alles nur noch als Banner oben
@@ -2282,7 +2338,7 @@ Aber auch nicht nichts.
 @warte 1.4
 @setze handyweit = 1
 @shutdown
-@warte 4.6
+@warte 2
 # V8.9 (Patrick): nach dem Pfeifen komplette Stille, lange – keine Musik, nichts von draußen. Dann kommt das Zimmerrauschen zurück.
 @stille
 @warte 6
@@ -3330,6 +3386,10 @@ Zum Abschied umarmt sie mich. Länger als nötig. !3
 @ton! schloss
 Ich schließe ab. Hier ist es leiser. !2
 @ton bzzz
+@warte 1
+@handy sperr
+@benachrichtigung WhatsApp | Tim | afterparty bei mir später?? 🔥 die vom konzert kommen auch
+@warte 1.4
 @handy chat Tim
 @nachricht Tim: afterparty bei mir später?? 🔥 die vom konzert kommen auch
 @foto N28 Tim
@@ -4065,7 +4125,10 @@ Ich bin auf keinem Foto. !3
 @handy story lena.xo LENA_FEGT 9 Std. | | aufräumen 🥲
 @warte 3
 # M2
+# V8.9 (Patrick 24.11.): die Zahl passt zum Handy – 214 ungelesen in der Liste, Trenner und Durchrauschen im Chat
+@handy ungelesen gruppe | 214 | Mia: 😂😂
 @handy gruppe
+@handy flut 214
 214 neue Nachrichten.
 @nachricht Jonas: leute gestern 😭😭
 # V8.5: Balkonfoto (Lena, Tim, Lynn) – muss auf jedem Weg vorkommen
@@ -4304,8 +4367,10 @@ Ich leg das Handy weg. Zwei Tage noch.
 @raum nacht
 @wenn typ=="zuhause" && weg=="B"
   @bild N02 schnitt
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @tipp
   @handy gruppe
@@ -4407,7 +4472,12 @@ Ich leg das Handy weg. Zwei Tage noch.
 # V8.8 (M): Jonas mittags
 @lernplan aus
 @uhr springe So 12:40
+# V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
 @ton bzzz
+@warte 1.4
+@handy sperr
+@benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
+@warte 1.6
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
 @tippe lern
@@ -4561,7 +4631,12 @@ Ich krieg das hin.
 … !2
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
+# V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
 @ton bzzz
+@warte 1.4
+@handy sperr
+@benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
+@warte 1.6
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
 @tippe lern
@@ -4679,9 +4754,12 @@ Ich krieg das hin.
   @schwarz schnitt
   @warte 4.5
   @uhr Mo 06:30
-  @handy sperr
-  @ton! wecker 3.5s
-  @ton display_klick
+  # V8.9 (Patrick 24.11.): erst klingeln, dann Handy, dann aus
+  @ton wecker 7s
+  @warte 2.4
+  @handy wecker
+  @warte 1.2
+  @handy weckeraus
   -> EN2
 @ende
 @loop herzschlag an
@@ -4745,23 +4823,29 @@ Ich schau nur, wie spät es ist.
 @schwarz schnitt
 # V8.9: längere Pause vor dem Wecker
 @warte 4.5
+# V8.9 (Patrick 24.11.): erst klingelt der Wecker im Dunkeln, dann greift er zum Handy und drückt ihn weg – dreimal
 @uhr Mo 06:30
-@handy sperr
-@ton! wecker 3.5s
+@ton wecker 7s
+@warte 2.6
+@handy wecker
+@warte 1.4
+@handy schlummern
 @handy zu
-@warte 1.5
+@warte 1.8
 @uhr Mo 06:35
-@handy sperr
-@ton wecker 2.6s rate1.15 vol1.3
-@warte 2.8
-@ton display_klick
+@ton wecker 7s rate1.15 vol1.3
+@warte 1.8
+@handy wecker
+@warte 1
+@handy schlummern
 @handy zu
 @warte 1.2
 @uhr Mo 06:40
-@handy sperr
-@ton wecker 2.2s rate1.4 vol1.6
-@warte 2.4
-@ton display_klick
+@ton wecker 7s rate1.4 vol1.6
+@warte 1.2
+@handy wecker
+@warte .7
+@handy weckeraus
 -> EN2
 
 == MO_MORGEN
@@ -4818,8 +4902,10 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
   Die Buchstaben auf den Karteikarten der anderen verschwimmen kurz.
 @ende
 # Zwei letzte Nachrichten. Zählen nie als Handy-Punkt: Schauen ist hier richtig.
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 @benachrichtigung WhatsApp | Mama | Viel Erfolg heute, mein Schatz ❤️
 @wenn typ=="gluecklich"
   @warte .8
@@ -5005,8 +5091,10 @@ Und jetzt wieder warten, bis – >>
 @warte 1.5
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   # (Option aus dem Dokument, noch offen)
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Lynn | und? 🙂
   @tipp
   @handy chat Lynn
@@ -5014,8 +5102,10 @@ Und jetzt wieder warten, bis – >>
   @warte 3
   -> ENDE_LYNN
 @sonst
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Jonas | bereit für heute abend? 😏
   @tipp
 @ende
@@ -5150,9 +5240,9 @@ const BILDER = {
   N09:  { datei: "img/N09.webp",  text: "Zimmer aus der Tür (Master), Schreibtisch, Lampe an", stimmung: "zimmer" },
   N09T: { datei: "img/N31b.webp", text: "Zimmer bei Tag, leer", stimmung: "tag" },
   N09D: { datei: "img/N09.webp",  text: "N09, Licht aus (Claude-Variante)", filter: "lichtaus" },
-  K12:  { datei: "img/K12.webp",  text: "Fensterblick nachts", stimmung: "nacht" },
+  K12:  { datei: "img/K12.webp",  text: "Fensterblick nachts", stimmung: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   L4b:  { datei: "img/L4b.webp",  text: "Fenster offen, Blick nach draußen", stimmung: "nacht" },
-  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante)", filter: "nacht", fenster: true },
+  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante); V8.9: Fenster gegenüber gehen einzeln aus (proc/v89_fenster.py)", filter: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   N04:  { datei: "img/N04.webp",  text: "Schreibtisch mit Handy (Display nach unten)", stimmung: "zimmer", tisch: true },
   B05:  { datei: "img/B05.webp",  text: "Schreibtisch ohne Handy, Lampe an, Kalender", stimmung: "zimmer", tisch: true },
   K10:  { datei: "img/B05.webp",  text: "Schreibtisch (normal hell, Philip 20.11.)", tisch: true },
@@ -5182,7 +5272,7 @@ const BILDER = {
   N38a: { datei: "img/N38a.webp", text: "Rückblende Seminar: mein zerknitterter, leerer Collegeblock (Gemini, V8.5)", stimmung: "traum" },
   N38b: { datei: "img/N38b.webp", text: "Rückblende Seminar: Lynn kichert hinter der Hand (V8)", stimmung: "traum", figur: true },
   N38:  { datei: "img/N38.webp", text: "Rückblende Seminar: Lynn hält mir den Vierfarb-Stift hin (V8)", stimmung: "traum", figur: true },
-  N26:  { datei: "img/N26.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten unscharf (V8.7: bleibt beim Ranzoomen unscharf)", stimmung: "foto", zoom: [.515, .5] },
+  N26:  { datei: "img/N26s.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten (V8.9, Patrick 24.11.: Lynn scharf wie der Rest – nur sie unscharf wirkte unlogisch; alte Fassung img/N26.webp)", stimmung: "foto", zoom: [.515, .5] },
   N26s: { datei: "img/N26s.webp", text: "Handyfoto Küche, Lynn scharf (beim Ranzoomen wird darauf überblendet)", stimmung: "foto", zoom: [.515, .5] },
   B07: { datei: "img/B07.webp", text: "Lenas Story: Selfie mit Konfetti, Lynn klein hinten", stimmung: "foto" },
   N27:  { datei: "img/N27.webp", text: "Handyfoto Gruppe auf dem Sofa, Lynn als Letzte, daneben ein Platz frei (V8)", stimmung: "foto", story: "ganz" },
@@ -5359,6 +5449,7 @@ const BILDER = {
   LIVE1: { datei: "img/LIVE1.webp", imHandy: "img/LIVE1_h.webp", text: "Lenas Live: Partyraum (9:16, V8.8)", stimmung: "foto" },
   LIVE2: { datei: "img/LIVE2.webp", imHandy: "img/LIVE2_h.webp", text: "Lenas Live: Lena und Tim (9:16, V8.8)", stimmung: "foto" },
   LIVE3: { datei: "img/LIVE3.webp", imHandy: "img/LIVE3_h.webp", text: "Lenas Live: Lena redet, Tim mit Becher (9:16, V8.8)", stimmung: "foto" },
+  LIVE3z: { datei: "img/LIVE3z.webp", imHandy: "img/LIVE3z_h.webp", text: "Lenas Live: wie LIVE3, Lenas Mund zu (V8.9, Patrick 24.11.: beim Reden wechselt nur der Mund, Tims Becher bleibt oben)", stimmung: "foto" },
   BAD_POST: { datei: "img/BAD_POST.webp", text: "Seine Story aus dem Bad: Handyfoto vom Flur zur Party (Ausschnitt B09, V8.8)", stimmung: "foto" },
 };
 
@@ -5462,7 +5553,8 @@ const TOENE = {
   // Übergänge, FoMO-Rahmen
   whoosh_kurz:     { datei: "ton/whoosh_kurz.mp3" },       // Zeitraffer
   whoosh_aufbau:   { datei: "ton/whoosh_aufbau.mp3" },     // vor dem Shutdown
-  aufbau_lang:     { datei: "ton/aufbau_lang.mp3", vol: 1 },   // Crashout Weg B: Rauschen baut sich auf, Piepsen, Woosh (8 s, aus Philips Woosh gebaut)
+  aufbau_lang:     { datei: "ton/aufbau_lang.mp3", vol: 1 },
+  aufbau_shutdown: { datei: "ton/aufbau_shutdown.mp3", vol: 1 },   // V8.9 (Patrick 24.11.): wie aufbau_lang, Piepen steigt bis zum Woosh, am Ende harter Schnitt in die Stille   // Crashout Weg B: Rauschen baut sich auf, Piepsen, Woosh (8 s, aus Philips Woosh gebaut)
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)
@@ -5767,6 +5859,7 @@ const Ton = (() => {
     lampe: 'lampe', rauschen: 'rauschen',
   };
   const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
+  let ausklingNr = 0;
   function loop(name, an) {
     if (!ctx) return;
     if (loops[name]) { loops[name](); delete loops[name]; }
@@ -5850,7 +5943,7 @@ const Ton = (() => {
       if (q && o.merke) gemerkt[name] = q;
       return q ? q.laenge : 0;
     },
-    stoppe(name) { const q = gemerkt[name]; if (q) { q.stop(.2); delete gemerkt[name]; }
+    stoppe(name, weich = .2) { const q = gemerkt[name]; if (q) { q.stop(weich); delete gemerkt[name]; }
     },
     loop,
     musik(art, opt) {
@@ -5876,6 +5969,13 @@ const Ton = (() => {
     },
     stille() { if (!ctx) return; Object.keys(loops).forEach(k => loop(k, false)); musikStopp(true); liedStopp(); musikGain.gain.setValueAtTime(0, now()); },
     sperre(an) { gesperrt = an; if (an && ctx) this.stille(); },
+    klangZurueck() { if (!ctx) return; ausklingNr++; const t = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(1, t); }); },
+    // V8.9 (Patrick 24.11.): am Ende Raumton, Vögel & Co. langsam ausblenden, bis alles weg ist (Musik bleibt Sache von outro/outroAus)
+    ausklingen(sek = 5) {
+      if (!ctx) return; const t = now(); const nr = ++ausklingNr;
+      [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0.0001, t + sek); });
+      setTimeout(() => { if (nr !== ausklingNr) return; Object.keys(loops).forEach(k => loop(k, false)); setTimeout(() => { if (nr !== ausklingNr) return; const t2 = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t2); b.gain.setValueAtTime(1, t2); }); }, 2500); }, sek * 1000 + 100);
+    },
     lautMaster(v, zeit = .3) { if (ctx) master.gain.setTargetAtTime(v, now(), zeit); },
     vibriere,
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
@@ -5957,6 +6057,7 @@ const Handy = (() => {
   function tagLabel(i) { const d = heute() - i; return d <= 0 ? 'Heute' : d === 1 ? 'Gestern' : (WTAG[i] || ''); }
   function merke(n, vorschau, zeit, ungelesen, tagIdx) { const m = meta[n] || (meta[n] = { ungelesen: 0 }); m.vorschau = vorschau; m.zeit = zeit; m.tagIdx = tagIdx == null ? heute() : tagIdx; m.tagText = null; m.n = ++zaehler; if (ungelesen) m.ungelesen += ungelesen; }
   const APPICON = { WhatsApp: ['#25d366', '✆'], Instagram: ['linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)', '◎'], Wetter: ['#f0a030', '☀'], System: ['#607d8b', '⚙'], Livestream: ['#8e44ad', '▶'], YouNow: ['#2fd171', '▶'], Telefon: ['#2e7d32', '✆'], Wohlbefinden: ['#2e9e5b', '♥'] };
+  const APPNAME = { System: 'Einstellungen', Wohlbefinden: 'Digitales Wohlbefinden', Telefon: 'Telefon' };   // V8.9: App-Name oben in der Karte (wie Android)
   const istGruppe = n => n === 'gruppe' || !!(meta[n] && meta[n].gruppe);
   function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : m.text; return (m.von === 'Ich' ? (istGruppe(aktChat) ? '✓✓ Du: ' : '✓✓ ') : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
   let gruppe = { name: 'Gruppe', mitglieder: 'Jonas, Lena, Tim' };
@@ -6014,10 +6115,11 @@ const Handy = (() => {
     <div class="app" data-app="feed">${IG_KOPF}<div class="ig-fenster"><div class="f-rolle"></div></div>${IG_NAV}</div>
     <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.xo</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
     <div class="app" data-app="karussell">${IG_KOPF}<div class="ig-fenster"><div class="ka-post"><div class="ig-pk"><span class="ig-av" style="--c:#6a5acd"><b>s</b></span><div class="ig-pn"><b>studygram.de</b><small>Gesponsert</small></div>${IG.punkte}</div>
-      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div><span class="ka-zahl">1/5</span></div>
+      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite a"><span class="ka-chip">STUDY TIPPS 📚</span><div class="ka-titel">5 Lerntipps, die <mark>WIRKLICH</mark> funktionieren</div><span class="ka-handle">@studygram.de</span><span class="ka-swipe">swipe →</span><i class="ka-deko d1"></i><i class="ka-deko d2"></i></div><div class="ka-seite b"><span class="ka-nr">01</span><div class="ka-txt"><mark>Handy weglegen.</mark></div><span class="ka-sticker">📵</span><span class="ka-handle">@studygram.de</span></div><div class="ka-seite c"><span class="ka-nr">02</span><div class="ka-txt"><mark>Pausen bewusst einplanen.</mark></div><span class="ka-sticker">⏰</span><span class="ka-handle">@studygram.de</span></div></div><span class="ka-zahl">1/5</span></div>
       <div class="ig-ak"><span>${IG.herz}${IG.sprech}${IG.senden}</span><div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div>${IG.merken}</div>
       <div class="ig-tx"><b>Gefällt 2.318 Mal</b></div><div class="ig-tx"><b>studygram.de</b> Speichern für die Prüfungsphase 📌</div></div></div>${IG_NAV}</div>
     <div class="app" data-app="pdf"><div class="pdf-kopf"><span>←</span><b class="pdf-name"></b><span>⋮</span></div><div class="pdf-fenster"><div class="pdf-rolle"></div></div><div class="pdf-seite">1 / 34</div></div>
+    <div class="app" data-app="wecker"><div class="w-oben"><div class="w-label">⏰ Wecker</div><div class="w-uhr">06:30</div><div class="w-datum">Mo., 14. Januar</div></div><div class="w-knoepfe"><div class="w-schl">Schlummern</div><div class="w-stopp"><span>✕</span></div></div></div>
     <div class="app" data-app="video"><div class="v-bild"></div><div class="v-balken"><i></i></div><div class="v-ton">🔊</div></div>
     <div class="hhinweis"><span class="h-ic"></span><div><b></b><div class="h-x"></div></div></div>
     <div class="stummtoast">🔕 Stumm</div>
@@ -6076,7 +6178,7 @@ const Handy = (() => {
   const anzeige = n => n === 'gruppe' ? gruppe.name : (KONTAKTE[n] && KONTAKTE[n].name) || n;
   // V8.8 (G3/G65): eine Benachrichtigung landet auch als Nachricht im Chat (Gruppen: „Name: Text“ trennen)
   function speichere(k, text, zeit) {
-    if (!k || !text || /^\d+ neue Nachrichten$/.test(text)) return;
+    if (!k || !text || /^\d+ neue Nachrichten$/.test(text) || /^([^:]{1,20}:\s)?📊 /.test(text)) return;   // Umfragen baut die Umfrage selbst
     const g = istGruppe(k) && text.match(/^([^:]{1,20}):\s(.*)$/); const von = g ? g[1] : k, txt = g ? g[2] : text;
     const l = chatListe(k); const h = heute();
     if (l.some(m => m.von === von && m.text === txt && m.tagIdx === h)) return;
@@ -6202,37 +6304,54 @@ const Handy = (() => {
     },
     weg() { el.classList.add('weg'); document.getElementById('buehne').classList.remove('handyoffen'); },
     her() { el.classList.remove('weg'); if (offen) document.getElementById('buehne').classList.add('handyoffen'); },
-    sperr() { oeffne(); zeige('sperr'); },
+    sperr() { oeffne(); zeige('sperr'); this.sperrUngelesen(); },
     merkeNachricht(titel, text, zeit) { const k = chatKey(titel); if (k) speichere(k, text, zeit); return k; },
     benachrichtigung(appName, titel, text, zeit) {
-      if (appName !== 'WhatsApp') this.meldung(appName, titel, text, zeit);   // V8.9: zählt am Handy-Knopf mit, bis man nachgeschaut hat
-      if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) titel = anzeige(k); if (k && !(offen && app === 'chat' && aktChat === k && !el.classList.contains('weg'))) speichere(k, text || '', zeit);
-        if (k && meta[k] && meta[k].stumm) { if (!/^\d+ neue Nachrichten$/.test(text || '')) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste' && offen) renderListe(); return; } }   // V8.8 (G2): stummer Chat – kein Banner, keine Karte
-      if (offen && ['video', 'anruf', 'story', 'live', 'pdf', 'feed', 'karussell'].includes(app) && !el.classList.contains('weg')) {   // V8.8 (G13): kein App-Wechsel, nur Banner oben
-        if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) merke(k, text || '', zeit || uhrText(), 1); }
+      // V8.9 (Patrick 24.11.): Meldungen bleiben auf dem Sperrbildschirm stehen, bis man sie liest (Chat öffnen) oder selbst nachschaut
+      const wa = appName === 'WhatsApp'; const k = wa ? chatKey(titel) : null; if (k) titel = anzeige(k);
+      const sichtbar = offen && !el.classList.contains('weg');
+      if (wa && k && meta[k] && meta[k].stumm) { speichere(k, text || '', zeit); if (!/^\d+ neue Nachrichten$/.test(text || '')) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste' && offen) renderListe(); return; }   // V8.8 (G2): stummer Chat – kein Banner, keine Karte
+      if (sichtbar && ['video', 'anruf', 'story', 'live', 'pdf', 'feed', 'karussell', 'wecker', 'notizen'].includes(app)) {   // V8.8 (G13): kein App-Wechsel, nur Banner oben
+        if (k) { speichere(k, text || '', zeit); merke(k, text || '', zeit || uhrText(), 1); } else if (!wa) this.meldung(appName, titel, text, zeit);
         this.hinweis(appName, titel, text || ''); return;
       }
-      if (offen && (app === 'chat' || app === 'liste') && !el.classList.contains('weg')) {
-        if (appName === 'WhatsApp') { const k = chatKey(titel); if (k && k === aktChat && app === 'chat') return; if (k) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste') renderListe(); }
+      if (sichtbar && (app === 'chat' || app === 'liste')) {
+        if (k && k === aktChat && app === 'chat') return;
+        if (k) { speichere(k, text || '', zeit); merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste') renderListe(); } else if (!wa) this.meldung(appName, titel, text, zeit);
         this.hinweis(appName, titel, text || ''); return;
       }
       if (!offen || app !== 'sperr') { oeffne(); zeige('sperr'); }
-      const ic = APPICON[appName] || ['#555', '•'];
-      if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) merke(k, text || '', zeit || uhrText(), 1); }
-      const top = $('.sp-notifs').firstElementChild; const schl = appName + '|' + titel;
-      if (top && top.dataset.k === schl && text) { const z = document.createElement('div'); z.className = 'nt neu'; z.textContent = text; top.querySelector('.ntx').appendChild(z); top.querySelector('.nkopf span').textContent = zeit || uhrText(); top.classList.remove('stups'); void top.offsetWidth; top.classList.add('stups'); return; }
-      const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = schl;
-      d.innerHTML = `<span class="nic" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="nkopf"><b>${esc(titel)}</b><span>${zeit || uhrText()}</span></div>${text ? `<div class="nt">${esc(text)}</div>` : ''}${appName === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`;
-      const box = $('.sp-notifs'); box.prepend(d); notifs.push(d);
-      while (box.children.length > 7) box.lastChild.remove();
+      this.sperrUngelesen();   // was vorher kam und noch nicht gelesen ist, steht schon da
+      if (k) { speichere(k, text || '', zeit); merke(k, text || '', zeit || uhrText(), 1); } else if (!wa) this.meldung(appName, titel, text, zeit, true);
+      const box = $('.sp-notifs'); const schl = appName + '|' + titel; const z = zeit || uhrText();
+      const da = [...box.children].find(c => c.dataset.k === schl);
+      if (da) {   // gruppiert wie Android: neue Zeile in die vorhandene Karte, Karte nach oben
+        const nts = da.querySelectorAll('.nt'); const letzt = nts[nts.length - 1];
+        if (text && (!letzt || letzt.textContent !== text)) { const d2 = document.createElement('div'); d2.className = 'nt neu'; d2.textContent = text; da.querySelector('.ntx').appendChild(d2); if (nts.length >= 3) nts[0].remove(); }
+        da.querySelector('.nkopf span').textContent = z; this._zahlKarte(da, k);
+        box.prepend(da); box.scrollTop = 0; da.classList.remove('stups'); void da.offsetWidth; da.classList.add('stups'); return;
+      }
+      const d = this._karte(appName, titel, text ? [text] : [], z, k);
+      box.prepend(d); box.scrollTop = 0; notifs.push(d);
+      while (box.children.length > 12) box.lastChild.remove();
     },
-    async wegwischen() { const n = $('.sp-notifs .nk'); if (n) { n.classList.add('wisch'); await warte(500); n.remove(); } },
+    _karte(appName, titel, texte, zeit, k) {
+      const ic = APPICON[appName] || ['#555', '•']; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = appName + '|' + titel;
+      d.innerHTML = `<span class="nic${ic[2] ? ' ' + ic[2] : ''}" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="napp">${esc(APPNAME[appName] || appName)}</div><div class="nkopf"><b>${esc(titel)}</b><em class="nz"></em><span>${zeit}</span></div>${texte.map(t => `<div class="nt">${esc(t)}</div>`).join('')}${appName === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`;
+      this._zahlKarte(d, k); return d;
+    },
+    _zahlKarte(d, k) { const e = d.querySelector('.nz'); if (!e) return; const n = k && meta[k] ? meta[k].ungelesen || 0 : 0; e.textContent = n > 1 ? n + ' Nachrichten' : ''; },
+    // Tippen auf eine WhatsApp-Karte beim Selbst-Nachschauen: diesen Chat lesen
+    chatVonKarte(karte) { const m = (karte.dataset.k || '').match(/^WhatsApp\|(.*)$/); return m ? chatKey(m[1]) : null; },
+    sperrScroll(dy) { const b = $('.sp-notifs'); const sk = el.getBoundingClientRect().height / (el.offsetHeight || 1) || 1; b.scrollTop += dy / sk; },
+    async wegwischen() { const n = $('.sp-notifs .nk'); if (n) { this._wegKarte(n); n.classList.add('wisch'); await warte(500); n.remove(); } },
+    _wegKarte(n) { const [a, ...t] = (n.dataset.k || '').split('|'); if (a !== 'WhatsApp') this.appGeoeffnet(a, t.join('|')); },
     // Sperrbildschirm voll: er wischt eine weg, es kommen neue nach, er wischt schneller, bis alle weg sind
     async allesWegwischen(nachschub) {
       const neu = (nachschub || []).slice(); let tempo = 520;
       while (true) {
         const n = $('.sp-notifs .nk'); if (!n) break;
-        n.classList.add('wisch'); Ton.spiele('whoosh_kurz', { vol: .18, rate: 1.6 }); await warteZ(60, tempo); n.remove();
+        this._wegKarte(n); n.classList.add('wisch'); Ton.spiele('whoosh_kurz', { vol: .18, rate: 1.6 }); await warteZ(60, tempo); n.remove();
         if (neu.length && Math.random() < .75) { const [a, t, x] = neu.shift(); this.benachrichtigung(a, t, x); Spiel.bzzz({ leise: true }); await warteZ(60, 220); }
         tempo = Math.max(170, tempo * .78);
       }
@@ -6321,7 +6440,7 @@ const Handy = (() => {
     },
     // Lena ist live: wackeliges Partybild, Zuschauer, Kommentare laufen hoch
     async live(code, zuschauer) {
-      oeffne(); zeige('live'); const l = $('[data-app=live]');
+      oeffne(); zeige('live'); const l = $('[data-app=live]'); this.appGeoeffnet('Instagram', 'lena.xo');
       l.querySelector('.lv-bild').innerHTML = Spiel.bildHTML(code, true); l.querySelector('.lv-k').innerHTML = '';
       l.querySelector('.lv-z b').textContent = zuschauer; this._live = { z: +zuschauer };
       await warteZ(20, 900);
@@ -6401,6 +6520,23 @@ const Handy = (() => {
       await warte(30); r.classList.add('an'); await warte(1200); r.classList.add('zoom');
       if (sch) setTimeout(() => r.classList.add('fokus'), 1700);
     },
+    // V8.9 (Patrick 24.11.): „214 neue Nachrichten“ – Trenner wie WhatsApp und sichtbar viele Nachrichten, die durchrauschen (nur Fotos, Videos, Emojis, Sprachnachrichten)
+    async flut(n) {
+      await this.rein(); if (app !== 'chat') return; const box = $('.c-msgs');
+      box.insertAdjacentHTML('beforeend', `<div class="c-ungelesen"><span>${n} ungelesene Nachrichten</span></div>`);
+      const LEUTE = ['Mia', 'Jonas', 'Tim', 'Lena', 'Ben', 'Sophie', 'Max', 'Leo'];
+      const FUELL = [['f', 'N32a'], ['t', '😂😂😂'], ['t', '🔥🔥🔥'], ['f', 'N32c'], ['t', '🎤 Sprachnachricht (0:14)'], ['t', '😭😭'], ['f', 'TORTE'], ['t', '🎉🎉'], ['v', 'N32b'], ['t', '💀'], ['f', 'N32d'], ['t', '😂'], ['f', 'A1'], ['t', '🙈'], ['t', '🥳🥳🥳'], ['f', 'B12A'], ['t', '😭😭😭'], ['t', '🎤 Sprachnachricht (0:31)'], ['t', '❤️'], ['t', '🍕'], ['f', 'FEUER'], ['t', '😂😂']];
+      const zahl = Math.min(30, n);
+      for (let i = 0; i < zahl; i++) {
+        const [typ, x] = FUELL[i % FUELL.length]; const von = LEUTE[(i * 3 + 1) % LEUTE.length];
+        const min = 10 + Math.round(i * (330 / zahl)); const zeit = String(Math.floor(min / 60)).padStart(2, '0') + ':' + String(min % 60).padStart(2, '0');
+        anhaengen(typ === 't' ? { von, text: x, zeit } : { von, typ: typ === 'v' ? 'video' : 'foto', bild: x, zeit });
+        box.scrollTop = box.scrollHeight;
+        await warteZ(10, Math.max(45, 150 - i * 5));
+      }
+      if (meta[aktChat]) meta[aktChat].ungelesen = 0;
+      await warte(300);
+    },
     fotozoomWeg() { el.querySelectorAll('.fotogross').forEach(e => e.remove()); },
     async tippeUndSende(text) { await this.rein(); if (app !== 'chat') return; await tippe(text); return sende(); },
     tippe, sende, loesche,
@@ -6428,7 +6564,7 @@ const Handy = (() => {
     klingelAus() { if (klingelt) { Ton.loop('klingel', false); klingelt = false; } clearInterval(callTimer); },
     // ---- Story ----
     async story(name, code, dauer = 5, zeit = null, aufrufe = null, text = null) {
-      oeffne(); zeige('story'); const s = $('[data-app=story]');
+      oeffne(); zeige('story'); const s = $('[data-app=story]'); this.appGeoeffnet('Instagram', name);
       { const h = s.querySelector('.st-fuss span'); if (h) { h.textContent = '♡'; h.classList.remove('rot'); } }   // V8.9: Herz bei jeder neuen Story wieder leer
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + (text ? `<div class="st-text st-text-story">${esc(text)}</div>` : '');   // V8.8: Text auf der Story
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
@@ -6448,7 +6584,7 @@ const Handy = (() => {
     aufrufe(n) { const b = $('.st-views b'); b.textContent = n; b.parentNode.classList.remove('pop'); void b.offsetWidth; b.parentNode.classList.add('pop'); },
     hinweis(appName, titel, text) {
       const h = $('.hhinweis'); h.querySelector('b').textContent = titel; h.querySelector('.h-x').textContent = text;
-      h.querySelector('.h-ic').style.background = appName === 'Instagram' ? 'linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)' : '#25d366';
+      { const ic = APPICON[appName] || APPICON.WhatsApp; const hi = h.querySelector('.h-ic'); hi.style.background = ic[0]; hi.className = 'h-ic' + (ic[2] ? ' ' + ic[2] : ''); hi.innerHTML = ic[1]; }
       h.classList.remove('an'); void h.offsetWidth; h.classList.add('an'); Spiel.bzzz({ entprellen: true }); clearTimeout(h.t); h.t = setTimeout(() => h.classList.remove('an'), 3500);
     },
     notizen() { oeffne(); zeige('notizen'); },
@@ -6502,7 +6638,7 @@ const Handy = (() => {
       for (const z of ziel) { s += z; t.textContent = s; Ton.spiele('tipp'); await warte(110); }
     },
     feed() {
-      oeffne(); zeige('feed'); const r = $('.f-rolle'); const jetzt = Spiel.V.uhr || 0;
+      oeffne(); zeige('feed'); const r = $('.f-rolle'); this.appGeoeffnet('Instagram'); const jetzt = Spiel.V.uhr || 0;
       const farbe = n => n.includes('lena') ? '#e0558e' : n.includes('mia') ? '#9b6ad8' : n.includes('tim') ? '#22a39a' : n.includes('jonas') ? '#e8833a' : '#5a6a8a';
       const posts = IG_FEED.filter(p => p[2] <= jetzt).reverse();
       const storys = ['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'nightcrew', 'ben.r'];
@@ -6518,22 +6654,28 @@ const Handy = (() => {
       oeffne(); el.classList.add('schnapp'); zeige('sperr'); await warte(250); el.classList.remove('schnapp');
       Ton.spiele('klick'); const t = $('.stummtoast'); t.classList.add('an'); $('.sp-stumm').classList.add('an'); el.classList.add('handy-stumm'); await warte(1300);
     },
+    // V8.9 (Patrick 24.11.): Wecker-Bildschirm – erst klingelt es, dann nimmt er das Handy und drückt „Schlummern“
+    wecker() { oeffne(); zeige('wecker'); $('.w-uhr').textContent = uhrText(); $('.w-datum').textContent = Spiel.datumText(); const w = $('[data-app=wecker]'); w.classList.remove('weg'); },
+    async weckerDruck(was) { const k = $(was === 'stopp' ? '.w-stopp' : '.w-schl'); k.classList.add('druck'); Ton.spiele('display_klick'); Ton.stoppe && Ton.stoppe('wecker'); await warte(350); k.classList.remove('druck'); $('[data-app=wecker]').classList.add('weg'); await warte(300); },
     aus() { Ton.spiele('klick'); $('.displayaus').classList.add('an'); },
     laut() { $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); },   // V8.8 (G19)
     // V8.8 (G29): beim Selbst-Nachschauen zeigt der Sperrbildschirm die ungelesenen Chats (außer stummen)
     // V8.9: stille Meldung einer anderen App (zählt am Knopf, erscheint beim Nachschauen auf dem Sperrbildschirm)
-    meldung(app, titel, text, zeit) { const z = zeit || uhrText(); if (sonst.some(x => x.app === app && x.titel === titel && x.text === (text || '') && x.zeit === z)) return; sonst.push({ app, titel, text: text || '', zeit: z }); },
-    meldungenGelesen() { sonst = []; },
+    meldung(app, titel, text, zeit) { const z = zeit || uhrText(); if (sonst.some(x => x.app === app && x.titel === titel && x.text === (text || '') && x.zeit === z)) return; sonst.push({ app, titel, text: text || '', zeit: z, n: ++zaehler, min: (Spiel.V && Spiel.V.uhr) || 0 }); },
+    // V8.9 (Patrick 24.11.): gesehene Meldungen zählen nicht mehr, bleiben aber auf dem Sperrbildschirm (bis die App geöffnet wird oder sie alt sind)
+    meldungenGelesen() { sonst.forEach(x => x.gesehen = true); },
+    appGeoeffnet(appName, titel) { sonst = sonst.filter(x => !(x.app === appName && (!titel || x.titel === titel))); },
+    _aufraeumen() { const u = (Spiel.V && Spiel.V.uhr) || 0; sonst = sonst.filter(x => u - (x.min || 0) < 840); },
     // Zahl am Handy-Knopf: ungelesene Nachrichten (ohne stumme Chats) + ungelesene Meldungen anderer Apps
-    zahl() { return Object.keys(meta).reduce((a, n) => a + (meta[n].stumm || !meta[n].vorschau ? 0 : (meta[n].ungelesen || 0)), 0) + sonst.length; },
+    zahl() { this._aufraeumen(); return Object.keys(meta).reduce((a, n) => a + (meta[n].stumm || !meta[n].vorschau ? 0 : (meta[n].ungelesen || 0)), 0) + sonst.filter(x => !x.gesehen).length; },
     sperrUngelesen() {
-      const box = $('.sp-notifs'); if (box.children.length) return;
-      sonst.slice(-4).reverse().forEach(x => { const ic = APPICON[x.app] || ['#555', '•']; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = x.app + '|' + x.titel;
-        d.innerHTML = `<span class="nic" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="nkopf"><b>${esc(x.titel)}</b><span>${x.zeit}</span></div>${x.text ? `<div class="nt">${esc(x.text)}</div>` : ''}${x.app === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`; box.appendChild(d); });
-      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).sort((a, b) => meta[b].n - meta[a].n).slice(0, Math.max(1, 5 - box.children.length)).forEach(n => {
-        const m = meta[n]; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = 'WhatsApp|' + anzeige(n);
-        d.innerHTML = `<span class="nic" style="background:#25d366">✆</span><div class="ntx"><div class="nkopf"><b>${esc(anzeige(n))}</b><span>${m.zeit || ''}</span></div><div class="nt">${esc(m.vorschau)}${m.ungelesen > 1 ? ` <small style="opacity:.6">(${m.ungelesen})</small>` : ''}</div></div><span class="npf">⌄</span>`;
-        box.appendChild(d); });
+      const box = $('.sp-notifs'); if (box.children.length) return; this._aufraeumen();
+      // alles Ungelesene, neueste oben: Meldungen anderer Apps (gleiche App + Absender in einer Karte) und Chats mit ungelesenen Nachrichten
+      const gruppen = {}; sonst.forEach(x => { const key = x.app + '|' + x.titel; const g = gruppen[key] || (gruppen[key] = { app: x.app, titel: x.titel, texte: [], zeit: x.zeit, n: 0 }); if (x.text && !g.texte.includes(x.text)) g.texte.push(x.text); g.zeit = x.zeit; g.n = Math.max(g.n, x.n || 0); });
+      const karten = Object.values(gruppen).map(g => ({ n: g.n, el: this._karte(g.app, g.titel, g.texte.slice(-3), g.zeit, null) }));
+      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).forEach(n => { const m = meta[n]; karten.push({ n: m.n || 0, el: this._karte('WhatsApp', anzeige(n), [m.vorschau], m.zeit || '', n) }); });
+      karten.sort((x, y) => y.n - x.n).slice(0, 12).forEach(x => { x.el.style.animation = 'none'; box.appendChild(x.el); });
+      box.scrollTop = 0;
     },
     // ---- V8.5 Sonntagnacht: PDF öffnen und durchscrollen ----
     async pdf(name, seiten) {
@@ -6564,6 +6706,7 @@ const Handy = (() => {
       const ok = $('.cd-knoepfe .ok'); ok.classList.add('druck'); Ton.spiele('display_klick'); await warte(300); ok.classList.remove('druck');
       c.classList.remove('dialog'); if (aktChat && meta[aktChat]) meta[aktChat].stumm = true; c.classList.add('chatstumm'); await warte(600);
     },
+    _dbg() { return { meta: Object.fromEntries(Object.entries(meta).map(([k, m]) => [k, { u: m.ungelesen, v: m.vorschau, st: !!m.stumm }])), sonst: sonst.slice() }; },
     reset() {
       for (const k in chats) delete chats[k];
       $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); $('[data-app=chat]').classList.remove('chatstumm', 'menue', 'dialog'); for (const k in meta) delete meta[k]; sonst = []; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();
@@ -7215,8 +7358,9 @@ const Spiel = (() => {
   B.addEventListener('pointerdown', e => {
     if (!blick.offen || e.target.closest('#handyknopf')) return;
     e.stopPropagation(); e.preventDefault();
-    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung')) {
-      if (Handy.app === 'sperr') { Handy.liste(); Ton.spiele('display_klick'); return; }
+    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V')) {
+      // V8.9 (Patrick 24.11.): Sperrbildschirm – wischen = Meldungen durchscrollen, Tippen auf einen Chat = lesen, sonst = WhatsApp
+      if (Handy.app === 'sperr') { blickDruck = { y: e.clientY, y0: e.clientY, ziel: e.target, zug: false }; return; }
       // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
       if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
       if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
@@ -7224,6 +7368,14 @@ const Spiel = (() => {
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  let blickDruck = null;
+  B.addEventListener('pointermove', e => { const d = blickDruck; if (!d || !blick.offen) return; e.stopPropagation(); const dy = e.clientY - d.y; d.y = e.clientY; if (Math.abs(e.clientY - d.y0) > 10) d.zug = true; if (d.zug) Handy.sperrScroll(-dy); }, true);
+  B.addEventListener('pointerup', e => {
+    const d = blickDruck; blickDruck = null; if (!d || !blick.offen) return; e.stopPropagation(); if (d.zug) return;
+    const nk = d.ziel && d.ziel.closest && d.ziel.closest('.nk'); const n = nk && Handy.chatVonKarte(nk);
+    if (aktBild && aktBild.stimmung === 'pruefung') { if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } return; }   // vor der Prüfung: nur Sperrbildschirm
+    if (n) { Handy.lesen(n); Ton.spiele('tipp', { vol: .5 }); } else if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } else { Handy.liste(); Ton.spiele('display_klick'); }
+  }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
   let blickErstmals = true, blickZahl = -1;
   setInterval(() => {
@@ -7274,7 +7426,8 @@ const Spiel = (() => {
     if (spEl) spEl.classList.add('spricht');
     for (let i = 0; i < teile.length; i++) {
       const t = teile[i];
-      if (t.cue) { if (!ueberspringen) Ton.spiele(t.cue); continue; }
+      // V8.9 (Patrick 24.11.): {schreib} = Stift kratzt, bis der Haken kommt – Schreiben und „Check“ überlappen nicht
+      if (t.cue) { if (t.cue === 'haken') Ton.stoppe('PR3_stift', .05); if (!ueberspringen) { if (t.cue === 'schreib') Ton.spiele('PR3_stift', { merke: true, vol: .8 }); else Ton.spiele(t.cue); } continue; }
       s += t.ch; zeichenNr++;
       if (vtIdx >= 0 && !vtFertig && zeichenNr === vtIdx + ins.vertipp.length) {
         // V8.8 (K): er tippt den Namen, merkt es nach ~0,6 s, löscht „ynn“ und schreibt normal weiter
@@ -7381,6 +7534,7 @@ const Spiel = (() => {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
     if (e.datei) {   // V8.9: Bild und seine Gesichts-Overlays zusammen abwarten
       const ovs = typeof OVERLAYS !== 'undefined' ? Object.keys(OVERLAYS).filter(k => OVERLAYS[k].basis === code).map(k => lade('img/' + k + '.webp')) : [];
+      if (e.fensterLichter) e.fensterLichter.forEach(k => ovs.push(lade('img/' + k + '.webp')));
       await Promise.race([Promise.all([lade(e.datei), ...ovs]), new Promise(r => setTimeout(r, 4000))]);
     }
     if (nr !== bildNr) return;   // V8.8 (G63): inzwischen kam ein neueres Bild – dieses nicht mehr zeigen
@@ -7394,6 +7548,8 @@ const Spiel = (() => {
     let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
     if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
+    if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
     if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
@@ -7404,7 +7560,7 @@ const Spiel = (() => {
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
-    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add('f-dunkel'));
+    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
     const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
@@ -7531,7 +7687,7 @@ const Spiel = (() => {
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
-      case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
+      case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
         const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
@@ -7574,18 +7730,24 @@ const Spiel = (() => {
       default: console.warn('Effekt?', name);
     }
   }
+  let aufbauEnde = 0;   // V8.9: wann der Woosh-Aufbau (aufbau_shutdown) zu Ende ist – genau dann wird es schwarz
   async function shutdown() {
+    // V8.9 (Patrick 24.11.): erst der ganze Woosh mit steigendem Piepen, am Ende schwarz und Stille (kein Piepen mehr danach)
+    if (aufbauEnde && !schnell) { console.log('[shutdown] Rest Aufbau s', ((aufbauEnde - performance.now()) / 1000).toFixed(2)); const rest = (aufbauEnde - performance.now()) / 1000; if (rest > 0 && rest < 10) await new Promise(r => setTimeout(r, rest * 1000)); }
+    const mitPiep = !aufbauEnde; aufbauEnde = 0;
     Handy.zu(); party(false); Ton.stille(); Ton.sperre(true); $('#tunnel').style.opacity = 0;
-    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); Ton.spiele('tinnitus');
+    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); if (mitPiep) Ton.spiele('tinnitus');
   }
   async function fensterAus(ziel) {
-    const ws = [...document.querySelectorAll('#fenster .w')]; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
+    // V8.9 (Patrick 24.11.): die Fenster gehen genau an ihren Stellen aus und bleiben aus (auch beim Szenenwechsel kein Aufhellen)
+    const ebene = aktBild && aktBild.el; const ws = ebene ? [...ebene.querySelectorAll('img.fw:not(.aus)')] : []; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
     await uhrLaufen(ziel, () => {
       const anteil = (V.uhr - start) / gesamt; const soll = Math.floor(anteil * (ws.length + 1));
-      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); }
-      if (anteil > .85) welt.style.filter = 'brightness(.5)';
+      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+      if (anteil > .85 && ebene && !ebene.style.filter) { ebene.style.transition += ', filter 1.5s ease'; ebene.style.filter = 'brightness(.62)'; }
     });
-    ws.forEach(w => w.classList.add('aus')); await warte(1.2); welt.style.filter = '';
+    while (n < ws.length) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+    await warte(1.2);
   }
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
@@ -7833,11 +7995,13 @@ const Spiel = (() => {
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
       case 'montage': await montage(); break;
       case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
-        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; B.appendChild(st);
+        // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
+        const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');
+        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; if (aufBlatt) { st.classList.add('blatt'); kl.appendChild(st); } else B.appendChild(st);
         void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
-        await warte(1.4); setTimeout(() => st.remove(), 4000); break;
+        await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
       }
-      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
+      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
       case 'zuruf': { Ton.spiele('jubel', { vol: .9 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); await text({ t: 'text', text: a, sprecher: 'Alle', schrei: true, auto: true, stil: '' }); await warte(.5); break; }
@@ -7863,7 +8027,9 @@ const Spiel = (() => {
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
         if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
+        if (n === 'wecker') o.merke = true;   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
+        if (n === 'aufbau_shutdown') aufbauEnde = performance.now() + (d || 8) * 1000;
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
         break;
@@ -7938,6 +8104,7 @@ const Spiel = (() => {
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
       case 'meldung': { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); break; }   // V8.9: stille Meldung, zählt am Handy-Knopf
+      case 'flut': await Handy.flut(+t[1] || 100); break;
       case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
@@ -7971,6 +8138,9 @@ const Spiel = (() => {
       case 'pdfweiter': await Handy.pdfWeiter(t[1]); break;
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
+      case 'wecker': zeigeTextbox(false); Handy.wecker(); await warte(.3); break;
+      case 'schlummern': await Handy.weckerDruck('schlummern'); break;
+      case 'weckeraus': await Handy.weckerDruck('stopp'); break;
       case 'laut': Handy.laut(); break;
       case 'herz': await Handy.storyHerz(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
@@ -8005,7 +8175,7 @@ const Spiel = (() => {
       await warte(4); await tipp(); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
-    zeigeTextbox(false); Ton.outro();
+    zeigeTextbox(false); Ton.outro(); Ton.ausklingen(5);
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
     { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
     await warte(4); await tipp();
@@ -8052,7 +8222,7 @@ const Spiel = (() => {
   function neustart(label, vorab) {
     gen++; if (tippWarter) tippWarter(); tippt = false; Rahmen.weg();
     document.querySelectorAll('.schirm').forEach(s => s.classList.remove('an'));
-    Ton.outroAus(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
+    Ton.outroAus(); Ton.klangZurueck && Ton.klangZurueck(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
     if (label) { // Einstellungen am Anfang trotzdem ausführen
       const ende = labels['PROLOG']; prog.slice(0, ende).forEach(p => { if (p.t === 'cmd' && ['setze', 'text', 'abzeichenliste', 'gruppe', 'verlauf'].includes(p.name)) befehl(p); });
       springe(label);

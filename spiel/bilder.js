@@ -14,9 +14,9 @@ const BILDER = {
   N09:  { datei: "img/N09.webp",  text: "Zimmer aus der Tür (Master), Schreibtisch, Lampe an", stimmung: "zimmer" },
   N09T: { datei: "img/N31b.webp", text: "Zimmer bei Tag, leer", stimmung: "tag" },
   N09D: { datei: "img/N09.webp",  text: "N09, Licht aus (Claude-Variante)", filter: "lichtaus" },
-  K12:  { datei: "img/K12.webp",  text: "Fensterblick nachts", stimmung: "nacht" },
+  K12:  { datei: "img/K12.webp",  text: "Fensterblick nachts", stimmung: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   L4b:  { datei: "img/L4b.webp",  text: "Fenster offen, Blick nach draußen", stimmung: "nacht" },
-  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante)", filter: "nacht", fenster: true },
+  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante); V8.9: Fenster gegenüber gehen einzeln aus (proc/v89_fenster.py)", filter: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   N04:  { datei: "img/N04.webp",  text: "Schreibtisch mit Handy (Display nach unten)", stimmung: "zimmer", tisch: true },
   B05:  { datei: "img/B05.webp",  text: "Schreibtisch ohne Handy, Lampe an, Kalender", stimmung: "zimmer", tisch: true },
   K10:  { datei: "img/B05.webp",  text: "Schreibtisch (normal hell, Philip 20.11.)", tisch: true },
@@ -46,7 +46,7 @@ const BILDER = {
   N38a: { datei: "img/N38a.webp", text: "Rückblende Seminar: mein zerknitterter, leerer Collegeblock (Gemini, V8.5)", stimmung: "traum" },
   N38b: { datei: "img/N38b.webp", text: "Rückblende Seminar: Lynn kichert hinter der Hand (V8)", stimmung: "traum", figur: true },
   N38:  { datei: "img/N38.webp", text: "Rückblende Seminar: Lynn hält mir den Vierfarb-Stift hin (V8)", stimmung: "traum", figur: true },
-  N26:  { datei: "img/N26.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten unscharf (V8.7: bleibt beim Ranzoomen unscharf)", stimmung: "foto", zoom: [.515, .5] },
+  N26:  { datei: "img/N26s.webp", text: "Handyfoto: Küche, Jonas mit Becher, Lynn hinten (V8.9, Patrick 24.11.: Lynn scharf wie der Rest – nur sie unscharf wirkte unlogisch; alte Fassung img/N26.webp)", stimmung: "foto", zoom: [.515, .5] },
   N26s: { datei: "img/N26s.webp", text: "Handyfoto Küche, Lynn scharf (beim Ranzoomen wird darauf überblendet)", stimmung: "foto", zoom: [.515, .5] },
   B07: { datei: "img/B07.webp", text: "Lenas Story: Selfie mit Konfetti, Lynn klein hinten", stimmung: "foto" },
   N27:  { datei: "img/N27.webp", text: "Handyfoto Gruppe auf dem Sofa, Lynn als Letzte, daneben ein Platz frei (V8)", stimmung: "foto", story: "ganz" },
@@ -223,6 +223,7 @@ const BILDER = {
   LIVE1: { datei: "img/LIVE1.webp", imHandy: "img/LIVE1_h.webp", text: "Lenas Live: Partyraum (9:16, V8.8)", stimmung: "foto" },
   LIVE2: { datei: "img/LIVE2.webp", imHandy: "img/LIVE2_h.webp", text: "Lenas Live: Lena und Tim (9:16, V8.8)", stimmung: "foto" },
   LIVE3: { datei: "img/LIVE3.webp", imHandy: "img/LIVE3_h.webp", text: "Lenas Live: Lena redet, Tim mit Becher (9:16, V8.8)", stimmung: "foto" },
+  LIVE3z: { datei: "img/LIVE3z.webp", imHandy: "img/LIVE3z_h.webp", text: "Lenas Live: wie LIVE3, Lenas Mund zu (V8.9, Patrick 24.11.: beim Reden wechselt nur der Mund, Tims Becher bleibt oben)", stimmung: "foto" },
   BAD_POST: { datei: "img/BAD_POST.webp", text: "Seine Story aus dem Bad: Handyfoto vom Flur zur Party (Ausschnitt B09, V8.8)", stimmung: "foto" },
 };
 
@@ -326,7 +327,8 @@ const TOENE = {
   // Übergänge, FoMO-Rahmen
   whoosh_kurz:     { datei: "ton/whoosh_kurz.mp3" },       // Zeitraffer
   whoosh_aufbau:   { datei: "ton/whoosh_aufbau.mp3" },     // vor dem Shutdown
-  aufbau_lang:     { datei: "ton/aufbau_lang.mp3", vol: 1 },   // Crashout Weg B: Rauschen baut sich auf, Piepsen, Woosh (8 s, aus Philips Woosh gebaut)
+  aufbau_lang:     { datei: "ton/aufbau_lang.mp3", vol: 1 },
+  aufbau_shutdown: { datei: "ton/aufbau_shutdown.mp3", vol: 1 },   // V8.9 (Patrick 24.11.): wie aufbau_lang, Piepen steigt bis zum Woosh, am Ende harter Schnitt in die Stille   // Crashout Weg B: Rauschen baut sich auf, Piepsen, Woosh (8 s, aus Philips Woosh gebaut)
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)

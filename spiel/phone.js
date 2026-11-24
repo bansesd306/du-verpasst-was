@@ -47,6 +47,7 @@ const Handy = (() => {
   function tagLabel(i) { const d = heute() - i; return d <= 0 ? 'Heute' : d === 1 ? 'Gestern' : (WTAG[i] || ''); }
   function merke(n, vorschau, zeit, ungelesen, tagIdx) { const m = meta[n] || (meta[n] = { ungelesen: 0 }); m.vorschau = vorschau; m.zeit = zeit; m.tagIdx = tagIdx == null ? heute() : tagIdx; m.tagText = null; m.n = ++zaehler; if (ungelesen) m.ungelesen += ungelesen; }
   const APPICON = { WhatsApp: ['#25d366', '✆'], Instagram: ['linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)', '◎'], Wetter: ['#f0a030', '☀'], System: ['#607d8b', '⚙'], Livestream: ['#8e44ad', '▶'], YouNow: ['#2fd171', '▶'], Telefon: ['#2e7d32', '✆'], Wohlbefinden: ['#2e9e5b', '♥'] };
+  const APPNAME = { System: 'Einstellungen', Wohlbefinden: 'Digitales Wohlbefinden', Telefon: 'Telefon' };   // V8.9: App-Name oben in der Karte (wie Android)
   const istGruppe = n => n === 'gruppe' || !!(meta[n] && meta[n].gruppe);
   function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : m.text; return (m.von === 'Ich' ? (istGruppe(aktChat) ? '✓✓ Du: ' : '✓✓ ') : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
   let gruppe = { name: 'Gruppe', mitglieder: 'Jonas, Lena, Tim' };
@@ -104,10 +105,11 @@ const Handy = (() => {
     <div class="app" data-app="feed">${IG_KOPF}<div class="ig-fenster"><div class="f-rolle"></div></div>${IG_NAV}</div>
     <div class="app" data-app="live"><div class="lv-bild"></div><div class="lv-kopf"><span class="av" style="background:#e0558e">l</span><b>lena.xo</b><span class="lv-rot">LIVE</span><span class="lv-z">👁 <b>23</b></span></div><div class="lv-k"></div><div class="lv-feld">Kommentieren …</div></div>
     <div class="app" data-app="karussell">${IG_KOPF}<div class="ig-fenster"><div class="ka-post"><div class="ig-pk"><span class="ig-av" style="--c:#6a5acd"><b>s</b></span><div class="ig-pn"><b>studygram.de</b><small>Gesponsert</small></div>${IG.punkte}</div>
-      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite">5 Lerntipps, die WIRKLICH funktionieren 📚</div><div class="ka-seite b">1. Handy weglegen.</div><div class="ka-seite c">2. Pausen bewusst einplanen.</div></div><span class="ka-zahl">1/5</span></div>
+      <div class="ka-fenster"><div class="ka-band"><div class="ka-seite a"><span class="ka-chip">STUDY TIPPS 📚</span><div class="ka-titel">5 Lerntipps, die <mark>WIRKLICH</mark> funktionieren</div><span class="ka-handle">@studygram.de</span><span class="ka-swipe">swipe →</span><i class="ka-deko d1"></i><i class="ka-deko d2"></i></div><div class="ka-seite b"><span class="ka-nr">01</span><div class="ka-txt"><mark>Handy weglegen.</mark></div><span class="ka-sticker">📵</span><span class="ka-handle">@studygram.de</span></div><div class="ka-seite c"><span class="ka-nr">02</span><div class="ka-txt"><mark>Pausen bewusst einplanen.</mark></div><span class="ka-sticker">⏰</span><span class="ka-handle">@studygram.de</span></div></div><span class="ka-zahl">1/5</span></div>
       <div class="ig-ak"><span>${IG.herz}${IG.sprech}${IG.senden}</span><div class="ka-punkte"><i class="an"></i><i></i><i></i><i></i><i></i></div>${IG.merken}</div>
       <div class="ig-tx"><b>Gefällt 2.318 Mal</b></div><div class="ig-tx"><b>studygram.de</b> Speichern für die Prüfungsphase 📌</div></div></div>${IG_NAV}</div>
     <div class="app" data-app="pdf"><div class="pdf-kopf"><span>←</span><b class="pdf-name"></b><span>⋮</span></div><div class="pdf-fenster"><div class="pdf-rolle"></div></div><div class="pdf-seite">1 / 34</div></div>
+    <div class="app" data-app="wecker"><div class="w-oben"><div class="w-label">⏰ Wecker</div><div class="w-uhr">06:30</div><div class="w-datum">Mo., 14. Januar</div></div><div class="w-knoepfe"><div class="w-schl">Schlummern</div><div class="w-stopp"><span>✕</span></div></div></div>
     <div class="app" data-app="video"><div class="v-bild"></div><div class="v-balken"><i></i></div><div class="v-ton">🔊</div></div>
     <div class="hhinweis"><span class="h-ic"></span><div><b></b><div class="h-x"></div></div></div>
     <div class="stummtoast">🔕 Stumm</div>
@@ -166,7 +168,7 @@ const Handy = (() => {
   const anzeige = n => n === 'gruppe' ? gruppe.name : (KONTAKTE[n] && KONTAKTE[n].name) || n;
   // V8.8 (G3/G65): eine Benachrichtigung landet auch als Nachricht im Chat (Gruppen: „Name: Text“ trennen)
   function speichere(k, text, zeit) {
-    if (!k || !text || /^\d+ neue Nachrichten$/.test(text)) return;
+    if (!k || !text || /^\d+ neue Nachrichten$/.test(text) || /^([^:]{1,20}:\s)?📊 /.test(text)) return;   // Umfragen baut die Umfrage selbst
     const g = istGruppe(k) && text.match(/^([^:]{1,20}):\s(.*)$/); const von = g ? g[1] : k, txt = g ? g[2] : text;
     const l = chatListe(k); const h = heute();
     if (l.some(m => m.von === von && m.text === txt && m.tagIdx === h)) return;
@@ -292,37 +294,54 @@ const Handy = (() => {
     },
     weg() { el.classList.add('weg'); document.getElementById('buehne').classList.remove('handyoffen'); },
     her() { el.classList.remove('weg'); if (offen) document.getElementById('buehne').classList.add('handyoffen'); },
-    sperr() { oeffne(); zeige('sperr'); },
+    sperr() { oeffne(); zeige('sperr'); this.sperrUngelesen(); },
     merkeNachricht(titel, text, zeit) { const k = chatKey(titel); if (k) speichere(k, text, zeit); return k; },
     benachrichtigung(appName, titel, text, zeit) {
-      if (appName !== 'WhatsApp') this.meldung(appName, titel, text, zeit);   // V8.9: zählt am Handy-Knopf mit, bis man nachgeschaut hat
-      if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) titel = anzeige(k); if (k && !(offen && app === 'chat' && aktChat === k && !el.classList.contains('weg'))) speichere(k, text || '', zeit);
-        if (k && meta[k] && meta[k].stumm) { if (!/^\d+ neue Nachrichten$/.test(text || '')) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste' && offen) renderListe(); return; } }   // V8.8 (G2): stummer Chat – kein Banner, keine Karte
-      if (offen && ['video', 'anruf', 'story', 'live', 'pdf', 'feed', 'karussell'].includes(app) && !el.classList.contains('weg')) {   // V8.8 (G13): kein App-Wechsel, nur Banner oben
-        if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) merke(k, text || '', zeit || uhrText(), 1); }
+      // V8.9 (Patrick 24.11.): Meldungen bleiben auf dem Sperrbildschirm stehen, bis man sie liest (Chat öffnen) oder selbst nachschaut
+      const wa = appName === 'WhatsApp'; const k = wa ? chatKey(titel) : null; if (k) titel = anzeige(k);
+      const sichtbar = offen && !el.classList.contains('weg');
+      if (wa && k && meta[k] && meta[k].stumm) { speichere(k, text || '', zeit); if (!/^\d+ neue Nachrichten$/.test(text || '')) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste' && offen) renderListe(); return; }   // V8.8 (G2): stummer Chat – kein Banner, keine Karte
+      if (sichtbar && ['video', 'anruf', 'story', 'live', 'pdf', 'feed', 'karussell', 'wecker', 'notizen'].includes(app)) {   // V8.8 (G13): kein App-Wechsel, nur Banner oben
+        if (k) { speichere(k, text || '', zeit); merke(k, text || '', zeit || uhrText(), 1); } else if (!wa) this.meldung(appName, titel, text, zeit);
         this.hinweis(appName, titel, text || ''); return;
       }
-      if (offen && (app === 'chat' || app === 'liste') && !el.classList.contains('weg')) {
-        if (appName === 'WhatsApp') { const k = chatKey(titel); if (k && k === aktChat && app === 'chat') return; if (k) merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste') renderListe(); }
+      if (sichtbar && (app === 'chat' || app === 'liste')) {
+        if (k && k === aktChat && app === 'chat') return;
+        if (k) { speichere(k, text || '', zeit); merke(k, text || '', zeit || uhrText(), 1); if (app === 'liste') renderListe(); } else if (!wa) this.meldung(appName, titel, text, zeit);
         this.hinweis(appName, titel, text || ''); return;
       }
       if (!offen || app !== 'sperr') { oeffne(); zeige('sperr'); }
-      const ic = APPICON[appName] || ['#555', '•'];
-      if (appName === 'WhatsApp') { const k = chatKey(titel); if (k) merke(k, text || '', zeit || uhrText(), 1); }
-      const top = $('.sp-notifs').firstElementChild; const schl = appName + '|' + titel;
-      if (top && top.dataset.k === schl && text) { const z = document.createElement('div'); z.className = 'nt neu'; z.textContent = text; top.querySelector('.ntx').appendChild(z); top.querySelector('.nkopf span').textContent = zeit || uhrText(); top.classList.remove('stups'); void top.offsetWidth; top.classList.add('stups'); return; }
-      const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = schl;
-      d.innerHTML = `<span class="nic" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="nkopf"><b>${esc(titel)}</b><span>${zeit || uhrText()}</span></div>${text ? `<div class="nt">${esc(text)}</div>` : ''}${appName === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`;
-      const box = $('.sp-notifs'); box.prepend(d); notifs.push(d);
-      while (box.children.length > 7) box.lastChild.remove();
+      this.sperrUngelesen();   // was vorher kam und noch nicht gelesen ist, steht schon da
+      if (k) { speichere(k, text || '', zeit); merke(k, text || '', zeit || uhrText(), 1); } else if (!wa) this.meldung(appName, titel, text, zeit, true);
+      const box = $('.sp-notifs'); const schl = appName + '|' + titel; const z = zeit || uhrText();
+      const da = [...box.children].find(c => c.dataset.k === schl);
+      if (da) {   // gruppiert wie Android: neue Zeile in die vorhandene Karte, Karte nach oben
+        const nts = da.querySelectorAll('.nt'); const letzt = nts[nts.length - 1];
+        if (text && (!letzt || letzt.textContent !== text)) { const d2 = document.createElement('div'); d2.className = 'nt neu'; d2.textContent = text; da.querySelector('.ntx').appendChild(d2); if (nts.length >= 3) nts[0].remove(); }
+        da.querySelector('.nkopf span').textContent = z; this._zahlKarte(da, k);
+        box.prepend(da); box.scrollTop = 0; da.classList.remove('stups'); void da.offsetWidth; da.classList.add('stups'); return;
+      }
+      const d = this._karte(appName, titel, text ? [text] : [], z, k);
+      box.prepend(d); box.scrollTop = 0; notifs.push(d);
+      while (box.children.length > 12) box.lastChild.remove();
     },
-    async wegwischen() { const n = $('.sp-notifs .nk'); if (n) { n.classList.add('wisch'); await warte(500); n.remove(); } },
+    _karte(appName, titel, texte, zeit, k) {
+      const ic = APPICON[appName] || ['#555', '•']; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = appName + '|' + titel;
+      d.innerHTML = `<span class="nic${ic[2] ? ' ' + ic[2] : ''}" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="napp">${esc(APPNAME[appName] || appName)}</div><div class="nkopf"><b>${esc(titel)}</b><em class="nz"></em><span>${zeit}</span></div>${texte.map(t => `<div class="nt">${esc(t)}</div>`).join('')}${appName === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`;
+      this._zahlKarte(d, k); return d;
+    },
+    _zahlKarte(d, k) { const e = d.querySelector('.nz'); if (!e) return; const n = k && meta[k] ? meta[k].ungelesen || 0 : 0; e.textContent = n > 1 ? n + ' Nachrichten' : ''; },
+    // Tippen auf eine WhatsApp-Karte beim Selbst-Nachschauen: diesen Chat lesen
+    chatVonKarte(karte) { const m = (karte.dataset.k || '').match(/^WhatsApp\|(.*)$/); return m ? chatKey(m[1]) : null; },
+    sperrScroll(dy) { const b = $('.sp-notifs'); const sk = el.getBoundingClientRect().height / (el.offsetHeight || 1) || 1; b.scrollTop += dy / sk; },
+    async wegwischen() { const n = $('.sp-notifs .nk'); if (n) { this._wegKarte(n); n.classList.add('wisch'); await warte(500); n.remove(); } },
+    _wegKarte(n) { const [a, ...t] = (n.dataset.k || '').split('|'); if (a !== 'WhatsApp') this.appGeoeffnet(a, t.join('|')); },
     // Sperrbildschirm voll: er wischt eine weg, es kommen neue nach, er wischt schneller, bis alle weg sind
     async allesWegwischen(nachschub) {
       const neu = (nachschub || []).slice(); let tempo = 520;
       while (true) {
         const n = $('.sp-notifs .nk'); if (!n) break;
-        n.classList.add('wisch'); Ton.spiele('whoosh_kurz', { vol: .18, rate: 1.6 }); await warteZ(60, tempo); n.remove();
+        this._wegKarte(n); n.classList.add('wisch'); Ton.spiele('whoosh_kurz', { vol: .18, rate: 1.6 }); await warteZ(60, tempo); n.remove();
         if (neu.length && Math.random() < .75) { const [a, t, x] = neu.shift(); this.benachrichtigung(a, t, x); Spiel.bzzz({ leise: true }); await warteZ(60, 220); }
         tempo = Math.max(170, tempo * .78);
       }
@@ -411,7 +430,7 @@ const Handy = (() => {
     },
     // Lena ist live: wackeliges Partybild, Zuschauer, Kommentare laufen hoch
     async live(code, zuschauer) {
-      oeffne(); zeige('live'); const l = $('[data-app=live]');
+      oeffne(); zeige('live'); const l = $('[data-app=live]'); this.appGeoeffnet('Instagram', 'lena.xo');
       l.querySelector('.lv-bild').innerHTML = Spiel.bildHTML(code, true); l.querySelector('.lv-k').innerHTML = '';
       l.querySelector('.lv-z b').textContent = zuschauer; this._live = { z: +zuschauer };
       await warteZ(20, 900);
@@ -491,6 +510,23 @@ const Handy = (() => {
       await warte(30); r.classList.add('an'); await warte(1200); r.classList.add('zoom');
       if (sch) setTimeout(() => r.classList.add('fokus'), 1700);
     },
+    // V8.9 (Patrick 24.11.): „214 neue Nachrichten“ – Trenner wie WhatsApp und sichtbar viele Nachrichten, die durchrauschen (nur Fotos, Videos, Emojis, Sprachnachrichten)
+    async flut(n) {
+      await this.rein(); if (app !== 'chat') return; const box = $('.c-msgs');
+      box.insertAdjacentHTML('beforeend', `<div class="c-ungelesen"><span>${n} ungelesene Nachrichten</span></div>`);
+      const LEUTE = ['Mia', 'Jonas', 'Tim', 'Lena', 'Ben', 'Sophie', 'Max', 'Leo'];
+      const FUELL = [['f', 'N32a'], ['t', '😂😂😂'], ['t', '🔥🔥🔥'], ['f', 'N32c'], ['t', '🎤 Sprachnachricht (0:14)'], ['t', '😭😭'], ['f', 'TORTE'], ['t', '🎉🎉'], ['v', 'N32b'], ['t', '💀'], ['f', 'N32d'], ['t', '😂'], ['f', 'A1'], ['t', '🙈'], ['t', '🥳🥳🥳'], ['f', 'B12A'], ['t', '😭😭😭'], ['t', '🎤 Sprachnachricht (0:31)'], ['t', '❤️'], ['t', '🍕'], ['f', 'FEUER'], ['t', '😂😂']];
+      const zahl = Math.min(30, n);
+      for (let i = 0; i < zahl; i++) {
+        const [typ, x] = FUELL[i % FUELL.length]; const von = LEUTE[(i * 3 + 1) % LEUTE.length];
+        const min = 10 + Math.round(i * (330 / zahl)); const zeit = String(Math.floor(min / 60)).padStart(2, '0') + ':' + String(min % 60).padStart(2, '0');
+        anhaengen(typ === 't' ? { von, text: x, zeit } : { von, typ: typ === 'v' ? 'video' : 'foto', bild: x, zeit });
+        box.scrollTop = box.scrollHeight;
+        await warteZ(10, Math.max(45, 150 - i * 5));
+      }
+      if (meta[aktChat]) meta[aktChat].ungelesen = 0;
+      await warte(300);
+    },
     fotozoomWeg() { el.querySelectorAll('.fotogross').forEach(e => e.remove()); },
     async tippeUndSende(text) { await this.rein(); if (app !== 'chat') return; await tippe(text); return sende(); },
     tippe, sende, loesche,
@@ -518,7 +554,7 @@ const Handy = (() => {
     klingelAus() { if (klingelt) { Ton.loop('klingel', false); klingelt = false; } clearInterval(callTimer); },
     // ---- Story ----
     async story(name, code, dauer = 5, zeit = null, aufrufe = null, text = null) {
-      oeffne(); zeige('story'); const s = $('[data-app=story]');
+      oeffne(); zeige('story'); const s = $('[data-app=story]'); this.appGeoeffnet('Instagram', name);
       { const h = s.querySelector('.st-fuss span'); if (h) { h.textContent = '♡'; h.classList.remove('rot'); } }   // V8.9: Herz bei jeder neuen Story wieder leer
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + (text ? `<div class="st-text st-text-story">${esc(text)}</div>` : '');   // V8.8: Text auf der Story
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
@@ -538,7 +574,7 @@ const Handy = (() => {
     aufrufe(n) { const b = $('.st-views b'); b.textContent = n; b.parentNode.classList.remove('pop'); void b.offsetWidth; b.parentNode.classList.add('pop'); },
     hinweis(appName, titel, text) {
       const h = $('.hhinweis'); h.querySelector('b').textContent = titel; h.querySelector('.h-x').textContent = text;
-      h.querySelector('.h-ic').style.background = appName === 'Instagram' ? 'linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)' : '#25d366';
+      { const ic = APPICON[appName] || APPICON.WhatsApp; const hi = h.querySelector('.h-ic'); hi.style.background = ic[0]; hi.className = 'h-ic' + (ic[2] ? ' ' + ic[2] : ''); hi.innerHTML = ic[1]; }
       h.classList.remove('an'); void h.offsetWidth; h.classList.add('an'); Spiel.bzzz({ entprellen: true }); clearTimeout(h.t); h.t = setTimeout(() => h.classList.remove('an'), 3500);
     },
     notizen() { oeffne(); zeige('notizen'); },
@@ -592,7 +628,7 @@ const Handy = (() => {
       for (const z of ziel) { s += z; t.textContent = s; Ton.spiele('tipp'); await warte(110); }
     },
     feed() {
-      oeffne(); zeige('feed'); const r = $('.f-rolle'); const jetzt = Spiel.V.uhr || 0;
+      oeffne(); zeige('feed'); const r = $('.f-rolle'); this.appGeoeffnet('Instagram'); const jetzt = Spiel.V.uhr || 0;
       const farbe = n => n.includes('lena') ? '#e0558e' : n.includes('mia') ? '#9b6ad8' : n.includes('tim') ? '#22a39a' : n.includes('jonas') ? '#e8833a' : '#5a6a8a';
       const posts = IG_FEED.filter(p => p[2] <= jetzt).reverse();
       const storys = ['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'nightcrew', 'ben.r'];
@@ -608,22 +644,28 @@ const Handy = (() => {
       oeffne(); el.classList.add('schnapp'); zeige('sperr'); await warte(250); el.classList.remove('schnapp');
       Ton.spiele('klick'); const t = $('.stummtoast'); t.classList.add('an'); $('.sp-stumm').classList.add('an'); el.classList.add('handy-stumm'); await warte(1300);
     },
+    // V8.9 (Patrick 24.11.): Wecker-Bildschirm – erst klingelt es, dann nimmt er das Handy und drückt „Schlummern“
+    wecker() { oeffne(); zeige('wecker'); $('.w-uhr').textContent = uhrText(); $('.w-datum').textContent = Spiel.datumText(); const w = $('[data-app=wecker]'); w.classList.remove('weg'); },
+    async weckerDruck(was) { const k = $(was === 'stopp' ? '.w-stopp' : '.w-schl'); k.classList.add('druck'); Ton.spiele('display_klick'); Ton.stoppe && Ton.stoppe('wecker'); await warte(350); k.classList.remove('druck'); $('[data-app=wecker]').classList.add('weg'); await warte(300); },
     aus() { Ton.spiele('klick'); $('.displayaus').classList.add('an'); },
     laut() { $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); },   // V8.8 (G19)
     // V8.8 (G29): beim Selbst-Nachschauen zeigt der Sperrbildschirm die ungelesenen Chats (außer stummen)
     // V8.9: stille Meldung einer anderen App (zählt am Knopf, erscheint beim Nachschauen auf dem Sperrbildschirm)
-    meldung(app, titel, text, zeit) { const z = zeit || uhrText(); if (sonst.some(x => x.app === app && x.titel === titel && x.text === (text || '') && x.zeit === z)) return; sonst.push({ app, titel, text: text || '', zeit: z }); },
-    meldungenGelesen() { sonst = []; },
+    meldung(app, titel, text, zeit) { const z = zeit || uhrText(); if (sonst.some(x => x.app === app && x.titel === titel && x.text === (text || '') && x.zeit === z)) return; sonst.push({ app, titel, text: text || '', zeit: z, n: ++zaehler, min: (Spiel.V && Spiel.V.uhr) || 0 }); },
+    // V8.9 (Patrick 24.11.): gesehene Meldungen zählen nicht mehr, bleiben aber auf dem Sperrbildschirm (bis die App geöffnet wird oder sie alt sind)
+    meldungenGelesen() { sonst.forEach(x => x.gesehen = true); },
+    appGeoeffnet(appName, titel) { sonst = sonst.filter(x => !(x.app === appName && (!titel || x.titel === titel))); },
+    _aufraeumen() { const u = (Spiel.V && Spiel.V.uhr) || 0; sonst = sonst.filter(x => u - (x.min || 0) < 840); },
     // Zahl am Handy-Knopf: ungelesene Nachrichten (ohne stumme Chats) + ungelesene Meldungen anderer Apps
-    zahl() { return Object.keys(meta).reduce((a, n) => a + (meta[n].stumm || !meta[n].vorschau ? 0 : (meta[n].ungelesen || 0)), 0) + sonst.length; },
+    zahl() { this._aufraeumen(); return Object.keys(meta).reduce((a, n) => a + (meta[n].stumm || !meta[n].vorschau ? 0 : (meta[n].ungelesen || 0)), 0) + sonst.filter(x => !x.gesehen).length; },
     sperrUngelesen() {
-      const box = $('.sp-notifs'); if (box.children.length) return;
-      sonst.slice(-4).reverse().forEach(x => { const ic = APPICON[x.app] || ['#555', '•']; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = x.app + '|' + x.titel;
-        d.innerHTML = `<span class="nic" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="nkopf"><b>${esc(x.titel)}</b><span>${x.zeit}</span></div>${x.text ? `<div class="nt">${esc(x.text)}</div>` : ''}${x.app === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`; box.appendChild(d); });
-      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).sort((a, b) => meta[b].n - meta[a].n).slice(0, Math.max(1, 5 - box.children.length)).forEach(n => {
-        const m = meta[n]; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = 'WhatsApp|' + anzeige(n);
-        d.innerHTML = `<span class="nic" style="background:#25d366">✆</span><div class="ntx"><div class="nkopf"><b>${esc(anzeige(n))}</b><span>${m.zeit || ''}</span></div><div class="nt">${esc(m.vorschau)}${m.ungelesen > 1 ? ` <small style="opacity:.6">(${m.ungelesen})</small>` : ''}</div></div><span class="npf">⌄</span>`;
-        box.appendChild(d); });
+      const box = $('.sp-notifs'); if (box.children.length) return; this._aufraeumen();
+      // alles Ungelesene, neueste oben: Meldungen anderer Apps (gleiche App + Absender in einer Karte) und Chats mit ungelesenen Nachrichten
+      const gruppen = {}; sonst.forEach(x => { const key = x.app + '|' + x.titel; const g = gruppen[key] || (gruppen[key] = { app: x.app, titel: x.titel, texte: [], zeit: x.zeit, n: 0 }); if (x.text && !g.texte.includes(x.text)) g.texte.push(x.text); g.zeit = x.zeit; g.n = Math.max(g.n, x.n || 0); });
+      const karten = Object.values(gruppen).map(g => ({ n: g.n, el: this._karte(g.app, g.titel, g.texte.slice(-3), g.zeit, null) }));
+      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).forEach(n => { const m = meta[n]; karten.push({ n: m.n || 0, el: this._karte('WhatsApp', anzeige(n), [m.vorschau], m.zeit || '', n) }); });
+      karten.sort((x, y) => y.n - x.n).slice(0, 12).forEach(x => { x.el.style.animation = 'none'; box.appendChild(x.el); });
+      box.scrollTop = 0;
     },
     // ---- V8.5 Sonntagnacht: PDF öffnen und durchscrollen ----
     async pdf(name, seiten) {
@@ -654,6 +696,7 @@ const Handy = (() => {
       const ok = $('.cd-knoepfe .ok'); ok.classList.add('druck'); Ton.spiele('display_klick'); await warte(300); ok.classList.remove('druck');
       c.classList.remove('dialog'); if (aktChat && meta[aktChat]) meta[aktChat].stumm = true; c.classList.add('chatstumm'); await warte(600);
     },
+    _dbg() { return { meta: Object.fromEntries(Object.entries(meta).map(([k, m]) => [k, { u: m.ungelesen, v: m.vorschau, st: !!m.stumm }])), sonst: sonst.slice() }; },
     reset() {
       for (const k in chats) delete chats[k];
       $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); $('[data-app=chat]').classList.remove('chatstumm', 'menue', 'dialog'); for (const k in meta) delete meta[k]; sonst = []; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();

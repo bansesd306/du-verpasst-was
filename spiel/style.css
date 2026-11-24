@@ -617,3 +617,9 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #sprungmenue .reiter,#sprungmenue .wege,#sprungmenue .kopf{flex:none}
 #fehlerbox .mik.an{background:#c0392b;color:#fff}
 #sperre.an{opacity:0!important}
+
+/* V8.9 (Patrick 24.11.): Stempel auf der Klausur unten rechts – ersetzt die Rotstift-5,0 (Schicht s4 aus) */
+#klausur .s4{display:none}
+#stempel.blatt{left:735px;top:690px;font-size:150px;border-width:9px;border-radius:14px;padding:0 24px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
+.ebene .innen img.fw{opacity:0;transition:opacity 1.4s ease}
+.ebene .innen img.fw.aus{opacity:1}

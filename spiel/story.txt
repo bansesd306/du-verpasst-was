@@ -139,10 +139,10 @@ Deliktsrecht. Ergibt plötzlich alles Sinn.
 @ton blaettern
 „A schießt im Hinterhof einen Ball gegen das Küchenfenster von B. Die Scheibe zerbricht.“
 @schwarz
-@ton PR3_stift
-Fremdes Eigentum verletzt. {haken}Check.
-Durch sein Handeln. Kausal. {haken}Check.
-Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
+# V8.9 (Patrick 24.11.): erst schreibt der Stift, dann kommt der Haken (nicht übereinander)
+{schreib}Fremdes Eigentum verletzt. {haken}Check.
+{schreib}Durch sein Handeln. Kausal. {haken}Check.
+{schreib}Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
 @bild K10H
 Schaden: eine Scheibe.
 § 823 Absatz 1.
@@ -284,9 +284,12 @@ Lynn: „Spar dir deine Jura-Scheiße.“
 @bild LP9 schnitt
 … !2
 Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
-@bild LP10 langsam
+# V8.9 (Patrick 24.11.): harter Schnitt statt Überblenden – LP10 ist näher dran, beim Überblenden sah der Wechsel komisch aus
+@bild LP4 gesicht
+@warte 1.1
+@bild LP10 schnitt
 … !1.5
-@bild LP2 gesicht
+@bild LP2 schnitt
 … !1.5
 @bild LP3 langsam
 … !2
@@ -502,7 +505,10 @@ Fünf Minuten.
 ~ Planen gehört ja auch zum Lernen dazu.
 … !3
 @abzeichen Planen gehört dazu
+# V8.9 (Patrick 24.11.): erst die Meldung oben, dann geht er rein
 @ton bzzz
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 📊 PIZZA 🍕 wer will was
+@warte 1.6
 @handy gruppe
 @handy umfrage PIZZA 🍕 wer will was | Salami | Margherita | Ich bin nicht da
 @handy stimme 0 Jonas
@@ -592,8 +598,10 @@ Geht doch.
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
 @bild N02
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
 # V8.9: Selfie von Lena (Kussmund)
@@ -728,8 +736,10 @@ Den Vorhang auch.
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
 @bild N02
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 # V8.8 (G22): Lenas Nachricht von 22:10 ist die älteste – zuerst
 @benachrichtigung WhatsApp | Lena | kommst du noch? 🥺 ist auch okay wenn nicht ❤️ | 22:10
 @warte 0.8
@@ -792,7 +802,8 @@ Weiter als letztes Mal bin ich schon.
 @handy kommentar jule.mxn | wer ist der typ hinten 😂
 @handy kommentar jonas.k | LENAAA
 @handy livedrehen LIVE2
-@handy livesprich LIVE3 LIVE2 2.4
+# V8.9 (Patrick 24.11.): nur Lenas Mund bewegt sich, Tim hebt den Becher nicht mehr ständig
+@handy livesprich LIVE3 LIVE3z 2.4
 Lena: „Leute, gleich kommt die Torte!“
 @handy liveeingabe alles gute 🎉
 ? „Senden.“ -> S4_LIVE_SENDEN
@@ -923,7 +934,8 @@ Aber auch nicht nichts.
 @ton bzzz
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
-@ton aufbau_lang
+# V8.9 (Patrick 24.11.): Woosh mit steigendem Piepen, schwarz erst am Ende des Wooshs (@shutdown wartet darauf)
+@ton aufbau_shutdown
 @warte 0.9
 @handy video N32b
 # V8.8 (G13): das Video bleibt kurz stehen, danach kommt alles nur noch als Banner oben
@@ -955,7 +967,7 @@ Aber auch nicht nichts.
 @warte 1.4
 @setze handyweit = 1
 @shutdown
-@warte 4.6
+@warte 2
 # V8.9 (Patrick): nach dem Pfeifen komplette Stille, lange – keine Musik, nichts von draußen. Dann kommt das Zimmerrauschen zurück.
 @stille
 @warte 6
@@ -2003,6 +2015,10 @@ Zum Abschied umarmt sie mich. Länger als nötig. !3
 @ton! schloss
 Ich schließe ab. Hier ist es leiser. !2
 @ton bzzz
+@warte 1
+@handy sperr
+@benachrichtigung WhatsApp | Tim | afterparty bei mir später?? 🔥 die vom konzert kommen auch
+@warte 1.4
 @handy chat Tim
 @nachricht Tim: afterparty bei mir später?? 🔥 die vom konzert kommen auch
 @foto N28 Tim
@@ -2722,7 +2738,8 @@ Ich bin auf keinem Foto. !3
 @handy laut
 # M1
 @schwarz
-@ton voegel
+# V8.9: Vögel blenden leise ein (wie Samstag 14:20)
+@ton voegel ein4
 @warte 3
 @bild SO schnitt
 @raum tag
@@ -2738,7 +2755,10 @@ Ich bin auf keinem Foto. !3
 @handy story lena.xo LENA_FEGT 9 Std. | | aufräumen 🥲
 @warte 3
 # M2
+# V8.9 (Patrick 24.11.): die Zahl passt zum Handy – 214 ungelesen in der Liste, Trenner und Durchrauschen im Chat
+@handy ungelesen gruppe | 214 | Mia: 😂😂
 @handy gruppe
+@handy flut 214
 214 neue Nachrichten.
 @nachricht Jonas: leute gestern 😭😭
 # V8.5: Balkonfoto (Lena, Tim, Lynn) – muss auf jedem Weg vorkommen
@@ -2977,8 +2997,10 @@ Ich leg das Handy weg. Zwei Tage noch.
 @raum nacht
 @wenn typ=="zuhause" && weg=="B"
   @bild N02 schnitt
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @tipp
   @handy gruppe
@@ -3080,7 +3102,12 @@ Ich leg das Handy weg. Zwei Tage noch.
 # V8.8 (M): Jonas mittags
 @lernplan aus
 @uhr springe So 12:40
+# V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
 @ton bzzz
+@warte 1.4
+@handy sperr
+@benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
+@warte 1.6
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
 @tippe lern
@@ -3234,7 +3261,12 @@ Ich krieg das hin.
 … !2
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
+# V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
 @ton bzzz
+@warte 1.4
+@handy sperr
+@benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
+@warte 1.6
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
 @tippe lern
@@ -3352,9 +3384,12 @@ Ich krieg das hin.
   @schwarz schnitt
   @warte 4.5
   @uhr Mo 06:30
-  @handy sperr
-  @ton! wecker 3.5s
-  @ton display_klick
+  # V8.9 (Patrick 24.11.): erst klingeln, dann Handy, dann aus
+  @ton wecker 7s
+  @warte 2.4
+  @handy wecker
+  @warte 1.2
+  @handy weckeraus
   -> EN2
 @ende
 @loop herzschlag an
@@ -3418,23 +3453,29 @@ Ich schau nur, wie spät es ist.
 @schwarz schnitt
 # V8.9: längere Pause vor dem Wecker
 @warte 4.5
+# V8.9 (Patrick 24.11.): erst klingelt der Wecker im Dunkeln, dann greift er zum Handy und drückt ihn weg – dreimal
 @uhr Mo 06:30
-@handy sperr
-@ton! wecker 3.5s
+@ton wecker 7s
+@warte 2.6
+@handy wecker
+@warte 1.4
+@handy schlummern
 @handy zu
-@warte 1.5
+@warte 1.8
 @uhr Mo 06:35
-@handy sperr
-@ton wecker 2.6s rate1.15 vol1.3
-@warte 2.8
-@ton display_klick
+@ton wecker 7s rate1.15 vol1.3
+@warte 1.8
+@handy wecker
+@warte 1
+@handy schlummern
 @handy zu
 @warte 1.2
 @uhr Mo 06:40
-@handy sperr
-@ton wecker 2.2s rate1.4 vol1.6
-@warte 2.4
-@ton display_klick
+@ton wecker 7s rate1.4 vol1.6
+@warte 1.2
+@handy wecker
+@warte .7
+@handy weckeraus
 -> EN2
 
 == MO_MORGEN
@@ -3491,8 +3532,10 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
   Die Buchstaben auf den Karteikarten der anderen verschwimmen kurz.
 @ende
 # Zwei letzte Nachrichten. Zählen nie als Handy-Punkt: Schauen ist hier richtig.
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 @benachrichtigung WhatsApp | Mama | Viel Erfolg heute, mein Schatz ❤️
 @wenn typ=="gluecklich"
   @warte .8
@@ -3678,8 +3721,10 @@ Und jetzt wieder warten, bis – >>
 @warte 1.5
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   # (Option aus dem Dokument, noch offen)
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Lynn | und? 🙂
   @tipp
   @handy chat Lynn
@@ -3687,8 +3732,10 @@ Und jetzt wieder warten, bis – >>
   @warte 3
   -> ENDE_LYNN
 @sonst
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Jonas | bereit für heute abend? 😏
   @tipp
 @ende
