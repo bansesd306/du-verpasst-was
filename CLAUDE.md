@@ -31,7 +31,7 @@
 `proc/v8_prep.py [ABSCHNITT]` → `bilder_neu/v8_src/` → `tools/upscale_v8_lauf.sh CODES…` (ein Prozess pro Bild, ncnn hält sonst Speicher) → `bilder_neu/v8_hq/` → `proc/v8_finish.py` (Spielbilder + Gesichts-Overlays, schreibt OVERLAYS in bilder.js). v8_src/v8_hq sind nicht im Repo.
 
 ## Regeln (Philip)
-- Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
+- Antworten auf Deutsch. ~~Nur erfundene Namen~~ (gilt nicht mehr, Philip 24.11.: echte Namen wie „drachenlordofficial“ erlaubt). Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
 - Stand: V8.8 gebaut (22.11. abends), siehe Projekt-Doc `claude/v8-8-stand-bau.md`; davor `claude/v8-7-stand-bau.md`. Ziele: `claude/ziele.md`.
 - V8.8-Bildwerkzeug: `proc/v88_bilder.py [a1|a2|neu|tim|handy|balkon|ov]` (wiederholbar; Originale vor dem Aufhellen in `bilder_neu/v88_vorhell/`). Balkonboden: N34/N34a1/N34a2/N34b auf den Bildausschnitt des Videos `dist/vid/N34v.mp4` gebracht (4-s-Schleife, Ton aus).

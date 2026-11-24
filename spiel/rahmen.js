@@ -316,7 +316,7 @@ const Rahmen = (() => {
       // V8.4: wie oft man von sich aus aufs Handy geschaut hat
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
       if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
-        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
       // V8.9: Verpasst-Liste dieses Durchgangs
       const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
       if (pv) pv.innerHTML = !vl.length ? '' : T('verpasst_liste', 'Du hast verpasst: {liste}.').replace('{liste}', vl.length === 1 ? '<b>' + vl[0] + '</b>' : vl.slice(0, -1).map(x => '<b>' + x + '</b>').join(', ') + ' und <b>' + vl[vl.length - 1] + '</b>');
