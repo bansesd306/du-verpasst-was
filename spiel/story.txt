@@ -3089,7 +3089,9 @@ Ich leg das Handy weg. Zwei Tage noch.
 ~ Sonntag.
 ~ Keiner postet was.
 ~ Alle liegen im Bett und bereuen.
-# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause (Ton „Ausatmen“ sucht Patrick)
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause
+@warte .8
+@ton ausatmen
 … !3
 ~ Ruhe.
 … !2
@@ -3222,7 +3224,9 @@ Ich krieg das hin.
 ~ Sonntag.
 ~ Keiner postet was.
 ~ Alle liegen im Bett und bereuen.
-# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause (Ton „Ausatmen“ sucht Patrick)
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause
+@warte .8
+@ton ausatmen
 … !3
 ~ Ruhe.
 … !2
