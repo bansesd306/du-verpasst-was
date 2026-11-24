@@ -521,7 +521,7 @@ const Spiel = (() => {
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
       case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
-        const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
+        clearTimeout(autoT); autoFahrt(700);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
       case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('schritte', { dauer: .6, vol: .7 }); await warte(.5); break;
@@ -729,8 +729,25 @@ const Spiel = (() => {
     const st = (e && e.stimmung) || '';
     pModus = st === 'strasse' ? 'regen' : st === 'pruefung' ? 'staub' : st === 'balkon' ? 'atem' : (e && /^(N35|MM|MK|MIA_)/.test(e.code || aktCodeNeu)) ? 'konfetti' : '';
     if (pModus && !pLauf) { pLauf = true; requestAnimationFrame(pSchritt); }
-    clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt');
-    if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); autoT = setTimeout(f, 22000 + Math.random() * 26000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
+    clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt'); al.querySelectorAll('i').forEach(x => x.getAnimations().forEach(a => a.cancel()));
+    if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; lichtEreignis(aktBild.stimmung); autoT = setTimeout(f, 20000 + Math.random() * 30000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
+  }
+  // V8.9 (Patrick 24.11., Animation 8): Licht von draußen ist jedes Mal anders – Autos mit warmem oder kaltem Licht, mal schnell, mal langsam,
+  // von links oder rechts, manchmal zwei hintereinander; nachts zieht selten eine Wolke vor den Mond (Zimmer wird kurz minimal dunkler).
+  function autoFahrt(verz = 0) {
+    const al = $('#autolicht'); const i = document.createElement('i'); al.appendChild(i);
+    const r = Math.random, links = r() < .55, dauer = 2600 + r() * 3200, kalt = r() < .4, breite = 18 + r() * 22, schraeg = (links ? -1 : 1) * (12 + r() * 26);
+    const hell = .07 + r() * .07, oben = -25 + r() * 20, hoehe = 70 + r() * 40;
+    const farbe = kalt ? `rgba(225,235,255,${hell})` : `rgba(255,232,196,${hell})`;
+    Object.assign(i.style, { top: oben + '%', height: hoehe + '%', width: breite + '%', background: `linear-gradient(${links ? 100 : 80}deg,transparent,${farbe} 45%,${farbe} 55%,transparent)`, transform: `skewX(${schraeg}deg)`, opacity: 0, maskImage: 'linear-gradient(to bottom,transparent,#000 30%,#000 62%,transparent)', webkitMaskImage: 'linear-gradient(to bottom,transparent,#000 30%,#000 62%,transparent)' });
+    const a = links ? '-45%' : '125%', b = links ? '125%' : '-45%';
+    const ani = i.animate([{ left: a, opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: .9, offset: .5 }, { opacity: 1, offset: .82 }, { left: b, opacity: 0 }], { duration: dauer, delay: verz, easing: r() < .5 ? 'ease-in-out' : 'linear' });
+    ani.onfinish = ani.oncancel = () => i.remove();
+  }
+  function lichtEreignis(st) {
+    const r = Math.random();
+    if (st === 'nacht' && r < .18) { welt.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.9)', offset: .35 }, { filter: 'brightness(.92)', offset: .65 }, { filter: 'brightness(1)' }], { duration: 7000 + Math.random() * 4000, easing: 'ease-in-out' }); return; }
+    autoFahrt(); if (r > .8) autoFahrt(900 + Math.random() * 1800);   // manchmal ein zweites Auto
   }
   function pSchritt() {
     const W = 960, H = 540; pctx.clearRect(0, 0, W, H);
@@ -1218,6 +1235,6 @@ const Spiel = (() => {
   return {
     init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
+    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };
 })();
