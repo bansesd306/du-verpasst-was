@@ -598,7 +598,9 @@ const Spiel = (() => {
   let auMin = null;
   async function analoguhr(arg) {
     const el = $('#analoguhr');
-    if (arg === 'aus') { el.classList.remove('an'); auMin = null; return; }
+    // V8.9 (Philip 24.11.): „aus langsam“ = Uhr bleicht langsam aus (4 s, ohne zu warten); „… leuchten“ = Uhr erscheint hell aufleuchtend
+    if (/^aus\b/.test(arg)) { if (/langsam/.test(arg)) { el.classList.add('bleicht'); setTimeout(() => el.classList.remove('bleicht'), 4200); } el.classList.remove('an', 'leuchtet'); auMin = null; return; }
+    if (/\sleuchten$/.test(arg)) { arg = arg.replace(/\s+leuchten$/, ''); el.classList.remove('leuchtet'); void el.offsetWidth; el.classList.add('leuchtet'); }
     const ziel = zeit(arg); V.uhr = ziel; zeigeUhr();
     const tagMin = ziel % 1440; let gesamt = auMin == null ? tagMin : auMin + ((tagMin - auMin % 1440) + 1440) % 1440;
     const setz = (m, dauer) => { el.querySelectorAll('.zg').forEach(z => z.style.transition = `transform ${dauer}s cubic-bezier(.45,0,.2,1)`); el.querySelector('.zm').style.transform = `rotate(${m * 6}deg)`; el.querySelector('.zh').style.transform = `rotate(${m * .5}deg)`; el.querySelector('.ad').textContent = uhrText(); };
