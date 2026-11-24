@@ -34,7 +34,13 @@ const Spiel = (() => {
   const zwei = n => String(n).padStart(2, '0');
   function uhrText(m = V.uhr) { m = ((Math.round(m) % 1440) + 1440) % 1440; return zwei(Math.floor(m / 60)) + ':' + zwei(m % 60); }
   function datumText() { return DATUM[Math.max(0, Math.min(3, Math.floor((V.uhr || 0) / 1440)))]; }
-  function zeigeUhr() { uhrEl.textContent = uhrText(); uhrEl.classList.toggle('an', !!V.uhr_zeigen); Handy.aktualisiereZeit(); }
+  function zeigeUhr() {
+    uhrEl.textContent = uhrText();
+    const war = uhrEl.classList.contains('an'), jetzt = !!V.uhr_zeigen;
+    uhrEl.classList.toggle('an', jetzt);
+    if (jetzt && !war) { uhrEl.classList.remove('auftauchen'); void uhrEl.offsetWidth; uhrEl.classList.add('auftauchen'); }   // V8.9: Uhr leuchtet auf, wenn sie wiederkommt
+    Handy.aktualisiereZeit();
+  }
 
   // ---------------- Ausdrücke ----------------
   const RESERV = new Set(['true', 'false', 'null', 'undefined']);
