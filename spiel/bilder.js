@@ -69,10 +69,10 @@ const BILDER = {
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
   W0:   { datei: "img/B14.webp", text: "Straße, Partyhaus noch im Nebel", stimmung: "strasse" },
-  B15:  { datei: "img/B15.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
-  N11:  { datei: "img/N11.webp", text: "Straße, Haus näher", stimmung: "strasse" },
-  N12:  { datei: "img/N12.webp", text: "Straße, Haus ganz nah, Fenster bunt", stimmung: "strasse" },
-  B16:  { datei: "img/N12.webp", imHandy: "img/N12_h.webp", text: "Haus mit leuchtenden Fenstern, Treppe", stimmung: "strasse" },
+  B15:  { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
+  N11:  { datei: "img/HAUS_WEIT.webp", text: "Straße, Haus näher", stimmung: "strasse" },
+  N12:  { datei: "img/HAUS.webp", text: "Straße, Haus ganz nah, Fenster bunt", stimmung: "strasse" },
+  B16:  { datei: "img/HAUS.webp", imHandy: "img/N12_h.webp", text: "Haus mit leuchtenden Fenstern, Treppe", stimmung: "strasse" },
   B14:  { datei: "img/B14.webp", text: "Leere Straße, Laternen (Heimweg)", stimmung: "strasse" },
 
   // ---------- Party ----------
@@ -105,7 +105,7 @@ const BILDER = {
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
 
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
-  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral)", stimmung: "balkon", figur: true, blinzeln: "N14z",
+  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral)", stimmung: "balkon", figur: true,
           lichter: [[0.28,0.606],[0.296,0.616],[0.264,0.646],[0.314,0.676],[0.854,0.678],[0.01,0.684],[0.131,0.681],[0.349,0.69],[0.241,0.699],[0.881,0.705],[0.216,0.728],[0.914,0.729],[0.997,0.731],[0.029,0.736],[0.939,0.74],[0.365,0.748],[0.401,0.751],[0.972,0.754],[0.066,0.753],[0.154,0.752],[0.182,0.757],[0.09,0.767],[0.121,0.768],[0.484,0.78],[0.423,0.789],[0.457,0.796]] },
   N14r: { datei: "img/N14r.webp", text: "Lynn redet mit den Händen", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14m: { datei: "img/N14m.webp", text: "Lynn redet, Mund offen, ohne Hände (Gemini, V8.5)", stimmung: "balkon", figur: true, lichterVon: "N14" },
@@ -122,6 +122,25 @@ const BILDER = {
   N14k: { datei: "img/N14k.webp", text: "Lynn schaut, Mund leicht offen (Gemini, V8.8)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N15:  { datei: "img/N15.webp", text: "Balkon leer", stimmung: "balkon", lichterVon: "N14" },
   N29b: { datei: "img/N29b.webp", text: "Balkon (Fenster-Fassung) leer, zwei rote Becher auf dem Geländer, drinnen Party (Gemini, V8.8)", stimmung: "balkon" },
+  HAUS: { datei: "img/HAUS.webp", text: "Partyhaus von vorn, 5 Stockwerke, Party oben + Balkon mit Lichterkette (Gemini V8.9)", stimmung: "strasse" },
+  HAUS_WEIT: { datei: "img/HAUS_WEIT.webp", text: "Straße, Partyhaus näher, Balkon deutlich (Gemini V8.9)", stimmung: "strasse" },
+  HAUS_WEIT_a: { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg (Gemini V8.9)", stimmung: "strasse" },
+  TREPPE_HELL: { datei: "img/TREPPE_HELL.webp", text: "Treppenhaus von unten, Partylicht von oben (Hinweg)", stimmung: "flur" },
+  TREPPE: { datei: "img/TREPPE.webp", text: "Treppenhaus dunkel (Rückweg, 2 Uhr)", stimmung: "flur" },
+  N29n: { datei: "img/N29n.webp", text: "Balkon: Becher nah, Lippenstift an einem (Gemini V8.9)", stimmung: "balkon" },
+  HW_TUER: { datei: "img/HW_TUER.webp", text: "Hand an der Balkontür-Klinke (Gemini V8.9)", stimmung: "balkon" },
+  TV0: { datei: "img/TV0.webp", text: "Tim zeigt auf sich: „Schon vergessen? Afterparty. Bei mir.“ (Gemini V8.9)", stimmung: "party", figur: true },
+  JONAS_TISCH: { datei: "img/JONAS_TISCH.webp", text: "Jonas steht auf dem Tisch, Becher hoch, alle grölen (Story, 9:16, V8.9)", stimmung: "foto" },
+  LENA_SELFIE: { datei: "img/LENA_SELFIE.webp", text: "Lena-Selfie auf der Party, Kussmund (Weg B, V8.9)", stimmung: "foto" },
+  LP3: { datei: "img/LP3.webp", text: "Rückblende Hörsaal: Lynn neutral, schaut nach vorn", stimmung: "traum", figur: true },
+  LP3z: { datei: "img/LP3z.webp", text: "Rückblende Hörsaal: Lynn Augen zu (Blinzeln)", stimmung: "traum", figur: true },
+  LP4: { datei: "img/LP4.webp", text: "Rückblende Hörsaal: Lynn, Braue hoch, schelmisch", stimmung: "traum", figur: true },
+  LP5: { datei: "img/LP5.webp", text: "Rückblende Hörsaal: roter Laserpunkt auf Lynns Wange", stimmung: "traum", figur: true },
+  LP6: { datei: "img/LP6.webp", text: "Rückblende Hörsaal: Lynn Nahaufnahme mit Laser", stimmung: "traum", figur: true },
+  LP7: { datei: "img/LP7.webp", text: "Rückblende Hörsaal: Lynn redet, Laser auf der Wange", stimmung: "traum", figur: true },
+  LP8: { datei: "img/LP8.webp", text: "Rückblende Hörsaal: Lynn greift nach dem Pointer", stimmung: "traum", figur: true },
+  LP9: { datei: "img/LP9.webp", text: "Rückblende Hörsaal: Lynns Stinkefinger", stimmung: "traum", figur: true },
+  LP2: { datei: "img/LP2.webp", text: "Rückblende Hörsaal: Lynn lächelt kurz", stimmung: "traum", figur: true },
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, großes Fenster, Party drinnen (V8.8)", stimmung: "balkon" },
   N34v: { datei: "img/N34.webp", video: "vid/N34v.mp4", text: "Wie N34, als bewegter Hintergrund (Veo-Video, 4-s-Schleife, V8.8)", stimmung: "balkon" },
@@ -210,9 +229,10 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "LNz": {"basis": "N14c", "box": [0.275, 0.0, 0.55, 0.5373]}, "LNLz": {"basis": "N14d", "box": [0.275, 0.0, 0.55, 0.5289]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "LNz": {"basis": "N14c", "box": [0.275, 0.0, 0.55, 0.5373]}, "LNLz": {"basis": "N14d", "box": [0.275, 0.0, 0.55, 0.5289]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
+  N14: { blink: ["N14zo"] },
   B12: { blink: ["B12z"], spricht: { Jonas: "B12s" }, mimik: ["B12g"] },
   N13L: { blink: ["N13Lz1", "N13Lz2"], spricht: { Jonas: "N13Ls" } },
   B12A: { blink: ["B12Az"], mimik: ["B12Ag"] },
@@ -337,6 +357,7 @@ const ABZ_STIL = {
   'Senden?': ['✉️', '#b77cff', '#5b2aa8', 'Getippt. Und dann doch gelöscht.', 'Ein paar Wörter. Nie angekommen.'],
   'Stumm': ['🔕', '#9aa4b6', '#4a5262', 'Du hast das Handy nachts stumm geschaltet.', 'Manchmal reicht ein Schalter.'],
   'Eine Stunde': ['⏳', '#ffad5c', '#c0571b', 'Afterparty. Nur eine Stunde. Klar.', 'Es gab noch ein Danach.'],
+  'Fotograf des Jahres': ['📷', '#ffd36b', '#8a5a14', 'Kein einziges Foto gemacht. Warst ja nicht da.', 'Ein Preis für Bilder, die andere gemacht haben.'],
   'Zwischen den Jacken': ['🧥', '#cf9a6a', '#6e4424', 'So spät da, dass nur die Jacken gewartet haben.', 'Zu spät ist auch eine Uhrzeit.'],
   'Musst du dabei gewesen sein': ['🎉', '#ff6fb3', '#a81e66', 'Den Feuerlöscher-Moment verpasst.', 'Alle reden noch davon. Du nicht.'],
   '§ 827': ['⚖️', '#ef5a5f', '#8f1d22', 'Auf der Party an Jura gedacht. Tim haftet.', 'Dein Studium war plötzlich nützlich.'],

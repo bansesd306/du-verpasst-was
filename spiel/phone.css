@@ -96,14 +96,14 @@
 
 /* Chat (WhatsApp dunkel) */
 [data-app=chat]{background:#0b1014}
-.c-kopf{margin-top:56px;height:96px;display:flex;align-items:center;gap:14px;padding:0 18px;background:#0b1014;flex:none;border-bottom:1px solid #1a2024}
+.c-kopf{margin-top:56px;height:96px;display:flex;align-items:center;gap:10px;padding:0 14px;background:#0b1014;flex:none;border-bottom:1px solid #1a2024}
 .c-kopf .zur{font-size:34px;color:#e9edef}
 .c-kopf .av{width:58px;height:58px;font-size:28px}
 .c-name{flex:1;min-width:0}
 .c-name b{display:block;font:600 34px system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.c-name small{display:block;font:400 24px system-ui;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-name small{display:block;font:400 23px system-ui;color:#8696a0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .c-name small.gruen{color:#25d366}
-.c-ic{color:#e9edef;display:flex;gap:34px;align-items:center;padding:6px 8px;border-radius:30px}
+.c-ic{color:#e9edef;display:flex;gap:22px;align-items:center;padding:6px 8px;border-radius:30px}
 .c-ic .ico{width:40px;height:40px;fill:currentColor}
 .c-kopf .zur .ico{width:40px;height:40px;fill:#e9edef;display:block}
 .c-kopf .zur{padding:6px}
@@ -257,7 +257,7 @@
 .v-ton{position:absolute;right:26px;bottom:60px;font-size:36px}
 
 /* Hinweis im Handy, Display aus */
-.hhinweis{position:absolute;left:14px;right:14px;top:60px;padding:20px 22px;border-radius:30px;background:rgba(40,40,44,.97);display:flex;gap:16px;align-items:center;transform:translateY(-160%);transition:transform .45s cubic-bezier(.2,.9,.3,1.2);z-index:9}
+.hhinweis{position:absolute;left:14px;right:14px;top:60px;padding:20px 22px;border-radius:30px;background:rgba(40,40,44,.97);display:flex;gap:16px;align-items:center;transform:translateY(calc(-100% - 80px));transition:transform .45s cubic-bezier(.2,.9,.3,1.2);z-index:9}
 .hhinweis.an{transform:none}
 .hhinweis b{font:600 26px system-ui;color:#fff}.h-x{font:400 24px system-ui;color:#ccc}
 .h-ic{width:46px;height:46px;border-radius:50%;flex:none}
@@ -378,3 +378,5 @@
 /* V8.7: Aufrufe bei fremder Story (Mias Text-Story) über der Fußleiste */
 .aufrufe .st-views{bottom:132px;left:34px;font:600 26px system-ui;opacity:.85}
 .aufrufe .st-musik{display:none}
+
+.st-fuss span.rot{color:#ff3040;animation:herzpop .5s ease-out}@keyframes herzpop{0%{transform:scale(1)}40%{transform:scale(1.55)}100%{transform:scale(1)}}

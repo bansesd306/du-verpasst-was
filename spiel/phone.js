@@ -450,8 +450,9 @@ const Handy = (() => {
       merke(name, (von === 'Ich' ? ((g || name === 'gruppe') ? '✓✓ Du: ' : '✓✓ ') : ((g || name === 'gruppe') ? von + ': ' : '')) + text, zeit, 0, ti); meta[name].tagText = bek ? null : tag;
     },
     gruppeOeffnen() { return this.chat('gruppe'); },
-    async nachricht(von, text, sofort) {
+    async nachricht(von, text, sofort, nachBzzz) {
       let schonGewartet = false;
+      if (nachBzzz && app === 'chat') sofort = true;   // V8.9: Handy hat gerade vibriert und der Chat ist offen → Nachricht muss da sein
       { const ziel = app === 'liste' && warteAuf ? warteAuf : app === 'chat' ? aktChat : von; const h = heute();
         const dup = chatListe(ziel).find(x => x.vorab && x.von === von && x.text === text && x.tagIdx === h); if (dup) { dup.vorab = false;   // V8.8 (G3): kam schon als Benachrichtigung – nicht doppelt
           if (app === 'liste' && warteAuf) await this.chat(warteAuf, true); else if (app !== 'chat') await this.chat(von); else renderChat();
@@ -495,6 +496,7 @@ const Handy = (() => {
     tippe, sende, loesche,
     async eintippen(text) { await tippe(text); },
     async abschicken() { await sende(); },
+    async tippeUndLoesche(text) { await this.rein(); if (app !== 'chat') return; await tippe(text); await warte(900); await loesche(); await warte(400); tastatur(false); },   // V8.9: tippt, überlegt, löscht alles – nichts wird gesendet
     async wegloeschen() { await loesche(); await warte(400); tastatur(false); },
     async entwurf(text) { await this.rein(); await tippe(text); await warte(900); await loesche(); await warte(500); tastatur(false); },
     schreibt,
@@ -517,6 +519,7 @@ const Handy = (() => {
     // ---- Story ----
     async story(name, code, dauer = 5, zeit = null, aufrufe = null, text = null) {
       oeffne(); zeige('story'); const s = $('[data-app=story]');
+      { const h = s.querySelector('.st-fuss span'); if (h) { h.textContent = '♡'; h.classList.remove('rot'); } }   // V8.9: Herz bei jeder neuen Story wieder leer
       s.querySelector('.st-name').textContent = name; s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + (text ? `<div class="st-text st-text-story">${esc(text)}</div>` : '');   // V8.8: Text auf der Story
       // Querformat-Foto in der Story ganz zeigen (wie Instagram: Bild über die Breite, Farbverlauf dahinter), z. B. das Gruppenfoto N27
       s.querySelector('.st-bild').classList.toggle('ganz', !!(typeof BILDER !== 'undefined' && BILDER[code] && BILDER[code].story === 'ganz'));
@@ -577,6 +580,8 @@ const Handy = (() => {
       k.classList.add('weg'); Ton.spiele('whoosh_kurz', { vol: .35 }); await warteZ(20, 350); this.feed(); await warteZ(20, 1600);
     },
     // Storys fremder Leute im Schnelldurchlauf
+    // V8.9: Herz auf der Story wird rot und poppt kurz
+    async storyHerz() { const h = el.querySelector('.st-fuss span'); if (!h) return; h.textContent = '❤'; h.classList.add('rot'); await warte(600); },
     async storys(codes) {
       const namen = ['tim_k97', 'nightcrew', 'jule.mxn', 'paulfrnk', 'x.mia.x', 'lea.vbs', 'kai_ontour', 'hannah.lt'];
       for (let i = 0; i < codes.length; i++) { const m = codes[i].match(/^(.+)=(.+)$/); await this.story(m ? m[1] : namen[i % namen.length], m ? m[2] : codes[i], .9); await warteZ(20, 780 - Math.min(i * 60, 360)); }

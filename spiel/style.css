@@ -582,3 +582,19 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #fehlerbox small{color:#9aa6c0}#fehlerbox textarea{width:100%;font:400 17px system-ui;padding:10px;border-radius:10px;border:1px solid #33405c;background:#0b101b;color:#fff}
 #fehlerbox .fb-k{display:flex;gap:8px;flex-wrap:wrap}#fehlerbox button{font:600 15px system-ui;padding:9px 14px;border-radius:10px;border:1px solid #33405c;background:#1e2740;color:#fff}
 #fehlerbox .ok{background:#2d5bd6;border-color:#2d5bd6}
+
+/* V8.9: Stempel 5,0 */
+#stempel{position:absolute;left:50%;top:46%;z-index:60;font:400 380px/1 'Permanent Marker',cursive;color:#c4161c;border:18px solid #c4161c;border-radius:26px;padding:0 54px;opacity:0;pointer-events:none;mix-blend-mode:multiply;text-shadow:3px 2px 0 rgba(120,0,0,.55);transform:translate(-50%,-50%) rotate(-11deg) scale(3.2)}
+#stempel.an{opacity:.93;transform:translate(-50%,-50%) rotate(-11deg) scale(1);transition:transform .22s cubic-bezier(.5,0,.9,.4),opacity .1s}
+
+/* V9.0 Sprungmenü: Reiter + lesbare Szenennamen */
+#sprungmenue .reiter{display:flex;gap:4px;padding:8px 12px;border-bottom:1px solid #253049;overflow-x:auto;white-space:nowrap}
+#sprungmenue .reiter button{border:1px solid #33405e;background:#141b2c;border-radius:8px 8px 0 0;padding:5px 10px;font-size:13px}
+#sprungmenue .reiter button.an{background:#7fb0ff;border-color:#7fb0ff;color:#06101f;font-weight:700}
+#sprungmenue .tabtitel{font-weight:700;color:#7fb0ff;padding:8px 0 2px}
+#sprungmenue .szenen button{font:500 13px system-ui,sans-serif;text-align:left;display:flex;flex-direction:column;gap:1px;max-width:100%}
+#sprungmenue .szenen button b{font-weight:600}
+#sprungmenue .szenen button i{font:italic 400 10px ui-monospace,monospace;color:#7a88a8}
+#sprungmenue .reiter,#sprungmenue .wege,#sprungmenue .kopf{flex:none}
+#fehlerbox .mik.an{background:#c0392b;color:#fff}
+#sperre.an{opacity:0!important}

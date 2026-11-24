@@ -1,6 +1,7 @@
 # „Du verpasst was.“ – Visual Novel zu FoMO (Philip, KSH München, Abgabe Mo 30.11.)
 
 **Neuer Chat/Account? Zuerst `docs/00_START_HIER.md` lesen** (Bauliste V8.9, Entscheidungen, Bilder, Arbeitsweise).
+## ÜBERGABE: zuerst `docs/UEBERGABE.md` lesen (Stand, offene Punkte, Regeln)
 
 ## Einrichten in einer neuen Sitzung
 `bash setup.sh` → verlinkt `spiel/` nach `/home/claude/game` und `tools/` nach `/home/claude/tools` (alle Skripte nutzen diese Pfade).
