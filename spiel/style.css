@@ -162,7 +162,11 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #topbar button{pointer-events:auto;width:78px;height:78px;border-radius:50%;border:none;background:rgba(0,0,0,.35);color:rgba(255,255,255,.75);font:400 34px system-ui;cursor:pointer}
 #topbar button.wackelt{animation:nein .5s}
 #uhr{margin-left:auto;font:300 54px/1 system-ui;color:rgba(255,255,255,.9);padding:12px 28px;border-radius:40px;background:rgba(0,0,0,.35);opacity:0;transition:opacity 1.6s;font-variant-numeric:tabular-nums;pointer-events:auto}
-#uhr.an{opacity:1}
+#uhr.an{opacity:1;transition:opacity .9s}
+/* V8.9: Uhr verblasst langsam (3,5 s) und leuchtet beim Wiederkommen kurz auf */
+#uhr:not(.an){transition:opacity 3.5s ease-in}
+#uhr.auftauchen{animation:uhrAuf 2.4s ease-out}
+@keyframes uhrAuf{0%{transform:scale(.94);text-shadow:none}30%{transform:scale(1.06);color:#fff;text-shadow:0 0 18px rgba(255,255,255,.95),0 0 42px rgba(170,205,255,.7);box-shadow:0 0 30px rgba(170,205,255,.35)}100%{transform:scale(1);text-shadow:none;box-shadow:none}}
 #uhr.springt{color:#fff;text-shadow:0 0 12px rgba(255,255,255,.5)}
 .handyoffen #uhr{opacity:.35}
 #toast{position:absolute;left:50%;top:130px;transform:translate(-50%,-30px);padding:22px 40px;border-radius:40px;background:rgba(20,20,24,.95);color:#fff;font:500 32px system-ui;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;gap:18px;align-items:center;white-space:nowrap}
