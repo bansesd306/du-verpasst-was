@@ -446,9 +446,9 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 @rufe CHECK_WOBLEIBST
 @bild K10P
 @ton blaettern
-„M bestellt online einen Kühlschrank, tippt aber 9 statt 900 Euro …“
+„V stellt einen Kühlschrank online, tippt aber 9 statt 900 Euro …“
 Irrtum. Anfechtung. § 119.
-Keine Sorge, M. Ich hab dich.
+Keine Sorge, V. Ich hab dich.
 …
 Ha.
 @bild K10P
@@ -2172,9 +2172,13 @@ Morgen ist Lerntag.
 @bild A1W
 Jonas: „Langweiler.“
 Umarmung trotzdem.
+@schwarz schnitt
+@musik club dumpf
+~ … Langweiler.
+… !1.5
 @musik club laut
-@bild TV1
-Tim: „Komm einfach mit zu mir!“
+@bild TV0
+Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
 @bild TV2 pose
 Tim: „Alle Wege führen nach –“ !3.5
 Ich: „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“
