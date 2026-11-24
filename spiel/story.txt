@@ -284,6 +284,8 @@ Lynn: „Spar dir deine Jura-Scheiße.“
 @bild LP9 schnitt
 … !2
 Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
+@bild LP10 langsam
+… !1.5
 @bild LP2 gesicht
 … !1.5
 @bild LP3 langsam

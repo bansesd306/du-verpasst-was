@@ -140,6 +140,7 @@ const BILDER = {
   LP7: { datei: "img/LP7.webp", text: "Rückblende Hörsaal: Lynn redet, Laser auf der Wange", stimmung: "traum", figur: true },
   LP8: { datei: "img/LP8.webp", text: "Rückblende Hörsaal: Lynn greift nach dem Pointer", stimmung: "traum", figur: true },
   LP9: { datei: "img/LP9.webp", text: "Rückblende Hörsaal: Lynns Stinkefinger", stimmung: "traum", figur: true },
+  LP10: { datei: "img/LP10.webp", text: "Rückblende Hörsaal: Lynn hält sich lachend die Hand vor den Mund (V8.9)", stimmung: "traum", figur: true },
   LP2: { datei: "img/LP2.webp", text: "Rückblende Hörsaal: Lynn lächelt kurz", stimmung: "traum", figur: true },
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, großes Fenster, Party drinnen (V8.8)", stimmung: "balkon" },
