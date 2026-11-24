@@ -2870,7 +2870,8 @@ Ich bin auf keinem Foto. !3
   @nachricht Jonas: musst du dabei gewesen sein 😂
   @nachricht Mia: hau mal raus jetzt 😭
   @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
-  @nachricht Jonas: MORITZ 😭
+  # FORster MOritz = FoMO (Patricks Easter Egg) – muss auf jedem Weg ausgeschrieben vorkommen
+  @nachricht Jonas: DER FORSTER MORITZ 😭🧯
 @sonst
   @nachricht Mia: ich hab immer noch bauchschmerzen vom lachen
   @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
@@ -2964,7 +2965,10 @@ Ich bin auf keinem Foto. !3
   @sonst
     @entwurf hey, wie war die party noch?
     @wenn typ=="party"
-      @entwurf du warst auf einmal weg
+      # Storycheck 3 (Z11, Patrick 24.11.): nach dem Draufschau-Weg hat sie sich im Flur verabschiedet – nicht „auf einmal weg“
+      @wenn lynn!="gm_geschaut"
+        @entwurf du warst auf einmal weg
+      @ende
     @sonst
       @entwurf sorry, dass ich nicht da war
     @ende
@@ -3210,7 +3214,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @warte 1.6
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
-@tippe lern
+@tippe lern grad
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
@@ -3256,7 +3260,10 @@ Ich leg das Handy weg. Zwei Tage noch.
 {haken}Check. {haken}Check. {haken}Check.
 # V8.7 (D11): erst das stille Handy, dann der Foto-Dump
 @bild K10P
-Es liegt da seit heute Morgen. Es ist still.
+# Storycheck 3 (Z15, Patrick 24.11.): seit Mittag (12:40 „lern grad“); statt „Es ist still.“ eine Pause, Regen und Zimmer laufen weiter
+Es liegt da seit Mittag.
+@leer
+@warte 4
 ? „Umdrehen.“ -> SO3_UM +handy
 ? „Liegen lassen.“ -> SO4
 
@@ -3377,7 +3384,7 @@ Ich krieg das hin.
 == SB_JONAS
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
-@tippe lern
+@tippe lern grad
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
@@ -3394,7 +3401,7 @@ Ich krieg das hin.
 @wenn jonasliegen
   @handy chat Jonas
   @warte 1.4
-  @tippe lern
+  @tippe lern grad
   @nachricht Jonas: ok 😔 dann montag
   @warte 1
 @ende
@@ -3563,7 +3570,8 @@ Ich schau nur, wie spät es ist.
 
 == SN_SCHLAF
 … !3
-~ Noch sieben Stunden.
+# Storycheck 3 (Z10, Patrick 24.11.): 01:47 bis 6:30 = knapp fünf Stunden
+~ Noch fünf Stunden.
 ~ Wenn ich jetzt einschlafe.
 @wenn typ=="gluecklich"
   ~ Letzter.
