@@ -313,7 +313,8 @@ const TOENE = {
   schloss:         { datei: "ton/schloss.mp3" },
   badtuer:         { datei: "ton/badtuer.mp3" },           // Wasser hört auf, Schloss, Tür (A4)
   schritte_holz:   { datei: "ton/schritte_holz.mp3" },
-  tinnitus:        { datei: "ton/tinnitus.mp3" },          // V8.6 Kater: hohes Pfeifen beim Aufwachen (synthetisch)
+  tinnitus:        { datei: "ton/tinnitus.mp3" },
+  ausatmen:        { datei: "ton/ausatmen.mp3", vol: .8 },   // V8.9 Sonntag vor „Ruhe.“ (Pixabay, freesound_community „sigh“, von Patrick)          // V8.6 Kater: hohes Pfeifen beim Aufwachen (synthetisch)
   lynn_lacht1:     { datei: "ton/lynn_lacht1.mp3" },
   lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3" },
   // Morgen, Prüfung
