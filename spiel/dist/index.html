@@ -4802,12 +4802,12 @@ Senner: „Noch zehn Minuten.“
   … !2
 @ende
 @wenn lernstand>=LERN_MITTEL && lernstand<LERN_HOCH
-  # V8.9 (Philip): Zwischenstufe – Fall drei noch leer, eins und zwei stehen
-  ~ Fall drei. Noch leer.
-  … !2
-  ~ Eins und zwei stehen wenigstens.
+  # V8.9 (Philip): Zwischenstufe – eins und zwei gut, Fall drei halb
+  Fall drei. Halb.
   @ton PR3_stift 1.6s
-  ~ Einfach noch irgendwas schreiben.
+  … !2
+  ~ Eins und zwei sollten passen.
+  ~ Wird schon.
   @wenn typ=="gluecklich"
     ~ Ich denk an zwei Uhr.
   @ende
@@ -4815,6 +4815,9 @@ Senner: „Noch zehn Minuten.“
 @ende
 @wenn lernstand<LERN_MITTEL
   ~ Fall drei fehlt.
+  # V8.9 (Philip): wenigstens steht bei eins und zwei was
+  … !1.5
+  ~ Bei eins und zwei steht wenigstens was.
   @ton PR3_stift 1.1s
   … !1
   ~ Zehn Minuten.
