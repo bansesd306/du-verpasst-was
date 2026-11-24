@@ -32,6 +32,7 @@
 # ---------------- Einstellungen (vorläufig, Philip entscheidet) ----------------
 @setze LEISER_BIS = 3
 @setze HIER_ODER_DA_BIS = 5
+# (V8.9: seit Storycheck 2B nur noch Grenze für die drei Pings vor „du verpasst was.“; das Ende heißt ab 4 Punkten „Blaues Licht“)
 # V8.8 (G27): Lernstand – ab wie viel echtem Lernen Montag „mittel“ bzw. „hoch“ läuft
 @setze LERN_MITTEL = 3
 @setze LERN_HOCH = 5
@@ -74,7 +75,7 @@
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
 @text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
-@abzeichenliste Leiser | Hier oder da | Blaues Licht | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Montagabend | Fotograf des Jahres
+@abzeichenliste Leiser | Blaues Licht | Montagabend | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Fotograf des Jahres
 @gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
 @verlauf Kleinanzeigen Fahrrad | 02.12. | 14:11 | Ich: Ist das noch da?
@@ -938,12 +939,29 @@ Aber auch nicht nichts.
 @warte 0.3
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Lena: 🎂🎂🎂
 @warte 0.3
+@benachrichtigung System | Datennutzung | 95 % deines Datenvolumens verbraucht
+@warte 0.3
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 📷 Foto
+@warte 0.3
+# V8.9 (Patrick): die eine wichtige Nachricht mitten im Müll – bleibt etwas länger stehen
+@ton bzzz
+@benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
+@warte 1.2
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 😂😂😂
+@warte 0.3
 @benachrichtigung YouNow | drachenlordofficial | drachenlordofficial ist jetzt live 🔴
 @warte 1.4
 @setze handyweit = 1
 @shutdown
-@warte 3
+@warte 4.6
+# V8.9 (Patrick): nach dem Pfeifen komplette Stille, lange – keine Musik, nichts von draußen. Dann kommt das Zimmerrauschen zurück.
+@stille
+@warte 6
+@raum nacht
+@warte 2.5
 … !3
+~ Hat sie?
+… !2
 # Lähmung: Tippt man einen Knopf an, wird er grau. Es passiert nichts. Bis beide grau sind.
 @laehmung „Hingehen.“ | „Hierbleiben.“
 ~ Soll ich nicht doch …
@@ -1808,7 +1826,7 @@ Bzzz. Nochmal.
 Ich lass es.
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
-@analoguhr 23:25
+@analoguhr 23:25 ecke
 …
 @analoguhr aus langsam
 @bild N14
@@ -1956,11 +1974,10 @@ Lynn: „Höchstens beim zweiten Date.“
 Lynn: „Oh.“
 Lynn: „Alle weg.“
 # V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
-@analoguhr 23:25 leuchten
-@warte 1.2
+@analoguhr 23:25 ecke ploetzlich
 @analoguhr Sa 01:58
 ~ Zwei?
-@analoguhr aus
+@analoguhr aus langsam
 @uhr Sa 01:58
 @uhr zeigen sofort
 Drinnen fegt Lena schon Konfetti zusammen.
@@ -2978,27 +2995,40 @@ Ich leg das Handy weg. Zwei Tage noch.
 @sonst
   @bild K10P schnitt
   @loop lampe an
-  @setze lernstand + 1
   @karteikarten auto
   @ton bzzz
   @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @warte 1.6
-  # V8.8 (M2): Mias Story von der Samstagsparty
-  @handy story x.mia.x SA2 12 Min. | | party nummer 5
-  @warte 3.5
-  @handy zu
-  @ton handy_ablegen
-  @karteikarten aus
-  … !2
-  ~ Montag.
-  @wenn typ=="gluecklich"
-    ~ Letzter.
-  @sonst
-    ~ Meine Entscheidung.
-  @ende
-  @loop lampe aus
+  # V8.9 (Storycheck 2B, K2): die zweite Party lockt – Lernpunkt nur, wenn man weiterlernt
+  @ton bzzz
+  @benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet
+  ? „Story anschauen.“ -> SA_STORY +handy
+  ? „Weiterlernen.“ -> SA_LERNEN
 @ende
+-> UEBER_SONNTAG
+
+== SA_STORY
+# V8.8 (M2): Mias Story von der Samstagsparty
+@handy story x.mia.x SA2 12 Min. | | party nummer 5
+@warte 3.5
+-> SA_REST
+
+== SA_LERNEN
+@setze lernstand + 1
+
+== SA_REST
+@handy zu
+@ton handy_ablegen
+@karteikarten aus
+… !2
+~ Montag.
+@wenn typ=="gluecklich"
+  ~ Letzter.
+@sonst
+  ~ Meine Entscheidung.
+@ende
+@loop lampe aus
 -> UEBER_SONNTAG
 
 # V8.9: Samstag → Sonntag nicht abrupt: Bett, Handy leuchtet, er dreht es um, schwarz, Uhr läuft, Regen
@@ -3058,8 +3088,9 @@ Ich leg das Handy weg. Zwei Tage noch.
 ~ Sonntag.
 ~ Keiner postet was.
 ~ Alle liegen im Bett und bereuen.
-… !2
-~ Endlich verpass ich mal nichts.
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause (Ton „Ausatmen“ sucht Patrick)
+… !3
+~ Ruhe.
 … !2
 @wenn typ!="party" || lernstand>=LERN_HOCH
   @lernplan stand ok1 ok2 ok3
@@ -3100,10 +3131,14 @@ Es liegt da seit heute Morgen. Es ist still.
 Keine Benachrichtigung.
 @handy zu
 Ich leg es wieder hin.
+# V8.9 (Storycheck 2B, S1): Umdrehen zählt nicht als Lernen – Lernpunkt überspringen
+-> SO4_FOTOS
 
 == SO4
 # V8.9: Handy liegen lassen und weiterlernen zählt
 @setze lernstand + 1
+
+== SO4_FOTOS
 # Lena postet den Foto-Dump
 @bild K10P
 @ton bzzz
@@ -3186,8 +3221,9 @@ Ich krieg das hin.
 ~ Sonntag.
 ~ Keiner postet was.
 ~ Alle liegen im Bett und bereuen.
-… !2
-~ Endlich verpass ich mal nichts.
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause (Ton „Ausatmen“ sucht Patrick)
+… !3
+~ Ruhe.
 … !2
 # V8.8 (M): Jonas mittags
 @uhr springe So 12:40
@@ -3510,6 +3546,10 @@ Blau.
 @uhr laufen Mo 11:50
 @bild N25L langsam
 Senner: „Noch zehn Minuten.“
+# V8.9 (Patrick): Spät-Weg – das Echo von „Zehn Minuten. Beide Male.“, egal wie die Prüfung läuft
+@wenn lynn=="" && ankunft>23:30
+  ~ Wie immer.
+@ende
 # V8.9: viel Handy kostet Lernen (je 2 Handy-Punkte -1)
 @wenn punkte>=2
   @setze lernstand - 1
@@ -3555,9 +3595,6 @@ Senner: „Noch zehn Minuten.“
   … !1
   ~ Zehn Minuten.
   @ton PR3_stift 0.7s
-  @wenn lynn=="" && ankunft>23:30
-    ~ Immer zehn Minuten.
-  @ende
   ~ Schreib einfach irgendwas.
   … !3
   ~ Alle guten Dinge sind drei.

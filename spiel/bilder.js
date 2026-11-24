@@ -355,7 +355,6 @@ const ABZ_STIL = {
   'Konfetti': ['🧹', '#f7a8e0', '#9a3c86', 'Geblieben, als alle weg waren. Schaufel gehalten.', 'Jemand muss ja aufräumen.'],
   'Außer Reichweite': ['📵', '#9ec2ff', '#3a5ca8', 'Handy auf den Schreibtisch gelegt. Hat nicht gereicht.', 'Abstand ist auch eine Entscheidung.'],
   'Leiser': ['🌙', '#4a5fc1', '#1f2a55', 'Ende: Das Handy hat kaum mitgeredet.', 'Ein Ende mit weniger Display.'],
-  'Hier oder da': ['🔀', '#f0a040', '#9a4d12', 'Ende: Halb im Raum, halb im Handy.', 'Ein Ende. Irgendwo dazwischen.'],
   'Blaues Licht': ['📱', '#36b4ff', '#1446a8', 'Ende: Das Display war heller als der Abend.', 'Ein Ende. Heller, als dir lieb ist.'],
   'Mal schauen': ['👀', '#f7cf3c', '#b8860b', 'Du hast Jonas „mal schauen“ geschrieben.', 'Eine Antwort, die keine war.'],
   'Find’s raus': ['🚪', '#3fd08a', '#167a48', 'Du bist an Jonas’ Anruf rangegangen.', 'Es hat geklingelt. Und dann?'],
@@ -367,7 +366,7 @@ const ABZ_STIL = {
   'Musst du dabei gewesen sein': ['🎉', '#ff6fb3', '#a81e66', 'Den Feuerlöscher-Moment verpasst.', 'Alle reden noch davon. Du nicht.'],
   '§ 827': ['⚖️', '#ef5a5f', '#8f1d22', 'Auf der Party an Jura gedacht. Tim haftet.', 'Dein Studium war plötzlich nützlich.'],
   'Gar nicht gemerkt': ['🕑', '#3fd4c6', '#127a71', 'Handy stecken lassen. Auf einmal war es zwei.', 'Irgendwann war die Uhr egal.'],
-  'Montagabend': ['🕯️', '#ff8fb1', '#8e2f5a', 'Montagabend. Handy umgedreht, ohne draufzuschauen.', 'Ein Abend nach der Prüfung.'],
+  'Montagabend': ['🕯️', '#ff8fb1', '#8e2f5a', 'Ende: Montagabend. Handy umgedreht, ohne draufzuschauen.', 'Ein Abend nach der Prüfung.'],
 };
 // (MENUEBILD wird nicht mehr gebraucht: Start und Menü sind jetzt das gezeichnete Zimmer)
 const MENUEBILD = 'B15';

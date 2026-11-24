@@ -288,12 +288,21 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 /* Analoge Uhr */
 #analoguhr{position:absolute;left:50%;top:90px;width:560px;transform:translateX(-50%);opacity:0;transition:opacity 1s;z-index:4;pointer-events:none;text-align:center}
 #analoguhr.an{opacity:1}
-/* V8.9: langsam ausbleichen / hell aufleuchtend wiederkommen (Balkon „Gar nicht gemerkt“) */
-#analoguhr.bleicht{transition:opacity 4s ease-in,filter 4s ease-in;filter:grayscale(1) brightness(1.6)}
-#analoguhr.leuchtet{animation:auLeuchten 2.4s ease-out;transition:opacity .25s}
-#analoguhr.leuchtet svg{animation:auLeuchtenSvg 2.4s ease-out}
-@keyframes auLeuchten{0%{transform:translateX(-50%) scale(1.08)}35%{transform:translateX(-50%) scale(1.02)}100%{transform:translateX(-50%) scale(1)}}
-@keyframes auLeuchtenSvg{0%{filter:drop-shadow(0 0 0 rgba(255,255,255,0)) brightness(1)}25%{filter:drop-shadow(0 0 80px rgba(255,255,255,1)) drop-shadow(0 0 30px rgba(170,215,255,1)) brightness(2.2)}100%{filter:drop-shadow(0 0 30px rgba(255,255,255,.12)) brightness(1)}}
+/* V8.9 (Philip 24.11.): Balkon „Gar nicht gemerkt“ – kleine warme Uhr links oben, passt zu den Lichterketten; leise weg, weich wieder da */
+#analoguhr.ecke{left:70px;top:110px;width:230px;transform:none}
+#analoguhr.ecke.an{opacity:.72}
+#analoguhr.ecke svg{width:230px;height:230px;filter:drop-shadow(0 0 10px rgba(255,190,120,.25))}
+#analoguhr.ecke svg circle{stroke:rgba(255,214,160,.85);fill:rgba(20,12,8,.18)}
+#analoguhr.ecke svg line{stroke:rgba(255,214,160,.9)}
+#analoguhr.ecke .ad{font-size:24px;color:rgba(255,214,160,.7);letter-spacing:2px;margin-top:4px}
+#analoguhr.bleicht{transition:opacity 4s ease-in}
+#analoguhr.ploppt{transition:none;animation:auPlopp .7s cubic-bezier(.2,.9,.3,1)}
+#analoguhr.ploppt svg{animation:auPloppSvg 1.1s ease-out}
+@keyframes auPlopp{0%{transform:scale(1.35)}100%{transform:scale(1)}}
+@keyframes auPloppSvg{0%{filter:drop-shadow(0 0 26px rgba(255,200,130,.95)) brightness(2.2)}100%{filter:drop-shadow(0 0 10px rgba(255,190,120,.25)) brightness(1)}}
+#analoguhr.sanft{transition:opacity 1.6s ease-out}
+#analoguhr.sanft svg{animation:auSanft 3s ease-out}
+@keyframes auSanft{0%{filter:drop-shadow(0 0 0 rgba(255,190,120,0))}40%{filter:drop-shadow(0 0 18px rgba(255,190,120,.55))}100%{filter:drop-shadow(0 0 10px rgba(255,190,120,.25))}}
 #analoguhr svg{width:560px;height:560px;filter:drop-shadow(0 0 30px rgba(255,255,255,.12))}
 #analoguhr .zg{transform-origin:200px 200px;transform-box:view-box}
 #analoguhr .ad{font:300 44px system-ui;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:4px}
@@ -1350,6 +1359,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 # ---------------- Einstellungen (vorläufig, Philip entscheidet) ----------------
 @setze LEISER_BIS = 3
 @setze HIER_ODER_DA_BIS = 5
+# (V8.9: seit Storycheck 2B nur noch Grenze für die drei Pings vor „du verpasst was.“; das Ende heißt ab 4 Punkten „Blaues Licht“)
 # V8.8 (G27): Lernstand – ab wie viel echtem Lernen Montag „mittel“ bzw. „hoch“ läuft
 @setze LERN_MITTEL = 3
 @setze LERN_HOCH = 5
@@ -1392,7 +1402,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
 @text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
-@abzeichenliste Leiser | Hier oder da | Blaues Licht | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Montagabend | Fotograf des Jahres
+@abzeichenliste Leiser | Blaues Licht | Montagabend | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Fotograf des Jahres
 @gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
 @verlauf Kleinanzeigen Fahrrad | 02.12. | 14:11 | Ich: Ist das noch da?
@@ -3126,7 +3136,7 @@ Bzzz. Nochmal.
 Ich lass es.
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
-@analoguhr 23:25
+@analoguhr 23:25 ecke
 …
 @analoguhr aus langsam
 @bild N14
@@ -3274,11 +3284,10 @@ Lynn: „Höchstens beim zweiten Date.“
 Lynn: „Oh.“
 Lynn: „Alle weg.“
 # V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
-@analoguhr 23:25 leuchten
-@warte 1.2
+@analoguhr 23:25 ecke ploetzlich
 @analoguhr Sa 01:58
 ~ Zwei?
-@analoguhr aus
+@analoguhr aus langsam
 @uhr Sa 01:58
 @uhr zeigen sofort
 Drinnen fegt Lena schon Konfetti zusammen.
@@ -4418,10 +4427,14 @@ Es liegt da seit heute Morgen. Es ist still.
 Keine Benachrichtigung.
 @handy zu
 Ich leg es wieder hin.
+# V8.9 (Storycheck 2B, S1): Umdrehen zählt nicht als Lernen – Lernpunkt überspringen
+-> SO4_FOTOS
 
 == SO4
 # V8.9: Handy liegen lassen und weiterlernen zählt
 @setze lernstand + 1
+
+== SO4_FOTOS
 # Lena postet den Foto-Dump
 @bild K10P
 @ton bzzz
@@ -5438,7 +5451,6 @@ const ABZ_STIL = {
   'Konfetti': ['🧹', '#f7a8e0', '#9a3c86', 'Geblieben, als alle weg waren. Schaufel gehalten.', 'Jemand muss ja aufräumen.'],
   'Außer Reichweite': ['📵', '#9ec2ff', '#3a5ca8', 'Handy auf den Schreibtisch gelegt. Hat nicht gereicht.', 'Abstand ist auch eine Entscheidung.'],
   'Leiser': ['🌙', '#4a5fc1', '#1f2a55', 'Ende: Das Handy hat kaum mitgeredet.', 'Ein Ende mit weniger Display.'],
-  'Hier oder da': ['🔀', '#f0a040', '#9a4d12', 'Ende: Halb im Raum, halb im Handy.', 'Ein Ende. Irgendwo dazwischen.'],
   'Blaues Licht': ['📱', '#36b4ff', '#1446a8', 'Ende: Das Display war heller als der Abend.', 'Ein Ende. Heller, als dir lieb ist.'],
   'Mal schauen': ['👀', '#f7cf3c', '#b8860b', 'Du hast Jonas „mal schauen“ geschrieben.', 'Eine Antwort, die keine war.'],
   'Find’s raus': ['🚪', '#3fd08a', '#167a48', 'Du bist an Jonas’ Anruf rangegangen.', 'Es hat geklingelt. Und dann?'],
@@ -5450,7 +5462,7 @@ const ABZ_STIL = {
   'Musst du dabei gewesen sein': ['🎉', '#ff6fb3', '#a81e66', 'Den Feuerlöscher-Moment verpasst.', 'Alle reden noch davon. Du nicht.'],
   '§ 827': ['⚖️', '#ef5a5f', '#8f1d22', 'Auf der Party an Jura gedacht. Tim haftet.', 'Dein Studium war plötzlich nützlich.'],
   'Gar nicht gemerkt': ['🕑', '#3fd4c6', '#127a71', 'Handy stecken lassen. Auf einmal war es zwei.', 'Irgendwann war die Uhr egal.'],
-  'Montagabend': ['🕯️', '#ff8fb1', '#8e2f5a', 'Montagabend. Handy umgedreht, ohne draufzuschauen.', 'Ein Abend nach der Prüfung.'],
+  'Montagabend': ['🕯️', '#ff8fb1', '#8e2f5a', 'Ende: Montagabend. Handy umgedreht, ohne draufzuschauen.', 'Ein Abend nach der Prüfung.'],
 };
 // (MENUEBILD wird nicht mehr gebraucht: Start und Menü sind jetzt das gezeichnete Zimmer)
 const MENUEBILD = 'B15';
@@ -6529,14 +6541,14 @@ const Rahmen = (() => {
   const bw = document.getElementById('zimmer');
   const $ = id => document.getElementById(id === 'bw' ? 'zimmer' : 'z-' + id);
   const reduziert = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const ENDEN = ['Leiser', 'Hier oder da', 'Blaues Licht'];
+  const ENDEN = ['Leiser', 'Blaues Licht', 'Montagabend'];   // V8.9: ein Name pro Schluss (Pizza / Jonas schreibt / Lynn)
   const TOENUNG = {
     'Leiser': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(90,110,220,.18),transparent 70%)',
-    'Hier oder da': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(240,160,64,.14),transparent 70%)',
-    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)'
+    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)',
+    'Montagabend': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'
   };
   // Handy auf dem Tisch je Ende: umgedreht / meldet sich ab und zu / Display dauerhaft an
-  const HANDY = { 'Leiser': 'unten', 'Hier oder da': 'oben', 'Blaues Licht': 'hell' };
+  const HANDY = { 'Leiser': 'unten', 'Blaues Licht': 'hell', 'Montagabend': 'unten' };
   const T = (k, d) => (api && api.TEXTE[k] != null && api.TEXTE[k] !== '') ? api.TEXTE[k] : d;
   const S = () => api.S();
   // Abzeichen: [Name, Symbol, Farbe 1, Farbe 2, was man getan hat, vager Hinweis]
@@ -6792,7 +6804,7 @@ const Rahmen = (() => {
     $('e-nr').textContent = T('ende_nr', 'Ende {x} von 3').replace('{x}', ENDEN.indexOf(n) + 1);
     $('e-name').textContent = n;
     $('e-satz').textContent = s[4].replace('Ende: ', '');
-    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Montagabend. Das Handy liegt umgedreht auf dem Tisch.'; $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
+    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Das Handy liegt umgedreht auf dem Tisch.';   /* V8.9: Titel heißt jetzt selbst „Montagabend“ */ $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
     zeige(null); void bw.offsetWidth;
     zeige('s-ende');
   }
@@ -6992,6 +7004,7 @@ const Spiel = (() => {
   function lade() { try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; } catch (e) { return {}; } }
   function speichere(d) { try { localStorage.setItem(SPEICHER, JSON.stringify(d)); } catch (e) { } }
   let S = Object.assign({ abz: [], enden: [], entsch: {}, durchgaenge: 0 }, lade());
+  S.enden = (S.enden || []).filter(e => ['Leiser', 'Blaues Licht', 'Montagabend'].includes(e));   // V8.9: alte Namen („Hier oder da“) aus früheren Läufen nicht mitzählen
 
   // ---------------- Zeit ----------------
   const TAGE = ['Freitag', 'Samstag', 'Sonntag', 'Montag'], TAGK = ['Fr', 'Sa', 'So', 'Mo'];
@@ -7574,15 +7587,18 @@ const Spiel = (() => {
   let auMin = null;
   async function analoguhr(arg) {
     const el = $('#analoguhr');
-    // V8.9 (Philip 24.11.): „aus langsam“ = Uhr bleicht langsam aus (4 s, ohne zu warten); „… leuchten“ = Uhr erscheint hell aufleuchtend
-    if (/^aus\b/.test(arg)) { if (/langsam/.test(arg)) { el.classList.add('bleicht'); setTimeout(() => el.classList.remove('bleicht'), 4200); } el.classList.remove('an', 'leuchtet'); auMin = null; return; }
-    if (/\sleuchten$/.test(arg)) { arg = arg.replace(/\s+leuchten$/, ''); el.classList.remove('leuchtet'); void el.offsetWidth; el.classList.add('leuchtet'); }
+    // V8.9 (Philip 24.11.): „ecke“ = kleine warme Uhr links oben (Balkon), „aus langsam“ = blendet langsam aus (4 s, ohne zu warten), „sanft“ = kommt weich wieder
+    if (/^aus\b/.test(arg)) { const ecke = el.classList.contains('ecke'); if (/langsam/.test(arg)) { el.classList.add('bleicht'); setTimeout(() => { el.classList.remove('bleicht'); if (ecke) el.classList.remove('ecke'); }, 4200); } else if (ecke) setTimeout(() => el.classList.remove('ecke'), 1100); el.classList.remove('an', 'sanft'); auMin = null; return; }
+    const ecke = /\becke\b/.test(arg), sanft = /\bsanft\b/.test(arg), ploetzlich = /\bploetzlich\b/.test(arg); arg = arg.replace(/\s+(ecke|sanft|ploetzlich)\b/g, '').trim();
+    if (ecke) el.classList.add('ecke'); if (sanft) el.classList.add('sanft');
+    // „ploetzlich“ = Uhr ist auf einen Schlag da (kurzer warmer Blitz + Klick), Philip 24.11.
+    if (ploetzlich) { el.classList.remove('ploppt'); void el.offsetWidth; el.classList.add('ploppt'); Ton.spiele('uhr', { dauer: .3, vol: 1 }); setTimeout(() => el.classList.remove('ploppt'), 1200); }
     const ziel = zeit(arg); V.uhr = ziel; zeigeUhr();
     const tagMin = ziel % 1440; let gesamt = auMin == null ? tagMin : auMin + ((tagMin - auMin % 1440) + 1440) % 1440;
     const setz = (m, dauer) => { el.querySelectorAll('.zg').forEach(z => z.style.transition = `transform ${dauer}s cubic-bezier(.45,0,.2,1)`); el.querySelector('.zm').style.transform = `rotate(${m * 6}deg)`; el.querySelector('.zh').style.transform = `rotate(${m * .5}deg)`; el.querySelector('.ad').textContent = uhrText(); };
     zeigeTextbox(false);
-    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(.6); }
-    else { Ton.spiele('uhr', { dauer: 2.2, vol: .8 }); setz(gesamt, 2.2); await warte(2.4); }
+    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(el.classList.contains('sanft') ? 1.6 : ploetzlich ? 1 : .6); }
+    else { const ek = el.classList.contains('ecke'); Ton.spiele('uhr', { dauer: 2.2, vol: ek ? .4 : .8 }); setz(gesamt, 2.2); await warte(2.4); }
     auMin = gesamt;
   }
 
@@ -8005,7 +8021,7 @@ const Spiel = (() => {
 
   // ---------------- Ende ----------------
   async function endeSpiel() {
-    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Leiser' : p <= V.LEISER_BIS ? 'Leiser' : p <= V.HIER_ODER_DA_BIS ? 'Hier oder da' : 'Blaues Licht';   // V8.8 (G60)
+    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Montagabend' : p <= V.LEISER_BIS ? 'Leiser' : 'Blaues Licht';   // V8.9 (Storycheck 2B, E1): ein Name pro Schluss – Pizza / Jonas schreibt / Lynn
     kapitelZeiten.push({ n: 'Ende', t: performance.now() });
     pfad.push(ende); abzeichen(ende); PR('ende', ende + ' · Punkte ' + p + ' · Weg ' + pfad.join(' → ')); if (!S.enden.includes(ende)) S.enden.push(ende); speichere(S);
     abzQueue = [];   // die neuen Abzeichen zeigt der Rahmen selbst (gestempelt)
