@@ -621,7 +621,7 @@ const Spiel = (() => {
   }
 
   // ---------------- Analoge Uhr in der Bildmitte ----------------
-  let auMin = null;
+  let auMin = null, auZuletzt = null;
   async function analoguhr(arg) {
     const el = $('#analoguhr');
     // V8.9 (Philip 24.11.): „ecke“ = kleine warme Uhr links oben (Balkon), „aus langsam“ = blendet langsam aus (4 s, ohne zu warten), „sanft“ = kommt weich wieder
@@ -630,7 +630,13 @@ const Spiel = (() => {
     if (ecke) el.classList.add('ecke'); if (sanft) el.classList.add('sanft');
     // „ploetzlich“ = Uhr ist auf einen Schlag da (kurzer warmer Blitz + Klick), Philip 24.11.
     if (ploetzlich) { el.classList.remove('ploppt'); void el.offsetWidth; el.classList.add('ploppt'); Ton.spiele('uhr', { dauer: .3, vol: 1 }); setTimeout(() => el.classList.remove('ploppt'), 1200); }
-    const ziel = zeit(arg); V.uhr = ziel; zeigeUhr();
+    // Storycheck 3 (Patrick 24.11., Uhr nie rückwärts): „mind ZEIT“ = nie früher als die Uhr schon ist, „zuletzt“ = dieselbe Zeit wie beim letzten Mal, „+N“ = N Minuten nach der zuletzt gezeigten Zeit
+    let ziel;
+    if (arg === 'zuletzt') ziel = auZuletzt != null ? auZuletzt : V.uhr;
+    else if (/^\+\d+$/.test(arg)) ziel = (auZuletzt != null ? auZuletzt : V.uhr) + +arg.slice(1);
+    else if (/^mind\s/.test(arg)) ziel = Math.max(V.uhr, zeit(arg.slice(5).trim()));
+    else ziel = zeit(arg);
+    auZuletzt = ziel; V.uhr = ziel; zeigeUhr();
     const tagMin = ziel % 1440; let gesamt = auMin == null ? tagMin : auMin + ((tagMin - auMin % 1440) + 1440) % 1440;
     const setz = (m, dauer) => { el.querySelectorAll('.zg').forEach(z => z.style.transition = `transform ${dauer}s cubic-bezier(.45,0,.2,1)`); el.querySelector('.zm').style.transform = `rotate(${m * 6}deg)`; el.querySelector('.zh').style.transform = `rotate(${m * .5}deg)`; el.querySelector('.ad').textContent = uhrText(); };
     zeigeTextbox(false);
@@ -1057,7 +1063,7 @@ const Spiel = (() => {
   function neustart(label, vorab) {
     gen++; if (tippWarter) tippWarter(); tippt = false; Rahmen.weg();
     document.querySelectorAll('.schirm').forEach(s => s.classList.remove('an'));
-    Ton.outroAus(); Ton.klangZurueck && Ton.klangZurueck(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
+    Ton.outroAus(); Ton.klangZurueck && Ton.klangZurueck(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null; auZuletzt = null;
     if (label) { // Einstellungen am Anfang trotzdem ausführen
       const ende = labels['PROLOG']; prog.slice(0, ende).forEach(p => { if (p.t === 'cmd' && ['setze', 'text', 'abzeichenliste', 'gruppe', 'verlauf'].includes(p.name)) befehl(p); });
       springe(label);

@@ -94,7 +94,7 @@
 @verlauf Tim | 28.12. | 20:30 | Tim: schwach 😤
 @verlauf Jonas | 12. Juli | 19:48 | Jonas: bin unten. mach auf 🍕
 @verlauf Felix | 04.01. | 22:15 | Felix: bro hast du noch mein ladekabel
-@verlauf Oma | Sonntag | 11:30 | Oma: Gott segne dich mein Junge ❤️
+@verlauf Oma | 06.01. | 11:30 | Oma: Gott segne dich mein Junge ❤️
 @verlauf Lena | Dienstag | 16:20 | Lena: heyy 🥰 hab gehört montag ist dein großer tag??
 @verlauf Lena | Dienstag | 16:20 | Lena: du schaffst das 🍀💪
 @verlauf Lena | Dienstag | 17:02 | Ich: danke 🙈
@@ -627,6 +627,7 @@ Geht doch.
 Bzzz.
 # V8.9: Selfie von Lena (Kussmund)
 @handy story lena.xo LENA_SELFIE
+@setze selfieGesehen
 @warte 5
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
 ? „Noch fünf Minuten.“ -> S3_SCHLUMMER +handy
@@ -694,7 +695,12 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 @nachricht Paul: hast du ihre story gesehen?? krass 🔥
 @tipp
 @handy zu
-@handy story lena.xo LENA_SELFIE 3 Min.
+# Storycheck 3: in S3 schon gesehen (21:58) → so alt, wie es wirklich ist
+@wenn selfieGesehen
+  @handy story lena.xo LENA_SELFIE 22 Min.
+@sonst
+  @handy story lena.xo LENA_SELFIE 3 Min.
+@ende
 @warte 3
 ~ … Was ist daran krass?
 @handy chat Lerngruppe Schuldrecht
@@ -886,6 +892,8 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 
 == ANRUF_RAN
 @abzeichen Find’s raus
+# Storycheck 3 (Patrick 24.11.): merken, dass Jonas schon angerufen und das mit Lynn gesagt hat
+@setze jonasAnruf
 @handy anruf an
 @musik party telefon
 @musik lied telefon
@@ -902,6 +910,7 @@ Jonas lacht.
 -> DANACH_2245
 
 == ANRUF_AB
+@setze jonasAnruf
 @handy anruf abgelehnt
 @handy chat Jonas
 @nachricht Jonas: ?? 😂
@@ -965,7 +974,10 @@ Aber auch nicht nichts.
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 🎤 Sprachnachricht (0:47)
 @warte 0.6
 @effekt tunnel
-@handy anruf Jonas
+# Storycheck 3 (Patrick 24.11.): kein zweiter Anruf, wenn Jonas um 22:45 schon angerufen hat
+@wenn !jonasAnruf
+  @handy anruf Jonas
+@ende
 @warte 0.5
 @ton bzzz
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: HAHAHAHA
@@ -979,9 +991,11 @@ Aber auch nicht nichts.
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 📷 Foto
 @warte 0.3
 # V8.9 (Patrick): die eine wichtige Nachricht mitten im Müll – bleibt etwas länger stehen
-@ton bzzz
-@benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
-@warte 1.2
+@wenn !jonasAnruf
+  @ton bzzz
+  @benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
+  @warte 1.2
+@ende
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 😂😂😂
 @warte 0.3
 @benachrichtigung YouNow | drachenlordofficial | drachenlordofficial ist jetzt live 🔴
@@ -1425,6 +1439,15 @@ Lena drückt mir einen Becher in die Hand.
 @party an
 @musik party laut
 @wenn besucht>=2
+  @wenn !lied && ankunft<=22:45
+    # Storycheck 3 (Z3, Patrick 24.11.): Lied nicht auf dem Balkon abgewartet → kommt jetzt gedämpft durch die Tür
+    @setze lied
+    @uhr springe 22:45
+    @musik lied dumpf
+    @warte 5
+    @musik lied aus
+    @musik party laut
+  @ende
   -> BAD
 @ende
 ? „Küche.“ -> KUECHE wenn !kueche
@@ -1433,6 +1456,8 @@ Lena drückt mir einen Becher in die Hand.
 
 == HUB_ZURUECK
 @setze besucht + 1
+# Storycheck 3 (Z3): auf dem Balkon war die Uhr kurz weg
+@uhr zeigen
 @loop wind aus
 @wenn lynn=="geschaut"
   @bild N36L
@@ -1458,7 +1483,7 @@ Lena drückt mir einen Becher in die Hand.
 
 == HUB_HANDY
 @handy sperr
-@benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet | vor 2 Min.
+@benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet | vor 20 Min.
 @warte 1
 @handy story x.mia.x H36b
 @warte 3
@@ -1842,20 +1867,25 @@ Morgen 4 Grad.
 Sie kommt nicht wieder. !2
 @bild BR langsam
 Ich stehe eine Weile allein draußen.
-@wenn !lied && ankunft<=22:45
+# Storycheck 3 (Z3, Patrick 24.11.): allein höchstens ca. 10 Minuten. Lied nur, wenn es in diese 10 Minuten fällt, sonst kommt es später im Flur
+@wenn !lied && ankunft<=22:45 && uhr>=22:37
   @setze lied
   @uhr springe 22:45
   @musik lied dumpf
   Drinnen singen alle Happy Birthday.
   @musik lied aus
+  @uhr +2
+@sonst
+  @uhr +10
 @ende
-@uhr +10
 Irgendwann gehe ich rein.
 -> HUB_ZURUECK
 
 == BALKON_IGN1
 @wenn !lied && ankunft<=22:45
   @setze lied
+  # Storycheck 3 (Z3): Uhr ausblenden, damit sie nicht mitten im Gespräch eine Stunde rennt (kommt beim Reingehen wieder)
+  @uhr verstecken
   @uhr springe 22:45
   @musik lied dumpf
   Lynn: „Jetzt verpass ich’s doch.“
@@ -1880,7 +1910,8 @@ Bzzz. Nochmal.
 Ich lass es.
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
-@analoguhr 23:25 ecke
+# Storycheck 3 (Z4): nie rückwärts – ist es schon später als 23:25, zeigt sie die echte Zeit
+@analoguhr mind 23:25 ecke
 …
 @analoguhr aus langsam
 @bild N14
@@ -2029,7 +2060,8 @@ Lynn: „Höchstens beim zweiten Date.“
 Lynn: „Oh.“
 Lynn: „Alle weg.“
 # V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
-@analoguhr 23:25 ecke ploetzlich
+# Storycheck 3 (Z4): dieselbe Zeit wie beim Verschwinden
+@analoguhr zuletzt ecke ploetzlich
 @analoguhr Sa 01:58
 ~ Zwei?
 @analoguhr aus langsam
@@ -2070,6 +2102,8 @@ Ich schließe ab. Hier ist es leiser. !2
 Ein anderes Wohnzimmer. Andere Leute. … Sieht voller aus.
 @effekt traum aus
 @bild N16
+# Storycheck 3 (Z8): er bleibt eine Weile am Handy im Bad; Feuerlöscher auf allen Wegen 23:35–23:50 (wie auf dem Spät-Weg „vor zehn Minuten“)
+@uhr mind 23:35
 # V8.7: Feuerlöscher durch die Tür (wie bad_vorschau_feuerloescher.mp3: Zischen 1,5 s, Johlen 3,8 s, Gelächter 4,8 s)
 @warte 1.5
 @ton feuerloescher lp1400 vol1.7
@@ -2157,7 +2191,12 @@ Umarmung trotzdem.
 … !1.5
 @musik club laut
 @bild TV0
-Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
+@wenn lynn=="gm_geschaut"
+  # Storycheck 3 (Patrick 24.11.): Tim ist noch da, die anderen sind schon bei ihm
+  Tim: „Ey, warte. Afterparty. Bei mir. Meine Schwester hat die anderen schon reingelassen.“
+@sonst
+  Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
+@ende
 @bild TV2 pose
 Tim: „Alle Wege führen nach –“ !3.5
 Ich: „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“
@@ -2459,18 +2498,16 @@ Drüben redet Lynn mit irgendwem. Ich komm nicht durch.
 @schwarz
 @musik spaet dumpf
 # V8.7 (D29): von Lenas Party aus 23:50, nach dem langen Balkon (Gar nicht gemerkt … Draufschauen) erst 00:40
+# Storycheck 3 (Z4): 5 Minuten Weg zu Tim, nie früher als die Uhr schon war (Spät-Weg kommt erst um 0:00 bei Lena an); danach +1 Stunde
+@uhr +5
 @wenn lynn=="gm_geschaut"
-  @analoguhr Sa 00:40
+  @analoguhr mind Sa 00:40
 @sonst
-  @analoguhr 23:50
+  @analoguhr mind 23:50
 @ende
 @warte 1.2
 Eine Stunde ist keine Stunde. !2
-@wenn lynn=="gm_geschaut"
-  @analoguhr Sa 01:40
-@sonst
-  @analoguhr Sa 00:50
-@ende
+@analoguhr +60
 Also sind zwei … eine. !2
 @analoguhr Sa 02:47
 Und eine ist ja keine. !3
@@ -2810,21 +2847,38 @@ Ich bin auf keinem Foto. !3
   # (offen: „M2 kurz“ – vorläufige Auswahl)
   @nachricht Lena: feuerlöscher-mann 🧯😂
   @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
-  @nachricht Mia: DER FORSTER MORITZ 😭🧯
+  # Storycheck 3 (Z2, Patrick 24.11.): auf der Tanzfläche ist Mia früh weg – sie hat den Feuerlöscher verpasst
+  @wenn tanz
+    @nachricht Lena: DER FORSTER MORITZ 😭🧯
+  @sonst
+    @nachricht Mia: DER FORSTER MORITZ 😭🧯
+  @ende
   @nachricht Jonas: musst du dabei gewesen sein 😂
   @tippe war ich nicht. war woanders
+  @wenn tanz
+    @nachricht Mia: ich auch nicht 😭
+  @ende
   @abzeichen Musst du dabei gewesen sein
   @tipp
   -> M4
 @ende
 @nachricht Lena: feuerlöscher-mann 🧯😂
 @nachricht Tim: legendär. einfach legendär
-@nachricht Mia: ich hab immer noch bauchschmerzen vom lachen
-@nachricht Mia: ich weiß nicht mehr was gestern passiert ist
-@nachricht Jonas: du warst dabei 😭
-@nachricht Mia: ja genau das ist ja das problem
-@nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
-@nachricht Mia: DER FORSTER MORITZ 😭🧯
+@wenn tanz
+  # Storycheck 3 (Z2, Patrick 24.11.): Mia war schon auf Party Nummer vier und hat ihn verpasst
+  @nachricht Mia: WAS FÜR EIN FEUERLÖSCHER
+  @nachricht Jonas: musst du dabei gewesen sein 😂
+  @nachricht Mia: hau mal raus jetzt 😭
+  @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
+  @nachricht Jonas: MORITZ 😭
+@sonst
+  @nachricht Mia: ich hab immer noch bauchschmerzen vom lachen
+  @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
+  @nachricht Jonas: du warst dabei 😭
+  @nachricht Mia: ja genau das ist ja das problem
+  @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
+  @nachricht Mia: DER FORSTER MORITZ 😭🧯
+@ende
 @tipp
 @wenn typ=="zuhause"
   @wenn weg=="B" && notiz
@@ -2855,6 +2909,8 @@ Ich bin auf keinem Foto. !3
 == M3_FRAGEN
 @tippe was war mit dem feuerlöscher?? 😂
 @nachricht Jonas: musst du dabei gewesen sein 😂
+# Storycheck 3 (Patrick 24.11.): Mia weiß es ja auch nicht mehr
+@nachricht Mia: hau mal raus jetzt 😭
 @abzeichen Musst du dabei gewesen sein
 @tipp
 -> M4
@@ -3035,7 +3091,7 @@ Ich leg das Handy weg. Zwei Tage noch.
   -> UEBER_SONNTAG
 @ende
 @stille
-@karte Samstag. 23:10. Noch 34 Stunden.
+@karte Samstag. 23:10. Noch 33 Stunden.
 @uhr Sa 23:10
 @raum nacht
 @wenn typ=="zuhause" && weg=="B"
