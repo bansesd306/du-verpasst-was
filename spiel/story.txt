@@ -3565,6 +3565,7 @@ Ich …
   … fass es kaum.
   … !1.5
   Ich glaub, es lief gut.
+  Und nein, …
   … !1.5
   Die letzten zwei Male hab ich mich nicht getraut, das zu sagen.
 @sonst
@@ -3639,6 +3640,7 @@ Ich …
   … fass es kaum.
   … !1.5
   Ich glaub, es lief gut.
+  Und nein, …
   … !1.5
   Die letzten zwei Male hab ich mich nicht getraut, das zu sagen.
 @sonst
