@@ -1809,7 +1809,7 @@ Bzzz. Nochmal.
 Ich lass es.
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
-@analoguhr 23:25
+@analoguhr 23:25 ecke
 …
 @analoguhr aus langsam
 @bild N14
@@ -1957,11 +1957,11 @@ Lynn: „Höchstens beim zweiten Date.“
 Lynn: „Oh.“
 Lynn: „Alle weg.“
 # V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
-@analoguhr 23:25 leuchten
-@warte 1.2
+@analoguhr 23:25 ecke sanft
+@warte .6
 @analoguhr Sa 01:58
 ~ Zwei?
-@analoguhr aus
+@analoguhr aus langsam
 @uhr Sa 01:58
 @uhr zeigen sofort
 Drinnen fegt Lena schon Konfetti zusammen.

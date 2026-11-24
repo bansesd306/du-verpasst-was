@@ -279,12 +279,17 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 /* Analoge Uhr */
 #analoguhr{position:absolute;left:50%;top:90px;width:560px;transform:translateX(-50%);opacity:0;transition:opacity 1s;z-index:4;pointer-events:none;text-align:center}
 #analoguhr.an{opacity:1}
-/* V8.9: langsam ausbleichen / hell aufleuchtend wiederkommen (Balkon „Gar nicht gemerkt“) */
-#analoguhr.bleicht{transition:opacity 4s ease-in,filter 4s ease-in;filter:grayscale(1) brightness(1.6)}
-#analoguhr.leuchtet{animation:auLeuchten 2.4s ease-out;transition:opacity .25s}
-#analoguhr.leuchtet svg{animation:auLeuchtenSvg 2.4s ease-out}
-@keyframes auLeuchten{0%{transform:translateX(-50%) scale(1.08)}35%{transform:translateX(-50%) scale(1.02)}100%{transform:translateX(-50%) scale(1)}}
-@keyframes auLeuchtenSvg{0%{filter:drop-shadow(0 0 0 rgba(255,255,255,0)) brightness(1)}25%{filter:drop-shadow(0 0 80px rgba(255,255,255,1)) drop-shadow(0 0 30px rgba(170,215,255,1)) brightness(2.2)}100%{filter:drop-shadow(0 0 30px rgba(255,255,255,.12)) brightness(1)}}
+/* V8.9 (Philip 24.11.): Balkon „Gar nicht gemerkt“ – kleine warme Uhr links oben, passt zu den Lichterketten; leise weg, weich wieder da */
+#analoguhr.ecke{left:70px;top:110px;width:230px;transform:none}
+#analoguhr.ecke.an{opacity:.72}
+#analoguhr.ecke svg{width:230px;height:230px;filter:drop-shadow(0 0 10px rgba(255,190,120,.25))}
+#analoguhr.ecke svg circle{stroke:rgba(255,214,160,.85);fill:rgba(20,12,8,.18)}
+#analoguhr.ecke svg line{stroke:rgba(255,214,160,.9)}
+#analoguhr.ecke .ad{font-size:24px;color:rgba(255,214,160,.7);letter-spacing:2px;margin-top:4px}
+#analoguhr.bleicht{transition:opacity 4s ease-in}
+#analoguhr.sanft{transition:opacity 1.6s ease-out}
+#analoguhr.sanft svg{animation:auSanft 3s ease-out}
+@keyframes auSanft{0%{filter:drop-shadow(0 0 0 rgba(255,190,120,0))}40%{filter:drop-shadow(0 0 18px rgba(255,190,120,.55))}100%{filter:drop-shadow(0 0 10px rgba(255,190,120,.25))}}
 #analoguhr svg{width:560px;height:560px;filter:drop-shadow(0 0 30px rgba(255,255,255,.12))}
 #analoguhr .zg{transform-origin:200px 200px;transform-box:view-box}
 #analoguhr .ad{font:300 44px system-ui;color:rgba(255,255,255,.55);margin-top:10px;letter-spacing:4px}
