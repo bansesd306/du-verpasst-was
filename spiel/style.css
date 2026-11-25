@@ -545,6 +545,14 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #sprungmenue .wege{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;border-bottom:1px solid #253049}
 #sprungmenue .wege button{border:1px solid #33405e;background:#141b2c;border-radius:16px;padding:5px 11px;font-size:14px}
 #sprungmenue .wege button.an{background:#ffa23c;border-color:#ffa23c;color:#1a0d05;font-weight:700}
+#sprungmenue .titel1{flex:none;padding:10px 12px 0;font-weight:700;font-size:14px;color:#ffd08a}
+#sprungmenue .titel1 small{font-weight:400;color:#8d9ab5;font-size:12px}
+#sprungmenue .wegstart{flex:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;padding:8px 12px 10px;border-bottom:1px solid #253049}
+#sprungmenue .wegstart button{display:flex;flex-direction:column;align-items:flex-start;text-align:left;border:1px solid #6b4a1e;background:#2a1c0b;border-radius:10px;padding:7px 10px}
+#sprungmenue .wegstart button b{font-size:14px;color:#ffc47a}
+#sprungmenue .wegstart button i{font-style:normal;font-size:12px;color:#b9a587}
+#sprungmenue .wegstart button:active{background:#4a3214}
+#sprungmenue .wege button{padding:3px 9px;font-size:13px}
 #sprungmenue .liste{overflow:auto;padding:4px 12px 40px;-webkit-overflow-scrolling:touch}
 #sprungmenue summary{font-weight:700;padding:9px 0;cursor:pointer;color:#7fb0ff}
 #sprungmenue .abs{color:#8d9ab5;font-size:13px;margin:8px 0 4px}
@@ -637,3 +645,5 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #stempel.blatt{left:735px;top:690px;font-size:150px;border-width:9px;border-radius:14px;padding:0 24px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
 .ebene .innen img.fw{opacity:0;transition:opacity 1.4s ease}
 .ebene .innen img.fw.aus{opacity:1}
+/* V9.0: niedrige Bildschirme (Handy quer) – ganzes Menü scrollt, damit die Szenenliste nicht zu klein wird */
+@media (max-height:520px){#sprungmenue{overflow:auto}#sprungmenue .liste{overflow:visible;flex:none}#sprungmenue .wegstart{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}

@@ -16,6 +16,7 @@ const Spiel = (() => {
   let aktBild = null, partyAn = false, partyZaehler = 0, poolAktiv = null, t0 = performance.now();
   const PR = (t, x) => { if (window.Protokoll) try { Protokoll.log(t, x); } catch (e) { } };   // V8.8 (H): Test-Protokoll
   const ABBRUCH = Symbol('abbruch'); const besuchtL = new Set(); const fehlerLog = [];
+  window.addEventListener('unhandledrejection', e => { if (e.reason === ABBRUCH) e.preventDefault(); });   // V9.0: abgebrochene Abläufe beim Springen sind kein Fehler
 
   // ---------------- Speicher ----------------
   const SPEICHER = 'duverpasstwas_v1';

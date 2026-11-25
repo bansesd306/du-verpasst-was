@@ -28,11 +28,11 @@
   };
   const PARTY = { zugesagt: true, aufbruch: '21:20', ankunft: '21:40', besucht: 2, kueche: true, balkon: true };
   const WEGE = {
-    'Zuhause A': { v: { weg: 'A', flow: true, phantom: true, punkte: 0 }, typ: 'zuhause' },
-    'Zuhause B': { v: { weg: 'B', punkte: 7, notiz: true }, typ: 'zuhause' },
-    'Party': { v: Object.assign({ tanz: true, punkte: 4 }, PARTY), typ: 'party', lynn: 'geschaut' },
-    'Afterparty': { v: Object.assign({ punkte: 4, afterpartyStory: true }, PARTY), typ: 'afterparty', lynn: 'geschaut' },
-    'Lynn glücklich': { v: Object.assign({ tanz: true, mittanzen: true, punkte: 3 }, PARTY), typ: 'gluecklich', lynn: 'gm' },
+    'Zuhause A': { v: { weg: 'A', flow: true, phantom: true, punkte: 0 }, typ: 'zuhause', start: 'KAP2_A', info: 'lernt am Schreibtisch · Kap. 2' },
+    'Zuhause B': { v: { weg: 'B', punkte: 7, notiz: true }, typ: 'zuhause', start: 'KAP2_B', info: 'liegt im Bett · Kap. 2' },
+    'Party': { v: Object.assign({ tanz: true, punkte: 4 }, PARTY), typ: 'party', lynn: 'geschaut', start: 'PARTY_ANKUNFT', info: 'kommt an · Kap. 3' },
+    'Lynn glücklich': { v: Object.assign({ tanz: true, mittanzen: true, punkte: 3 }, PARTY), typ: 'gluecklich', lynn: 'gm', start: 'GM_START', uhr: '23:10', info: 'Balkon, Handy ignoriert · Kap. 3' },
+    'Afterparty': { v: Object.assign({ punkte: 4, afterpartyStory: true }, PARTY), typ: 'afterparty', lynn: 'geschaut', start: 'AFTERPARTY', uhr: 'Sa 00:40', info: 'mit zu Tim · Kap. 3' },
   };
   // Uhr beim Springen: Uhrzeit aus der Abschnitts-Überschrift, sonst Kapitelbeginn
   const KAPUHR = { K1: '21:07', K2: '21:20', KNOTEN: '21:20', K3: '21:40', K4: null, K5: 'Sa 10:32', K6: 'So 09:00', EPILOG: 'Mo 07:30' };
@@ -40,7 +40,7 @@
   let wegWahl = 'Zuhause A';
   try { wegWahl = localStorage.getItem('dvw-sprung-weg') || wegWahl; } catch (e) { }
 
-  function springen(label, kapId, absName) {
+  function springen(label, kapId, absName, uhrFest) {
     const w = WEGE[wegWahl], z = zeileVon[label];
     if (window.Ton) Ton.init();
     // V8.8 (G61): Weg-Variablen setzen, BEVOR das Skript losläuft (sonst nimmt es an der Sprungstelle falsche Zweige)
@@ -61,6 +61,7 @@
       const fest = { So: 'So 09:00', Mo: /Ende/.test(absName) ? 'Mo 18:30' : /Prüfung/.test(absName) ? 'Mo 11:00' : 'Mo 06:30', Sa: /abend/.test(absName) ? 'Sa 19:00' : 'Sa 10:32' };
       uhr = uhr && !/^(Sa|So|Mo) /.test(uhr) ? tag + ' ' + uhr : fest[tag];
     }
+    if (uhrFest) uhr = uhrFest;
     if (uhr) { V.uhr = Spiel._debug.zeit(uhr); V.uhr_zeigen = true; }
     Spiel._debug.zeigeUhr();
     });
@@ -73,6 +74,9 @@
   const panel = document.createElement('div'); panel.id = 'sprungmenue';
   const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="zu" aria-label="Schließen">✕</button></div>
+    <div class="titel1">1 · Weg starten <small>(springt sofort an den Anfang des Wegs)</small></div>
+    <div class="wegstart">${Object.entries(WEGE).map(([w, d]) => `<button type="button" data-start="${esc(w)}"><b>▶ ${esc(w)}</b><i>${esc(d.info)}</i></button>`).join('')}</div>
+    <div class="titel1">2 · Oder Szene wählen <small>– gespielt als Weg:</small></div>
     <div class="wege">${Object.keys(WEGE).map(w => `<button type="button" data-weg="${esc(w)}">${esc(w)}</button>`).join('')}</div>
     <div class="reiter">${kapitel.map((k, ki) => `<button type="button" data-tab="${ki}">${esc(TABNAME[k.id] || k.name)}</button>`).join('')}</div>
     <div class="liste">${kapitel.map((k, ki) => `<div class="tab" data-t="${ki}"><div class="tabtitel">${esc(k.name)}</div>${k.abs.map(a => `${a.name ? `<div class="abs">${esc(a.name)}</div>` : ''}<div class="szenen">${a.szenen.map(s => `<button type="button" data-l="${s}" data-k="${k.id}" data-a="${esc(a.name)}"><b>${esc(titel[s] || s)}</b>${titel[s] ? `<i>${s}</i>` : ''}</button>`).join('')}</div>`).join('')}</div>`).join('')}</div>`;
@@ -89,6 +93,7 @@
     const b = e.target.closest('button'); if (!b) return;
     if (b.classList.contains('zu')) panel.classList.remove('an');
     else if (b.dataset.tab) { tabNr = +b.dataset.tab; try { localStorage.setItem('dvw-sprung-tab', tabNr); } catch (x) { } tabsZeigen(); }
+    else if (b.dataset.start) { const w = b.dataset.start; wegWahl = w; try { localStorage.setItem('dvw-sprung-weg', w); } catch (x) { } wegeZeigen(); const l = WEGE[w].start, k = kapitel.find(k => k.abs.some(a => a.szenen.includes(l))), a = k && k.abs.find(a => a.szenen.includes(l)); springen(l, k ? k.id : '', a ? a.name : '', WEGE[w].uhr); }
     else if (b.dataset.weg) { wegWahl = b.dataset.weg; try { localStorage.setItem('dvw-sprung-weg', wegWahl); } catch (x) { } wegeZeigen(); }
     else if (b.dataset.l) springen(b.dataset.l, b.dataset.k, b.dataset.a || '');
   });
