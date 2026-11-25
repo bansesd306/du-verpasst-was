@@ -456,22 +456,22 @@ const Spiel = (() => {
     e.classList.toggle('an');
   }, 3600);
 
-  // Blinzeln
-  setInterval(() => {
-    if (B.classList.contains('einfrieren')) return;
-    const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink')];
-    if (bls.length && Math.random() > .3) {
-      const bl = bls[Math.random() * bls.length | 0]; if (bl.classList.contains('fest')) return;
-      bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 150);
-      if (Math.random() < .18) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140); }, 360);
+  // Blinzeln – 25.11. abends: nur EIN Zeitgeber (vorher zwei auf derselben Ebene → 3x Blinzeln in 1 s), Mindestabstand 2,5 s, hart umschalten (keine halben Augen)
+  let letztesBlinzeln = 0;
+  function blinzle() {
+    const naechst = () => setTimeout(blinzle, 2600 + Math.random() * 2400);
+    if (B.classList.contains('einfrieren')) return naechst();
+    const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink, .ebene.an img.blink')].filter(b => !b.classList.contains('fest'));
+    const jetzt = performance.now();
+    if (bls.length && jetzt - letztesBlinzeln > 2500 && Math.random() > .2) {
+      letztesBlinzeln = jetzt;
+      const bl = bls[Math.random() * bls.length | 0];
+      bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140);
+      if (Math.random() < .1) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 380);
     }
-  }, 2900);
-  setInterval(() => {
-    if (B.classList.contains('einfrieren')) return;
-    const bl = welt.querySelector('.ebene.an .blink'); if (!bl || Math.random() < .35) return;
-    bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 130);
-    if (Math.random() < .2) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 300);
-  }, 2600);
+    naechst();
+  }
+  setTimeout(blinzle, 2000);
 
   const FENSTER = [[.714, .211, .022, .07], [.772, .208, .023, .068], [.714, .331, .022, .065], [.812, .331, .02, .065], [.768, .448, .024, .07]];
   function fensterOverlay(an) { const f = $('#fenster'); f.innerHTML = an ? FENSTER.map(r => `<i class="w" style="left:${r[0] * 100}%;top:${r[1] * 100}%;width:${r[2] * 100}%;height:${r[3] * 100}%"></i>`).join('') : ''; }
