@@ -1283,6 +1283,8 @@ Alter, singt der schief.
   @handy sperr
   @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
   @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+  # Patrick 25.11. (Flagge): ungelesen bleibt sichtbar – im Chat-Verzeichnis steht Mama danach mit 2 ungelesenen
+  @handy ungelesen Mama | 2 | Papa sagt auch toi toi toi 🍀
   @tipp
   ~ …
   … !2
@@ -1587,6 +1589,8 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
     @handy sperr
     @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
     @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+    # Patrick 25.11. (Flagge): ungelesen bleibt sichtbar – im Chat-Verzeichnis steht Mama danach mit 2 ungelesenen
+    @handy ungelesen Mama | 2 | Papa sagt auch toi toi toi 🍀
     @tipp
     ~ Noch 58 Stunden.
     … !2
@@ -2376,7 +2380,7 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik club dumpf
 @setze treppe
 @bild TREPPE schnitt
-@ton treppe
+@ton treppe 4s
 … !2
 @bild HAUS langsam
 … !1.5
@@ -3107,6 +3111,8 @@ Glaub ich.
 -> M5_LENA
 
 == M5_LENA
+# Patrick 25.11. (Flagge): nicht so schnell aus Jonas’ Chat raus
+@warte 1.8
 @tipp
 @handy chat Lena
 @wenn typ=="zuhause" && lenaGesendet
@@ -3236,6 +3242,8 @@ Ich leg das Handy weg. Zwei Tage noch.
 @lernplan haken 2
 @wenn typ!="party" || lernstand>=LERN_HOCH
   @lernplan haken 3
+  # Patrick 25.11. (Flagge): wer Sonntag alles abgehakt hat, dem fehlt Fall drei Montag nicht ganz
+  @setze sonntagAlles = 1
 @ende
 # V8.8 (M): Jonas mittags
 @lernplan aus
@@ -3315,6 +3323,19 @@ Ich leg es wieder hin.
 == SO4
 # V8.9: Handy liegen lassen und weiterlernen zählt
 @setze lernstand + 1
+# Patrick 25.11. (Flagge): nach „Liegen lassen“ nimmt er das Handy nicht von selbst – es leuchtet auf, er entscheidet
+@bild K10P
+@ton bzzz
+@warte 1.2
+@handy sperr
+@benachrichtigung Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
+@warte 1.2
+? „Anschauen.“ -> SO4_STORYS
+? „Liegen lassen.“ -> SO4_LIEGEN
+
+== SO4_LIEGEN
+@handy zu
+-> SO4_ENDE
 
 == SO4_FOTOS
 # Lena postet den Foto-Dump
@@ -3323,6 +3344,8 @@ Ich leg es wieder hin.
 @handy sperr
 @benachrichtigung Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
 @tipp
+
+== SO4_STORYS
 # V8.5: zu Hause hat man diese Bilder noch nie gesehen, auf den Party-Wegen andere (keine Wiederholungen)
 @wenn typ=="zuhause"
   @handy story lena.xo N32d 2 Min.
@@ -3355,6 +3378,8 @@ Ich leg es wieder hin.
   … !2
 @ende
 @handy zu
+
+== SO4_ENDE
 Ich krieg das hin.
 @loop uhr an
 … !5
@@ -3466,6 +3491,8 @@ Ich krieg das hin.
 @handy chat Lena
 @nachricht! Lena: und diesmal nicht bis 4 uhr lernen 🙄
 @nachricht Lena: du kannst das eh ❤️
+# Patrick 25.11. (Flagge): Gedanke später
+@warte 2.2
 ~ Wie die letzten zwei Male.
 @tippeweg Danke, bedeutet mir v
 @tipp
@@ -3705,15 +3732,16 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
 @warte .9
 @handy sperr
 @benachrichtigung WhatsApp | Mama | Viel Erfolg heute, mein Schatz ❤️
+# Patrick 25.11. (Flagge): mehr Pause zwischen den Nachrichten
 @wenn typ=="gluecklich"
-  @warte .8
+  @warte 2.6
   @ton bzzz
   @benachrichtigung WhatsApp | Lynn | viel glück 🍀
 @sonst
-  @warte .8
+  @warte 2.6
   @ton bzzz
   @benachrichtigung WhatsApp | Jonas | scheiß nicht zu sehr rein 😂
-  @warte .6
+  @warte 1.2
   @benachrichtigung WhatsApp | Jonas | 4,0 🐐
 @ende
 @tipp
@@ -3776,6 +3804,9 @@ Senner: „Noch zehn Minuten.“
 @ende
 @wenn punkte>=6
   @setze lernstand - 1
+@ende
+@wenn sonntagAlles && lernstand<LERN_MITTEL
+  @setze lernstand = LERN_MITTEL
 @ende
 # V8.8 (G27): drei Stufen nach Lernstand (auch Lynn-Weg)
 @wenn lernstand>=LERN_HOCH
@@ -3884,7 +3915,7 @@ Und jetzt wieder warten, bis – >>
   @nachricht! Jonas: bereit für heute abend? 😏
   -> TWIST_SCHLUSS
 @ende
-@ton bzzz_doppel
+# Patrick 25.11. (Flagge): dreimal Vibrieren bei einer Nachricht – Doppel-Bzzz raus, nur noch das eine Bzzz mit der Meldung
 @warte 1.5
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   # (Option aus dem Dokument, noch offen)

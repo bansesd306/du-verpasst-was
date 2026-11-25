@@ -371,3 +371,20 @@
   #bw.licht-aus #handy.blip .an,#bw.licht-aus #handyglow.blip{animation:none!important}
   #titelblock,#titel{transition:none}
 }
+
+/* Patrick 25.11.: Bilanz nach dem Spiel auf eigenem schwarzen Schirm, Zeile für Zeile */
+#s-bilanz{gap:30px;background:#000;box-shadow:0 0 0 3000px #000;z-index:60}
+#s-bilanz .bilanz{display:flex;flex-direction:column;gap:18px;opacity:1}
+#s-bilanz .bilanz p{font:400 40px/1.35 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6;opacity:0;transition:opacity 1s}
+#s-bilanz .bilanz p.da{opacity:1}
+#s-bilanz .bilanz b{color:#fff;font-weight:700}
+#s-bilanz #p-verpasst{display:flex;flex-direction:column;gap:8px;margin-top:22px}
+#s-bilanz #p-verpasst .vk,#s-bilanz #p-verpasst .vp{display:block;opacity:0;transition:opacity .8s}
+#s-bilanz #p-verpasst .vk.da,#s-bilanz #p-verpasst .vp.da{opacity:1}
+#s-bilanz #p-verpasst .vp b{font-weight:700}
+#s-bilanz .vl{display:block;margin-top:18px;opacity:0;transition:opacity 2.4s ease-in;font-size:48px}
+#s-bilanz .vl.da{opacity:1}
+#s-bilanz #k-bweiter{opacity:0;pointer-events:none;transition:opacity .8s}
+#s-bilanz #k-bweiter.da{opacity:1;pointer-events:auto}
+#s-bilanz .trenn{display:none}
+#s-abz .trenn{font-style:normal}

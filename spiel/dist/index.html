@@ -809,9 +809,9 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .fotogross{position:absolute;inset:0;z-index:7;background:#000;opacity:0;transition:opacity .4s}
 .fotogross.an{opacity:1}
 .fotogross>*{transition:transform 3.5s ease}
-.fotogross.zoom>*:first-child{transform:scale(1.8);transform-origin:78% 35%}
+.fotogross.zoom>*:first-child{transform:scale(1.35);transform-origin:78% 35%}
 .fotogross>.fz-scharf{opacity:0;transition:transform 3.5s ease,opacity 1.3s ease}
-.fotogross.zoom>.fz-scharf{transform:scale(1.8)}
+.fotogross.zoom>.fz-scharf{transform:scale(1.35)}
 .fotogross.fokus>.fz-scharf{opacity:1}
 .c-eingabe{display:flex;gap:10px;align-items:flex-end;padding:10px 12px 22px;flex:none}
 .pille{flex:1;display:flex;align-items:flex-end;gap:12px;min-height:72px;padding:0 20px;border-radius:36px;background:#1f272a;color:#8696a0;font-size:30px;min-width:0}
@@ -1423,7 +1423,22 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #zimmer #z-handy .an,#zimmer #z-handyglow{animation:none!important}
 #zimmer.licht-aus #z-handy.blip .an,#zimmer.licht-aus #z-handyglow.blip{animation:none!important}
 #zimmer #z-titelblock,#zimmer #z-titel{transition:none}
-}
+}#zimmer #z-s-bilanz{gap:30px;background:#000;box-shadow:0 0 0 3000px #000;z-index:60}
+#zimmer #z-s-bilanz .bilanz{display:flex;flex-direction:column;gap:18px;opacity:1}
+#zimmer #z-s-bilanz .bilanz p{font:400 40px/1.35 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6;opacity:0;transition:opacity 1s}
+#zimmer #z-s-bilanz .bilanz p.da{opacity:1}
+#zimmer #z-s-bilanz .bilanz b{color:#fff;font-weight:700}
+#zimmer #z-s-bilanz #z-p-verpasst{display:flex;flex-direction:column;gap:8px;margin-top:22px}
+#zimmer #z-s-bilanz #z-p-verpasst .vk,#zimmer #z-s-bilanz #z-p-verpasst .vp{display:block;opacity:0;transition:opacity .8s}
+#zimmer #z-s-bilanz #z-p-verpasst .vk.da,#zimmer #z-s-bilanz #z-p-verpasst .vp.da{opacity:1}
+#zimmer #z-s-bilanz #z-p-verpasst .vp b{font-weight:700}
+#zimmer #z-s-bilanz .vl{display:block;margin-top:18px;opacity:0;transition:opacity 2.4s ease-in;font-size:48px}
+#zimmer #z-s-bilanz .vl.da{opacity:1}
+#zimmer #z-s-bilanz #z-k-bweiter{opacity:0;pointer-events:none;transition:opacity .8s}
+#zimmer #z-s-bilanz #z-k-bweiter.da{opacity:1;pointer-events:auto}
+#zimmer #z-s-bilanz .trenn{display:none}
+#zimmer #z-s-abz .trenn{font-style:normal}
+
 </style>
 </head>
 <body>
@@ -2717,6 +2732,8 @@ Alter, singt der schief.
   @handy sperr
   @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
   @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+  # Patrick 25.11. (Flagge): ungelesen bleibt sichtbar – im Chat-Verzeichnis steht Mama danach mit 2 ungelesenen
+  @handy ungelesen Mama | 2 | Papa sagt auch toi toi toi 🍀
   @tipp
   ~ …
   … !2
@@ -3021,6 +3038,8 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
     @handy sperr
     @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
     @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+    # Patrick 25.11. (Flagge): ungelesen bleibt sichtbar – im Chat-Verzeichnis steht Mama danach mit 2 ungelesenen
+    @handy ungelesen Mama | 2 | Papa sagt auch toi toi toi 🍀
     @tipp
     ~ Noch 58 Stunden.
     … !2
@@ -3810,7 +3829,7 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik club dumpf
 @setze treppe
 @bild TREPPE schnitt
-@ton treppe
+@ton treppe 4s
 … !2
 @bild HAUS langsam
 … !1.5
@@ -4541,6 +4560,8 @@ Glaub ich.
 -> M5_LENA
 
 == M5_LENA
+# Patrick 25.11. (Flagge): nicht so schnell aus Jonas’ Chat raus
+@warte 1.8
 @tipp
 @handy chat Lena
 @wenn typ=="zuhause" && lenaGesendet
@@ -4670,6 +4691,8 @@ Ich leg das Handy weg. Zwei Tage noch.
 @lernplan haken 2
 @wenn typ!="party" || lernstand>=LERN_HOCH
   @lernplan haken 3
+  # Patrick 25.11. (Flagge): wer Sonntag alles abgehakt hat, dem fehlt Fall drei Montag nicht ganz
+  @setze sonntagAlles = 1
 @ende
 # V8.8 (M): Jonas mittags
 @lernplan aus
@@ -4749,6 +4772,19 @@ Ich leg es wieder hin.
 == SO4
 # V8.9: Handy liegen lassen und weiterlernen zählt
 @setze lernstand + 1
+# Patrick 25.11. (Flagge): nach „Liegen lassen“ nimmt er das Handy nicht von selbst – es leuchtet auf, er entscheidet
+@bild K10P
+@ton bzzz
+@warte 1.2
+@handy sperr
+@benachrichtigung Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
+@warte 1.2
+? „Anschauen.“ -> SO4_STORYS
+? „Liegen lassen.“ -> SO4_LIEGEN
+
+== SO4_LIEGEN
+@handy zu
+-> SO4_ENDE
 
 == SO4_FOTOS
 # Lena postet den Foto-Dump
@@ -4757,6 +4793,8 @@ Ich leg es wieder hin.
 @handy sperr
 @benachrichtigung Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
 @tipp
+
+== SO4_STORYS
 # V8.5: zu Hause hat man diese Bilder noch nie gesehen, auf den Party-Wegen andere (keine Wiederholungen)
 @wenn typ=="zuhause"
   @handy story lena.xo N32d 2 Min.
@@ -4789,6 +4827,8 @@ Ich leg es wieder hin.
   … !2
 @ende
 @handy zu
+
+== SO4_ENDE
 Ich krieg das hin.
 @loop uhr an
 … !5
@@ -4900,6 +4940,8 @@ Ich krieg das hin.
 @handy chat Lena
 @nachricht! Lena: und diesmal nicht bis 4 uhr lernen 🙄
 @nachricht Lena: du kannst das eh ❤️
+# Patrick 25.11. (Flagge): Gedanke später
+@warte 2.2
 ~ Wie die letzten zwei Male.
 @tippeweg Danke, bedeutet mir v
 @tipp
@@ -5139,15 +5181,16 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
 @warte .9
 @handy sperr
 @benachrichtigung WhatsApp | Mama | Viel Erfolg heute, mein Schatz ❤️
+# Patrick 25.11. (Flagge): mehr Pause zwischen den Nachrichten
 @wenn typ=="gluecklich"
-  @warte .8
+  @warte 2.6
   @ton bzzz
   @benachrichtigung WhatsApp | Lynn | viel glück 🍀
 @sonst
-  @warte .8
+  @warte 2.6
   @ton bzzz
   @benachrichtigung WhatsApp | Jonas | scheiß nicht zu sehr rein 😂
-  @warte .6
+  @warte 1.2
   @benachrichtigung WhatsApp | Jonas | 4,0 🐐
 @ende
 @tipp
@@ -5210,6 +5253,9 @@ Senner: „Noch zehn Minuten.“
 @ende
 @wenn punkte>=6
   @setze lernstand - 1
+@ende
+@wenn sonntagAlles && lernstand<LERN_MITTEL
+  @setze lernstand = LERN_MITTEL
 @ende
 # V8.8 (G27): drei Stufen nach Lernstand (auch Lynn-Weg)
 @wenn lernstand>=LERN_HOCH
@@ -5318,7 +5364,7 @@ Und jetzt wieder warten, bis – >>
   @nachricht! Jonas: bereit für heute abend? 😏
   -> TWIST_SCHLUSS
 @ende
-@ton bzzz_doppel
+# Patrick 25.11. (Flagge): dreimal Vibrieren bei einer Nachricht – Doppel-Bzzz raus, nur noch das eine Bzzz mit der Meldung
 @warte 1.5
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   # (Option aus dem Dokument, noch offen)
@@ -6014,6 +6060,9 @@ const FILME = { weg: 'vid/weg.mp4' };
    <h2 class="gross" id="z-g-frage"></h2>
    <div class="liste" id="z-g-liste"></div>
   </section>
+  <section class="schirm2" id="z-s-bilanz">
+   <button class="knopf" type="button" id="z-k-bweiter">Weiter</button>
+  </section>
   <section class="schirm2" id="z-s-abz">
    <div class="kopf"><h2 class="gross" id="z-a-titel">Abzeichen</h2><span class="zaehler" id="z-zaehler"></span></div>
    <div id="z-raster"></div>
@@ -6134,7 +6183,7 @@ const Ton = (() => {
   const LOOPS = {
     wind: [['wind', { vol: .55 }]],
     raum_nacht: [['wind', { vol: .16, lp: 600 }]],
-    raum_tag: [['raum_tag', { vol: .6 }]],
+    raum_tag: [['raum_tag', { vol: .3, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
     uhr: [['uhr', { vol: .55 }]],
     herzschlag: [['herzschlag', { vol: .9 }]],
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
@@ -6162,7 +6211,7 @@ const Ton = (() => {
     loopGain[name] = g;
     let stops = [];
     if (def === 'pruefung') {
-      const r = quelle('raum_tag', g, { loop: true, vol: .35 }); if (r) stops.push(() => r.stop());
+      const r = quelle('raum_tag', g, { loop: true, vol: .18, lp: 2200 }); if (r) stops.push(() => r.stop());
       let aktiv = true, q = null, t = null;
       const schub = () => { if (!aktiv) return; const d = .5 + Math.random() * 2.4; q = quelle('PR3_stift', g, { ab: Math.random() * 3.2, dauer: d, vol: .2 + Math.random() * .08 }); t = setTimeout(() => { t = setTimeout(schub, 350 + Math.random() * (Math.random() < .3 ? 3800 : 1400)); }, d * 1000); };
       schub(); stops.push(() => { aktiv = false; clearTimeout(t); try { q && q.stop(); } catch (e) { } });
@@ -7061,7 +7110,7 @@ const Rahmen = (() => {
 
   // Zeitpläne, damit Wechsel sauber abbrechen
   let plaene = [];
-  let verpasstPlan = null;
+  let verpasstPlan = null, verpasstLauf = null;
   function plan(fn, ms) { const id = setTimeout(fn, ms); plaene.push(id); return id; }
   function planStopp() { plaene.forEach(clearTimeout); plaene = []; }
 
@@ -7313,7 +7362,24 @@ const Rahmen = (() => {
 
   // ---------------- Abzeichen ----------------
   let letzter = null;
-  function abzeichen(modus) {
+  // Bilanz Zeile für Zeile auf Schwarz, dann „Weiter“
+  function bilanzZeigen() {
+    const bil = $('bilanz'), knopf = $('k-bweiter'); bil.classList.add('da'); knopf.classList.remove('da');
+    zeige('s-bilanz'); bw.classList.add('bilanz-an');
+    const zeilen = [...bil.querySelectorAll('p')].filter(x => x.id !== 'p-verpasst' && x.innerHTML.trim());
+    let u = reduziert ? 0 : 900;
+    zeilen.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 1600; });
+    const vp = verpasstLauf, pv = $('p-verpasst');
+    if (vp) {
+      pv.classList.add('da'); const sp = [...pv.querySelectorAll('.vk, .vp')];
+      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 900; });
+      if (vp.lynn) { u += reduziert ? 0 : 1400; plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += reduziert ? 0 : 2400; }
+    }
+    plan(() => knopf.classList.add('da'), u + (reduziert ? 0 : 600));
+    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); r(); }; });
+  }
+  function abzeichen(modus, nurText) {
+    if (nurText) { const pl = plaene; plaene = []; abzeichen(modus); plaene.forEach(clearTimeout); plaene = pl; return; }
     const sek = $('s-abz'); sek.classList.toggle('sammlung', modus === 'sammlung');
     $('a-titel').textContent = T('menue_abzeichen', 'Abzeichen');
     const r = $('raster'); r.innerHTML = '';
@@ -7339,6 +7405,10 @@ const Rahmen = (() => {
       r.appendChild(k);
     });
     const bil = $('bilanz'); bil.classList.remove('da');
+    // Patrick 25.11.: nach dem Spiel steht die Bilanz auf einem eigenen schwarzen Schirm (Zeile für Zeile), der Abzeichen-Schirm bleibt leer davon
+    const lauf = modus === 'lauf';
+    if (lauf) $('s-bilanz').insertBefore(bil, $('k-bweiter')); else $('s-abz').insertBefore(bil, $('s-abz').querySelector('.knopfreihe'));
+    bil.classList.toggle('zeilen', lauf); [...bil.querySelectorAll('p')].forEach(x => x.classList.remove('da'));
     const offen = 3 - S().enden.length;
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
@@ -7359,7 +7429,7 @@ const Rahmen = (() => {
         const VT = { geburtstag: 'Lenas Party des Jahres', lied: 'Lena heult bei Happy Birthday', feuerloescher: 'Die Feuerlöscher-Eskalation', mia: 'Mias Crashout auf der Tanzfläche', tim: 'Tims Absturz auf Lenas Teppich', afterparty: 'Tims Afterparty bis 3 Uhr', lynn: 'Lynn' };
         const tx = k => T('verpasst_' + k, VT[k]);
         const lynn = vl.includes('lynn'), rest = vl.filter(k => k !== 'lynn');
-        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? ' · ' : '') + '<b>' + tx(k) + '</b></span>').join('');
+        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? '<i class="trenn"> · </i>' : '') + '<b>' + tx(k) + '</b></span>').join('');
         verpasstPlan = { pv, lynn, tx };
       } else verpasstPlan = null;
     }
@@ -7374,7 +7444,8 @@ const Rahmen = (() => {
       if (!reduziert) { z.classList.remove('hoch'); void z.offsetWidth; z.classList.add('hoch'); }
     }, t + j * (reduziert ? 0 : 720)));
     t += frische.length * (reduziert ? 0 : 720) + (reduziert ? 0 : 250);
-    plan(() => bil.classList.add('da'), t);
+    if (lauf) { verpasstLauf = verpasstPlan; verpasstPlan = null; }
+    else plan(() => bil.classList.add('da'), t);
     if (verpasstPlan) { const { pv, lynn, tx } = verpasstPlan; const sp = [...pv.querySelectorAll('.vp')];
       if (reduziert) { sp.forEach(x => x.classList.add('da')); if (lynn) pv.insertAdjacentHTML('beforeend', ' <span class="vp da">… und <b>' + tx('lynn') + '</b>.</span>'); }
       else {
@@ -7491,6 +7562,8 @@ const Rahmen = (() => {
       $('g-frage').textContent = T('gefuehl_frage', 'Wie hast du dich gerade gefühlt?');
       const liste = $('g-liste'); liste.innerHTML = '';
       await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; b.textContent = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.onclick = ev => { ev.stopPropagation(); r(i); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
+      abzeichen('lauf', true);
+      await bilanzZeigen();
       abzeichen('lauf'); zeige('s-abz');
     },
   };

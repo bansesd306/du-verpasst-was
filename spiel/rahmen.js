@@ -27,7 +27,7 @@ const Rahmen = (() => {
 
   // Zeitpläne, damit Wechsel sauber abbrechen
   let plaene = [];
-  let verpasstPlan = null;
+  let verpasstPlan = null, verpasstLauf = null;
   function plan(fn, ms) { const id = setTimeout(fn, ms); plaene.push(id); return id; }
   function planStopp() { plaene.forEach(clearTimeout); plaene = []; }
 
@@ -279,7 +279,24 @@ const Rahmen = (() => {
 
   // ---------------- Abzeichen ----------------
   let letzter = null;
-  function abzeichen(modus) {
+  // Bilanz Zeile für Zeile auf Schwarz, dann „Weiter“
+  function bilanzZeigen() {
+    const bil = $('bilanz'), knopf = $('k-bweiter'); bil.classList.add('da'); knopf.classList.remove('da');
+    zeige('s-bilanz'); bw.classList.add('bilanz-an');
+    const zeilen = [...bil.querySelectorAll('p')].filter(x => x.id !== 'p-verpasst' && x.innerHTML.trim());
+    let u = reduziert ? 0 : 900;
+    zeilen.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 1600; });
+    const vp = verpasstLauf, pv = $('p-verpasst');
+    if (vp) {
+      pv.classList.add('da'); const sp = [...pv.querySelectorAll('.vk, .vp')];
+      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 900; });
+      if (vp.lynn) { u += reduziert ? 0 : 1400; plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += reduziert ? 0 : 2400; }
+    }
+    plan(() => knopf.classList.add('da'), u + (reduziert ? 0 : 600));
+    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); r(); }; });
+  }
+  function abzeichen(modus, nurText) {
+    if (nurText) { const pl = plaene; plaene = []; abzeichen(modus); plaene.forEach(clearTimeout); plaene = pl; return; }
     const sek = $('s-abz'); sek.classList.toggle('sammlung', modus === 'sammlung');
     $('a-titel').textContent = T('menue_abzeichen', 'Abzeichen');
     const r = $('raster'); r.innerHTML = '';
@@ -305,6 +322,10 @@ const Rahmen = (() => {
       r.appendChild(k);
     });
     const bil = $('bilanz'); bil.classList.remove('da');
+    // Patrick 25.11.: nach dem Spiel steht die Bilanz auf einem eigenen schwarzen Schirm (Zeile für Zeile), der Abzeichen-Schirm bleibt leer davon
+    const lauf = modus === 'lauf';
+    if (lauf) $('s-bilanz').insertBefore(bil, $('k-bweiter')); else $('s-abz').insertBefore(bil, $('s-abz').querySelector('.knopfreihe'));
+    bil.classList.toggle('zeilen', lauf); [...bil.querySelectorAll('p')].forEach(x => x.classList.remove('da'));
     const offen = 3 - S().enden.length;
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
@@ -325,7 +346,7 @@ const Rahmen = (() => {
         const VT = { geburtstag: 'Lenas Party des Jahres', lied: 'Lena heult bei Happy Birthday', feuerloescher: 'Die Feuerlöscher-Eskalation', mia: 'Mias Crashout auf der Tanzfläche', tim: 'Tims Absturz auf Lenas Teppich', afterparty: 'Tims Afterparty bis 3 Uhr', lynn: 'Lynn' };
         const tx = k => T('verpasst_' + k, VT[k]);
         const lynn = vl.includes('lynn'), rest = vl.filter(k => k !== 'lynn');
-        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? ' · ' : '') + '<b>' + tx(k) + '</b></span>').join('');
+        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? '<i class="trenn"> · </i>' : '') + '<b>' + tx(k) + '</b></span>').join('');
         verpasstPlan = { pv, lynn, tx };
       } else verpasstPlan = null;
     }
@@ -340,7 +361,8 @@ const Rahmen = (() => {
       if (!reduziert) { z.classList.remove('hoch'); void z.offsetWidth; z.classList.add('hoch'); }
     }, t + j * (reduziert ? 0 : 720)));
     t += frische.length * (reduziert ? 0 : 720) + (reduziert ? 0 : 250);
-    plan(() => bil.classList.add('da'), t);
+    if (lauf) { verpasstLauf = verpasstPlan; verpasstPlan = null; }
+    else plan(() => bil.classList.add('da'), t);
     if (verpasstPlan) { const { pv, lynn, tx } = verpasstPlan; const sp = [...pv.querySelectorAll('.vp')];
       if (reduziert) { sp.forEach(x => x.classList.add('da')); if (lynn) pv.insertAdjacentHTML('beforeend', ' <span class="vp da">… und <b>' + tx('lynn') + '</b>.</span>'); }
       else {
@@ -457,6 +479,8 @@ const Rahmen = (() => {
       $('g-frage').textContent = T('gefuehl_frage', 'Wie hast du dich gerade gefühlt?');
       const liste = $('g-liste'); liste.innerHTML = '';
       await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; b.textContent = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.onclick = ev => { ev.stopPropagation(); r(i); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
+      abzeichen('lauf', true);
+      await bilanzZeigen();
       abzeichen('lauf'); zeige('s-abz');
     },
   };
