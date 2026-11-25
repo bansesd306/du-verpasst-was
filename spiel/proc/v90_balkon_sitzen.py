@@ -60,6 +60,6 @@ def arm_um(code, datei='arm_versuch3'):
     m = Image.new('L', (W, Hh), 0); m.paste(255, tuple(int(x * k) for x in (440, 330, 720, 610)))
     Image.composite(v, base, m.filter(ImageFilter.GaussianBlur(8))).save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
 
-arm('N34Z3a', 10, 1.08)
+# arm('N34Z3a', 10, 1.08)   # ersetzt (Patrick 25.11.): Zögern-Bild ist jetzt arm_um_versuch4
 arm_um('N34ZA')
-arm_um('N34Z3b', 'arm_um_versuch4')   # Patrick 25.11.: sieht aus, als zieht er den Arm zurück
+arm_um('N34Z3a', 'arm_um_versuch4')   # Patrick 25.11.: er zieht den Arm zurück, traut sich nicht – Zögern-Bild (Zeitraffer und Rückblende beim Date)

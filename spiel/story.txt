@@ -2015,9 +2015,7 @@ Irgendwann sitzen wir auf dem Boden.
 @warte 3.5
 # V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht
 @bild N34Z3a
-@warte 2
-@bild N34Z3b
-@warte 1.5
+@warte 2.5
 @bild N34Z4 langsam
 @warte 4
 @bild N34v sehrlangsam
