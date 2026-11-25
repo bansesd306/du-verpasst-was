@@ -53,12 +53,13 @@ def arm(code, winkel, skala):
     out.paste(v.transform((W, Hh), Image.AFFINE, coef, resample=Image.BICUBIC), (0, 0), am.transform((W, Hh), Image.AFFINE, coef, resample=Image.BICUBIC))
     out.save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
 
-def arm_um(code):
+def arm_um(code, datei='arm_versuch3'):
     # Vorstellung beim Date: die beiden aus arm_versuch3 (Arm um sie), Rest aus N34Z3
     base = Image.open(H + '/dist/img/N34Z3.webp').convert('RGB'); W, Hh = base.size; k = W / 1344
-    v = Image.open(Q + 'arm_versuch3.jpg').convert('RGB').resize((W, Hh), Image.LANCZOS)
+    v = Image.open(Q + datei + '.jpg').convert('RGB').resize((W, Hh), Image.LANCZOS)
     m = Image.new('L', (W, Hh), 0); m.paste(255, tuple(int(x * k) for x in (440, 330, 720, 610)))
     Image.composite(v, base, m.filter(ImageFilter.GaussianBlur(8))).save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
 
 arm('N34Z3a', 10, 1.08)
 arm_um('N34ZA')
+arm_um('N34Z3b', 'arm_um_versuch4')   # Patrick 25.11.: sieht aus, als zieht er den Arm zurück

@@ -158,6 +158,7 @@ const BILDER = {
   N34Z4: { datei: "img/N34Z4.webp", text: "Wie N34Z3, Party drinnen fast leer, gedimmtes Licht (Gemini, nur Fenster getauscht, Patrick 25.11.)", stimmung: "balkon" },
   N34Z3a: { datei: "img/N34Z3a.webp", text: "Wie N34Z3, er hebt den Arm halb hinter ihren Rücken und traut sich nicht (Arm aus arm_versuch3 hochgedreht, Patrick 25.11.)", stimmung: "balkon" },
   N34ZA: { datei: "img/N34ZA.webp", text: "Wie N34Z3, er hat den Arm um sie gelegt – Vorstellung beim Date (arm_versuch3, Patrick 25.11.)", stimmung: "balkon" },
+  N34Z3b: { datei: "img/N34Z3b.webp", text: "Wie N34Z3a, er zieht den Arm wieder zurück (arm_um_versuch4, Patrick 25.11.)", stimmung: "balkon" },
   N34a1: { datei: "img/N34a1.webp", text: "Balkonboden: drinnen schon weniger Leute (V8.8)", stimmung: "balkon" },
   N34a2: { datei: "img/N34a2.webp", text: "Balkonboden: drinnen fast leer (V8.8)", stimmung: "balkon" },
   N34b: { datei: "img/N34b.webp", text: "Er und Lynn von hinten auf dem Balkonboden, drinnen leer (Fenster-Fassung, V8.8)", stimmung: "balkon" },
