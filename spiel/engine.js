@@ -22,6 +22,7 @@ const Spiel = (() => {
   function lade() { try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; } catch (e) { return {}; } }
   function speichere(d) { try { localStorage.setItem(SPEICHER, JSON.stringify(d)); } catch (e) { } }
   let S = Object.assign({ abz: [], enden: [], entsch: {}, durchgaenge: 0 }, lade());
+  S.enden = (S.enden || []).filter(e => ['Leiser', 'Blaues Licht', 'Montagabend'].includes(e));   // V8.9: alte Namen („Hier oder da“) aus früheren Läufen nicht mitzählen
 
   // ---------------- Zeit ----------------
   const TAGE = ['Freitag', 'Samstag', 'Sonntag', 'Montag'], TAGK = ['Fr', 'Sa', 'So', 'Mo'];
@@ -34,7 +35,13 @@ const Spiel = (() => {
   const zwei = n => String(n).padStart(2, '0');
   function uhrText(m = V.uhr) { m = ((Math.round(m) % 1440) + 1440) % 1440; return zwei(Math.floor(m / 60)) + ':' + zwei(m % 60); }
   function datumText() { return DATUM[Math.max(0, Math.min(3, Math.floor((V.uhr || 0) / 1440)))]; }
-  function zeigeUhr() { uhrEl.textContent = uhrText(); uhrEl.classList.toggle('an', !!V.uhr_zeigen); Handy.aktualisiereZeit(); }
+  function zeigeUhr() {
+    uhrEl.textContent = uhrText();
+    const war = uhrEl.classList.contains('an'), jetzt = !!V.uhr_zeigen;
+    uhrEl.classList.toggle('an', jetzt);
+    if (jetzt && !war) { uhrEl.classList.remove('auftauchen'); void uhrEl.offsetWidth; uhrEl.classList.add('auftauchen'); }   // V8.9: Uhr leuchtet auf, wenn sie wiederkommt
+    Handy.aktualisiereZeit();
+  }
 
   // ---------------- Ausdrücke ----------------
   const RESERV = new Set(['true', 'false', 'null', 'undefined']);
@@ -161,6 +168,7 @@ const Spiel = (() => {
   // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
   // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
   const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
+  let bzzzMs = 0;   // V8.9: Zeitpunkt des letzten Vibrierens (erste Nachricht danach ist sofort da)
   const blickKnopf = $('#handyknopf');
   function blickMoeglich() {
     // V8.5: nur, wenn das Handy griffbereit ist (Skript setzt `handyweit`, wenn es weg/aus ist)
@@ -176,15 +184,16 @@ const Spiel = (() => {
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu(still) { if (!blick.offen) return; blick.offen = false; if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
   B.addEventListener('pointerdown', e => {
     if (!blick.offen || e.target.closest('#handyknopf')) return;
     e.stopPropagation(); e.preventDefault();
-    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung')) {
-      if (Handy.app === 'sperr') { Handy.liste(); Ton.spiele('display_klick'); return; }
+    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V')) {
+      // V8.9 (Patrick 24.11.): Sperrbildschirm – wischen = Meldungen durchscrollen, Tippen auf einen Chat = lesen, sonst = WhatsApp
+      if (Handy.app === 'sperr') { blickDruck = { y: e.clientY, y0: e.clientY, ziel: e.target, zug: false }; return; }
       // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
       if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
       if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
@@ -192,11 +201,22 @@ const Spiel = (() => {
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  let blickDruck = null;
+  B.addEventListener('pointermove', e => { const d = blickDruck; if (!d || !blick.offen) return; e.stopPropagation(); const dy = e.clientY - d.y; d.y = e.clientY; if (Math.abs(e.clientY - d.y0) > 10) d.zug = true; if (d.zug) Handy.sperrScroll(-dy); }, true);
+  B.addEventListener('pointerup', e => {
+    const d = blickDruck; blickDruck = null; if (!d || !blick.offen) return; e.stopPropagation(); if (d.zug) return;
+    const nk = d.ziel && d.ziel.closest && d.ziel.closest('.nk'); const n = nk && Handy.chatVonKarte(nk);
+    if (aktBild && aktBild.stimmung === 'pruefung') { if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } return; }   // vor der Prüfung: nur Sperrbildschirm
+    if (n) { Handy.lesen(n); Ton.spiele('tipp', { vol: .5 }); } else if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } else { Handy.liste(); Ton.spiele('display_klick'); }
+  }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
-  let blickErstmals = true;
+  let blickErstmals = true, blickZahl = -1;
   setInterval(() => {
     const an = blick.offen || blickMoeglich();
     blickKnopf.classList.toggle('aus', !an);
+    // V8.9: Zahl = ungelesene Nachrichten + Meldungen; 0 = grau und still, mehr als vorher = kurz pulsieren
+    const z = Handy.zahl(); const ze = blickKnopf.querySelector('.zahl');
+    if (z !== blickZahl) { ze.textContent = z > 99 ? '99+' : z || ''; blickKnopf.classList.toggle('leer', !z); if (z > blickZahl && !blick.offen) { blickKnopf.classList.remove('puls'); void blickKnopf.offsetWidth; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); } blickZahl = z; }
     if (an && blickErstmals) { blickErstmals = false; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); }
   }, 250);
 
@@ -239,7 +259,8 @@ const Spiel = (() => {
     if (spEl) spEl.classList.add('spricht');
     for (let i = 0; i < teile.length; i++) {
       const t = teile[i];
-      if (t.cue) { if (!ueberspringen) Ton.spiele(t.cue); continue; }
+      // V8.9 (Patrick 24.11.): {schreib} = Stift kratzt, bis der Haken kommt – Schreiben und „Check“ überlappen nicht
+      if (t.cue) { if (t.cue === 'haken') Ton.stoppe('PR3_stift', .05); if (!ueberspringen) { if (t.cue === 'schreib') Ton.spiele('PR3_stift', { merke: true, vol: .8 }); else Ton.spiele(t.cue); } continue; }
       s += t.ch; zeichenNr++;
       if (vtIdx >= 0 && !vtFertig && zeichenNr === vtIdx + ins.vertipp.length) {
         // V8.8 (K): er tippt den Namen, merkt es nach ~0,6 s, löscht „ynn“ und schreibt normal weiter
@@ -336,13 +357,19 @@ const Spiel = (() => {
     // V8.8 (G52): nur Bilder, die das Skript irgendwo nennt (auch im Handy), nicht die ganze Liste
     const roh = document.getElementById('story').textContent;
     Object.keys(BILDER).forEach(k => { const e = eintrag(k); if (e.datei && !reihe.includes(e.datei) && new RegExp('(^|[\\s|])' + k + '($|[\\s|])', 'm').test(roh)) reihe.push(e.datei); });
-    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 30)); };
-    for (let k = 0; k < 3; k++) naechstes();
+    // V8.9: Gesichts-Overlays (blinzeln, sprechen, Mimik) mitladen – sonst poppen sie erst nach dem Bild auf
+    if (typeof OVERLAYS !== 'undefined') Object.keys(OVERLAYS).forEach(k => { const d = 'img/' + k + '.webp'; if (!reihe.includes(d)) reihe.push(d); });
+    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 10)); };
+    for (let k = 0; k < 6; k++) naechstes();
   }
   let bildNr = 0;
   async function zeigeBild(code, modus = '') {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
-    if (e.datei) { const ok = lade(e.datei); await Promise.race([ok, new Promise(r => setTimeout(r, 2500))]); }
+    if (e.datei) {   // V8.9: Bild und seine Gesichts-Overlays zusammen abwarten
+      const ovs = typeof OVERLAYS !== 'undefined' ? Object.keys(OVERLAYS).filter(k => OVERLAYS[k].basis === code).map(k => lade('img/' + k + '.webp')) : [];
+      if (e.fensterLichter) e.fensterLichter.forEach(k => ovs.push(lade('img/' + k + '.webp')));
+      await Promise.race([Promise.all([lade(e.datei), ...ovs]), new Promise(r => setTimeout(r, 4000))]);
+    }
     if (nr !== bildNr) return;   // V8.8 (G63): inzwischen kam ein neueres Bild – dieses nicht mehr zeigen
     PR('bild', code + (modus ? ' ' + modus : ''));
     $('#schwarz').classList.remove('an', 'langsam');
@@ -354,6 +381,8 @@ const Spiel = (() => {
     let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
     if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
+    if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
     if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
@@ -364,7 +393,7 @@ const Spiel = (() => {
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
-    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add('f-dunkel'));
+    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
     const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
@@ -491,8 +520,8 @@ const Spiel = (() => {
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
-      case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
-        const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
+      case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
+        clearTimeout(autoT);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
       case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('schritte', { dauer: .6, vol: .7 }); await warte(.5); break;
@@ -534,18 +563,24 @@ const Spiel = (() => {
       default: console.warn('Effekt?', name);
     }
   }
+  let aufbauEnde = 0;   // V8.9: wann der Woosh-Aufbau (aufbau_shutdown) zu Ende ist – genau dann wird es schwarz
   async function shutdown() {
+    // V8.9 (Patrick 24.11.): erst der ganze Woosh mit steigendem Piepen, am Ende schwarz und Stille (kein Piepen mehr danach)
+    if (aufbauEnde && !schnell) { console.log('[shutdown] Rest Aufbau s', ((aufbauEnde - performance.now()) / 1000).toFixed(2)); const rest = (aufbauEnde - performance.now()) / 1000; if (rest > 0 && rest < 10) await new Promise(r => setTimeout(r, rest * 1000)); }
+    const mitPiep = !aufbauEnde; aufbauEnde = 0;
     Handy.zu(); party(false); Ton.stille(); Ton.sperre(true); $('#tunnel').style.opacity = 0;
-    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); Ton.spiele('tinnitus');
+    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); if (mitPiep) Ton.spiele('tinnitus');
   }
   async function fensterAus(ziel) {
-    const ws = [...document.querySelectorAll('#fenster .w')]; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
+    // V8.9 (Patrick 24.11.): die Fenster gehen genau an ihren Stellen aus und bleiben aus (auch beim Szenenwechsel kein Aufhellen)
+    const ebene = aktBild && aktBild.el; const ws = ebene ? [...ebene.querySelectorAll('img.fw:not(.aus)')] : []; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
     await uhrLaufen(ziel, () => {
       const anteil = (V.uhr - start) / gesamt; const soll = Math.floor(anteil * (ws.length + 1));
-      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); }
-      if (anteil > .85) welt.style.filter = 'brightness(.5)';
+      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+      if (anteil > .85 && ebene && !ebene.style.filter) { ebene.style.transition += ', filter 1.5s ease'; ebene.style.filter = 'brightness(.62)'; }
     });
-    ws.forEach(w => w.classList.add('aus')); await warte(1.2); welt.style.filter = '';
+    while (n < ws.length) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+    await warte(1.2);
   }
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
@@ -589,13 +624,18 @@ const Spiel = (() => {
   let auMin = null;
   async function analoguhr(arg) {
     const el = $('#analoguhr');
-    if (arg === 'aus') { el.classList.remove('an'); auMin = null; return; }
+    // V8.9 (Philip 24.11.): „ecke“ = kleine warme Uhr links oben (Balkon), „aus langsam“ = blendet langsam aus (4 s, ohne zu warten), „sanft“ = kommt weich wieder
+    if (/^aus\b/.test(arg)) { const ecke = el.classList.contains('ecke'); if (/langsam/.test(arg)) { el.classList.add('bleicht'); setTimeout(() => { el.classList.remove('bleicht'); if (ecke) el.classList.remove('ecke'); }, 4200); } else if (ecke) setTimeout(() => el.classList.remove('ecke'), 1100); el.classList.remove('an', 'sanft'); auMin = null; return; }
+    const ecke = /\becke\b/.test(arg), sanft = /\bsanft\b/.test(arg), ploetzlich = /\bploetzlich\b/.test(arg); arg = arg.replace(/\s+(ecke|sanft|ploetzlich)\b/g, '').trim();
+    if (ecke) el.classList.add('ecke'); if (sanft) el.classList.add('sanft');
+    // „ploetzlich“ = Uhr ist auf einen Schlag da (kurzer warmer Blitz + Klick), Philip 24.11.
+    if (ploetzlich) { el.classList.remove('ploppt'); void el.offsetWidth; el.classList.add('ploppt'); Ton.spiele('uhr', { dauer: .3, vol: 1 }); setTimeout(() => el.classList.remove('ploppt'), 1200); }
     const ziel = zeit(arg); V.uhr = ziel; zeigeUhr();
     const tagMin = ziel % 1440; let gesamt = auMin == null ? tagMin : auMin + ((tagMin - auMin % 1440) + 1440) % 1440;
     const setz = (m, dauer) => { el.querySelectorAll('.zg').forEach(z => z.style.transition = `transform ${dauer}s cubic-bezier(.45,0,.2,1)`); el.querySelector('.zm').style.transform = `rotate(${m * 6}deg)`; el.querySelector('.zh').style.transform = `rotate(${m * .5}deg)`; el.querySelector('.ad').textContent = uhrText(); };
     zeigeTextbox(false);
-    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(.6); }
-    else { Ton.spiele('uhr', { dauer: 2.2, vol: .8 }); setz(gesamt, 2.2); await warte(2.4); }
+    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(el.classList.contains('sanft') ? 1.6 : ploetzlich ? 1 : .6); }
+    else { const ek = el.classList.contains('ecke'); Ton.spiele('uhr', { dauer: 2.2, vol: ek ? .4 : .8 }); setz(gesamt, 2.2); await warte(2.4); }
     auMin = gesamt;
   }
 
@@ -659,7 +699,9 @@ const Spiel = (() => {
     if (schnell) vz += 6.2 + (MIA_BEATS[MIA_BEATS.length - 1] - MIA_BEATS[0]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
     const schritte = []; let i = 0, f = 0;
-    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); schritte.push([MIA_BEATS[i], folge[f++ % folge.length]]); i += doppel ? 2 : 1; }
+    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
+        const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
+        schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); f++; } i += doppel ? 2 : 1; }
     const weiss = $('#weiss'); const strobo = $('#strobo');
     for (const [zeit, code] of schritte) {
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
@@ -668,7 +710,7 @@ const Spiel = (() => {
       const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
-      welt.classList.toggle('spiegel', Math.random() < .3 && !code.startsWith('MK'));
+      welt.classList.remove('spiegel');   // V9.0: Mia nicht mehr spiegeln (wirkte wie Doppelbild)
       if (Math.random() < .6) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
       // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze
       if (!schnell && Math.random() < .42) { const n = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= n; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
@@ -685,10 +727,28 @@ const Spiel = (() => {
   let aktCodeNeu = '';
   function umgebung(e) {
     const st = (e && e.stimmung) || '';
+    B.classList.toggle('nachtlicht', ['nacht', 'zimmer', 'balkon', 'strasse', 'flur', 'party', 'bad'].includes(st));   // V8.9: Handyschein im Dunkeln stärker
     pModus = st === 'strasse' ? 'regen' : st === 'pruefung' ? 'staub' : st === 'balkon' ? 'atem' : (e && /^(N35|MM|MK|MIA_)/.test(e.code || aktCodeNeu)) ? 'konfetti' : '';
     if (pModus && !pLauf) { pLauf = true; requestAnimationFrame(pSchritt); }
-    clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt');
-    if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); autoT = setTimeout(f, 22000 + Math.random() * 26000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
+    clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt'); al.querySelectorAll('i').forEach(x => x.getAnimations().forEach(a => a.cancel()));
+    if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; lichtEreignis(aktBild.stimmung); autoT = setTimeout(f, 20000 + Math.random() * 30000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
+  }
+  // V8.9 (Patrick 24.11., Animation 8): Licht von draußen ist jedes Mal anders – Autos mit warmem oder kaltem Licht, mal schnell, mal langsam,
+  // von links oder rechts, manchmal zwei hintereinander; nachts zieht selten eine Wolke vor den Mond (Zimmer wird kurz minimal dunkler).
+  function autoFahrt(verz = 0) {
+    const al = $('#autolicht'); const i = document.createElement('i'); al.appendChild(i);
+    const r = Math.random, links = r() < .55, dauer = 2600 + r() * 3200, kalt = r() < .4, breite = 18 + r() * 22, schraeg = (links ? -1 : 1) * (12 + r() * 26);
+    const hell = .07 + r() * .07, oben = -25 + r() * 20, hoehe = 70 + r() * 40;
+    const farbe = kalt ? `rgba(225,235,255,${hell})` : `rgba(255,232,196,${hell})`;
+    Object.assign(i.style, { top: oben + '%', height: hoehe + '%', width: breite + '%', background: `linear-gradient(${links ? 100 : 80}deg,transparent,${farbe} 45%,${farbe} 55%,transparent)`, transform: `skewX(${schraeg}deg)`, opacity: 0, maskImage: 'linear-gradient(to bottom,transparent,#000 30%,#000 62%,transparent)', webkitMaskImage: 'linear-gradient(to bottom,transparent,#000 30%,#000 62%,transparent)' });
+    const a = links ? '-45%' : '125%', b = links ? '125%' : '-45%';
+    const ani = i.animate([{ left: a, opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: .9, offset: .5 }, { opacity: 1, offset: .82 }, { left: b, opacity: 0 }], { duration: dauer, delay: verz, easing: r() < .5 ? 'ease-in-out' : 'linear' });
+    ani.onfinish = ani.oncancel = () => i.remove();
+  }
+  function lichtEreignis(st) {
+    const r = Math.random();
+    if (st === 'nacht' && r < .35) { welt.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.9)', offset: .35 }, { filter: 'brightness(.92)', offset: .65 }, { filter: 'brightness(1)' }], { duration: 7000 + Math.random() * 4000, easing: 'ease-in-out' }); return; }
+    // Autolicht automatisch aus (Patrick 24.11.: ergibt im Bild keinen Sinn)
   }
   function pSchritt() {
     const W = 960, H = 540; pctx.clearRect(0, 0, W, H);
@@ -785,7 +845,14 @@ const Spiel = (() => {
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
       case 'montage': await montage(); break;
-      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
+      case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
+        // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
+        const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');
+        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; if (aufBlatt) { st.classList.add('blatt'); kl.appendChild(st); } else B.appendChild(st);
+        void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
+        await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
+      }
+      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
       case 'zuruf': { Ton.spiele('jubel', { vol: .9 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); await text({ t: 'text', text: a, sprecher: 'Alle', schrei: true, auto: true, stil: '' }); await warte(.5); break; }
@@ -807,10 +874,13 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; m = x.match(/^ein(\d+(?:\.\d+)?)$/); if (m) o.einblenden = +m[1]; });   // V8.9: ein4 = 4 s einblenden
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
+        if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
+        if (n === 'wecker' || n === 'PR3_stift') o.merke = true;   // V8.9: der Haken beendet den Stift   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
+        if (n === 'aufbau_shutdown') aufbauEnde = performance.now() + (d || 8) * 1000;
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
         break;
@@ -831,14 +901,15 @@ const Spiel = (() => {
         b.classList.add('an'); await warte(.5); break;
       }
       case 'anruf_unbemerkt': { const m = $('#anrufmini'); if (a === 'aus') { m.classList.remove('an'); Ton.loop('klingel', false); Ton.stoppe('anruf'); } else { m.innerHTML = `<span style="font-size:40px">✆</span><span>${a}<br><small style="opacity:.7;font-size:24px">Eingehender Anruf</small></span>`; m.classList.add('an'); Ton.spiele('anruf', { dumpf: true, leise: true, dauer: 5.5, merke: true }); } break; }
-      case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); effekt('handylicht', 'kurz'); kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
+      case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); if (aktBild && (aktBild.handy || aktBild.fernLicht) && !Handy.offen) effekt('handylicht', 'kurz');   /* V8.9: Leuchten nur, wenn das Handy im Bild liegt */ kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
       case 'zettel_aus': break;
       // ---- Handy ----
       case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
-      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!')); break; }
+      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 9000; bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
       case 'ich': await Handy.ich(a); await warte(.2); break;
+      case 'tippeweg': zeigeTextbox(false); await Handy.tippeUndLoesche(a); await warte(.4); break;
       case 'tippe': zeigeTextbox(false); await Handy.rein(); await Handy.tippeUndSende(a); await warte(.5); break;
       case 'schreibt': await Handy.schreibt(teile[0], +teile[1] || 2); break;
       case 'haken': Handy.haken(a); break;
@@ -867,6 +938,8 @@ const Spiel = (() => {
   }
   async function handyBefehl(t, a) {
     const was = t[0];
+    // V8.9 (Patrick 24.11.): stille, unwichtige Meldung (Kleinanzeigen, Mail …) – kein Vibrieren, zählt nicht als „Neues“
+    if (was === 'meldung') { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); if (blick.offen) Handy.sperrUngelesen(); return; }
     if (blick.offen) blickZu(true);
     if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
@@ -883,6 +956,8 @@ const Spiel = (() => {
       case 'liveloeschen': await Handy.liveLoeschen(); break;
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
+      case 'meldung': { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); break; }   // V8.9: stille Meldung, zählt am Handy-Knopf
+      case 'flut': await Handy.flut(+t[1] || 100); break;
       case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
@@ -916,7 +991,11 @@ const Spiel = (() => {
       case 'pdfweiter': await Handy.pdfWeiter(t[1]); break;
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
+      case 'wecker': zeigeTextbox(false); Handy.wecker(); await warte(.3); break;
+      case 'schlummern': await Handy.weckerDruck('schlummern'); break;
+      case 'weckeraus': await Handy.weckerDruck('stopp'); break;
       case 'laut': Handy.laut(); break;
+      case 'herz': await Handy.storyHerz(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
       case 'wegwischen': await Handy.wegwischen(); break;
       default: console.warn('Handy?', was);
@@ -949,7 +1028,7 @@ const Spiel = (() => {
       await warte(4); await tipp(); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
-    zeigeTextbox(false); Ton.outro();
+    zeigeTextbox(false); Ton.outro(); Ton.ausklingen(5);
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
     { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
     await warte(4); await tipp();
@@ -996,7 +1075,7 @@ const Spiel = (() => {
   function neustart(label, vorab) {
     gen++; if (tippWarter) tippWarter(); tippt = false; Rahmen.weg();
     document.querySelectorAll('.schirm').forEach(s => s.classList.remove('an'));
-    Ton.outroAus(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
+    Ton.outroAus(); Ton.klangZurueck && Ton.klangZurueck(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
     if (label) { // Einstellungen am Anfang trotzdem ausführen
       const ende = labels['PROLOG']; prog.slice(0, ende).forEach(p => { if (p.t === 'cmd' && ['setze', 'text', 'abzeichenliste', 'gruppe', 'verlauf'].includes(p.name)) befehl(p); });
       springe(label);
@@ -1007,7 +1086,7 @@ const Spiel = (() => {
 
   // ---------------- Ende ----------------
   async function endeSpiel() {
-    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Leiser' : p <= V.LEISER_BIS ? 'Leiser' : p <= V.HIER_ODER_DA_BIS ? 'Hier oder da' : 'Blaues Licht';   // V8.8 (G60)
+    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Montagabend' : p <= V.LEISER_BIS ? 'Leiser' : 'Blaues Licht';   // V8.9 (Storycheck 2B, E1): ein Name pro Schluss – Pizza / Jonas schreibt / Lynn
     kapitelZeiten.push({ n: 'Ende', t: performance.now() });
     pfad.push(ende); abzeichen(ende); PR('ende', ende + ' · Punkte ' + p + ' · Weg ' + pfad.join(' → ')); if (!S.enden.includes(ende)) S.enden.push(ende); speichere(S);
     abzQueue = [];   // die neuen Abzeichen zeigt der Rahmen selbst (gestempelt)
@@ -1136,6 +1215,11 @@ const Spiel = (() => {
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
       TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
+      // V8.9 (Patrick 24.11.): was man auf genau diesem Weg verpasst hat (Endbildschirm)
+      verpasst() { if (!V.typ) return []; const L = [], party = V.typ !== 'zuhause';
+        if (!party) L.push('Lenas Geburtstag'); else if (!V.gesungen) L.push('das Lied');
+        L.push('den Feuerlöscher'); if (party && !V.tanz) L.push('Mias Lied');
+        if (V.typ !== 'afterparty') L.push('Tims Afterparty'); if (V.lynn !== 'gm') L.push('Lynn'); return L; },
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.filter(o => o.ziel !== '!wackeln').length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
@@ -1146,12 +1230,12 @@ const Spiel = (() => {
     });
     grundzustand();
     Rahmen.start(false);
-    setTimeout(vorladenAlle, 800);
+    setTimeout(vorladenAlle, 200);
   }
 
   return {
     init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
+    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };
 })();

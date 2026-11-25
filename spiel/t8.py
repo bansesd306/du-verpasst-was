@@ -1,6 +1,6 @@
 import asyncio, sys, json, random
 from playwright.async_api import async_playwright
-VERBOTEN=['Umdrehen','„Doch bleiben.“','Doch bleiben.','Löschen.']
+VERBOTEN=['Umdrehen','Umdrehen.','„Umdrehen.“','„Doch bleiben.“','Doch bleiben.','Löschen.']
 SZ={
  'A1_flow_zuhause':['Nee, ich glaub ich bin raus. Muss echt noch lernen 😕','Senden.','Nein.','Weiter.','Weiter.','Lynn schreiben.','Löschen.','Lynn schreiben.','Senden.','Schlafen.','Nachschauen.','was war mit dem feuerlöscher?? 😂','Anschauen.','Phänomenal.','Senden.','Liegen lassen.'],
  'A2_flow_handyweg':['Nee, ich glaub ich bin raus. Muss echt noch lernen 😕','Senden.','Nein.','Weiter.','Weiter.','Handy weg.','Liegen bleiben.','Nichts schreiben.','Nicht.','Scheiße.','Senden.','Liegen lassen.'],
