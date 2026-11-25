@@ -24,3 +24,13 @@ def zeitraffer(code, datei, box):
 
 zeitraffer('N34Z2', 'zeit_2_lacht', (0.35, 0.5, 0.85, 1.0))
 zeitraffer('N34Z3', 'zeit_3_gelaender', (0.28, 0.42, 0.86, 1.0))
+
+def fenster(code, datei, basis_code, box):
+    # V9.0: nur das Partyfenster tauschen (Party leert sich), alles andere bleibt aus dem vorigen Zeitraffer-Bild
+    basis = Image.open(H + '/dist/img/' + basis_code + '.webp').convert('RGB'); neu = Image.open(Q + datei + '.jpg').convert('RGB').resize(basis.size, Image.LANCZOS)
+    m = np.zeros((basis.height, basis.width), 'uint8'); x0, y0, x1, y1 = [int(v * (basis.width if i % 2 == 0 else basis.height)) for i, v in enumerate(box)]
+    m[y0:y1, x0:x1] = 255
+    maske = Image.fromarray(m).filter(ImageFilter.GaussianBlur(10))   # nur die Maskenkante weich
+    Image.composite(neu, basis, maske).save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
+
+fenster('N34Z4', 'zeit_4_leer', 'N34Z3', (0.57, 0.0, 0.91, 0.66))
