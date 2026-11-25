@@ -4001,21 +4001,23 @@ Lynn: „Auf dem Balkon.“
 Lynn: „Denkst du, ich hab’s nicht gemerkt?“
 … !2.5
 Lynn: „Ich sag doch.“
-… !2
-@bild N34Z3 langsam
+… !1.5
+@schwarz langsam
 Lynn: „Feigling.“
+… !2
+@effekt traum
+@bild N34Z3a langsam
 … !2.5
 Lynn: „Und …“
-… !2
-@schwarz langsam
+… !1.5
 Lynn: „Traust du dich nächstes Mal?“
-… !1.5
-Ich: „Ja.“
-… !1.5
+… !2.5
 @effekt traum aus
 @effekt vorstellung
 @bild N34ZA sehrlangsam
-@warte 4
+@warte 3.5
+Ich: „Ja.“
+@warte 3
 @effekt vorstellung aus weich
 @schwarz langsam
 @bild LD1 schnitt
