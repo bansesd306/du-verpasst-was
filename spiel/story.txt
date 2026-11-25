@@ -2012,7 +2012,10 @@ Irgendwann sitzen wir auf dem Boden.
 @leer
 @warte 4.5
 @bild N34Z3 langsam
-@warte 4.5
+@warte 3.5
+# V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht
+@bild N34Z3a
+@warte 2.5
 @bild N34Z4 langsam
 @warte 4
 @bild N34v sehrlangsam
@@ -3982,6 +3985,24 @@ Ich: „Und?“
 Lynn: „Hab’s wieder gelöscht.“
 @gesicht aus
 Ich: „… Kenn ich.“
+# V9.0 (Patrick 25.11.): Rückblende aufs Zögern auf dem Balkon, dann seine Vorstellung
+Lynn: „Und Freitag. Auf dem Balkon.“
+@bild N34Z3a traum
+@musik party fern
+Lynn: „Ich hab’s gemerkt.“
+… !1.5
+Lynn: „Feigling.“
+@musik aus
+@effekt traum aus
+@bild LD1 schnitt
+@gesicht LD2
+Lynn: „Traust du dich nächstes Mal?“
+@gesicht aus
+@bild N34ZA traum
+Ich: „Ja.“
+@effekt traum aus weich
+@bild LD1 schnitt
+… !1.5
 @ton bzzz
 @banner WhatsApp | Jonas | bereit für heute abend? 😏
 @warte 1.8

@@ -34,3 +34,31 @@ def fenster(code, datei, basis_code, box):
     Image.composite(neu, basis, maske).save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
 
 fenster('N34Z4', 'zeit_4_leer', 'N34Z3', (0.57, 0.0, 0.91, 0.66))
+
+def arm(code, winkel, skala):
+    # V9.0 (Patrick 25.11.): er hebt den Arm halb hinter ihren Rücken und traut sich nicht. Gemini schaffte die schwebende Hand nicht,
+    # deshalb: Arm aus arm_versuch3 (Arm um sie) ausschneiden und um seine Schulter nach oben drehen, Rest aus N34Z3.
+    import math
+    from PIL import ImageDraw
+    base = Image.open(H + '/dist/img/N34Z3.webp').convert('RGB'); W, Hh = base.size; k = W / 1344
+    v = Image.open(Q + 'arm_versuch3.jpg').convert('RGB').resize((W, Hh), Image.LANCZOS)
+    S = lambda *p: [int(x * k) for x in p]
+    out = base.copy()
+    m = Image.new('L', (W, Hh), 0); ImageDraw.Draw(m).rectangle(S(455, 340, 568, 600), fill=255)   # sein Körper ohne herabhängenden Arm
+    out.paste(v, (0, 0), m.filter(ImageFilter.GaussianBlur(4)))
+    poly = [(552,423),(580,430),(605,438),(630,436),(648,430),(655,418),(662,411),(672,413),(681,421),(682,432),(672,441),(665,446),(650,455),(630,466),(615,479),(595,483),(575,479),(552,472)]
+    am = Image.new('L', (W, Hh), 0); ImageDraw.Draw(am).polygon([tuple(S(*p)) for p in poly], fill=255); am = am.filter(ImageFilter.GaussianBlur(1.5))
+    px, py = S(560, 448); a = math.radians(winkel); c, s = math.cos(a) / skala, math.sin(a) / skala
+    coef = (c, -s, px - c * px + s * py, s, c, py - s * px - c * py)
+    out.paste(v.transform((W, Hh), Image.AFFINE, coef, resample=Image.BICUBIC), (0, 0), am.transform((W, Hh), Image.AFFINE, coef, resample=Image.BICUBIC))
+    out.save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
+
+def arm_um(code):
+    # Vorstellung beim Date: die beiden aus arm_versuch3 (Arm um sie), Rest aus N34Z3
+    base = Image.open(H + '/dist/img/N34Z3.webp').convert('RGB'); W, Hh = base.size; k = W / 1344
+    v = Image.open(Q + 'arm_versuch3.jpg').convert('RGB').resize((W, Hh), Image.LANCZOS)
+    m = Image.new('L', (W, Hh), 0); m.paste(255, tuple(int(x * k) for x in (440, 330, 720, 610)))
+    Image.composite(v, base, m.filter(ImageFilter.GaussianBlur(8))).save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
+
+arm('N34Z3a', 10, 1.08)
+arm_um('N34ZA')
