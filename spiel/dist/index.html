@@ -79,6 +79,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #traumglow{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,rgba(255,230,190,.28) 0,rgba(255,210,150,.12) 45%,rgba(255,240,220,.55) 100%);mix-blend-mode:screen}
 #traumrand{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,transparent 40%,rgba(255,232,200,.22) 66%,rgba(255,238,215,.5) 88%,rgba(255,244,228,.66) 100%)}
 .traum #traumglow,.traum #traumrand{opacity:1}
+.vorstellung #traumrand{opacity:1;mix-blend-mode:screen;background:radial-gradient(ellipse at 50% 48%,transparent 45%,rgba(255,240,215,.35) 62%,rgba(255,246,230,.85) 80%,#fffaf2 96%)}
+.vorstellung #welt{filter:brightness(.92) saturate(1.05)}
+.vorstellung #vignette{opacity:0;transition:opacity 1.6s}
 .traum #welt{filter:sepia(.35) saturate(1.25) brightness(1.1) blur(.6px)}
 .einfrieren #welt{filter:grayscale(.75) brightness(.78) contrast(.95)!important}
 .handyoffen.einfrieren #welt{filter:grayscale(.75) brightness(.55) blur(2.5px)!important}
@@ -5385,9 +5388,10 @@ Lynn: „Feigling.“
 @gesicht LD2
 Lynn: „Traust du dich nächstes Mal?“
 @gesicht aus
-@bild N34ZA traum
+@effekt vorstellung
+@bild N34ZA
 Ich: „Ja.“
-@effekt traum aus weich
+@effekt vorstellung aus weich
 @bild LD1 schnitt
 … !1.5
 @ton bzzz
@@ -7913,6 +7917,8 @@ const Spiel = (() => {
         else { B.classList.add('einfrieren'); Ton.lautMaster(.25); Ton.loop('rauschen', true); }
         break;
       case 'traum': if (arg.startsWith('aus')) { B.classList.remove('traum'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('traum'); Ton.spiele('flashback'); } break;
+      // V9.0 (Patrick 25.11.): Vorstellung – Bild bleibt dunkel (Abendstimmung), nur der Rand leuchtet sehr hell
+      case 'vorstellung': if (arg.startsWith('aus')) { B.classList.remove('vorstellung'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('vorstellung'); Ton.spiele('flashback'); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße

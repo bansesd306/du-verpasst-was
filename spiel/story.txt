@@ -3998,9 +3998,10 @@ Lynn: „Feigling.“
 @gesicht LD2
 Lynn: „Traust du dich nächstes Mal?“
 @gesicht aus
-@bild N34ZA traum
+@effekt vorstellung
+@bild N34ZA
 Ich: „Ja.“
-@effekt traum aus weich
+@effekt vorstellung aus weich
 @bild LD1 schnitt
 … !1.5
 @ton bzzz

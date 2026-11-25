@@ -519,6 +519,8 @@ const Spiel = (() => {
         else { B.classList.add('einfrieren'); Ton.lautMaster(.25); Ton.loop('rauschen', true); }
         break;
       case 'traum': if (arg.startsWith('aus')) { B.classList.remove('traum'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('traum'); Ton.spiele('flashback'); } break;
+      // V9.0 (Patrick 25.11.): Vorstellung – Bild bleibt dunkel (Abendstimmung), nur der Rand leuchtet sehr hell
+      case 'vorstellung': if (arg.startsWith('aus')) { B.classList.remove('vorstellung'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('vorstellung'); Ton.spiele('flashback'); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
