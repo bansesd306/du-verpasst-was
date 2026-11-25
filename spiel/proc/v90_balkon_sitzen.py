@@ -61,5 +61,5 @@ def arm_um(code, datei='arm_versuch3'):
     Image.composite(v, base, m.filter(ImageFilter.GaussianBlur(8))).save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'fertig')
 
 # arm('N34Z3a', 10, 1.08)   # ersetzt (Patrick 25.11.): Zögern-Bild ist jetzt arm_um_versuch4
-# arm_um('N34ZA')   # ersetzt: Patrick nutzt jetzt das ganze Gemini-Bild arm_um_voll
+arm_um('N34ZA')   # Vorstellung: Hand auf ihrer Schulter, sie lehnt noch nicht (arm_versuch3) – klarer Schritt zu N34ZB
 arm_um('N34Z3a', 'arm_um_versuch4')   # Patrick 25.11.: er zieht den Arm zurück, traut sich nicht – Zögern-Bild (Zeitraffer und Rückblende beim Date)
