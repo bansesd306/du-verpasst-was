@@ -206,9 +206,11 @@ Zehn Minuten Pause. Hab ich mir verdient.
 @kapitel Kapitel 1
 @uhr 21:07
 @bild N02
-@handy sperr
 Das war vor einer Stunde.
+# Patrick 25.11. (Flagge): er schaut nicht aufs Handy – erst vibriert es, dann nimmt er es
 @ton bzzz
+@warte 1.2
+@handy sperr
 @benachrichtigung WhatsApp | Jonas | ey, lena feiert doch heute!! 🎉
 Bzzz.
 @effekt einfrieren
@@ -251,6 +253,7 @@ Lynn.
 @schwarz langsam
 @musik aus
 @warte 1.8
+== SEMINAR_FLASHBACK
 @bild N38a traum
 @raum tag
 @loop seminar an
@@ -259,8 +262,7 @@ Lynn.
 ~ Wieder perfekt vorbereitet.
 ~ Gesprächsführung. Ausgerechnet.
 … !1.5
-@bild N38c gesicht
-… !1.5
+# Patrick 25.11. (Flagge): N38c war zu nah – Lynn weiter weg, schaut zu ihm (N38b)
 @bild N38b gesicht
 @gesicht N38bl
 @ton lynn_lacht1 leise
@@ -275,6 +277,11 @@ Lynn: „Behalt ihn.“ !2
 Die Frau muss wirklich viel von mir halten.
 … Der hat sogar einen Laserpointer.
 # V8.9: Laserpointer-Flashback (Lynn ist frech, nicht nur lieb)
+# Patrick 25.11.: Gesichter immer Schritt für Schritt: lachend (LP2) → leichtes Lächeln (LP11) → neutral (LP3) → Laser
+@bild LP2 gesicht
+@warte 1.4
+@bild LP11 gesicht
+@warte 1.4
 @bild LP3 gesicht
 @warte 1
 @ton display_klick
@@ -285,7 +292,7 @@ Die Frau muss wirklich viel von mir halten.
 @bild LP7 gesicht
 Lynn: „Pass auf. Gleich isser wieder weg.“
 Ich: „Schenkung ist Schenkung.“
-@bild LP4 gesicht
+# Patrick 25.11.: LP4 hier raus (Laser ist noch an, LP7 bleibt)
 Lynn: „Spar dir deine Jura-Scheiße.“
 @bild LP8 ruck
 @ton stift leise
@@ -293,14 +300,12 @@ Lynn: „Spar dir deine Jura-Scheiße.“
 @bild LP9 schnitt
 … !2
 Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
-# V8.9 (Patrick 24.11.): harter Schnitt statt Überblenden – LP10 ist näher dran, beim Überblenden sah der Wechsel komisch aus
+# Patrick 25.11.: Ende ohne Lachen – Laser aus, sie bleibt genervt (LP4), dann neutral (LP3), zuletzt leichtes Lächeln (LP11). LP10 passt nicht hierher.
 @bild LP4 gesicht
-@warte 1.1
-@bild LP10 schnitt
-… !1.5
-@bild LP2 schnitt
-… !1.5
+@warte 2.2
 @bild LP3 langsam
+@warte 1.6
+@bild LP11 langsam
 … !2
 @loop seminar aus
 @effekt traum aus weich
@@ -2106,7 +2111,8 @@ Drinnen fegt Lena schon Konfetti zusammen.
 @loop wind an
 Zum Abschied umarmt sie mich.
 @leer
-@ton umarmung
+# Patrick 25.11. (Flagge): „umarmung“ klang nach Schulterklopfen unter Freunden – hier nur leises Stoffrascheln
+@ton decke2 leise
 @warte 4.5
 @loop wind aus
 @setze lynn = "gm"
@@ -2485,7 +2491,7 @@ Hm.
 @wenn !treppe
   @setze treppe
   @bild TREPPE schnitt
-  @ton treppe
+  @ton treppe 4s
   … !2
   @bild HAUS langsam
   … !1.5
