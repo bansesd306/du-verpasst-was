@@ -6,7 +6,7 @@ const Ton = (() => {
   let ctx = null, master, sfx, musikBus, musikFilter, musikGain, loopsBus;
   const P = {};           // Name -> AudioBuffer
   const R = {};           // rückwärts
-  const loops = {};
+  const loops = {}, loopGain = {};
   let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false, outroNr = 0;
 
   let analyser = null, fftDaten = null, pegelSchnitt = 0; const gemerkt = {}; let introSoll = false;
@@ -85,6 +85,8 @@ const Ton = (() => {
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
     regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
     oben: [['M1_party', { vol: .5, lp: 160 }]],
+    bass_fern: [['M1_party', { vol: .16, lp: 110 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
+    bass_leiser: [['M1_party', { vol: .09, lp: 95 }]],   // ab ca. 23:30 noch leiser
     halle: [['halle', { vol: .75 }]],
     schritte: [['schritte_lauf', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
@@ -95,12 +97,14 @@ const Ton = (() => {
     lampe: 'lampe', rauschen: 'rauschen',
   };
   const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
+  let ausklingNr = 0;
   function loop(name, an) {
     if (!ctx) return;
     if (loops[name]) { loops[name](); delete loops[name]; }
     if (!an || gesperrt) return;
     const g = ctx.createGain(); g.connect(loopsBus); g.gain.setValueAtTime(0, now()); g.gain.linearRampToValueAtTime(1, now() + .4);
     const def = LOOPS[name]; if (!def) return;
+    loopGain[name] = g;
     let stops = [];
     if (def === 'pruefung') {
       const r = quelle('raum_tag', g, { loop: true, vol: .35 }); if (r) stops.push(() => r.stop());
@@ -131,7 +135,8 @@ const Ton = (() => {
     musikStopp(true);
     const qs = [];
     if (welche === 'party') { const a = quelle('M1_party', musikBus, { loop: true }); if (a) qs.push(a); [['gemurmel', .62], ['gemurmel2', .3], ['frauen', .34]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); if (!a) lade('M1_party').then(() => { if (musik && musik.art === 'party' && !musik.qs.length) { const q = quelle('M1_party', musikBus, { loop: true }); q && musik.qs.push(q); } }); }
-    if (welche === 'spaet') { const a = quelle('M3_spaet', musikBus, { loop: true, vol: 1.4 }); if (a) qs.push(a); }
+    if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
+      if (a) qs.push(a); }
     if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
     if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
@@ -178,9 +183,11 @@ const Ton = (() => {
       if (q && o.merke) gemerkt[name] = q;
       return q ? q.laenge : 0;
     },
-    stoppe(name) { const q = gemerkt[name]; if (q) { q.stop(.2); delete gemerkt[name]; }
+    stoppe(name, weich = .2) { const q = gemerkt[name]; if (q) { q.stop(weich); delete gemerkt[name]; }
     },
     loop,
+    // Storycheck 3 (Patrick 24.11.): laufende Schleife weich lauter/leiser (1 = normal), z. B. Regen in der Sonntagspause minimal leiser
+    loopLaut(name, v, sek = 1.5) { const g = loopGain[name]; if (!ctx || !g || !loops[name]) return; try { g.gain.cancelScheduledValues(now()); g.gain.setValueAtTime(g.gain.value, now()); g.gain.linearRampToValueAtTime(v, now() + sek); } catch (e) { } },
     musik(art, opt) {
       if (!ctx) return;
       if (art === 'aus') { liedStopp(); return musikStopp(false); }
@@ -204,6 +211,13 @@ const Ton = (() => {
     },
     stille() { if (!ctx) return; Object.keys(loops).forEach(k => loop(k, false)); musikStopp(true); liedStopp(); musikGain.gain.setValueAtTime(0, now()); },
     sperre(an) { gesperrt = an; if (an && ctx) this.stille(); },
+    klangZurueck() { if (!ctx) return; ausklingNr++; const t = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(1, t); }); },
+    // V8.9 (Patrick 24.11.): am Ende Raumton, Vögel & Co. langsam ausblenden, bis alles weg ist (Musik bleibt Sache von outro/outroAus)
+    ausklingen(sek = 5) {
+      if (!ctx) return; const t = now(); const nr = ++ausklingNr;
+      [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0.0001, t + sek); });
+      setTimeout(() => { if (nr !== ausklingNr) return; Object.keys(loops).forEach(k => loop(k, false)); setTimeout(() => { if (nr !== ausklingNr) return; const t2 = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t2); b.gain.setValueAtTime(1, t2); }); }, 2500); }, sek * 1000 + 100);
+    },
     lautMaster(v, zeit = .3) { if (ctx) master.gain.setTargetAtTime(v, now(), zeit); },
     vibriere,
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
@@ -224,7 +238,7 @@ const Ton = (() => {
     tippLauf(ab, dauer) { if (!ctx || gesperrt || !P.tipplauf) return null; return quelle('tipplauf', sfx, { ab, dauer }); },
     get anschlaege() { return (TOENE.tipplauf && TOENE.tipplauf.anschlaege) || []; },
     outro(welche) {
-      if (!ctx) return; musikStopp(true); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
+      if (!ctx) return; musikStopp(true); liedStopp(); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
       const k = welche === 'warm' ? 'ende_warm' : 'Outro'; const nr = ++outroNr;
       const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
       if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten

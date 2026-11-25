@@ -4,7 +4,7 @@ from playwright.async_api import async_playwright
 V=json.loads(sys.argv[1]); PRE=sys.argv[2]
 async def main():
     async with async_playwright() as p:
-        b=await p.chromium.launch(executable_path='/usr/bin/google-chrome')
+        b=await p.chromium.launch(executable_path='/opt/pw-browsers/chromium')
         pg=await b.new_page(viewport={'width':1280,'height':720}); errs=[]
         pg.on('pageerror', lambda e: errs.append(str(e)))
         await pg.goto('http://localhost:8765/index.html'); await pg.wait_for_timeout(500)

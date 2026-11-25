@@ -30,11 +30,12 @@
 # =====================================================================
 
 # ---------------- Einstellungen (vorläufig, Philip entscheidet) ----------------
-@setze LEISER_BIS = 2
+@setze LEISER_BIS = 3
 @setze HIER_ODER_DA_BIS = 5
+# (V8.9: seit Storycheck 2B nur noch Grenze für die drei Pings vor „du verpasst was.“; das Ende heißt ab 4 Punkten „Blaues Licht“)
 # V8.8 (G27): Lernstand – ab wie viel echtem Lernen Montag „mittel“ bzw. „hoch“ läuft
 @setze LERN_MITTEL = 3
-@setze LERN_HOCH = 6
+@setze LERN_HOCH = 5
 @setze lernstand = 0
 # glücklicher Weg: Lynns „und? 🙂“ nach der Prüfung (Option im Dokument). 1 = an, 0 = aus
 @setze OPTION_LYNN_UND = 1
@@ -57,6 +58,15 @@
 @text gefuehl_3 = Weiß nicht.
 @text enden_verpasst = Du hast {n} von 3 Enden verpasst. Schade.
 @text entscheidungen = Du hast {x} von {y} Entscheidungen nie getroffen.
+@text verpasst_liste = Du hast verpasst:
+# V8.9 (Patrick 24.11.): Schlagzeilen am Ende (erscheinen nur, wenn man es auf dem Weg verpasst hat); Lynn kommt zuletzt allein
+@text verpasst_geburtstag = Lenas Party des Jahres
+@text verpasst_lied = Lena heult bei Happy Birthday
+@text verpasst_feuerloescher = Die Feuerlöscher-Eskalation
+@text verpasst_mia = Mias Crashout auf der Tanzfläche
+@text verpasst_tim = Tims Absturz auf Lenas Teppich
+@text verpasst_afterparty = Tims Afterparty bis 3 Uhr
+@text verpasst_lynn = Lynn
 @text beenden = Beenden
 @text nochmal_knopf = Nochmal
 @text beenden_1 = Sicher, dass du nichts verpasst hast?
@@ -73,8 +83,8 @@
 @text menue_credits = Mitwirkende
 @text menue_enden = Enden gefunden: {n} von 3
 @text ende_nr = Ende {x} von 3
-@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Late Night Breeze“ (DBsound), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
-@abzeichenliste Leiser | Hier oder da | Blaues Licht | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Montagabend
+@text credits = <b>Idee und Story:</b> Philip // <b>Lernbaustein:</b> Psychologie der Digitalisierung, KSH München // <b>Bilder:</b> KI-generiert (Gemini, Perchance), bearbeitet und hochskaliert // <b>Musik:</b> „Lost in FOMO“ (Royect), „Dance Until Dark“ (DJDoblina), „Club Trance“ (HumanStudioed), „Club Party Dance“ (mondamusic), „Melancholy Lofi“ (zephiramusic), „Lofi Restaurant“ (Alex Morgan), „Warm“ (Andrii G.), „Muffled Party“ (mccrunchy) – Pixabay // <b>Mias Lied:</b> KI-generiert // <b>Geräusche:</b> Pixabay (freesound_community u. a.) // <b>Schriften:</b> Bricolage Grotesque, Caveat, Patrick Hand, Reenie Beanie (SIL Open Font License), Permanent Marker (Apache 2.0) – Google Fonts // <b>Umsetzung:</b> mit Claude
+@abzeichenliste Leiser | Blaues Licht | Montagabend | Mal schauen | Find’s raus | Senden? | Stumm | Eine Stunde | Zwischen den Jacken | Musst du dabei gewesen sein | § 827 | Gar nicht gemerkt | Planen gehört dazu | Ich lern. | Rot ist fast leer | Das tut weh | MORITZ! | Laucharm | Konfetti | Außer Reichweite | Fotograf des Jahres
 @gruppe Lenas Geburtstag 🎂 | Jonas, Lena, Tim, Mia, Lynn, Ben, Sophie, Max, Leo
 # Ältere Chats im Handy (vor Spielbeginn), älteste zuerst: Chat | Tag | Uhrzeit | Absender: Text
 @verlauf Kleinanzeigen Fahrrad | 02.12. | 14:11 | Ich: Ist das noch da?
@@ -84,7 +94,7 @@
 @verlauf Tim | 28.12. | 20:30 | Tim: schwach 😤
 @verlauf Jonas | 12. Juli | 19:48 | Jonas: bin unten. mach auf 🍕
 @verlauf Felix | 04.01. | 22:15 | Felix: bro hast du noch mein ladekabel
-@verlauf Oma | Sonntag | 11:30 | Oma: Gott segne dich mein Junge ❤️
+@verlauf Oma | 06.01. | 11:30 | Oma: Gott segne dich mein Junge ❤️
 @verlauf Lena | Dienstag | 16:20 | Lena: heyy 🥰 hab gehört montag ist dein großer tag??
 @verlauf Lena | Dienstag | 16:20 | Lena: du schaffst das 🍀💪
 @verlauf Lena | Dienstag | 17:02 | Ich: danke 🙈
@@ -138,10 +148,10 @@ Deliktsrecht. Ergibt plötzlich alles Sinn.
 @ton blaettern
 „A schießt im Hinterhof einen Ball gegen das Küchenfenster von B. Die Scheibe zerbricht.“
 @schwarz
-@ton PR3_stift
-Fremdes Eigentum verletzt. {haken}Check.
-Durch sein Handeln. Kausal. {haken}Check.
-Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
+# V8.9 (Patrick 24.11.): erst schreibt der Stift, dann kommt der Haken (nicht übereinander)
+{schreib}Fremdes Eigentum verletzt. {haken}Check.
+{schreib}Durch sein Handeln. Kausal. {haken}Check.
+{schreib}Rechtswidrig. Fahrlässig. {haken}Check, {haken}check.
 @bild K10H
 Schaden: eine Scheibe.
 § 823 Absatz 1.
@@ -154,13 +164,21 @@ Ja. Natürlich macht es Spaß. Ich könnte mir nichts Besseres vorstellen.
 … !1
 @bild N03
 @ton blaettern
-Der erste Versuch war lustig.
+Der erste Versuch war schon lustig.
 @klausur
-Der zweite war nochmal spannender.
+Beim zweiten konnte ich mich gar nicht mehr einkriegen vor Lachen.
+Besonders nach dem Ergebnis.
+@stempel 5,0
+… !2
 @klausur aus
+… !2
+~ Zeit.
+~ Kausalität.
+~ Partys.
 Irgendwas war halt immer.
+Aber klar.
 Alle guten Dinge sind drei.
-…
+… !2
 Wer’s glaubt.
 @zettel Dritter und letzter Versuch. Mo, 14.01., 9:00 Uhr · Prüfer: Herr Senner
 …
@@ -191,7 +209,7 @@ Zehn Minuten Pause. Hab ich mir verdient.
 @handy sperr
 Das war vor einer Stunde.
 @ton bzzz
-@benachrichtigung WhatsApp | Jonas | Ey, Lena feiert doch heute!! 🎉
+@benachrichtigung WhatsApp | Jonas | ey, lena feiert doch heute!! 🎉
 Bzzz.
 @effekt einfrieren
 Jonas. !2
@@ -200,12 +218,13 @@ Seit der Fünften. Nach beiden 5,0 stand er mit Pizza vor meiner Tür. Ungefragt
 Der hält es halt nicht lange ohne seine große Liebe aus.
 @effekt einfrieren aus
 @handy chat Jonas
-@nachricht! Jonas: Ey, Lena feiert doch heute!! 🎉
-@nachricht Jonas: Alle kommen. Echt alle
-@nachricht Jonas: Bist du dabei??
+@nachricht! Jonas: ey, lena feiert doch heute!! 🎉
+@nachricht Jonas: alle kommen. echt alle
+@nachricht Jonas: bist du dabei??
 @tipp
-@tippe Junge. Du weißt ganz genau, dass ich lernen muss. Geh mir nicht auf den Sack 😂
-@nachricht Jonas: ich lieb dich auch ❤️
+@tippe junge. du weißt ganz genau, dass ich lernen muss. geh mir nicht auf den sack 😂
+@nachricht Jonas: klar
+@nachricht Jonas: so wie die letzten 2 male? 😂
 @nachricht Jonas: EINE stunde. du kommst eh nicht weiter heute. glaub mir, du verpasst was
 @tipp
 …
@@ -255,6 +274,34 @@ Lynn: „Behalt ihn.“ !2
 …
 Die Frau muss wirklich viel von mir halten.
 … Der hat sogar einen Laserpointer.
+# V8.9: Laserpointer-Flashback (Lynn ist frech, nicht nur lieb)
+@bild LP3 gesicht
+@warte 1
+@ton display_klick
+@bild LP5 schnitt
+… !2
+@bild LP6 langsam
+… !1.5
+@bild LP7 gesicht
+Lynn: „Pass auf. Gleich isser wieder weg.“
+Ich: „Schenkung ist Schenkung.“
+@bild LP4 gesicht
+Lynn: „Spar dir deine Jura-Scheiße.“
+@bild LP8 ruck
+@ton stift leise
+… !1
+@bild LP9 schnitt
+… !2
+Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
+# V8.9 (Patrick 24.11.): harter Schnitt statt Überblenden – LP10 ist näher dran, beim Überblenden sah der Wechsel komisch aus
+@bild LP4 gesicht
+@warte 1.1
+@bild LP10 schnitt
+… !1.5
+@bild LP2 schnitt
+… !1.5
+@bild LP3 langsam
+… !2
 @loop seminar aus
 @effekt traum aus weich
 @raum nacht
@@ -262,13 +309,14 @@ Die Frau muss wirklich viel von mir halten.
 @handy her
 @handy chat Jonas
 @schreibt Jonas 5
-@nachricht! Jonas: Hallo?? 😄
-?? „Nee, ich glaub ich bin raus. Muss echt noch lernen 😕“ -> S18_A
-?? „Weiß noch nicht… mal schauen“ -> S18_B
-?? „Okay. Ich komm!“ -> S18_C
+@nachricht! Jonas: hallo?? 😄
+?? „nee, ich glaub ich bin raus. muss echt noch lernen 😕“ -> S18_A
+?? „weiß noch nicht… mal schauen“ -> S18_B
+?? „okay. ich komm!“ -> S18_C
 
 == S18_A
 @pfad A
+@setze k1 = "raus"
 # V8.7 (D35)
 @nachricht Jonas: schwach 😕
 @warte 1.2
@@ -276,11 +324,13 @@ Die Frau muss wirklich viel von mir halten.
 
 == S18_B
 @pfad B
+@setze k1 = "mal"
 @abzeichen Mal schauen
 -> KAP2_B
 
 == S18_C
 @pfad C
+@setze k1 = "komm"
 # V8.7 (D35)
 @nachricht Jonas: JAAAA 🔥
 @warte 1.2
@@ -296,6 +346,8 @@ Die Frau muss wirklich viel von mir halten.
 #   Weg A = lernen (Schreibtisch), Weg B = aufschieben (Bett)
 # =====================================================================
 == KAP2_A
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @kapitel Kapitel 2
 @setze weg = "A"
 @uhr 21:20
@@ -304,6 +356,8 @@ Die Frau muss wirklich viel von mir halten.
 -> L2
 
 == KAP2_B
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @kapitel Kapitel 2
 @setze weg = "B"
 @uhr 21:20
@@ -358,6 +412,8 @@ Die Frau muss wirklich viel von mir halten.
 
 # ---- Zurück zu Hause (nach „Doch bleiben“ oder Umdrehen): nächste Etappe nach Uhrzeit ----
 == WEITER_ZUHAUSE
+# V8.9 (Patrick 24.11.): leiser Bass von irgendwo – die Party läuft ohne ihn
+@loop bass_fern an
 @wenn weg=="A"
   @rufe L1
   @wenn uhr<=21:30
@@ -410,13 +466,15 @@ Die Frau muss wirklich viel von mir halten.
 # ---- 21:30 – Erster Fall / erstes Schlummern ----
 == L2
 @uhr mind 21:30
+# V8.9 (Patrick 24.11.): unwichtige Meldungen, still – liegen beim Nachschauen auf dem Sperrbildschirm
+@handy meldung Kleinanzeigen | Suchauftrag: Rennrad mit Sportsattel | 3 neue Anzeigen
 @setze lernstand + 1
 @rufe CHECK_WOBLEIBST
 @bild K10P
 @ton blaettern
-„M bestellt online einen Kühlschrank, tippt aber 9 statt 900 Euro …“
+„V stellt einen Kühlschrank online, tippt aber 9 statt 900 Euro …“
 Irrtum. Anfechtung. § 119.
-Keine Sorge, M. Ich hab dich.
+Keine Sorge, V. Ich hab dich.
 …
 Ha.
 @bild K10P
@@ -428,6 +486,7 @@ Drei von drei.
 
 == S2
 @uhr mind 21:30
+@handy meldung Kleinanzeigen | Suchauftrag: Rennrad mit Sportsattel | 3 neue Anzeigen
 @rufe CHECK_WOBLEIBST
 @bild N02
 Gleich fang ich an.
@@ -467,7 +526,10 @@ Fünf Minuten.
 ~ Planen gehört ja auch zum Lernen dazu.
 … !3
 @abzeichen Planen gehört dazu
+# V8.9 (Patrick 24.11.): erst die Meldung oben, dann geht er rein
 @ton bzzz
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 📊 PIZZA 🍕 wer will was
+@warte 1.6
 @handy gruppe
 @handy umfrage PIZZA 🍕 wer will was | Salami | Margherita | Ich bin nicht da
 @handy stimme 0 Jonas
@@ -546,7 +608,7 @@ Nächster Fall.
 ~ … Wo war ich?
 Nochmal von vorn.
 @schema 2
-~ … Wo war ich?
+~ Maaan.
 @schema 5
 Check.
 Geht doch.
@@ -557,12 +619,15 @@ Geht doch.
 @uhr mind 21:58
 @rufe CHECK_WOBLEIBST
 @bild N02
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 Bzzz.
-# V8.8 (J1-2): wieder B07 (das Live hat jetzt eigene Bilder)
-@handy story lena.xo B07
+# V8.9: Selfie von Lena (Kussmund)
+@handy story lena.xo LENA_SELFIE
+@setze selfieGesehen
 @warte 5
 ? „Okay. Ich geh doch.“ -> AUFBRUCH
 ? „Noch fünf Minuten.“ -> S3_SCHLUMMER +handy
@@ -627,7 +692,27 @@ Herr Senner weiß wohl noch nicht, mit wem er es diesmal zu tun hat.
 @tippe nö. du?
 @nachricht Paul: nee auch am lernen 😅
 … !2
-@nachricht Paul: ihre story sieht aber krass aus
+@nachricht Paul: hast du ihre story gesehen?? krass 🔥
+@tipp
+@handy zu
+# Storycheck 3: in S3 schon gesehen (21:58) → so alt, wie es wirklich ist
+@wenn selfieGesehen
+  @handy story lena.xo LENA_SELFIE 22 Min.
+@sonst
+  @handy story lena.xo LENA_SELFIE 3 Min.
+@ende
+@warte 3
+~ … Was ist daran krass?
+@handy chat Lerngruppe Schuldrecht
+@tippe was ist daran krass?
+@nachricht Paul: also sie 💀
+… !2
+~ Was hab ich auch erwartet.
+@handy zu
+… !2
+@ton bzzz
+@handy story x.mia.x JONAS_TISCH 1 Min.
+@warte 3.5
 … !3
 @handy zu
 -> L4_WEITER
@@ -678,8 +763,10 @@ Den Vorhang auch.
 @uhr mind 22:20
 @rufe CHECK_WOBLEIBST
 @bild N02
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 # V8.8 (G22): Lenas Nachricht von 22:10 ist die älteste – zuerst
 @benachrichtigung WhatsApp | Lena | kommst du noch? 🥺 ist auch okay wenn nicht ❤️ | 22:10
 @warte 0.8
@@ -742,7 +829,8 @@ Weiter als letztes Mal bin ich schon.
 @handy kommentar jule.mxn | wer ist der typ hinten 😂
 @handy kommentar jonas.k | LENAAA
 @handy livedrehen LIVE2
-@handy livesprich LIVE3 LIVE2 2.4
+# V8.9 (Patrick 24.11.): nur Lenas Mund bewegt sich, Tim hebt den Becher nicht mehr ständig
+@handy livesprich LIVE3 LIVE3z 2.4
 Lena: „Leute, gleich kommt die Torte!“
 @handy liveeingabe alles gute 🎉
 ? „Senden.“ -> S4_LIVE_SENDEN
@@ -804,6 +892,8 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 
 == ANRUF_RAN
 @abzeichen Find’s raus
+# Storycheck 3 (Patrick 24.11.): merken, dass Jonas schon angerufen und das mit Lynn gesagt hat
+@setze jonasAnruf
 @handy anruf an
 @musik party telefon
 @musik lied telefon
@@ -820,6 +910,7 @@ Jonas lacht.
 -> DANACH_2245
 
 == ANRUF_AB
+@setze jonasAnruf
 @handy anruf abgelehnt
 @handy chat Jonas
 @nachricht Jonas: ?? 😂
@@ -873,7 +964,8 @@ Aber auch nicht nichts.
 @ton bzzz
 @benachrichtigung Instagram | lena.xo | lena.xo hat eine Story gepostet
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 🎥 Video
-@ton aufbau_lang
+# V8.9 (Patrick 24.11.): Woosh mit steigendem Piepen, schwarz erst am Ende des Wooshs (@shutdown wartet darauf)
+@ton aufbau_shutdown
 @warte 0.9
 @handy video N32b
 # V8.8 (G13): das Video bleibt kurz stehen, danach kommt alles nur noch als Banner oben
@@ -882,7 +974,10 @@ Aber auch nicht nichts.
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 🎤 Sprachnachricht (0:47)
 @warte 0.6
 @effekt tunnel
-@handy anruf Jonas
+# Storycheck 3 (Patrick 24.11.): kein zweiter Anruf, wenn Jonas um 22:45 schon angerufen hat
+@wenn !jonasAnruf
+  @handy anruf Jonas
+@ende
 @warte 0.5
 @ton bzzz
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: HAHAHAHA
@@ -891,12 +986,31 @@ Aber auch nicht nichts.
 @warte 0.3
 @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Lena: 🎂🎂🎂
 @warte 0.3
+@benachrichtigung System | Datennutzung | 95 % deines Datenvolumens verbraucht
+@warte 0.3
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Mia: 📷 Foto
+@warte 0.3
+# V8.9 (Patrick): die eine wichtige Nachricht mitten im Müll – bleibt etwas länger stehen
+@wenn !jonasAnruf
+  @ton bzzz
+  @benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
+  @warte 1.2
+@ende
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: 😂😂😂
+@warte 0.3
 @benachrichtigung YouNow | drachenlordofficial | drachenlordofficial ist jetzt live 🔴
 @warte 1.4
 @setze handyweit = 1
 @shutdown
-@warte 3
+@warte 2
+# V8.9 (Patrick): nach dem Pfeifen komplette Stille, lange – keine Musik, nichts von draußen. Dann kommt das Zimmerrauschen zurück.
+@stille
+@warte 6
+@raum nacht
+@warte 2.5
 … !3
+~ Hat sie?
+… !2
 # Lähmung: Tippt man einen Knopf an, wird er grau. Es passiert nichts. Bis beide grau sind.
 @laehmung „Hingehen.“ | „Hierbleiben.“
 ~ Soll ich nicht doch …
@@ -935,21 +1049,25 @@ Aber auch nicht nichts.
 
 # ---- 23:40 – Auftauchen (Weg A, aus dem Flow) ----
 == L5
+@loop bass_fern aus
+@loop bass_leiser an
 @uhr mind 23:40
 @setze lernstand + 1
 @bild K10P
 @handy sperr
 @benachrichtigung Telefon | Jonas | 3 verpasste Anrufe
 @benachrichtigung WhatsApp | WhatsApp | 47 neue Nachrichten
-@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: afterparty bei mir später?? 🔥
 @benachrichtigung WhatsApp | Jonas | lynn hat nach dir gefragt btw
+… !1.5
+@ton bzzz
+@benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Tim: afterparty bei mir später?? 🔥
 @tipp
 Natürlich.
 @handy zu
 Ich darf den Scheiß nicht versauen.
 Aber Lynn …
 Das eigentlich auch nicht.
-Vielleicht muss man manchmal auf ein dummes Gefühl hören.
+Wieder auf ein dummes Gefühl hören?
 … Und wer sagt eigentlich, dass es dumm ist?
 @bild L7
 @effekt handylicht an
@@ -959,10 +1077,10 @@ Sie verschwindet ja nicht. !3
 @bild N34 traum
 @musik party fern
 ~ Was, wenn …
-~ … …
+~ … wir reden.
 # V8.8 (A6): die Leute drinnen verschwinden langsam
 @bild N34b sehrlangsam
-~ … wir reden und gar nicht merken, dass die anderen schon weg sind.
+… !4
 @musik aus
 @effekt traum aus
 @bild L7 schnitt
@@ -994,6 +1112,8 @@ Sie verschwindet ja nicht. !3
 
 # ---- 23:31 – wer bei 22:45 geblieben ist ----
 == L9
+@loop bass_fern aus
+@loop bass_leiser an
 @uhr mind 23:31
 @wenn !l9
   @setze l9
@@ -1007,6 +1127,8 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 ? „Licht aus.“ -> L9_LICHTAUS
 
 == L9_LICHTAUS
+@loop bass_leiser aus
+@loop bass_fern aus
 @handy zu
 @ton! lichtschalter
 @schwarz schnitt
@@ -1019,7 +1141,7 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 @bild N02D
 @handy chat Lynn
 @haken blau
-Blau. !3
+… !3
 @handy zoegern Lynn
 @loop herzschlag an
 … !4
@@ -1034,6 +1156,8 @@ Fuck.
 #   KNOTEN AUFBRUCH (immer gleich)
 # =====================================================================
 == AUFBRUCH
+@loop bass_fern aus
+@loop bass_leiser aus
 @setze aufbruch = uhr
 @setze uhr_zeigen
 @uhr zeigen
@@ -1099,7 +1223,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 # ---- Der Weg (drei Bilder, je Tipp ein Schritt) ----
 == W0
 @setze wo = 0
-@ton schritte
+@ton schritte 1.8s
 @bild W0 langsam
 @warte 1.5
 ? „Nach vorne gehen“ -> W1
@@ -1107,7 +1231,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W1
 @setze wo = 1
-@ton schritte
+@ton schritte 1.8s
 @uhr +2
 @bild B15
 @musik party fern
@@ -1117,7 +1241,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W2
 @setze wo = 2
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @bild N11
 @musik party strasse 2
@@ -1133,7 +1257,7 @@ Kalt. Die Luft riecht nach nassem Laub.
 
 == W3
 @setze wo = 3
-@ton schritte
+@ton schritte 1.8s
 @uhr +4
 @bild N12
 @musik party strasse 3
@@ -1144,12 +1268,31 @@ Alter, singt der schief.
 ? „Umdrehen“ -> UMDREHEN wenn !umgedreht
 
 == W4
-@ton schritte
+@setze wo = 4
+@ton schritte 1.8s
 @uhr +4
 @loop wind aus
 @bild B16
 @effekt heranzoomen
 @musik party strasse 4
+@warte 2.2
+# V9.0: Mama schreibt vor dem Haus (einmal auf jedem Weg; man kann noch umdrehen). Text unverändert, der Spieler zeigt nur „…“.
+@wenn !mama
+  @setze mama
+  @ton bzzz
+  @handy sperr
+  @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+  @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+  @tipp
+  ~ …
+  … !2
+  @handy zu
+  ? „Reingehen.“ -> W4_REIN
+  ? „Umdrehen.“ -> UMDREHEN wenn !umgedreht
+@ende
+
+== W4_REIN
+@bild TREPPE_HELL schnitt
 Die Bässe gehen bis auf die Treppe.
 -> PARTY_ANKUNFT
 
@@ -1241,6 +1384,7 @@ Die Bässe gehen bis auf die Treppe.
 @kapitel Kapitel 3
 @setze ankunft = uhr
 @setze typ = "party"
+@handy meldung Kleinanzeigen | Suchauftrag: Rennrad mit Sportsattel | 3 neue Anzeigen
 @wenn ankunft>23:30
   -> SP1
 @ende
@@ -1253,7 +1397,6 @@ Oh Mann …
 Jonas hat nicht zu viel versprochen.
 @wenn ankunft>22:45
   @setze lied
-  @rufe MAMA
 @ende
 @bild B12T schnitt
 Jonas!: „NA ALSO!“
@@ -1296,6 +1439,15 @@ Lena drückt mir einen Becher in die Hand.
 @party an
 @musik party laut
 @wenn besucht>=2
+  @wenn !lied && ankunft<=22:45
+    # Storycheck 3 (Z3, Patrick 24.11.): Lied nicht auf dem Balkon abgewartet → kommt jetzt gedämpft durch die Tür
+    @setze lied
+    @uhr springe 22:45
+    @musik lied dumpf
+    @warte 5
+    @musik lied aus
+    @musik party laut
+  @ende
   -> BAD
 @ende
 ? „Küche.“ -> KUECHE wenn !kueche
@@ -1304,6 +1456,8 @@ Lena drückt mir einen Becher in die Hand.
 
 == HUB_ZURUECK
 @setze besucht + 1
+# Storycheck 3 (Z3): auf dem Balkon war die Uhr kurz weg
+@uhr zeigen
 @loop wind aus
 @wenn lynn=="geschaut"
   @bild N36L
@@ -1329,7 +1483,7 @@ Lena drückt mir einen Becher in die Hand.
 
 == HUB_HANDY
 @handy sperr
-@benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet | vor 2 Min.
+@benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet | vor 20 Min.
 @warte 1
 @handy story x.mia.x H36b
 @warte 3
@@ -1343,6 +1497,10 @@ Ich steck es wieder ein.
   @setze ben
   @bild HB1 langsam
   Ben erzählt Lynn irgendwas. Sie lacht.
+  @ton herzschlag vol.45
+  @warte 1
+  @ton herzschlag vol.4
+  @warte 1.2
   … !2
   @bild N36L
 @ende
@@ -1354,7 +1512,17 @@ Ich steck es wieder ein.
 @setze kueche
 @uhr +5
 @bild N13
-Jonas: „Ich hab echt gedacht, du kommst nicht.“
+# Storycheck 3 (Patrick 24.11.): Jonas äfft nach, was der Ich ihm geschrieben hat, dann ehrlich
+@wenn k1=="raus"
+  Jonas: „‚Ich bin raus. Muss eeecht noch leeernen.‘“
+@ende
+@wenn k1=="mal"
+  Jonas: „‚Weiß noch nicht … mal schauuun.‘“
+@ende
+@wenn k1!="raus" && k1!="mal"
+  Jonas: „‚Geh mir nicht auf den Sack, ich muss leeernen.‘“
+@ende
+… !1.5
 Jonas: „Schön, dass du da bist. Glaub mir.“
 Ich: „Du bist so hacke.“
 @bild B12 gesicht
@@ -1365,6 +1533,17 @@ Jonas: „Montag ist der letzte, oder?“
 Ich: „Danke für die Erinnerung.“
 Jonas: „Deswegen bist du ja hier. Damit du mal nicht dran denkst.“
 Ich: „Klappt super.“
+@wenn lynn==""
+  Jonas: „Und, schon mit ihr geredet?“
+  Ich: „Klar, dass du das direkt fragst.“
+  …
+  Jonas: „Junge.“
+  …
+  Jonas: „Weißt du, wie oft ich den Namen in den letzten Tagen hören musste?“
+  Jonas: „Mach mal.“
+  Ich: „Wenn’s so leicht wäre.“
+  Ich: „Sorry, dass ich mir noch nicht die halbe Bar hinter den Schädel gekippt hab.“
+@ende
 @bild B12L gesicht
 … !2
 @bild N13
@@ -1401,15 +1580,18 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
   … !3
   @bild N32dC gesicht
   Ich singe mit.
-  @setze mama
-  @ton bzzz
-  @handy sperr
-  @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
-  @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
-  @tipp
-  ~ Noch 58 Stunden.
-  … !2
-  @handy zu
+  # V9.0: Mama kommt nur noch einmal, vor dem Haus (W4); hier nur, falls sie noch nicht kam
+  @wenn !mama
+    @setze mama
+    @ton bzzz
+    @handy sperr
+    @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+    @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
+    @tipp
+    ~ Noch 58 Stunden.
+    … !2
+    @handy zu
+  @ende
   @musik lied aus
   @bild N32dP gesicht
   @warte .8
@@ -1457,6 +1639,8 @@ Mia: „Sag was für die Story.“
 Ich: „Was denn?“
 @bild N35cL gesicht
 Mia: „Egal. Ist eh schon gepostet.“
+Ich: „Wow. Wie nett.“
+… !1.5
 @bild N35t gesicht
 Mia: „Ich war heute schon auf drei Partys.“
 Ich: „Gleichzeitig?“
@@ -1468,12 +1652,14 @@ Mia: „Falls eine scheiße ist.“
 … !1.5
 Mia: „Meistens sind’s dann alle.“
 @bild N35n gesicht
-Mia: „Bist du der Jura-Typ von Lena?“
+Mia: „Bist du nicht der Jura-Typ …“
 Ich: „Kommt drauf an, wer fragt.“
 @bild N35b gesicht
 # V8.7 (C12)
 Mia: „Is doch son Juristensatz.“
 Ich: „Kommt drauf an.“
+@bild N35s schnitt
+@warte 2.2
 @bild N35n gesicht
 Mia: „Wo warst du vorher?“
 Ich: „Zuhause.“
@@ -1483,6 +1669,11 @@ Ich: „Mit Schuldrecht.“
 Mia: „Klingt nach einem, der dich ghostet.“
 Ich: „Zweimal schon.“
 Mia: „Typisch.“
+Mia: „Und du rennst ihm trotzdem hinterher.“
+Ich: „Was bleibt mir übrig?“
+Ich: „Montag. Dritter Versuch.“
+… !2
+Mia: „Würd mir stinken.“
 @bild N35be schnitt
 Mia: „Kannst du mich verklagen? Bitte.“
 Ich: „Wofür?“
@@ -1500,10 +1691,16 @@ Ich: „Muss ich mir Sorgen machen?“
 @bild N35f ruck
 Mia: „Wieso Sorgen? Dass ich dich auch noch heirate?“
 Mia: „Vielleicht.“
-@bild N35fz gesicht
+@bild N35fz schnitt
+@warte .5
+@bild N35f gesicht
 Mia: „Aber ist ja nicht bindend.“
+… !2
+Mia: „Zumindest nicht für mich.“
 Ich: „Und die drei ghostest du dann alle?“
-@bild N35s schnitt
+@bild N35n gesicht
+@warte .9
+@bild N35s langsam
 Mia: „Denkst du, ich mach sowas?“
 … !1.5
 @bild MIA_SMIRK schnitt
@@ -1551,6 +1748,9 @@ Alle Hände oben. Meine nicht.
 
 == TANZ_SHOW
 @montage
+~ Hm.
+… !1.5
+~ Fehlen nur die blauen Haare.
 @bild N35f schnitt
 @gesicht N35fl 1.3
 @gesicht N35fg .6
@@ -1599,7 +1799,7 @@ Lynn: „Zu laut?“
 Ich: „Bisschen.“
 Lynn: „Geht mir auch so.“
 @bild N14 gesicht
-Lynn: „Und mein Heiligtum?“
+Lynn: „Und? … Wie geht’s meinem Heiligtum?“
 Ich: „Was?“
 @bild N14r geste
 Lynn: „Na, der Stift.“
@@ -1612,6 +1812,7 @@ Ich: „Rot ist fast leer.“
 @bild N14b gesicht
 @ton lynn_lacht1
 … !2
+Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 @abzeichen Rot ist fast leer
 @bild N14 gesicht
 @wenn gesungen
@@ -1666,20 +1867,25 @@ Morgen 4 Grad.
 Sie kommt nicht wieder. !2
 @bild BR langsam
 Ich stehe eine Weile allein draußen.
-@wenn !lied && ankunft<=22:45
+# Storycheck 3 (Z3, Patrick 24.11.): allein höchstens ca. 10 Minuten. Lied nur, wenn es in diese 10 Minuten fällt, sonst kommt es später im Flur
+@wenn !lied && ankunft<=22:45 && uhr>=22:37
   @setze lied
   @uhr springe 22:45
   @musik lied dumpf
   Drinnen singen alle Happy Birthday.
   @musik lied aus
+  @uhr +2
+@sonst
+  @uhr +10
 @ende
-@uhr +10
 Irgendwann gehe ich rein.
 -> HUB_ZURUECK
 
 == BALKON_IGN1
 @wenn !lied && ankunft<=22:45
   @setze lied
+  # Storycheck 3 (Z3): Uhr ausblenden, damit sie nicht mitten im Gespräch eine Stunde rennt (kommt beim Reingehen wieder)
+  @uhr verstecken
   @uhr springe 22:45
   @musik lied dumpf
   Lynn: „Jetzt verpass ich’s doch.“
@@ -1689,7 +1895,7 @@ Irgendwann gehe ich rein.
   @musik lied aus
 @sonst
   @bild N14c gesicht
-  Lynn: „Musst du nicht schauen?“
+  Lynn: „Wichtig?“
   Ich: „Nah.“
 @ende
 @bild N14 gesicht
@@ -1702,9 +1908,12 @@ Bzzz. Nochmal.
 # ---- „Gar nicht gemerkt“ (wer zweimal ignoriert) ----
 == GM_START
 Ich lass es.
+# V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
-@uhr 23:25
+# Storycheck 3 (Z4): nie rückwärts – ist es schon später als 23:25, zeigt sie die echte Zeit
+@analoguhr mind 23:25 ecke
 …
+@analoguhr aus langsam
 @bild N14
 Lynn: „Drinnen erklärt Tim übrigens gerade schon wieder sein Krypto-Ding.“
 Ich: „Ist er schon Millionär?“
@@ -1783,12 +1992,38 @@ Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
 … !2
 Lynn: „… Naja.“
 … !4
+# V8.9 (Philip 24.11.): Lynn verpasst Tims Afterparty mit Absicht; Tim ruft nur sie
+Tim!: „Lynn! Wir gehen!“
+… !1.5
+@bild N14 gesicht
+Lynn: „Geht schon mal.“
+… !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
-@bild N34v langsam
 @effekt waermer
 @musik aus langsam
 @warte 1.2
+# V8.9 (Patrick 24.11.): ruhiger Song leise über der Szene (gedämpft passte nicht, ist kein Party-Song)
 @musik lofi leise
+# V9.0 (Patrick 25.11.): Zeitraffer mit fester Kamera – nur die beiden bewegen sich, drinnen läuft die Party weiter, der Balkon ist ihre eigene Welt.
+# Nur EIN Platzwechsel (zum Geländer, weil alle späteren Bilder sie dort zeigen).
+@bild N34S1 langsam
+Irgendwann sitzen wir auf dem Boden.
+@bild N34Z2 langsam
+@leer
+@warte 4.5
+@bild N34Z3 langsam
+@warte 5
+# V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht – kurz, dann zurück und länger bleiben, bis sich die Party leert
+@bild N34Z3a
+@warte 1.8
+@bild N34Z3
+@warte 4
+@bild N34Z4 langsam
+@warte 3.5
+@bild N34Z5 langsam
+@warte 4
+@bild N34v sehrlangsam
+@warte 3
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -1806,7 +2041,7 @@ Lynn: „… Naja.“
 @warte 2
 @handy zu
 @effekt waermer aus
-@bild N14
+@bild N34Ls
 Lynn sagt nichts mehr. Sie schaut in die Stadt.
 # V8.7 (D17)
 Irgendwann steht sie auf.
@@ -1817,11 +2052,20 @@ Lynn: „Ich geh mal rein.“
 
 == GM_STECKEN
 @effekt tasche aus
-@bild N14
-Lynn: „Hast du eigentlich schon was vor? Nach deiner Prüfung?“
-Ich: „Jetzt schon.“
+# Patrick 25.11.: erst nah von außen (er von hinten), dann Ich-Sicht – Lynn sitzend (drei deckungsgleiche Bilder)
+@bild N34S5 langsam
+# Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 4): Lynn fragt zögerlich, in Stücken; „Ich frag.“
+Lynn: „Und … nach der Prüfung?“
 … !1.5
-@bild N14d gesicht
+Ich: „Hm?“
+@bild N34Lt langsam
+… !1.5
+Lynn: „Schon was vor?“
+… !2
+Ich: „Kommt drauf an, wer fragt.“
+@bild N34L
+Lynn: „Ich frag.“
+… !1.5
 Lynn: „Montagabend?“
 Ich: „Montagabend.“
 # V8.8 (A6): drinnen werden es ganz langsam weniger
@@ -1843,12 +2087,24 @@ Lynn: „Höchstens beim zweiten Date.“
 @effekt heranzoomen 3.5
 Lynn: „Oh.“
 Lynn: „Alle weg.“
+# V8.9 (Philip 24.11.): die große Uhr springt von 23:25 auf 01:58
+# Storycheck 3 (Z4): dieselbe Zeit wie beim Verschwinden
+@analoguhr zuletzt ecke ploetzlich
+@analoguhr Sa 01:58
+~ Zwei?
+@analoguhr aus langsam
 @uhr Sa 01:58
 @uhr zeigen sofort
 Drinnen fegt Lena schon Konfetti zusammen.
 @schwarz langsam
 @effekt waermer aus
-Zum Abschied umarmt sie mich. Länger als nötig. !3
+# Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 3): „Länger als nötig.“ weg – Schwarzbild, leiser Wind, Umarmungs-Ton, ca. 4,5 s nicht wegtippbar
+@loop wind an
+Zum Abschied umarmt sie mich.
+@leer
+@ton umarmung
+@warte 4.5
+@loop wind aus
 @setze lynn = "gm"
 @setze typ = "gluecklich"
 @pfad Gar nicht gemerkt
@@ -1866,15 +2122,22 @@ Zum Abschied umarmt sie mich. Länger als nötig. !3
 @ton! schloss
 Ich schließe ab. Hier ist es leiser. !2
 @ton bzzz
+@warte 1
+@handy sperr
+@benachrichtigung WhatsApp | Tim | afterparty bei mir später?? 🔥 die vom konzert kommen auch
+@warte 1.4
 @handy chat Tim
 @nachricht Tim: afterparty bei mir später?? 🔥 die vom konzert kommen auch
 @foto N28 Tim
+@nachricht Tim: meine schwester hat die schon reingelassen 😅
 @tipp
 @handy zu
 @bild N28 traum
 Ein anderes Wohnzimmer. Andere Leute. … Sieht voller aus.
 @effekt traum aus
 @bild N16
+# Storycheck 3 (Z8): er bleibt eine Weile am Handy im Bad; Feuerlöscher auf allen Wegen 23:35–23:50 (wie auf dem Spät-Weg „vor zehn Minuten“)
+@uhr mind 23:35
 # V8.7: Feuerlöscher durch die Tür (wie bad_vorschau_feuerloescher.mp3: Zischen 1,5 s, Johlen 3,8 s, Gelächter 4,8 s)
 @warte 1.5
 @ton feuerloescher lp1400 vol1.7
@@ -1956,9 +2219,18 @@ Ich muss echt nach Hause. Morgen ist Lerntag.
 Ich verabschiede mich.
 Jonas: „Langweiler.“
 Umarmung trotzdem.
+@schwarz schnitt
+@musik club dumpf
+~ … Langweiler.
+… !1.5
 @musik club laut
-@bild TV1
-Tim: „Komm einfach mit zu mir!“
+@bild TV0
+@wenn lynn=="gm_geschaut"
+  # Storycheck 3 (Patrick 24.11.): Tim ist noch da, die anderen sind schon bei ihm
+  Tim: „Ey, warte. Afterparty. Bei mir. Meine Schwester hat die anderen schon reingelassen.“
+@sonst
+  Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
+@ende
 @bild TV2 pose
 Tim: „Alle Wege führen nach –“ !3.5
 Ich: „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“
@@ -1998,6 +2270,7 @@ Ich: „Ich … eigentlich wollt ich grad …“
   Lynn: „Jonas kommt. Lena und Ben. Mia ist wohl schon da.“
 @sonst
   Lynn: „Jonas kommt. Lena, Mia. Und Ben.“
+  @ton herzschlag vol.4
 @ende
 … !3
 ? „Okay. Ich komm mit.“ -> ZU_TIM +handy
@@ -2036,9 +2309,16 @@ Sie geht. Ich stehe im Gang mit der Jacke in der Hand.
 @bild FL1 langsam
 @musik club dumpf
 … !3
-? „Eine Stunde. EINE.“ -> AFTERPARTY
-? „Lynn kennt sich bestimmt mit Recht aus.“ -> AFTERPARTY
+? „Eine Stunde. EINE.“ -> A_NAGUT
+? „Lynn kennt sich bestimmt mit Recht aus.“ -> A_NAGUT
 ? „Nein. Jetzt geh ich wirklich …“ -> A13
+
+# V8.9 (Philip, Fehlerprotokoll): Schwarz, kurze Pause, „Na gut …“, dann erst Tims Feier
+== A_NAGUT
+@schwarz
+@warte 1.5
+Na gut …
+-> AFTERPARTY
 
 == A13
 …
@@ -2055,9 +2335,13 @@ Morgen ist Lerntag.
 @bild A1W
 Jonas: „Langweiler.“
 Umarmung trotzdem.
+@schwarz schnitt
+@musik club dumpf
+~ … Langweiler.
+… !1.5
 @musik club laut
-@bild TV1
-Tim: „Komm einfach mit zu mir!“
+@bild TV0
+Tim: „Ey, warte. Schon vergessen? Afterparty. Bei mir.“
 @bild TV2 pose
 Tim: „Alle Wege führen nach –“ !3.5
 Ich: „Ich will aber nicht nach scheiß Rom. Ich will einfach nach Hause.“
@@ -2079,6 +2363,23 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik party tuer
 @bild N29b
 … !3
+@bild N29n langsam
+… halb voll.
+@ton haustuer leise dumpf
+@loop wind aus
+@musik club laut
+@ton johlen leise
+@bild HW_TUER langsam
+~ Ein Lied noch.
+… !3
+@ton schloss leise
+@musik club dumpf
+@setze treppe
+@bild TREPPE schnitt
+@ton treppe
+… !2
+@bild HAUS langsam
+… !1.5
 -> HEIMWEG
 
 # ---- Spät auf der Party (Ankunft nach 23:30) ----
@@ -2090,7 +2391,9 @@ Fast draußen. Ich dreh mich nochmal um.
 Ich leg meine dazu.
 @abzeichen Zwischen den Jacken
 @setze lied
-@rufe MAMA
+@wenn !mama
+  @rufe MAMA
+@ende
 @musik party leise
 # V8.8 (J1-5): kurz nach dem Feuerlöscher, alle reden noch davon
 @bild FEUER
@@ -2174,6 +2477,15 @@ Hm.
 @party aus
 @musik aus langsam
 @effekt alles_aus
+# V8.9: jeder Ausgang führt erst durch das Treppenhaus (nicht direkt auf die Straße); nur einmal
+@wenn !treppe
+  @setze treppe
+  @bild TREPPE schnitt
+  @ton treppe
+  … !2
+  @bild HAUS langsam
+  … !1.5
+@ende
 @bild B14
 @loop wind an
 @ton schritte
@@ -2200,6 +2512,9 @@ Hm.
 @pfad Afterparty
 @abzeichen Eine Stunde
 @party aus
+# V8.9 (Philip, Fehlerprotokoll): erst kurz schwarz, dann das Bild von Tims Feier
+@schwarz
+@warte 1
 # V8.8 (A5/J1-12): Tims Feier (Mia ist auch da – „Die vierte“)
 @bild TIM_FEIER_1 langsam
 @musik spaet leise
@@ -2217,18 +2532,16 @@ Drüben redet Lynn mit irgendwem. Ich komm nicht durch.
 @schwarz
 @musik spaet dumpf
 # V8.7 (D29): von Lenas Party aus 23:50, nach dem langen Balkon (Gar nicht gemerkt … Draufschauen) erst 00:40
+# Storycheck 3 (Z4): 5 Minuten Weg zu Tim, nie früher als die Uhr schon war (Spät-Weg kommt erst um 0:00 bei Lena an); danach +1 Stunde
+@uhr +5
 @wenn lynn=="gm_geschaut"
-  @analoguhr Sa 00:40
+  @analoguhr mind Sa 00:40
 @sonst
-  @analoguhr 23:50
+  @analoguhr mind 23:50
 @ende
 @warte 1.2
 Eine Stunde ist keine Stunde. !2
-@wenn lynn=="gm_geschaut"
-  @analoguhr Sa 01:40
-@sonst
-  @analoguhr Sa 00:50
-@ende
+@analoguhr +60
 Also sind zwei … eine. !2
 @analoguhr Sa 02:47
 Und eine ist ja keine. !3
@@ -2250,6 +2563,8 @@ Und eine ist ja keine. !3
 #   KAPITEL 4 – Die Nacht
 # =====================================================================
 == NACHT_ZUHAUSE
+@loop bass_fern aus
+@loop bass_leiser aus
 @loop oben aus
 @setze typ = "zuhause"
 @kapitel Kapitel 4
@@ -2420,8 +2735,9 @@ Ich bin auf keinem Foto. !3
 == NP_SCROLL
 # V8.8 (A5/J1-12): dazwischen Tims Feier (Tim filmt, Mias Selfies)
 @handy storys lena.xo=H36a tim_k97=TIM_FEIER_1 nightcrew=N32a x.mia.x=TIM_FEIER_3 jule.mxn=B16 lena.xo=TORTE x.mia.x=TIM_FEIER_4 lena.xo=A1
-@uhr springe Sa 01:52
 @handy zu
+# V8.9 (Patrick 24.11.): die Uhr rast sichtbar hoch – das Scrollen hat Zeit gefressen
+@uhr laufen Sa 01:52
 … !2
 -> MONOLOG
 
@@ -2506,14 +2822,12 @@ Ich bin auf keinem Foto. !3
   Ich glaub, heute hab ich mal nichts verpasst.
   Egal, was draus wird. Daran werd ich mich erinnern.
   Verdammte Scheiße, aber wenn’s nichts wird …
-  will ich mich vielleicht doch nicht dran erinnern. Haha.
+  … !4
+  dann bleibt das unter uns.
   Ich freu mich so drauf.
   Ich hab jetzt sogar ein bisschen mehr Bock zu lernen.
   Und falls das alles schiefgeht …
-  hab ich immer noch Jonas.
-  Der kommt dann wieder mit Pizza.
-  Vielleicht handel ich ihm diesmal sogar zwei raus.
-  Der wird mich jedenfalls nicht mehr so schnell los.
+  kommt Jonas wieder mit Pizza.
 @ende
 … !2
 @effekt einschlafen
@@ -2532,16 +2846,18 @@ Ich bin auf keinem Foto. !3
 @stille
 @karte Samstag. 10:32. Noch 46 Stunden.
 @uhr Sa 10:32
+@handy meldung Instagram | Instagram | ben.r gefällt dein Beitrag | 09:47
 # V8.8 (G19): das Stumm-Symbol vom Freitag ist weg (Wecker/neuer Tag)
 @handy laut
 # M1
 @schwarz
-@ton voegel
+# V8.9: Vögel blenden leise ein (wie Samstag 14:20)
+@ton voegel ein4
 @warte 3
 @bild SO schnitt
 @raum tag
 @handy sperr
-@ton klick
+@ton display_klick
 …
 # V8.7 (Philip): Mias letzte Story, 05:12 – nur Text, 2 Aufrufe, kein Gedanke
 @wenn tanz
@@ -2552,7 +2868,10 @@ Ich bin auf keinem Foto. !3
 @handy story lena.xo LENA_FEGT 9 Std. | | aufräumen 🥲
 @warte 3
 # M2
+# V8.9 (Patrick 24.11.): die Zahl passt zum Handy – 214 ungelesen in der Liste, Trenner und Durchrauschen im Chat
+@handy ungelesen gruppe | 214 | Mia: 😂😂
 @handy gruppe
+@handy flut 214
 214 neue Nachrichten.
 @nachricht Jonas: leute gestern 😭😭
 # V8.5: Balkonfoto (Lena, Tim, Lynn) – muss auf jedem Weg vorkommen
@@ -2562,21 +2881,39 @@ Ich bin auf keinem Foto. !3
   # (offen: „M2 kurz“ – vorläufige Auswahl)
   @nachricht Lena: feuerlöscher-mann 🧯😂
   @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
-  @nachricht Mia: DER FORSTER MORITZ 😭🧯
+  # Storycheck 3 (Z2, Patrick 24.11.): auf der Tanzfläche ist Mia früh weg – sie hat den Feuerlöscher verpasst
+  @wenn tanz
+    @nachricht Lena: DER FORSTER MORITZ 😭🧯
+  @sonst
+    @nachricht Mia: DER FORSTER MORITZ 😭🧯
+  @ende
   @nachricht Jonas: musst du dabei gewesen sein 😂
   @tippe war ich nicht. war woanders
+  @wenn tanz
+    @nachricht Mia: ich auch nicht 😭
+  @ende
   @abzeichen Musst du dabei gewesen sein
   @tipp
   -> M4
 @ende
 @nachricht Lena: feuerlöscher-mann 🧯😂
 @nachricht Tim: legendär. einfach legendär
-@nachricht Mia: ich hab immer noch bauchschmerzen vom lachen
-@nachricht Mia: ich weiß nicht mehr was gestern passiert ist
-@nachricht Jonas: du warst dabei 😭
-@nachricht Mia: ja genau das ist ja das problem
-@nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
-@nachricht Mia: DER FORSTER MORITZ 😭🧯
+@wenn tanz
+  # Storycheck 3 (Z2, Patrick 24.11.): Mia war schon auf Party Nummer vier und hat ihn verpasst
+  @nachricht Mia: WAS FÜR EIN FEUERLÖSCHER
+  @nachricht Jonas: musst du dabei gewesen sein 😂
+  @nachricht Mia: hau mal raus jetzt 😭
+  @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
+  # FORster MOritz = FoMO (Patricks Easter Egg) – muss auf jedem Weg ausgeschrieben vorkommen
+  @nachricht Jonas: DER FORSTER MORITZ 😭🧯
+@sonst
+  @nachricht Mia: ich hab immer noch bauchschmerzen vom lachen
+  @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
+  @nachricht Jonas: du warst dabei 😭
+  @nachricht Mia: ja genau das ist ja das problem
+  @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
+  @nachricht Mia: DER FORSTER MORITZ 😭🧯
+@ende
 @tipp
 @wenn typ=="zuhause"
   @wenn weg=="B" && notiz
@@ -2607,6 +2944,8 @@ Ich bin auf keinem Foto. !3
 == M3_FRAGEN
 @tippe was war mit dem feuerlöscher?? 😂
 @nachricht Jonas: musst du dabei gewesen sein 😂
+# Storycheck 3 (Patrick 24.11.): Mia weiß es ja auch nicht mehr
+@nachricht Mia: hau mal raus jetzt 😭
 @abzeichen Musst du dabei gewesen sein
 @tipp
 -> M4
@@ -2660,7 +2999,10 @@ Ich bin auf keinem Foto. !3
   @sonst
     @entwurf hey, wie war die party noch?
     @wenn typ=="party"
-      @entwurf du warst auf einmal weg
+      # Storycheck 3 (Z11, Patrick 24.11.): nach dem Draufschau-Weg hat sie sich im Flur verabschiedet – nicht „auf einmal weg“
+      @wenn lynn!="gm_geschaut"
+        @entwurf du warst auf einmal weg
+      @ende
     @sonst
       @entwurf sorry, dass ich nicht da war
     @ende
@@ -2678,17 +3020,20 @@ Ich bin auf keinem Foto. !3
 @karte Samstag. 14:20. Noch 42 Stunden.
 @uhr Sa 14:20
 @handy laut
+@handy meldung Instagram | Instagram | ben.r gefällt dein Beitrag | 09:47
 @schwarz
 # V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
 @ton tinnitus
-@warte 3.5
-@ton voegel
-@warte 1.5
+# V8.9 (Fehlerprotokoll): Vögel leise parallel zum Pfeifen einblenden
+@ton voegel ein4
+@warte 5
 @bild SO schnitt
 @raum tag
-~ Wieso bin ich so dumm?
+~ … mein Kopf …
 … !2
-Irgendwas war halt immer.
+~ Perfekter Zustand zum Lernen.
+… !2
+~ Irgendwas ist halt immer.
 … !2
 # V8.8 (L): Lenas Story von der Nacht
 @handy story lena.xo LENA_FEGT 13 Std. | | aufräumen 🥲
@@ -2768,7 +3113,7 @@ Glaub ich.
   @nachricht Lena: danke nochmal für deine nachricht gestern 🥹 hat mich voll gefreut
 @ende
 @wenn typ=="zuhause" && !lenaGesendet
-  @nachricht Lena: schade, dass du nicht da warst 🥺 nächstes mal!
+  @nachricht Lena: schade, dass du nicht da warst 🥲 nächstes mal!!
 @ende
 @wenn typ!="zuhause"
   @nachricht Lena: ich hab mich echt gefreut, dass du da warst. wirklich ❤️
@@ -2781,16 +3126,18 @@ Ich leg das Handy weg. Zwei Tage noch.
 # ---- Samstagabend (V8, alle außer Afterparty): die nächste Party kommt immer ----
 == SAMSTAGABEND
 @wenn typ=="afterparty"
-  -> SONNTAG
+  -> UEBER_SONNTAG
 @ende
 @stille
-@karte Samstag. 23:10. Noch 34 Stunden.
+@karte Samstag. 23:10. Noch 33 Stunden.
 @uhr Sa 23:10
 @raum nacht
 @wenn typ=="zuhause" && weg=="B"
   @bild N02 schnitt
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @tipp
   @handy gruppe
@@ -2810,27 +3157,59 @@ Ich leg das Handy weg. Zwei Tage noch.
 @sonst
   @bild K10P schnitt
   @loop lampe an
-  @setze lernstand + 1
   @karteikarten auto
   @ton bzzz
   @handy sperr
   @benachrichtigung WhatsApp | Lenas Geburtstag 🎂 | Jonas: 🎥 Video
   @warte 1.6
-  # V8.8 (M2): Mias Story von der Samstagsparty
-  @handy story x.mia.x SA2 12 Min. | | party nummer 5
-  @warte 3.5
-  @handy zu
-  @ton handy_ablegen
-  @karteikarten aus
-  … !2
-  ~ Montag.
-  @wenn typ=="gluecklich"
-    ~ Letzter.
-  @sonst
-    ~ Meine Entscheidung.
-  @ende
-  @loop lampe aus
+  # V8.9 (Storycheck 2B, K2): die zweite Party lockt – Lernpunkt nur, wenn man weiterlernt
+  @ton bzzz
+  @benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet
+  ? „Story anschauen.“ -> SA_STORY +handy
+  ? „Weiterlernen.“ -> SA_LERNEN
 @ende
+-> UEBER_SONNTAG
+
+== SA_STORY
+# V8.8 (M2): Mias Story von der Samstagsparty
+@handy story x.mia.x SA2 12 Min. | | party nummer 5
+@warte 3.5
+-> SA_REST
+
+== SA_LERNEN
+@setze lernstand + 1
+
+== SA_REST
+@handy zu
+@ton handy_ablegen
+@karteikarten aus
+… !2
+~ Montag.
+@wenn typ=="gluecklich"
+  ~ Letzter.
+@sonst
+  ~ Meine Entscheidung.
+@ende
+@loop lampe aus
+-> UEBER_SONNTAG
+
+# V8.9: Samstag → Sonntag nicht abrupt: Bett, Handy leuchtet, er dreht es um, schwarz, Uhr läuft, Regen
+== UEBER_SONNTAG
+@stille
+@bild N1 schnitt
+@loop regen an
+@handy sperr
+@warte 1.8
+@handy zu
+@ton handy_ablegen
+~ Ein Tag.
+… !2
+~ Ein Tag reicht.
+… !2
+~ Muss reichen.
+@schwarz schnitt
+@uhr So 09:00
+@warte 2
 -> SONNTAG
 
 # ---- Sonntag ----
@@ -2838,6 +3217,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 @stille
 @karte Sonntag. 09:00. Noch 24 Stunden.
 @uhr So 09:00
+@handy meldung Outlook | Uni | Erinnerung: Prüfung Mo 9:00 | 08:15
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   -> SB
 @ende
@@ -2859,14 +3239,29 @@ Ich leg das Handy weg. Zwei Tage noch.
 @ende
 # V8.8 (M): Jonas mittags
 @lernplan aus
-@uhr So 12:40
+@uhr springe So 12:40
+# V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
 @ton bzzz
+@warte 1.4
+@handy sperr
+@benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
+@warte 1.6
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
-@tippe lern
+@tippe lern grad
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
+# V8.9 (Philip 24.11.): Sonntag, Regen – Erleichterung
+~ Sonntag.
+~ Keiner postet was.
+~ Alle liegen im Bett und bereuen.
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause
+@warte .8
+@ton ausatmen
+… !3
+~ Ruhe.
+… !2
 @wenn typ!="party" || lernstand>=LERN_HOCH
   @lernplan stand ok1 ok2 ok3
 @sonst
@@ -2878,11 +3273,6 @@ Ich leg das Handy weg. Zwei Tage noch.
 @lernplan haken 4
 @bild SO1d schnitt
 @warte 1.2
-@wenn typ=="party" && lernstand<LERN_HOCH
-  @lernplan blick 3
-  @warte .8
-@ende
-@lernplan blick 5
 @warte 1.4
 @wenn typ=="zuhause" && weg=="A"
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
@@ -2898,12 +3288,20 @@ Ich leg das Handy weg. Zwei Tage noch.
 # V8.8 (K): Verschreiber, ganz kurz, kein Gedanke dazu
 „Lynn kauft bei V einen gebrauchten Laptop …“ ⌫ynn
 @schwarz
+# V8.9: erst schreibt der Stift, der erste Haken beendet ihn
 @ton PR3_stift
+@warte 1.4
 {haken}Check. {haken}Check. {haken}Check.
 # V8.7 (D11): erst das stille Handy, dann der Foto-Dump
 @bild K10P
-Es liegt da seit heute Morgen. Es ist still.
-? „Umdrehen.“ -> SO3_UM +handy
+# Storycheck 3 (Z15, Patrick 24.11.): seit Mittag (12:40 „lern grad“); statt „Es ist still.“ eine Pause, Regen und Zimmer laufen weiter
+Es liegt da seit Mittag.
+@leer
+# Patrick 24.11.: Regen in der Pause nur minimal leiser, danach wieder normal
+@loop regen laut 0.8 1.5
+@warte 4
+@loop regen laut 1 1.5
+? „Handy umdrehen.“ -> SO3_UM +handy
 ? „Liegen lassen.“ -> SO4
 
 == SO3_UM
@@ -2911,8 +3309,14 @@ Es liegt da seit heute Morgen. Es ist still.
 Keine Benachrichtigung.
 @handy zu
 Ich leg es wieder hin.
+# V8.9 (Storycheck 2B, S1): Umdrehen zählt nicht als Lernen – Lernpunkt überspringen
+-> SO4_FOTOS
 
 == SO4
+# V8.9: Handy liegen lassen und weiterlernen zählt
+@setze lernstand + 1
+
+== SO4_FOTOS
 # Lena postet den Foto-Dump
 @bild K10P
 @ton bzzz
@@ -2934,7 +3338,11 @@ Ich leg es wieder hin.
   @handy story lena.xo B12A 2 Min.
   @warte 1
   … !2
-  Ich tipp aufs Herz.
+  ~ Nen Award kriegt sie dafür wahrscheinlich nicht.
+  @abzeichen Fotograf des Jahres
+  … !2
+  ~ Naja.
+  @handy herz
   … !2
 @sonst
   @handy story lena.xo B12A 2 Min.
@@ -2972,23 +3380,68 @@ Ich krieg das hin.
 @lernplan haken 1
 @warte .4
 @lernplan haken 2
+# V8.9 (Philip 24.11.): ein Fall, der nicht aufgeht
+@lernplan aus
+„K überweist aus Versehen 500 Euro an B …“
+…
+„K überweist aus Versehen …“
+„K überweist …“
+~ Was war nochmal eine Leistung?
+… !2
+~ Das wusste ich mal.
 … !3
+@lernplan stand ok1 ok2
 @lernplan streich 3
 @lernplan streich 4
 @lernplan streich 5
 ~ Kommt eh nicht dran.
 @lernplan aus
+~ Sonntag.
+~ Keiner postet was.
+~ Alle liegen im Bett und bereuen.
+# V8.9 (Patrick): statt „Endlich verpass ich mal nichts.“ – Ausschnaufen über die Pause
+@warte .8
+@ton ausatmen
+… !3
+~ Ruhe.
+… !2
 # V8.8 (M): Jonas mittags
-@uhr So 12:40
+@uhr springe So 12:40
+# V8.9 (Patrick 24.11.): erst vibriert es (Handy liegt), dann schaut er drauf, dann der Chat
+@setze jonasliegen = 0
 @ton bzzz
+@warte 1.4
+@handy sperr
+@benachrichtigung WhatsApp | Jonas | pizza heute? 🍕
+@warte 1.2
+# V8.9 (Patrick 24.11., Punkt 6): selbst entscheiden, ob er nachschaut
+? „Nachschauen.“ -> SB_JONAS +handy
+? „Liegen lassen.“ -> SB_JONAS_LIEGEN
+
+== SB_JONAS
 @handy chat Jonas
 @nachricht Jonas: pizza heute? 🍕
-@tippe lern
+@tippe lern grad
 @nachricht Jonas: ok 😔 dann montag
 @warte 1
 @handy zu
+-> SB_ABEND
+
+== SB_JONAS_LIEGEN
+@setze jonasliegen = 1
+@handy zu
+
+== SB_ABEND
 # V8.5: 23:12 → 22:31, weil danach die Sonntagnacht um 22:40 beginnt
-@uhr So 22:31
+@uhr springe So 22:31
+# V8.9: wer mittags liegen gelassen hat, liest Jonas erst jetzt
+@wenn jonasliegen
+  @handy chat Jonas
+  @warte 1.4
+  @tippe lern grad
+  @nachricht Jonas: ok 😔 dann montag
+  @warte 1
+@ende
 @handy sperr
 … Ich krieg das hin.
 -> SONNTAGNACHT
@@ -3013,6 +3466,8 @@ Ich krieg das hin.
 @handy chat Lena
 @nachricht! Lena: und diesmal nicht bis 4 uhr lernen 🙄
 @nachricht Lena: du kannst das eh ❤️
+~ Wie die letzten zwei Male.
+@tippeweg Danke, bedeutet mir v
 @tipp
 @handy zu
 … !2
@@ -3046,6 +3501,10 @@ Ich krieg das hin.
 ? „Gruppe stummschalten.“ -> SN_STUMM
 
 == SN_AUF
+# V8.9: wer den Stoff noch nicht kennt, lernt in letzter Minute ein bisschen
+@wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
+  @setze lernstand + 1
+@ende
 @handy pdf Bereicherungsrecht_komplett.pdf 34
 @handy pdfweiter 4
 @uhr springe So 23:50
@@ -3053,13 +3512,13 @@ Ich krieg das hin.
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   ~ … kenn ich nicht.
 @sonst
-  ~ … das stand so nicht im Skript.
+  ~ … Kenn ich. Das hab ich heute durch.
 @ende
 @handy pdfweiter 11
 @wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
   ~ … nie gehört.
 @sonst
-  ~ … Saldotheorie? Warte.
+  ~ … Saldotheorie. Hatte ich auch.
 @ende
 @handy pdfweiter 19
 ~ … die trollt doch.
@@ -3090,10 +3549,14 @@ Ich krieg das hin.
   # V8.7 (D24): Wecker 6:30
   @stille
   @schwarz schnitt
+  @warte 4.5
   @uhr Mo 06:30
-  @handy sperr
-  @ton! wecker 3.5s
-  @ton display_klick
+  # V8.9 (Patrick 24.11.): erst klingeln, dann Handy, dann aus
+  @ton wecker 7s
+  @warte 2.4
+  @handy wecker
+  @warte 1.2
+  @handy weckeraus
   -> EN2
 @ende
 @loop herzschlag an
@@ -3122,7 +3585,7 @@ Ich schau nur, wie spät es ist.
 @handy ungelesen Lerngruppe Schuldrecht | 14 | Paul: ich bin so am arsch
 @handy liste
 ? „Lesen.“ -> SN_LESEN +handy
-? „Umdrehen.“ -> SN_UMDREHEN
+? „Augen zu.“ -> SN_UMDREHEN
 
 == SN_LESEN
 @handy chat Lerngruppe Schuldrecht
@@ -3144,7 +3607,8 @@ Ich schau nur, wie spät es ist.
 
 == SN_SCHLAF
 … !3
-~ Noch sieben Stunden.
+# Storycheck 3 (Z10, Patrick 24.11.): 01:47 bis 6:30 = knapp fünf Stunden
+~ Noch fünf Stunden.
 ~ Wenn ich jetzt einschlafe.
 @wenn typ=="gluecklich"
   ~ Letzter.
@@ -3155,23 +3619,31 @@ Ich schau nur, wie spät es ist.
 # Morgen (wer schlecht geschlafen hat): drei Wecker
 @stille
 @schwarz schnitt
+# V8.9: längere Pause vor dem Wecker
+@warte 4.5
+# V8.9 (Patrick 24.11.): erst klingelt der Wecker im Dunkeln, dann greift er zum Handy und drückt ihn weg – dreimal
 @uhr Mo 06:30
-@handy sperr
-@ton! wecker 3.5s
+@ton wecker 7s
+@warte 2.6
+@handy wecker
+@warte 1.4
+@handy schlummern
 @handy zu
-@warte 1.5
+@warte 1.8
 @uhr Mo 06:35
-@handy sperr
-@ton wecker 2.6s
-@warte 2.8
-@ton display_klick
+@ton wecker 7s rate1.15 vol1.3
+@warte 1.8
+@handy wecker
+@warte 1
+@handy schlummern
 @handy zu
 @warte 1.2
 @uhr Mo 06:40
-@handy sperr
-@ton wecker 2.2s
-@warte 2.4
-@ton display_klick
+@ton wecker 7s rate1.4 vol1.6
+@warte 1.2
+@handy wecker
+@warte .7
+@handy weckeraus
 -> EN2
 
 == MO_MORGEN
@@ -3228,8 +3700,10 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
   Die Buchstaben auf den Karteikarten der anderen verschwimmen kurz.
 @ende
 # Zwei letzte Nachrichten. Zählen nie als Handy-Punkt: Schauen ist hier richtig.
-@handy sperr
+# V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
 @ton bzzz
+@warte .9
+@handy sperr
 @benachrichtigung WhatsApp | Mama | Viel Erfolg heute, mein Schatz ❤️
 @wenn typ=="gluecklich"
   @warte .8
@@ -3276,7 +3750,6 @@ Blau.
 @sonst
   @schema 2 phantom
   … !2
-  ~ … Das ist aus.
   ~ Das liegt da vorne. Aus.
   … !2
   ~ … Wo war ich?
@@ -3290,11 +3763,28 @@ Blau.
 @uhr laufen Mo 11:50
 @bild N25L langsam
 Senner: „Noch zehn Minuten.“
+# V8.9 (Patrick): Spät-Weg – das Echo von „Zehn Minuten. Beide Male.“, egal wie die Prüfung läuft
+@wenn lynn=="" && ankunft>23:30
+  ~ Wie immer.
+@ende
+# V8.9: viel Handy kostet Lernen (je 2 Handy-Punkte -1)
+@wenn punkte>=2
+  @setze lernstand - 1
+@ende
+@wenn punkte>=4
+  @setze lernstand - 1
+@ende
+@wenn punkte>=6
+  @setze lernstand - 1
+@ende
 # V8.8 (G27): drei Stufen nach Lernstand (auch Lynn-Weg)
 @wenn lernstand>=LERN_HOCH
-  Ich bin bei Fall drei.
+  # V8.9 (Philip): gute Stufe – alles fertig
+  Fall drei. Fertig.
   @ton PR3_stift 2.5s
-  ~ Reicht.
+  ~ Ich les noch mal drüber.
+  … !2
+  ~ … Passt.
   @wenn typ=="gluecklich"
     ~ Ich denk an zwei Uhr.
   @ende
@@ -3302,8 +3792,11 @@ Senner: „Noch zehn Minuten.“
   … !2
 @ende
 @wenn lernstand>=LERN_MITTEL && lernstand<LERN_HOCH
+  # V8.9 (Philip): Zwischenstufe – eins und zwei gut, Fall drei halb
   Fall drei. Halb.
   @ton PR3_stift 1.6s
+  … !2
+  ~ Eins und zwei sollten passen.
   ~ Wird schon.
   @wenn typ=="gluecklich"
     ~ Ich denk an zwei Uhr.
@@ -3312,13 +3805,13 @@ Senner: „Noch zehn Minuten.“
 @ende
 @wenn lernstand<LERN_MITTEL
   ~ Fall drei fehlt.
+  # V8.9 (Philip): wenigstens steht bei eins und zwei was
+  … !1.5
+  ~ Bei eins und zwei steht wenigstens was.
   @ton PR3_stift 1.1s
   … !1
   ~ Zehn Minuten.
   @ton PR3_stift 0.7s
-  @wenn lynn=="" && ankunft>23:30
-    ~ Immer zehn Minuten.
-  @ende
   ~ Schreib einfach irgendwas.
   … !3
   ~ Alle guten Dinge sind drei.
@@ -3349,9 +3842,34 @@ Senner: „Noch zehn Minuten.“
 @uhr aus
 @schwarz
 @loop halle an
-# V8.7 (D27): „Blaues Licht“ – noch in der Halle, Pings, das Handy ist sofort oben (kein Tippen)
+# V8.9: beginnt wie das Pizza-Ende (Halle, zu Hause, Endlich …), dann statt Türklingel: Bzzz
+…
+… !3
+@loop halle aus
+@warte 2
+@bild N09T langsam
+@raum tag
+Zu Hause …
+… !2
+Endlich.
+… !2
+Oh Mann.
+Ich …
+@wenn lernstand>=LERN_HOCH
+  # V8.9 (Philip): wer viel gelernt hat, weiß es
+  … fass es kaum.
+  … !1.5
+  Ich glaub, es lief gut.
+  Und nein, …
+  … !1.5
+  Die letzten zwei Male hab ich mich nicht getraut, das zu sagen.
+@sonst
+  … weiß nicht mal, wie’s gelaufen ist.
+@ende
+… !1.5
+Und jetzt wieder warten, bis – >>
+# V8.7 (D27): „Blaues Licht“ – Pings, das Handy ist sofort oben (kein Tippen)
 @wenn typ!="gluecklich" && punkte>HIER_ODER_DA_BIS
-  @warte .8
   @ton bzzz
   @handy sperr
   @benachrichtigung WhatsApp | Jonas | bereit für heute abend? 😏
@@ -3364,17 +3882,16 @@ Senner: „Noch zehn Minuten.“
   @warte .5
   @handy chat Jonas
   @nachricht! Jonas: bereit für heute abend? 😏
-  @loop halle aus
   -> TWIST_SCHLUSS
 @ende
 @ton bzzz_doppel
-…
-… !4
-@loop halle aus
+@warte 1.5
 @wenn typ=="gluecklich" && OPTION_LYNN_UND==1
   # (Option aus dem Dokument, noch offen)
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Lynn | und? 🙂
   @tipp
   @handy chat Lynn
@@ -3382,8 +3899,10 @@ Senner: „Noch zehn Minuten.“
   @warte 3
   -> ENDE_LYNN
 @sonst
-  @handy sperr
+  # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
   @ton bzzz
+  @warte .9
+  @handy sperr
   @benachrichtigung WhatsApp | Jonas | bereit für heute abend? 😏
   @tipp
 @ende
@@ -3415,7 +3934,17 @@ Endlich.
 … !2
 Oh Mann.
 Ich …
-… weiß nicht mal, wie’s gelaufen ist.
+@wenn lernstand>=LERN_HOCH
+  # V8.9 (Philip): wer viel gelernt hat, weiß es
+  … fass es kaum.
+  … !1.5
+  Ich glaub, es lief gut.
+  Und nein, …
+  … !1.5
+  Die letzten zwei Male hab ich mich nicht getraut, das zu sagen.
+@sonst
+  … weiß nicht mal, wie’s gelaufen ist.
+@ende
 … !1.5
 Und jetzt wieder warten, bis – >>
 @ton! tuerklingel
@@ -3463,6 +3992,9 @@ Ich: „Und gegen wen?“
 @gesicht LDa
 Lynn: „Jonas.“
 … !1.5
+# Storycheck 3 (Patrick 24.11.): kurzer Rückgriff – Jonas hat so gedrängt, weil er wollte, dass er kommt
+Lynn: „Ich glaub, der wollte verlieren.“
+… !1.5
 @gesicht LDh
 Lynn: „Ich wollt dir übrigens schreiben. Zweimal.“
 Ich: „Und?“
@@ -3470,12 +4002,51 @@ Ich: „Und?“
 Lynn: „Hab’s wieder gelöscht.“
 @gesicht aus
 Ich: „… Kenn ich.“
+# V9.0 (Patrick 25.11.): Rückblende aufs Zögern. Date-Musik aus, Bild dunkelt ab, Flashback-Ton genau mit dem Bild
+Lynn: „Und Freitag.“
+@loop restaurant aus
+@schwarz langsam
+@warte .8
+@effekt traum
+@bild N34Z3 langsam
+@warte 3
+Lynn: „Auf dem Balkon.“
+… !2
+@bild N34Z3a langsam
+Lynn: „Denkst du, ich hab’s nicht gemerkt?“
+… !2.5
+Lynn: „Ich sag doch.“
+… !1.5
+@bild N34Z3 langsam
+… !1.5
+Lynn: „Feigling.“
+… !2.5
+@schwarz langsam
+@stille
+Lynn: „Und …“
+… !1.5
+Lynn: „Traust du dich nächstes Mal?“
+… !2
+@effekt traum aus
+@effekt vorstellung
+@bild N34ZA sehrlangsam
+@warte 3.5
+Ich: „Ja.“
+@warte 2
+@bild N34ZB sehrlangsam
+@warte 4
+@effekt vorstellung aus weich
+@schwarz langsam
+@bild LD1 schnitt
+@loop restaurant an
+… !2.5
 @ton bzzz
 @banner WhatsApp | Jonas | bereit für heute abend? 😏
 @warte 1.8
-Lynn: „Musst du nicht schauen?“
+Lynn: „Unwichtig?“
+… !2
 @banner aus
-Ich: „Nah.“
+Ich: „…“
 @gesicht LD4
 @ton handy_ablegen
 … !3

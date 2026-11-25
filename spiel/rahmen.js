@@ -8,14 +8,14 @@ const Rahmen = (() => {
   const bw = document.getElementById('zimmer');
   const $ = id => document.getElementById(id === 'bw' ? 'zimmer' : 'z-' + id);
   const reduziert = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const ENDEN = ['Leiser', 'Hier oder da', 'Blaues Licht'];
+  const ENDEN = ['Leiser', 'Blaues Licht', 'Montagabend'];   // V8.9: ein Name pro Schluss (Pizza / Jonas schreibt / Lynn)
   const TOENUNG = {
     'Leiser': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(90,110,220,.18),transparent 70%)',
-    'Hier oder da': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(240,160,64,.14),transparent 70%)',
-    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)'
+    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)',
+    'Montagabend': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'
   };
   // Handy auf dem Tisch je Ende: umgedreht / meldet sich ab und zu / Display dauerhaft an
-  const HANDY = { 'Leiser': 'unten', 'Hier oder da': 'oben', 'Blaues Licht': 'hell' };
+  const HANDY = { 'Leiser': 'unten', 'Blaues Licht': 'hell', 'Montagabend': 'unten' };
   const T = (k, d) => (api && api.TEXTE[k] != null && api.TEXTE[k] !== '') ? api.TEXTE[k] : d;
   const S = () => api.S();
   // Abzeichen: [Name, Symbol, Farbe 1, Farbe 2, was man getan hat, vager Hinweis]
@@ -27,6 +27,7 @@ const Rahmen = (() => {
 
   // Zeitpläne, damit Wechsel sauber abbrechen
   let plaene = [];
+  let verpasstPlan = null;
   function plan(fn, ms) { const id = setTimeout(fn, ms); plaene.push(id); return id; }
   function planStopp() { plaene.forEach(clearTimeout); plaene = []; }
 
@@ -182,7 +183,7 @@ const Rahmen = (() => {
     }
     ton('bzzz');
     // V8.6: Lampe flackert nur noch bei jeder dritten Nachricht, weich
-    if (!reduziert && (++flackZ % 3 === 1)) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
+    if (!reduziert) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
     sichern();
   }
   function nachrichtenStart(verz) { nachrichtenStopp(); nStart = setTimeout(() => { neu(); nTimer = setInterval(neu, 3600); }, verz); }
@@ -223,7 +224,7 @@ const Rahmen = (() => {
     sp.classList.remove('gelesen');
     bzzzZaehler = 0; besuch(); uhrzeitSetzen();
     if (nachWeg && laeufe() > 0) { S().nachr = (S().nachr || 0) + 6 + Math.floor(Math.random() * 7); zaehlerText(); kopf.classList.add('an'); sichern(); }
-    if (nachWeg && window.Ton) Ton.outroAus();
+    if (window.Ton) Ton.outroAus();   // V8.9: auch beim Zurückkommen ins Menü nach dem Ende (Endmusik lief doppelt mit)
     ton('party_fern');   // beim allerersten Laden: Autoplay-Versuch (Browser blockt evtl. bis zum ersten Tippen)
     bw.classList.remove('anlauf'); void bw.offsetWidth; bw.classList.add('anlauf');
     bw.classList.add('tippbar'); tippAb = Date.now() + 500;
@@ -271,7 +272,7 @@ const Rahmen = (() => {
     $('e-nr').textContent = T('ende_nr', 'Ende {x} von 3').replace('{x}', ENDEN.indexOf(n) + 1);
     $('e-name').textContent = n;
     $('e-satz').textContent = s[4].replace('Ende: ', '');
-    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Montagabend. Das Handy liegt umgedreht auf dem Tisch.'; $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
+    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Das Handy liegt umgedreht auf dem Tisch.';   /* V8.9: Titel heißt jetzt selbst „Montagabend“ */ $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
     zeige(null); void bw.offsetWidth;
     zeige('s-ende');
   }
@@ -308,7 +309,7 @@ const Rahmen = (() => {
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
       $('p-entsch').innerHTML = 'Also auch noch nichts verpasst. Noch.';
-      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; }
+      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; const pv = $('p-verpasst'); if (pv) pv.innerHTML = ''; }
     } else {
       $('p-enden').innerHTML = offen > 0 ? T('enden_verpasst', 'Du hast {n} von 3 Enden verpasst. Schade.').replace('{n} von 3 Enden', '<b>{n} von 3 Enden</b>').replace('{n}', offen) : 'Du hast alle Enden gesehen. Und trotzdem.';
       const [nie, gesamt] = api.entscheidungen();
@@ -316,7 +317,17 @@ const Rahmen = (() => {
       // V8.4: wie oft man von sich aus aufs Handy geschaut hat
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
       if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
-        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+      // V8.9 (Patrick 24.11.): Verpasst-Liste wie Schlagzeilen, eine nach der anderen; dann verschwindet alles, nur „… und Lynn.“ bleibt
+      const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
+      if (pv) { pv.innerHTML = ''; pv.classList.remove('weg'); }
+      if (pv && vl.length) {
+        const VT = { geburtstag: 'Lenas Party des Jahres', lied: 'Lena heult bei Happy Birthday', feuerloescher: 'Die Feuerlöscher-Eskalation', mia: 'Mias Crashout auf der Tanzfläche', tim: 'Tims Absturz auf Lenas Teppich', afterparty: 'Tims Afterparty bis 3 Uhr', lynn: 'Lynn' };
+        const tx = k => T('verpasst_' + k, VT[k]);
+        const lynn = vl.includes('lynn'), rest = vl.filter(k => k !== 'lynn');
+        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? ' · ' : '') + '<b>' + tx(k) + '</b></span>').join('');
+        verpasstPlan = { pv, lynn, tx };
+      } else verpasstPlan = null;
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');
@@ -330,6 +341,12 @@ const Rahmen = (() => {
     }, t + j * (reduziert ? 0 : 720)));
     t += frische.length * (reduziert ? 0 : 720) + (reduziert ? 0 : 250);
     plan(() => bil.classList.add('da'), t);
+    if (verpasstPlan) { const { pv, lynn, tx } = verpasstPlan; const sp = [...pv.querySelectorAll('.vp')];
+      if (reduziert) { sp.forEach(x => x.classList.add('da')); if (lynn) pv.insertAdjacentHTML('beforeend', ' <span class="vp da">… und <b>' + tx('lynn') + '</b>.</span>'); }
+      else {
+        let u = t + 700; sp.forEach((x, i) => plan(() => x.classList.add('da'), u + i * 450)); u += sp.length * 450 + 1800;
+        if (lynn) { plan(() => pv.classList.add('weg'), u); plan(() => { pv.classList.remove('weg'); pv.innerHTML = '<span class="vl">… und <b>' + tx('lynn') + '</b>.</span>'; void pv.offsetWidth; pv.querySelector('.vl').classList.add('da'); }, u + 1500); }
+      } }
     if (!reduziert && laeufe() > 0) zu.forEach((k, j) => plan(() => { k.classList.add('blick'); plan(() => k.classList.remove('blick'), 520); }, t + 500 + j * 190));
   }
 
@@ -421,7 +438,7 @@ const Rahmen = (() => {
         b.querySelector('.mt').textContent = T(k, b.dataset.t);
       });
       $('tippen').textContent = T('start_tippen', 'Tippen zum Starten');
-      $('iosnote').textContent = a.iosHinweis || '';
+      $('iosnote').textContent = [a.iosHinweis, 'Tipp: Dunkelmodus für Webseiten ausschalten.'].filter(Boolean).join(' ');
       zaehlerText();
     },
     start: startZeigen,
