@@ -4007,6 +4007,7 @@ Lynn: „Ich sag doch.“
 Lynn: „Feigling.“
 … !2.5
 @schwarz langsam
+@stille
 Lynn: „Und …“
 … !1.5
 Lynn: „Traust du dich nächstes Mal?“
