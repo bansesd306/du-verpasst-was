@@ -1,14 +1,25 @@
-# Sprechtext „FoMO – die Theorie zum Spiel“ (Entwurf 1, 25.11.2026)
+# Sprechtext „FoMO – die Theorie zum Spiel“ (Fassung 2, 25.11.2026)
 
 Für Patricks Stimme, Anrede „ihr“. [Eckige Klammern] = Bildhinweise, nicht sprechen. Dateinamen aus `spiel/dist/img/`, Details in `SZENENLISTE.md`.
 Länge: ca. 1.500 gesprochene Wörter ≈ 10:45–11:10 Min. (135–140 Wörter/Min.). Zum Kürzen zuerst Abschnitt 5 (Schlaf) oder die Need-for-Touch-Sätze streichen. Zeitmarken grob.
 Belege in (Klammern) nur zur Kontrolle, nicht sprechen; im Video als kleine Einblendung unten links (z. B. „Przybylski et al., 2013“).
+**[WITZ-STELLE]** = hier passt ein Witz oder eine Anspielung aufs Spiel; Patrick schreibt sie selbst (Vorschläge in Klammern sind nur Ideen).
+Länge ist offen (Patrick 25.11.: länger als 10 Min. ist ok).
+
+**Regeln für die Animation (gelten im ganzen Video):**
+- Kritzel-Stil wie die Probe (`probe/`): Strichmännchen, dicke Tintenlinie, Handschrift (Caveat/Patrick Hand). Spielbilder bleiben echt und farbig, nur mit Kritzel-Rahmen oder in Gedankenblasen.
+- **Farbe als Regel:** Wenn FoMO kickt, wird die Welt grau; Gedankenblase und Handy bleiben bunt. Flow und Lynn = alles wieder bunt.
+- **Die rote Zahl** (Benachrichtigungs-Abzeichen) ist eine Nebenfigur: folgt der Figur, wächst, schubst sie an, platzt am Schluss.
+- **Vierfarbstift** hinter dem Ohr der Figur (Lynns Stift).
+- **Randnotizen** wie auf einem Lernzettel: kleine Kritzel-Kommentare mit Pfeil („Korrelation, keine Ursache!“, „klausurrelevant 😅“).
+- **Übergänge** als Karteikarten, die umgeblättert werden.
+- **Jonas-Cameo:** kleines Strichmännchen mit Pizzakarton schiebt sich ab und zu ins Bild.
 
 ---
 
 ## 1 · Einstieg (0:00–0:45)
 
-[Schwarz. Dann Handy-Chat aus dem Spiel: Jonas „glaub mir, du verpasst was“ – Bild N02.webp mit Handy, Szene K1]
+[Schwarz. Dann Handy-Chat aus dem Spiel: Jonas „glaub mir, du verpasst was“ – Bild N02.webp mit Handy, Szene K1. Danach Animation wie in der Probe: Figur am Schreibtisch, Bzzz, rote Zahl erscheint zum ersten Mal.]
 
 „Glaub mir, du verpasst was.“
 
@@ -18,6 +29,8 @@ Den Satz habt ihr im Spiel gelesen. Wahrscheinlich nicht zum ersten Mal. Und vie
 
 Genau darum geht es in diesem Video. Um das Gefühl, dass gerade woanders etwas Besseres passiert. Ohne mich. Die Psychologie nennt das „Fear of Missing Out“, kurz FoMO. Ich erkläre euch, was die Forschung darüber weiß, was sie nicht weiß, und wo genau das alles im Spiel steckt.
 
+[WITZ-STELLE: kurzer Satz zum Zuschauen statt Weiterspielen, z. B. dass das Video auch ein Weg ist, nichts zu verpassen]
+
 ## 2 · Was ist FoMO? (0:45–2:10)
 
 [Folie: Definition im Original, darunter deutsch]
@@ -26,11 +39,11 @@ Die bekannteste Definition kommt von Andrew Przybylski und Kollegen aus dem Jahr
 
 Wichtig ist das Wort „Besorgnis“. FoMO ist keine Panik. Es ist eher ein Ziehen. Eine Unruhe, die euch beim Lernen kurz rausholt.
 
-[Folie: „Keine Diagnose“ – DSM-5 / ICD-11 durchgestrichen]
+[Animation: Figur auf einer Arztliege, Arzt-Strichmännchen blättert im dicken Diagnosebuch, findet nichts, zuckt mit den Schultern. Randnotiz: „keine Diagnose“]
 
 Und noch etwas vorab, weil das oft falsch verstanden wird: FoMO ist keine Krankheit. Es steht in keinem Diagnosehandbuch, es ist keine Angststörung. Der Begriff kam ursprünglich aus Zeitungsartikeln, also aus dem Alltag. (Elhai et al., 2016) Die Psychologie hat ihn dann aufgegriffen und messbar gemacht: mit einem Fragebogen aus zehn Aussagen, zum Beispiel „Es stört mich, wenn ich eine Gelegenheit verpasse, mich mit Freunden zu treffen.“ Jeder Mensch landet da irgendwo auf der Skala. Die Frage ist nicht, ob ihr FoMO habt, sondern wie viel.
 
-[Folie: Balken „Jüngere: mehr FoMO“, „abends, Wochenende, bei Pflichten“]
+[Animation: Wochenkalender Mo–So als Karteikarte, eine Kritzel-Kurve steigt zum Freitagabend; Figur sitzt mit Büchern im Freitag-Feld]
 
 Wer hat besonders viel? Jüngere Menschen eher als ältere. (Przybylski et al., 2013) Und wann tritt es auf? Eine Studie mit Studierenden hat das über Tage hinweg mehrmals am Tag abgefragt. FoMO kam vor allem abends, gegen Ende der Woche – und dann, wenn man gerade etwas tun musste, statt etwas zu wollen. Also zum Beispiel lernen. (Milyavskaya et al., 2018)
 
@@ -38,13 +51,13 @@ Freitagabend, Lernen, die anderen feiern. Klingt bekannt?
 
 ## 3 · Warum fühlen wir das? (2:10–3:25)
 
-[Folie: drei Kreise – Kompetenz, Autonomie, Eingebundenheit]
+[Animation: drei Kreise füllen sich wie Akkus – Kompetenz (Figur mit Haken), Autonomie (Figur am Steuer), Eingebundenheit (Figur zwischen Freunden). Der dritte Akku ist bei FoMO fast leer.]
 
 Um zu verstehen, woher FoMO kommt, hilft die Selbstbestimmungstheorie von Ryan und Deci. Sie sagt: Wir Menschen haben drei psychologische Grundbedürfnisse. Kompetenz, also das Gefühl, etwas zu können. Autonomie, also selbst zu entscheiden. Und soziale Eingebundenheit, also dazuzugehören. (Ryan & Deci, 2000)
 
 Przybylski hat gefunden: Wer diese Bedürfnisse im Alltag weniger erfüllt erlebt, hat mehr FoMO. (Przybylski et al., 2013) Das heißt nicht, dass das eine das andere verursacht. Aber die beiden hängen zusammen.
 
-[Folie: „Need to belong“]
+[Animation: Figur steht vor einer Gruppe, ein Kreis um die Gruppe, sie ist knapp draußen. Kreis öffnet sich, sie geht rein, Farbe kommt.]
 
 Besonders das dritte Bedürfnis ist stark. Baumeister und Leary haben schon 1995 argumentiert: Das Bedürfnis dazuzugehören ist so grundlegend wie Hunger. Wir wollen nicht irgendwelche Kontakte, sondern feste, wiederkehrende Beziehungen. Und wir reagieren empfindlich auf alles, was nach Ausschluss aussieht. (Baumeister & Leary, 1995)
 
@@ -52,13 +65,13 @@ FoMO ist also im Kern nichts Kaputtes. Es ist ein gesundes Bedürfnis, das in ei
 
 ## 4 · FoMO und das Smartphone (3:25–5:15)
 
-[Folie: Elhai et al. 2016, Titel; daneben „308 Erwachsene, Online-Befragung“]
+[Animation: 308 Mini-Strichmännchen füllen das Bild (Gitter), Titel der Studie als Karteikarte]
 
 Und wo kommt das Handy ins Spiel? Damit hat sich eine Studie von Jon Elhai und Kollegen aus dem Jahr 2016 beschäftigt. Sie haben 308 Erwachsene online befragt, im Schnitt 33 Jahre alt. Es ging um problematische Smartphone-Nutzung. Gemeint ist eine Nutzung, die den Alltag stört, bei der man sich ohne Handy unwohl fühlt und nicht aufhören kann. (Elhai et al., 2016)
 
 Sie haben mehrere mögliche Ursachen gleichzeitig angeschaut: Angst, depressive Symptome, wie man mit Gefühlen umgeht, und eben FoMO.
 
-[Folie: Balkendiagramm „Stärkster Faktor: FoMO“]
+[Animation: Kritzel-Balken wachsen nacheinander: Angst, Need for Touch, FoMO; der FoMO-Balken ist rot und wächst am höchsten. Die rote Zahl sitzt oben drauf.]
 
 Das Ergebnis: FoMO war der stärkste Faktor für problematische Nutzung. Stärker als Angst. Danach kam übrigens etwas, das „Need for Touch“ heißt – ein Begriff aus der Marketingforschung. Manche Menschen wollen Dinge gern anfassen, um sie zu beurteilen. Die Autoren vermuten, dass solche Menschen auch das Tippen und Vibrieren am Handy angenehmer finden.
 
@@ -66,25 +79,27 @@ Das Ergebnis: FoMO war der stärkste Faktor für problematische Nutzung. Stärke
 
 Jetzt kommt der Teil, der mich am meisten überrascht hat. FoMO hing in der Studie mit problematischer Nutzung zusammen, aber nicht damit, wie oft jemand das Handy benutzt. Viel Nutzung ist also nicht automatisch ein Problem. Entscheidend ist, warum und wie man schaut.
 
-[Folie: Handy, Vibrationssymbol mit Fragezeichen]
+[Animation: 100 kleine Handys im Gitter, 89 davon zittern, Zahl „89 %“ schreibt sich]
 
 Zwei Phänomene passen dazu. Erstens: Phantomvibrationen. In einer Befragung unter Studierenden gaben 89 Prozent an, dass sie schon mal gespürt haben, wie das Handy vibriert – obwohl es gar nicht vibriert hat. (Drouin et al., 2012)
 
 Zweitens: das Gewohnheits-Checken. Eine Studie, die echte Handynutzung aufgezeichnet hat, zeigt: Viele Blicke aufs Handy sind ganz kurz. Kurz entsperren, schauen, ob was Neues da ist, wieder weg. Ohne dass etwas passiert ist. (Oulasvirta et al., 2012)
 
+[WITZ-STELLE: Anspielung auf Benachrichtigungen ohne Inhalt, z. B. Kleinanzeigen „Fahrrad“ oder „Wetter · Morgen 4 °C“]
+
 ## 5 · Vergleichen und Schlafen (5:15–6:20)
 
-[Folie: Pfeil nach oben, „Aufwärtsvergleich“]
+[Animation: Figur steht auf einer Treppe; auf jeder höheren Stufe ein Handy-Foto mit glücklicheren Leuten; Figur wird mit jedem Blick kleiner und grauer]
 
 Zwei weitere Mechanismen machen FoMO stärker. Der erste ist der soziale Vergleich. Leon Festinger hat schon 1954 beschrieben, dass wir uns selbst einschätzen, indem wir uns mit anderen vergleichen. (Festinger, 1954) Auf Social Media vergleichen wir uns aber vor allem mit den besten Momenten der anderen. Eine Studie zeigte: Wer sich häufiger auf Facebook nach oben vergleicht, hat ein geringeres Selbstwertgefühl. (Vogel et al., 2014)
 
-[Folie: Mond, Uhrzeit 01:47]
+[Animation: Figur im Bett, Handylicht im Gesicht, Uhr springt 23:10 → 00:40 → 01:47; draußen gehen Fenster aus]
 
 Der zweite ist der Schlaf. Studierende mit mehr FoMO berichteten mehr Müdigkeit und weniger Schlaf. (Milyavskaya et al., 2018) Und eine Studie von 2023 fand: Mehr FoMO geht mit späterem Schlafengehen einher, und zwar über das Grübeln. Man liegt da, denkt an das, was man verpasst, und schaut nochmal nach. (Flores et al., 2023)
 
 ## 6 · Was die Forschung nicht weiß (6:20–7:00)
 
-[Folie: „Zusammenhang ≠ Ursache“]
+[Animation: Pfeil zwischen „FoMO“ und „Handy“ dreht sich hin und her; Randnotiz „Korrelation, keine Ursache!“]
 
 Bevor wir zum Spiel kommen, müssen wir ehrlich sein. Fast alle Studien, die ich genannt habe, sind Befragungen. Oft zu einem einzigen Zeitpunkt, oft mit Studierenden oder mit bezahlten Online-Teilnehmenden. Das zeigt Zusammenhänge. Ob FoMO die Handynutzung verursacht, oder die Handynutzung FoMO, oder beides etwas Drittes hat – das wissen wir nicht. Auch Elhai und Kollegen schreiben das selbst über ihre Studie. (Elhai et al., 2016)
 
@@ -93,6 +108,8 @@ Und noch etwas: Das Handy ist nicht der Feind. Es ist der Ort, an dem FoMO gerad
 ## 7 · Wo steckt das im Spiel? (7:00–10:00)
 
 [Spielbild B05.webp, dann K10P.webp]
+
+[WITZ-STELLE: Übergang ins Spiel, z. B. Anspielung auf den Kühlschrank für 9 statt 900 Euro]
 
 Jetzt zum Spiel. Die Ausgangslage ist genau das, was Milyavskaya beschreibt. Freitagabend. Sechzig Stunden bis zur letzten Prüfung. Er muss lernen. Die anderen feiern.
 
@@ -107,6 +124,8 @@ Wenn ihr zu Hause geblieben seid und das Handy liegen lasst, kommt der Flow. „
 [K10P.webp, Tippen „Lynn leiht sich …“ mit Löschen]
 
 Wenn nicht, wandert der Kopf. „L leiht sich von F ein Fahrrad …“ wird zu „Lynn leiht sich …“. Das Handy ist weg, das Gefühl nicht. FoMO ist kein Handyproblem. Es sitzt im Kopf.
+
+[WITZ-STELLE: der Verschreiber selbst ist schon der Witz; evtl. kurzer Kommentar]
 
 [N02.webp mit Textbox Sophie „Kommst du mit?“ / „Ich lern.“ / „Aha.“]
 
@@ -124,9 +143,13 @@ Aber auch wer zur Party geht, ist nicht sicher. In der Küche erzählt jemand vo
 
 Mia ist die Figur, die FoMO zur Strategie gemacht hat. „Ich war heute schon auf drei Partys.“ – „Gleichzeitig?“ – „Story-mäßig, ja.“ – „Warum drei?“ – „Falls eine scheiße ist.“ Und dann: „Meistens sind’s dann alle.“
 
+[WITZ-STELLE: Mia „Ist das rechtlich bindend?“]
+
 [N16.webp Bad, dann N28.webp im Handy]
 
 Im Bad schickt Tim ein Foto von seiner Afterparty. „Ein anderes Wohnzimmer. Andere Leute. … Sieht voller aus.“ Das ist Festingers Aufwärtsvergleich. Und während er im Handy schaut, wer gerade wo ist, passiert draußen der Moment des Abends: der Feuerlöscher. „Als ich rauskomme, lachen noch alle. Es ist schon vorbei.“ Man kann dabei sein und trotzdem verpassen.
+
+[WITZ-STELLE: „Ich will aber nicht nach scheiß Rom“ oder Tims Krypto-Ding]
 
 [N14.webp Balkon; Handy-Benachrichtigung „Wetter · Morgen 4 °C“; dann N15.webp leerer Balkon]
 
@@ -148,9 +171,20 @@ Und dann ihr selbst. Oben links war die ganze Zeit dieser Handy-Knopf. Am Ende s
 
 Das Spiel sagt dabei nicht: Handy ist schlecht. Wer Paul in der Lerngruppe hilft, hört am Montag vor der Prüfung: „Fall 12 hab ich nur wegen dir gecheckt.“ – „Ehrenmann.“ Und das beste Ende kommt auch übers Handy: Lynn schreibt „und? 🙂“.
 
-## 8 · Schluss (10:00–10:45)
+## 7b · Persönlicher Teil, Patrick vor der Kamera (ca. 0:45–1:00, frei sprechen)
 
-[N37.webp Jonas mit Pizza, Overlay N37b; dann Schwarz]
+[Vollbild Kamera: Patrick am eigenen Schreibtisch, Lampe an, Handy mit Display nach unten auf dem Tisch – wie die Figur. Halbnah, in die Linse.]
+
+Stichpunkte (keine fertigen Sätze):
+- Warum ein Spiel und kein Referat? Man soll das Gefühl selbst haben, nicht nur davon hören.
+- Ein konkreter eigener Moment mit FoMO (wann, wo, was hast du gemacht, wie ging es aus). Konkret ist wichtiger als allgemein.
+- Was du wolltest: nicht „Handy ist böse“, sondern merken, wann man aus Unruhe schaut.
+- Was dir beim Bauen selbst aufgefallen ist (z. B. wie oft du beim Testen selbst auf den Handy-Knopf gedrückt hast).
+- Übergang zurück: „Und jetzt zum Schluss …“
+
+## 8 · Schluss
+
+[N37.webp Jonas mit Pizza, Overlay N37b; dann Schwarz. Animation: Jonas-Cameo schiebt sich ganz ins Bild, die rote Zahl platzt.]
 
 Und am Ende steht wieder Jonas da. Mit Pizza. „Bereit für heute Abend? … Du verpasst was.“
 
@@ -160,4 +194,6 @@ FoMO hört nicht auf. Es kommt aus einem gesunden Bedürfnis: dazugehören zu wo
 
 Deshalb zum Schluss eine Frage an euch: Wann habt ihr heute zuletzt aufs Handy geschaut, obwohl nichts Neues da war – und was habt ihr in dem Moment eigentlich gesucht?
 
-[Abspann: Quellenverzeichnis aus QUELLEN.md, ca. 15 Sekunden, nicht sprechen]
+Und falls ihr in einer Woche vergessen habt, worum es heute ging: Spielt nochmal und achtet darauf, wer das mit dem Feuerlöscher war.
+
+[Abspann: Quellenverzeichnis aus QUELLEN.md, ca. 15 Sekunden, nicht sprechen. Ganz klein am Ende: „Besonderer Dank: Forster Moritz 🧯“]
