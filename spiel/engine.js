@@ -177,9 +177,12 @@ const Spiel = (() => {
       && !$('#schwarz').classList.contains('an') && !$('#karte').classList.contains('an');
   }
   function blickAuf() {
-    blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
-    // V8.7 (D2): von sich aus nachschauen zählt mit – jeder zweite Blick = 1 Handy-Punkt (höchstens 3)
-    if (blick.zahl % 2 === 0 && blick.zahl <= 6) V.punkte = (V.punkte || 0) + 1;
+    // V8.9: „Unruhe-Blick“ = Knopf ist grau (keine rote Zahl), bevor etwas als gelesen markiert wird
+    const unruhe = Handy.zahl() === 0;
+    blick.offen = true; blick.zahl++; blick.neu = 0;
+    // Nur Unruhe-Blicke zählen (Bilanz „obwohl nichts Neues da war“ + Handy-Punkte): jeder zweite = 1 Punkt (höchstens 3).
+    // Blicke bei roter Zahl geben nie einen Punkt (Elhai 2016: problematische, nicht häufige Nutzung).
+    if (unruhe) { blick.leer++; if (blick.leer % 2 === 0 && blick.leer <= 6) V.punkte = (V.punkte || 0) + 1; }
     Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
