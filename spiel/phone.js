@@ -319,19 +319,20 @@ const Handy = (() => {
       if (da) {   // gruppiert wie Android: neue Zeile in die vorhandene Karte, Karte nach oben
         const nts = da.querySelectorAll('.nt'); const letzt = nts[nts.length - 1];
         if (text && (!letzt || letzt.textContent !== text)) { const d2 = document.createElement('div'); d2.className = 'nt neu'; d2.textContent = text; da.querySelector('.ntx').appendChild(d2); if (nts.length >= 3) nts[0].remove(); }
-        da.querySelector('.nkopf span').textContent = z; this._zahlKarte(da, k);
+        da.querySelector('.nzeit').textContent = z; if (!k) da._anz = (da._anz || 1) + 1; this._zahlKarte(da, k, da._anz);
         box.prepend(da); box.scrollTop = 0; da.classList.remove('stups'); void da.offsetWidth; da.classList.add('stups'); return;
       }
       const d = this._karte(appName, titel, text ? [text] : [], z, k);
       box.prepend(d); box.scrollTop = 0; notifs.push(d);
       while (box.children.length > 12) box.lastChild.remove();
     },
-    _karte(appName, titel, texte, zeit, k) {
+    _karte(appName, titel, texte, zeit, k, anzahl) {
       const ic = APPICON[appName] || ['#555', '•']; const d = document.createElement('div'); d.className = 'nk'; d.dataset.k = appName + '|' + titel;
-      d.innerHTML = `<span class="nic${ic[2] ? ' ' + ic[2] : ''}" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="napp">${esc(APPNAME[appName] || appName)}</div><div class="nkopf"><b>${esc(titel)}</b><em class="nz"></em><span>${zeit}</span></div>${texte.map(t => `<div class="nt">${esc(t)}</div>`).join('')}${appName === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="npf">⌄</span>`;
-      this._zahlKarte(d, k); return d;
+      // V8.9 (Patrick 25.11.): runder wie One UI – App-Zeichen als abgerundetes Quadrat, Uhrzeit oben neben dem App-Namen, Anzahl rechts
+      d.innerHTML = `<span class="nic${ic[2] ? ' ' + ic[2] : ''}" style="background:${ic[0]}">${ic[1]}</span><div class="ntx"><div class="napp">${esc(APPNAME[appName] || appName)}<span class="npunkt"> · </span><span class="nzeit">${zeit}</span></div><div class="nkopf"><b>${esc(titel)}</b></div>${texte.map(t => `<div class="nt">${esc(t)}</div>`).join('')}${appName === 'Wohlbefinden' ? '<div class="nsub">Digitales Wohlbefinden · Wochenbericht</div>' : ''}</div><span class="nrechts"><em class="nz"></em><span class="npf">⌄</span></span>`;
+      d._anz = anzahl || texte.length; this._zahlKarte(d, k, d._anz); return d;
     },
-    _zahlKarte(d, k) { const e = d.querySelector('.nz'); if (!e) return; const n = k && meta[k] ? meta[k].ungelesen || 0 : 0; e.textContent = n > 1 ? n + ' Nachrichten' : ''; },
+    _zahlKarte(d, k, anzahl) { const e = d.querySelector('.nz'); if (!e) return; const n = k && meta[k] ? meta[k].ungelesen || 0 : anzahl || 0; e.textContent = n > 1 ? n : ''; d.classList.toggle('mehr', n > 1); },
     // Tippen auf eine WhatsApp-Karte beim Selbst-Nachschauen: diesen Chat lesen
     chatVonKarte(karte) { const m = (karte.dataset.k || '').match(/^WhatsApp\|(.*)$/); return m ? chatKey(m[1]) : null; },
     sperrScroll(dy) { const b = $('.sp-notifs'); const sk = el.getBoundingClientRect().height / (el.offsetHeight || 1) || 1; b.scrollTop += dy / sk; },
@@ -663,7 +664,7 @@ const Handy = (() => {
       const box = $('.sp-notifs'); if (box.children.length) return; this._aufraeumen();
       // alles Ungelesene, neueste oben: Meldungen anderer Apps (gleiche App + Absender in einer Karte) und Chats mit ungelesenen Nachrichten
       const gruppen = {}; sonst.forEach(x => { const key = x.app + '|' + x.titel; const g = gruppen[key] || (gruppen[key] = { app: x.app, titel: x.titel, texte: [], zeit: x.zeit, n: 0 }); if (x.text && !g.texte.includes(x.text)) g.texte.push(x.text); g.zeit = x.zeit; g.n = Math.max(g.n, x.n || 0); });
-      const karten = Object.values(gruppen).map(g => ({ n: g.n, el: this._karte(g.app, g.titel, g.texte.slice(-3), g.zeit, null) }));
+      const karten = Object.values(gruppen).map(g => ({ n: g.n, el: this._karte(g.app, g.titel, g.texte.slice(-3), g.zeit, null, g.texte.length) }));
       Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).forEach(n => { const m = meta[n]; karten.push({ n: m.n || 0, el: this._karte('WhatsApp', anzeige(n), [m.vorschau], m.zeit || '', n) }); });
       karten.sort((x, y) => y.n - x.n).slice(0, 12).forEach(x => { x.el.style.animation = 'none'; box.appendChild(x.el); });
       box.scrollTop = 0;
