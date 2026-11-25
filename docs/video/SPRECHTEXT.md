@@ -50,11 +50,11 @@ Besonders das dritte Bedürfnis ist stark. Baumeister und Leary haben schon 1995
 
 FoMO ist also im Kern nichts Kaputtes. Es ist ein gesundes Bedürfnis, das in eine Situation gerät, in der es gerade nicht erfüllt wird.
 
-## 4 · Der Seminartext: FoMO und das Smartphone (3:25–5:15)
+## 4 · FoMO und das Smartphone (3:25–5:15)
 
 [Folie: Elhai et al. 2016, Titel; daneben „308 Erwachsene, Online-Befragung“]
 
-Und wo kommt das Handy ins Spiel? Damit hat sich unser Seminartext beschäftigt: Elhai, Levine, Dvorak und Hall, 2016. Sie haben 308 Erwachsene online befragt, im Schnitt 33 Jahre alt. Es ging um problematische Smartphone-Nutzung. Gemeint ist eine Nutzung, die den Alltag stört, bei der man sich ohne Handy unwohl fühlt und nicht aufhören kann. (Elhai et al., 2016)
+Und wo kommt das Handy ins Spiel? Damit hat sich eine Studie von Jon Elhai und Kollegen aus dem Jahr 2016 beschäftigt. Sie haben 308 Erwachsene online befragt, im Schnitt 33 Jahre alt. Es ging um problematische Smartphone-Nutzung. Gemeint ist eine Nutzung, die den Alltag stört, bei der man sich ohne Handy unwohl fühlt und nicht aufhören kann. (Elhai et al., 2016)
 
 Sie haben mehrere mögliche Ursachen gleichzeitig angeschaut: Angst, depressive Symptome, wie man mit Gefühlen umgeht, und eben FoMO.
 
@@ -86,7 +86,7 @@ Der zweite ist der Schlaf. Studierende mit mehr FoMO berichteten mehr Müdigkeit
 
 [Folie: „Zusammenhang ≠ Ursache“]
 
-Bevor wir zum Spiel kommen, müssen wir ehrlich sein. Fast alle Studien, die ich genannt habe, sind Befragungen. Oft zu einem einzigen Zeitpunkt, oft mit Studierenden oder mit bezahlten Online-Teilnehmenden. Das zeigt Zusammenhänge. Ob FoMO die Handynutzung verursacht, oder die Handynutzung FoMO, oder beides etwas Drittes hat – das wissen wir nicht. Auch die Autoren unseres Seminartexts schreiben das selbst. (Elhai et al., 2016)
+Bevor wir zum Spiel kommen, müssen wir ehrlich sein. Fast alle Studien, die ich genannt habe, sind Befragungen. Oft zu einem einzigen Zeitpunkt, oft mit Studierenden oder mit bezahlten Online-Teilnehmenden. Das zeigt Zusammenhänge. Ob FoMO die Handynutzung verursacht, oder die Handynutzung FoMO, oder beides etwas Drittes hat – das wissen wir nicht. Auch Elhai und Kollegen schreiben das selbst über ihre Studie. (Elhai et al., 2016)
 
 Und noch etwas: Das Handy ist nicht der Feind. Es ist der Ort, an dem FoMO gerade am leichtesten passiert.
 
@@ -114,7 +114,7 @@ Auf dem Schlummer-Weg fragt die Mitbewohnerin: „Kommst du mit?“ – „Ich l
 
 [N02D.webp, Fenster gegenüber gehen aus; Handy-Feed]
 
-Und dann geht nichts mehr. Er lernt nicht, er geht nicht hin. Er scrollt, bis gegenüber die Fenster ausgehen. Das ist das späte Schlafengehen aus der Studie von Flores – und was der Seminartext problematische Nutzung nennt.
+Und dann geht nichts mehr. Er lernt nicht, er geht nicht hin. Er scrollt, bis gegenüber die Fenster ausgehen. Das ist das späte Schlafengehen aus der Studie von Flores – und genau das, was Elhai problematische Nutzung nennt.
 
 [Party: N13.webp Küche]
 
@@ -142,7 +142,7 @@ Zu Hause in der Nacht schaltet er das Handy stumm. Ein paar Sekunden später: �
 
 [Endbildschirm Bilanz: „Du hast {n}-mal von dir aus aufs Handy geschaut …“]
 
-Und dann ihr selbst. Oben links war die ganze Zeit dieser Handy-Knopf. Am Ende steht, wie oft ihr von euch aus draufgeschaut habt – und wie oft davon, obwohl nichts Neues da war. Das ist Gewohnheits-Checken, an euch selbst gemessen. Und es ist genau der Unterschied aus dem Seminartext: Wer schaut, weil es vibriert, reagiert normal. Wer schaut, obwohl nichts da ist, schaut aus Unruhe.
+Und dann ihr selbst. Oben links war die ganze Zeit dieser Handy-Knopf. Am Ende steht, wie oft ihr von euch aus draufgeschaut habt – und wie oft davon, obwohl nichts Neues da war. Das ist Gewohnheits-Checken, an euch selbst gemessen. Und es ist genau der Unterschied aus der Studie von Elhai: Wer schaut, weil es vibriert, reagiert normal. Wer schaut, obwohl nichts da ist, schaut aus Unruhe.
 
 [Paul-Chat „EHRENMANN 🙏“ (K10P.webp + Handy); N25V.webp Flur Montag; Lynn-Nachricht „und? 🙂“]
 
