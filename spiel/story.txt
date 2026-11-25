@@ -2004,16 +2004,12 @@ Lynn: „Geht schon mal.“
 @warte 1.2
 # V8.9 (Patrick 24.11.): ruhiger Song leise über der Szene (gedämpft passte nicht, ist kein Party-Song)
 @musik lofi leise
-# V9.0 (Patrick 25.11.): Bildfolge „die Zeit vergeht“ – sie sitzen mal hier, mal da, drinnen läuft die Party weiter, der Balkon ist ihre eigene Welt.
-# Erst weit (Kamera fährt heran), dann wechselnde Plätze, am Ende von hinten wie bisher (N34v leitet zu N34a1/a2/b über).
-@bild N34S3 fahrt-rein
+# V9.0 (Patrick 25.11.): Zeitraffer mit fester Kamera – nur die beiden bewegen sich, drinnen läuft die Party weiter, der Balkon ist ihre eigene Welt.
+# Nur EIN Platzwechsel (zum Geländer, weil alle späteren Bilder sie dort zeigen). N34Z3 (am Geländer, von hinten) folgt, sobald das Bild da ist.
+@bild N34S1 langsam
 Irgendwann sitzen wir auf dem Boden.
-@bild N34S1 fahrt-links
+@bild N34Z2 langsam
 @leer
-@warte 4.5
-@bild N34S4 fahrt-rechts
-@warte 4.5
-@bild N34S2 fahrt-rein
 @warte 4.5
 @bild N34v sehrlangsam
 @warte 3
@@ -2045,11 +2041,11 @@ Lynn: „Ich geh mal rein.“
 
 == GM_STECKEN
 @effekt tasche aus
-# Patrick 25.11.: nach dem Schnitt sitzen beide – Lynn sitzend in Ich-Sicht (drei deckungsgleiche Bilder)
-@bild N34L langsam
+# Patrick 25.11.: erst nah von außen (er von hinten), dann Ich-Sicht – Lynn sitzend (drei deckungsgleiche Bilder)
+@bild N34S5 langsam
 Lynn: „Hast du eigentlich schon was vor? Nach deiner Prüfung?“
 Ich: „Jetzt schon.“
-@bild N34Lt
+@bild N34Lt langsam
 … !1.5
 @bild N34L
 Lynn: „Montagabend?“
