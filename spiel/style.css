@@ -99,8 +99,13 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes blitz{0%{opacity:.8}100%{opacity:0}}
 #rufe .ruf{position:absolute;font:800 64px/1 system-ui,sans-serif;color:#fff;text-shadow:0 0 18px rgba(255,80,180,.9),0 3px 0 rgba(0,0,0,.4);animation:ruf 2.6s ease-out forwards;white-space:nowrap}
 @keyframes ruf{0%{opacity:0;transform:translateY(30px) scale(.8)}15%{opacity:1}100%{opacity:0;transform:translateY(-120px) scale(1.1)}}
-.lichterbox .p{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,160,.95) 0,rgba(255,200,110,.45) 35%,transparent 70%);mix-blend-mode:screen;animation:funkeln 2.4s ease-in-out infinite alternate}
-@keyframes funkeln{0%{opacity:.15}100%{opacity:.85}}
+/* 25.11. (Patrick): Lichterkette ruhiger – drei Gruppen schimmern langsam (ein Viertel langsamer als die Demo), einzelne Birnen leuchten kurz auf */
+.lichterbox .p{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,160,.95) 0,rgba(255,200,110,.45) 35%,transparent 70%);mix-blend-mode:screen;opacity:.3;animation:schimmern 3.3s ease-in-out infinite alternate}
+.lichterbox .p.g1{animation-duration:4.45s}.lichterbox .p.g2{animation-duration:3.9s}
+.lichterbox .p b{position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,180,.95) 0,rgba(255,206,130,.4) 30%,transparent 68%);opacity:0}
+.lichterbox .p b.auf{animation:aufleuchten 1.5s linear forwards}
+@keyframes schimmern{0%{opacity:.22}100%{opacity:.5}}
+@keyframes aufleuchten{0%{opacity:0}25%{opacity:var(--st,.9)}100%{opacity:0}}
 @property --hr{syntax:'<number>';inherits:true;initial-value:110}@property --hg{syntax:'<number>';inherits:true;initial-value:165}@property --hb{syntax:'<number>';inherits:true;initial-value:255}
 #handylicht{opacity:0;transition:opacity .5s,--hr .9s ease,--hg .9s ease,--hb .9s ease}
 #handylicht.kurz{animation:hlicht 2s ease-out}

@@ -16,7 +16,7 @@ const BILDER = {
   N09D: { datei: "img/N09.webp",  text: "N09, Licht aus (Claude-Variante)", filter: "lichtaus" },
   K12:  { datei: "img/K12.webp",  text: "Fensterblick nachts", stimmung: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   L4b:  { datei: "img/L4b.webp",  text: "Fenster offen, Blick nach draußen", stimmung: "nacht" },
-  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante); V8.9: Fenster gegenüber gehen einzeln aus (proc/v89_fenster.py)", filter: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
+  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante); V8.9: Fenster gegenüber gehen einzeln aus (proc/v90_fenster_aus.py mit K12_aus)", filter: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   N04:  { datei: "img/N04.webp",  text: "Schreibtisch mit Handy (Display nach unten)", stimmung: "zimmer", tisch: true },
   B05:  { datei: "img/B05.webp",  text: "Schreibtisch ohne Handy, Lampe an, Kalender", stimmung: "zimmer", tisch: true },
   K10:  { datei: "img/B05.webp",  text: "Schreibtisch (normal hell, Philip 20.11.)", tisch: true },
@@ -105,7 +105,8 @@ const BILDER = {
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
 
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
-  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral)", stimmung: "balkon", figur: true,
+  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral); 25.11.: Haare bewegen sich leicht (proc/v90_haare.py, Veo)", stimmung: "balkon", figur: true,
+          video: "vid/N14_haar.mp4", videoKasten: [0.52083, 0.0, 0.3125, 0.61567],
           lichter: [[0.28,0.606],[0.296,0.616],[0.264,0.646],[0.314,0.676],[0.854,0.678],[0.01,0.684],[0.131,0.681],[0.349,0.69],[0.241,0.699],[0.881,0.705],[0.216,0.728],[0.914,0.729],[0.997,0.731],[0.029,0.736],[0.939,0.74],[0.365,0.748],[0.401,0.751],[0.972,0.754],[0.066,0.753],[0.154,0.752],[0.182,0.757],[0.09,0.767],[0.121,0.768],[0.484,0.78],[0.423,0.789],[0.457,0.796]] },
   N14r: { datei: "img/N14r.webp", text: "Lynn redet mit den Händen", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14m: { datei: "img/N14m.webp", text: "Lynn redet, Mund offen, ohne Hände (Gemini, V8.5)", stimmung: "balkon", figur: true, lichterVon: "N14" },

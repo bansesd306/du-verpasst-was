@@ -365,6 +365,14 @@ const Spiel = (() => {
     let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 10)); };
     for (let k = 0; k < 6; k++) naechstes();
   }
+  // 25.11. (Patrick): einzelne Birnen der Lichterkette leuchten kurz auf (alle 0,45–1,5 s eine, Stärke zufällig)
+  (function birnenTakt() {
+    setTimeout(birnenTakt, 450 + Math.random() * 1050);
+    const boxen = [...document.querySelectorAll('.ebene.an .lichterbox')]; if (!boxen.length) return;
+    const bs = boxen[boxen.length - 1].querySelectorAll('.p b'); if (!bs.length) return;
+    const b = bs[Math.floor(Math.random() * bs.length)];
+    b.style.setProperty('--st', (.6 + Math.random() * .4).toFixed(2)); b.classList.remove('auf'); void b.offsetWidth; b.classList.add('auf');
+  })();
   let bildNr = 0;
   async function zeigeBild(code, modus = '') {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
@@ -383,12 +391,13 @@ const Spiel = (() => {
     const innen = document.createElement('div'); innen.className = 'innen';
     let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
-    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"${e.videoKasten ? ` style="inset:auto;object-fit:fill;left:${e.videoKasten[0] * 100}%;top:${e.videoKasten[1] * 100}%;width:${e.videoKasten[2] * 100}%;height:${e.videoKasten[3] * 100}%"` : ''}></video>`;   // 25.11.: videoKasten = Video nur über einem Ausschnitt (Lynns Haare)   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
     // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
     if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
+    { const v = innen.querySelector('video.bv'); if (v && e.videoKasten) v.addEventListener('loadedmetadata', () => { try { v.currentTime = ((performance.now() - t0) / 1000) % v.duration; } catch (_) {} }, { once: true }); }   // Schleife läuft beim Posenwechsel weiter
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
-    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
+    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map((p, i) => `<i class="p g${(i * 7 + 3) % 3}" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((performance.now() - t0) / 1000 % 8.9).toFixed(2)}s"><b></b></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
     if (e.funken && e.datei) { const f = document.createElement('div'); f.className = 'funken'; f.innerHTML = e.funken.map((q, i) => `<i style="left:${q[0] * 100}%;top:${q[1] * 100}%;animation-delay:${-i * .13}s"></i>`).join(''); innen.appendChild(f); }
     if (e.figur) { innen.classList.add('atmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 4.6) + 's'; }
     // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)

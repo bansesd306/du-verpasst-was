@@ -108,8 +108,13 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes blitz{0%{opacity:.8}100%{opacity:0}}
 #rufe .ruf{position:absolute;font:800 64px/1 system-ui,sans-serif;color:#fff;text-shadow:0 0 18px rgba(255,80,180,.9),0 3px 0 rgba(0,0,0,.4);animation:ruf 2.6s ease-out forwards;white-space:nowrap}
 @keyframes ruf{0%{opacity:0;transform:translateY(30px) scale(.8)}15%{opacity:1}100%{opacity:0;transform:translateY(-120px) scale(1.1)}}
-.lichterbox .p{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,160,.95) 0,rgba(255,200,110,.45) 35%,transparent 70%);mix-blend-mode:screen;animation:funkeln 2.4s ease-in-out infinite alternate}
-@keyframes funkeln{0%{opacity:.15}100%{opacity:.85}}
+/* 25.11. (Patrick): Lichterkette ruhiger – drei Gruppen schimmern langsam (ein Viertel langsamer als die Demo), einzelne Birnen leuchten kurz auf */
+.lichterbox .p{position:absolute;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,rgba(255,230,160,.95) 0,rgba(255,200,110,.45) 35%,transparent 70%);mix-blend-mode:screen;opacity:.3;animation:schimmern 3.3s ease-in-out infinite alternate}
+.lichterbox .p.g1{animation-duration:4.45s}.lichterbox .p.g2{animation-duration:3.9s}
+.lichterbox .p b{position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,180,.95) 0,rgba(255,206,130,.4) 30%,transparent 68%);opacity:0}
+.lichterbox .p b.auf{animation:aufleuchten 1.5s linear forwards}
+@keyframes schimmern{0%{opacity:.22}100%{opacity:.5}}
+@keyframes aufleuchten{0%{opacity:0}25%{opacity:var(--st,.9)}100%{opacity:0}}
 @property --hr{syntax:'<number>';inherits:true;initial-value:110}@property --hg{syntax:'<number>';inherits:true;initial-value:165}@property --hb{syntax:'<number>';inherits:true;initial-value:255}
 #handylicht{opacity:0;transition:opacity .5s,--hr .9s ease,--hg .9s ease,--hb .9s ease}
 #handylicht.kurz{animation:hlicht 2s ease-out}
@@ -842,7 +847,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @keyframes ring{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.25)}50%{box-shadow:0 0 0 36px rgba(255,255,255,0)}}
 .a-knoepfe{position:absolute;bottom:110px;left:0;right:0;display:flex;justify-content:space-around}
 .a-gruen,.a-rot{width:120px;height:120px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:52px;color:#fff}
-.a-gruen{background:#2ecc71}.a-rot{background:#e74c3c;transform:rotate(135deg)}
+.a-gruen{background:#2ecc71}.a-rot{background:#e74c3c}   /* 25.11. (Patrick): roter Knopf = Hörer quer (Auflegen-Symbol) */
 .klingeln .a-gruen{animation:hops 1s infinite}
 .verbunden .a-gruen{display:none}
 .verbunden .a-knoepfe{justify-content:center}
@@ -1628,7 +1633,7 @@ Zehn Minuten Pause. Hab ich mir verdient.
 @handy sperr
 Das war vor einer Stunde.
 @ton bzzz
-@benachrichtigung WhatsApp | Jonas | Ey, Lena feiert doch heute!! 🎉
+@benachrichtigung WhatsApp | Jonas | ey, lena feiert doch heute!! 🎉
 Bzzz.
 @effekt einfrieren
 Jonas. !2
@@ -1637,11 +1642,11 @@ Seit der Fünften. Nach beiden 5,0 stand er mit Pizza vor meiner Tür. Ungefragt
 Der hält es halt nicht lange ohne seine große Liebe aus.
 @effekt einfrieren aus
 @handy chat Jonas
-@nachricht! Jonas: Ey, Lena feiert doch heute!! 🎉
-@nachricht Jonas: Alle kommen. Echt alle
-@nachricht Jonas: Bist du dabei??
+@nachricht! Jonas: ey, lena feiert doch heute!! 🎉
+@nachricht Jonas: alle kommen. echt alle
+@nachricht Jonas: bist du dabei??
 @tipp
-@tippe Junge. Du weißt ganz genau, dass ich lernen muss. Geh mir nicht auf den Sack 😂
+@tippe junge. du weißt ganz genau, dass ich lernen muss. geh mir nicht auf den sack 😂
 @nachricht Jonas: klar
 @nachricht Jonas: so wie die letzten 2 male? 😂
 @nachricht Jonas: EINE stunde. du kommst eh nicht weiter heute. glaub mir, du verpasst was
@@ -1728,10 +1733,10 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 @handy her
 @handy chat Jonas
 @schreibt Jonas 5
-@nachricht! Jonas: Hallo?? 😄
-?? „Nee, ich glaub ich bin raus. Muss echt noch lernen 😕“ -> S18_A
-?? „Weiß noch nicht… mal schauen“ -> S18_B
-?? „Okay. Ich komm!“ -> S18_C
+@nachricht! Jonas: hallo?? 😄
+?? „nee, ich glaub ich bin raus. muss echt noch lernen 😕“ -> S18_A
+?? „weiß noch nicht… mal schauen“ -> S18_B
+?? „okay. ich komm!“ -> S18_C
 
 == S18_A
 @pfad A
@@ -3473,11 +3478,18 @@ Lynn: „Ich geh mal rein.“
 @effekt tasche aus
 # Patrick 25.11.: erst nah von außen (er von hinten), dann Ich-Sicht – Lynn sitzend (drei deckungsgleiche Bilder)
 @bild N34S5 langsam
-Lynn: „Hast du eigentlich schon was vor? Nach deiner Prüfung?“
-Ich: „Jetzt schon.“
+# Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 4): Lynn fragt zögerlich, in Stücken; „Ich frag.“
+Lynn: „Und … nach der Prüfung?“
+… !1.5
+Ich: „Hm?“
 @bild N34Lt langsam
 … !1.5
+Lynn: „Schon was vor?“
+… !2
+Ich: „Kommt drauf an, wer fragt.“
 @bild N34L
+Lynn: „Ich frag.“
+… !1.5
 Lynn: „Montagabend?“
 Ich: „Montagabend.“
 # V8.8 (A6): drinnen werden es ganz langsam weniger
@@ -3510,7 +3522,13 @@ Lynn: „Alle weg.“
 Drinnen fegt Lena schon Konfetti zusammen.
 @schwarz langsam
 @effekt waermer aus
-Zum Abschied umarmt sie mich. Länger als nötig. !3
+# Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 3): „Länger als nötig.“ weg – Schwarzbild, leiser Wind, Umarmungs-Ton, ca. 4,5 s nicht wegtippbar
+@loop wind an
+Zum Abschied umarmt sie mich.
+@leer
+@ton umarmung
+@warte 4.5
+@loop wind aus
 @setze lynn = "gm"
 @setze typ = "gluecklich"
 @pfad Gar nicht gemerkt
@@ -4217,11 +4235,12 @@ Ich bin auf keinem Foto. !3
   Ich hör immer noch, wie sie über Tims Krypto-Ding lacht.
   Ob sie auch noch lacht, wenn er morgen wirklich Millionär ist?
   Naja.
-  Manchmal fühlt sich ein Moment einfach unendlich an. Obwohl man weiß, dass er irgendwann aufhören muss.
-  Aber vielleicht vergisst man eben genau das.
-  …
-  Oder will es vergessen.
-  Und lässt es einfach zu.
+  # Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 1, Fassung B) statt „Manchmal fühlt sich ein Moment einfach unendlich an …“
+  Seit Wochen hab ich Angst, was zu verpassen.
+  Und dann sitz ich zwei Stunden auf einem Balkon
+  und schau kein einziges Mal aufs Handy.
+  … !3
+  Vielleicht verpasst man nur was, wenn man nicht weiß, wo man sein will.
   Auf einmal war es zwei Uhr. Gar nicht gemerkt.
   … !3
   Aber schön.
@@ -4707,7 +4726,7 @@ Es liegt da seit Mittag.
 @loop regen laut 0.8 1.5
 @warte 4
 @loop regen laut 1 1.5
-? „Umdrehen.“ -> SO3_UM +handy
+? „Handy umdrehen.“ -> SO3_UM +handy
 ? „Liegen lassen.“ -> SO4
 
 == SO3_UM
@@ -4991,7 +5010,7 @@ Ich schau nur, wie spät es ist.
 @handy ungelesen Lerngruppe Schuldrecht | 14 | Paul: ich bin so am arsch
 @handy liste
 ? „Lesen.“ -> SN_LESEN +handy
-? „Umdrehen.“ -> SN_UMDREHEN
+? „Augen zu.“ -> SN_UMDREHEN
 
 == SN_LESEN
 @handy chat Lerngruppe Schuldrecht
@@ -5487,7 +5506,7 @@ const BILDER = {
   N09D: { datei: "img/N09.webp",  text: "N09, Licht aus (Claude-Variante)", filter: "lichtaus" },
   K12:  { datei: "img/K12.webp",  text: "Fensterblick nachts", stimmung: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   L4b:  { datei: "img/L4b.webp",  text: "Fenster offen, Blick nach draußen", stimmung: "nacht" },
-  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante); V8.9: Fenster gegenüber gehen einzeln aus (proc/v89_fenster.py)", filter: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
+  K12N: { datei: "img/K12.webp",  text: "Fensterblick, später Abend (Claude-Variante); V8.9: Fenster gegenüber gehen einzeln aus (proc/v90_fenster_aus.py mit K12_aus)", filter: "nacht", fensterLichter: ["K12_fa", "K12_fb", "K12_fc", "K12_fd", "K12_fe", "K12_ff"] },
   N04:  { datei: "img/N04.webp",  text: "Schreibtisch mit Handy (Display nach unten)", stimmung: "zimmer", tisch: true },
   B05:  { datei: "img/B05.webp",  text: "Schreibtisch ohne Handy, Lampe an, Kalender", stimmung: "zimmer", tisch: true },
   K10:  { datei: "img/B05.webp",  text: "Schreibtisch (normal hell, Philip 20.11.)", tisch: true },
@@ -5576,7 +5595,8 @@ const BILDER = {
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
 
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
-  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral)", stimmung: "balkon", figur: true,
+  N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral); 25.11.: Haare bewegen sich leicht (proc/v90_haare.py, Veo)", stimmung: "balkon", figur: true,
+          video: "vid/N14_haar.mp4", videoKasten: [0.52083, 0.0, 0.3125, 0.61567],
           lichter: [[0.28,0.606],[0.296,0.616],[0.264,0.646],[0.314,0.676],[0.854,0.678],[0.01,0.684],[0.131,0.681],[0.349,0.69],[0.241,0.699],[0.881,0.705],[0.216,0.728],[0.914,0.729],[0.997,0.731],[0.029,0.736],[0.939,0.74],[0.365,0.748],[0.401,0.751],[0.972,0.754],[0.066,0.753],[0.154,0.752],[0.182,0.757],[0.09,0.767],[0.121,0.768],[0.484,0.78],[0.423,0.789],[0.457,0.796]] },
   N14r: { datei: "img/N14r.webp", text: "Lynn redet mit den Händen", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14m: { datei: "img/N14m.webp", text: "Lynn redet, Mund offen, ohne Hände (Gemini, V8.5)", stimmung: "balkon", figur: true, lichterVon: "N14" },
@@ -6367,7 +6387,7 @@ const Handy = (() => {
     <div class="app" data-app="anruf">
       <div class="a-bg"></div>
       <div class="a-info"><div class="a-name">Jonas</div><div class="a-sub">Eingehender Anruf</div><div class="a-av"></div></div>
-      <div class="a-knoepfe"><div class="a-gruen">✆</div><div class="a-rot">✆</div></div>
+      <div class="a-knoepfe"><div class="a-gruen"><svg viewBox="0 0 24 24" width="58" height="58" fill="#fff"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg></div><div class="a-rot"><svg viewBox="0 0 24 24" width="64" height="64" fill="#fff"><path d="M12 9c-1.6 0-3.15.25-4.6.72v3.1c0 .39-.23.74-.56.9-.98.49-1.87 1.12-2.66 1.85-.18.18-.43.28-.7.28-.28 0-.53-.11-.71-.29L.29 13.08c-.18-.17-.29-.42-.29-.7 0-.28.11-.53.29-.71C3.34 8.78 7.46 7 12 7s8.66 1.78 11.71 4.67c.18.18.29.43.29.71 0 .28-.11.53-.29.71l-2.48 2.48c-.18.18-.43.29-.71.29-.27 0-.52-.11-.7-.28-.79-.74-1.69-1.36-2.67-1.85-.33-.16-.56-.5-.56-.9v-3.1C15.15 9.25 13.6 9 12 9z"/></svg></div></div>
     </div>
     <div class="app" data-app="story">
       <div class="st-balken"><i></i></div>
@@ -7836,6 +7856,14 @@ const Spiel = (() => {
     let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 10)); };
     for (let k = 0; k < 6; k++) naechstes();
   }
+  // 25.11. (Patrick): einzelne Birnen der Lichterkette leuchten kurz auf (alle 0,45–1,5 s eine, Stärke zufällig)
+  (function birnenTakt() {
+    setTimeout(birnenTakt, 450 + Math.random() * 1050);
+    const boxen = [...document.querySelectorAll('.ebene.an .lichterbox')]; if (!boxen.length) return;
+    const bs = boxen[boxen.length - 1].querySelectorAll('.p b'); if (!bs.length) return;
+    const b = bs[Math.floor(Math.random() * bs.length)];
+    b.style.setProperty('--st', (.6 + Math.random() * .4).toFixed(2)); b.classList.remove('auf'); void b.offsetWidth; b.classList.add('auf');
+  })();
   let bildNr = 0;
   async function zeigeBild(code, modus = '') {
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
@@ -7854,12 +7882,13 @@ const Spiel = (() => {
     const innen = document.createElement('div'); innen.className = 'innen';
     let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
-    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"${e.videoKasten ? ` style="inset:auto;object-fit:fill;left:${e.videoKasten[0] * 100}%;top:${e.videoKasten[1] * 100}%;width:${e.videoKasten[2] * 100}%;height:${e.videoKasten[3] * 100}%"` : ''}></video>`;   // 25.11.: videoKasten = Video nur über einem Ausschnitt (Lynns Haare)   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
     // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
     if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
+    { const v = innen.querySelector('video.bv'); if (v && e.videoKasten) v.addEventListener('loadedmetadata', () => { try { v.currentTime = ((performance.now() - t0) / 1000) % v.duration; } catch (_) {} }, { once: true }); }   // Schleife läuft beim Posenwechsel weiter
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
-    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
+    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map((p, i) => `<i class="p g${(i * 7 + 3) % 3}" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((performance.now() - t0) / 1000 % 8.9).toFixed(2)}s"><b></b></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
     if (e.funken && e.datei) { const f = document.createElement('div'); f.className = 'funken'; f.innerHTML = e.funken.map((q, i) => `<i style="left:${q[0] * 100}%;top:${q[1] * 100}%;animation-delay:${-i * .13}s"></i>`).join(''); innen.appendChild(f); }
     if (e.figur) { innen.classList.add('atmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 4.6) + 's'; }
     // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)

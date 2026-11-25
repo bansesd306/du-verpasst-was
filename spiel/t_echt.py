@@ -7,7 +7,7 @@ src=open('t8.py').read().split('async def spiel')[0]
 ns={}; exec(src,ns); SZ=ns['SZ']; VERBOTEN=ns['VERBOTEN']
 async def main(name):
     async with async_playwright() as p:
-        b=await p.chromium.launch(executable_path='/usr/bin/google-chrome',args=['--autoplay-policy=no-user-gesture-required'])
+        b=await p.chromium.launch(executable_path='/opt/pw-browsers/chromium',args=['--autoplay-policy=no-user-gesture-required'])
         pg=await b.new_page(viewport={'width':1280,'height':720})
         await pg.goto('http://localhost:8765/index.html'); await pg.wait_for_timeout(400)
         await pg.mouse.click(640,360); await pg.wait_for_timeout(300); await pg.evaluate("document.querySelector('#z-menue .spielen').click()"); await pg.wait_for_timeout(800)

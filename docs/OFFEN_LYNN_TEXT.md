@@ -1,6 +1,6 @@
 # Offen: Lynn-Weg, Texte und Töne (Patrick entscheidet) – Stand 24.11., 03:50
 
-Aus dem Gespräch zu Storycheck Lauf 2a. **Noch nichts eingebaut.** Zeilen = `spiel/story.txt`.
+Aus dem Gespräch zu Storycheck Lauf 2a. **25.11.: Nr. 1 (Fassung B), Nr. 3 (Umarmung mit Ton, Schwarzbild, Wind, 4,5 s) und Nr. 4 („Ich frag.“) eingebaut.** Zeilen = `spiel/story.txt`.
 
 ## 1. Monolog im Bett: „Manchmal fühlt sich ein Moment einfach unendlich an …“ (Z. 2664–2668)
 Entscheidung vorerst: **bleibt so.** Patrick: Der Standardgedanke wird in den Sätzen danach weitergedacht, der Monolog ist ein bewusster Bruch (er spricht einmal alles aus), lange Pausen gewollt.

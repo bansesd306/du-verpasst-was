@@ -209,7 +209,7 @@ Zehn Minuten Pause. Hab ich mir verdient.
 @handy sperr
 Das war vor einer Stunde.
 @ton bzzz
-@benachrichtigung WhatsApp | Jonas | Ey, Lena feiert doch heute!! 🎉
+@benachrichtigung WhatsApp | Jonas | ey, lena feiert doch heute!! 🎉
 Bzzz.
 @effekt einfrieren
 Jonas. !2
@@ -218,11 +218,11 @@ Seit der Fünften. Nach beiden 5,0 stand er mit Pizza vor meiner Tür. Ungefragt
 Der hält es halt nicht lange ohne seine große Liebe aus.
 @effekt einfrieren aus
 @handy chat Jonas
-@nachricht! Jonas: Ey, Lena feiert doch heute!! 🎉
-@nachricht Jonas: Alle kommen. Echt alle
-@nachricht Jonas: Bist du dabei??
+@nachricht! Jonas: ey, lena feiert doch heute!! 🎉
+@nachricht Jonas: alle kommen. echt alle
+@nachricht Jonas: bist du dabei??
 @tipp
-@tippe Junge. Du weißt ganz genau, dass ich lernen muss. Geh mir nicht auf den Sack 😂
+@tippe junge. du weißt ganz genau, dass ich lernen muss. geh mir nicht auf den sack 😂
 @nachricht Jonas: klar
 @nachricht Jonas: so wie die letzten 2 male? 😂
 @nachricht Jonas: EINE stunde. du kommst eh nicht weiter heute. glaub mir, du verpasst was
@@ -309,10 +309,10 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 @handy her
 @handy chat Jonas
 @schreibt Jonas 5
-@nachricht! Jonas: Hallo?? 😄
-?? „Nee, ich glaub ich bin raus. Muss echt noch lernen 😕“ -> S18_A
-?? „Weiß noch nicht… mal schauen“ -> S18_B
-?? „Okay. Ich komm!“ -> S18_C
+@nachricht! Jonas: hallo?? 😄
+?? „nee, ich glaub ich bin raus. muss echt noch lernen 😕“ -> S18_A
+?? „weiß noch nicht… mal schauen“ -> S18_B
+?? „okay. ich komm!“ -> S18_C
 
 == S18_A
 @pfad A
@@ -2054,11 +2054,18 @@ Lynn: „Ich geh mal rein.“
 @effekt tasche aus
 # Patrick 25.11.: erst nah von außen (er von hinten), dann Ich-Sicht – Lynn sitzend (drei deckungsgleiche Bilder)
 @bild N34S5 langsam
-Lynn: „Hast du eigentlich schon was vor? Nach deiner Prüfung?“
-Ich: „Jetzt schon.“
+# Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 4): Lynn fragt zögerlich, in Stücken; „Ich frag.“
+Lynn: „Und … nach der Prüfung?“
+… !1.5
+Ich: „Hm?“
 @bild N34Lt langsam
 … !1.5
+Lynn: „Schon was vor?“
+… !2
+Ich: „Kommt drauf an, wer fragt.“
 @bild N34L
+Lynn: „Ich frag.“
+… !1.5
 Lynn: „Montagabend?“
 Ich: „Montagabend.“
 # V8.8 (A6): drinnen werden es ganz langsam weniger
@@ -2091,7 +2098,13 @@ Lynn: „Alle weg.“
 Drinnen fegt Lena schon Konfetti zusammen.
 @schwarz langsam
 @effekt waermer aus
-Zum Abschied umarmt sie mich. Länger als nötig. !3
+# Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 3): „Länger als nötig.“ weg – Schwarzbild, leiser Wind, Umarmungs-Ton, ca. 4,5 s nicht wegtippbar
+@loop wind an
+Zum Abschied umarmt sie mich.
+@leer
+@ton umarmung
+@warte 4.5
+@loop wind aus
 @setze lynn = "gm"
 @setze typ = "gluecklich"
 @pfad Gar nicht gemerkt
@@ -2798,11 +2811,12 @@ Ich bin auf keinem Foto. !3
   Ich hör immer noch, wie sie über Tims Krypto-Ding lacht.
   Ob sie auch noch lacht, wenn er morgen wirklich Millionär ist?
   Naja.
-  Manchmal fühlt sich ein Moment einfach unendlich an. Obwohl man weiß, dass er irgendwann aufhören muss.
-  Aber vielleicht vergisst man eben genau das.
-  …
-  Oder will es vergessen.
-  Und lässt es einfach zu.
+  # Patrick 25.11. (OFFEN_LYNN_TEXT Nr. 1, Fassung B) statt „Manchmal fühlt sich ein Moment einfach unendlich an …“
+  Seit Wochen hab ich Angst, was zu verpassen.
+  Und dann sitz ich zwei Stunden auf einem Balkon
+  und schau kein einziges Mal aufs Handy.
+  … !3
+  Vielleicht verpasst man nur was, wenn man nicht weiß, wo man sein will.
   Auf einmal war es zwei Uhr. Gar nicht gemerkt.
   … !3
   Aber schön.
@@ -3288,7 +3302,7 @@ Es liegt da seit Mittag.
 @loop regen laut 0.8 1.5
 @warte 4
 @loop regen laut 1 1.5
-? „Umdrehen.“ -> SO3_UM +handy
+? „Handy umdrehen.“ -> SO3_UM +handy
 ? „Liegen lassen.“ -> SO4
 
 == SO3_UM
@@ -3572,7 +3586,7 @@ Ich schau nur, wie spät es ist.
 @handy ungelesen Lerngruppe Schuldrecht | 14 | Paul: ich bin so am arsch
 @handy liste
 ? „Lesen.“ -> SN_LESEN +handy
-? „Umdrehen.“ -> SN_UMDREHEN
+? „Augen zu.“ -> SN_UMDREHEN
 
 == SN_LESEN
 @handy chat Lerngruppe Schuldrecht
