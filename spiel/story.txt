@@ -2012,10 +2012,12 @@ Irgendwann sitzen wir auf dem Boden.
 @leer
 @warte 4.5
 @bild N34Z3 langsam
-@warte 3.5
-# V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht
+@warte 5
+# V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht – kurz, dann zurück und länger bleiben, bis sich die Party leert
 @bild N34Z3a
-@warte 2.5
+@warte 1.8
+@bild N34Z3
+@warte 4
 @bild N34Z4 langsam
 @warte 4
 @bild N34v sehrlangsam
@@ -3985,31 +3987,47 @@ Ich: „Und?“
 Lynn: „Hab’s wieder gelöscht.“
 @gesicht aus
 Ich: „… Kenn ich.“
-# V9.0 (Patrick 25.11.): Rückblende aufs Zögern auf dem Balkon, dann seine Vorstellung
-Lynn: „Und Freitag. Auf dem Balkon.“
-@bild N34Z3a traum
-@musik party fern
-Lynn: „Ich hab’s gemerkt.“
-… !1.5
+# V9.0 (Patrick 25.11.): Rückblende aufs Zögern. Date-Musik aus, Bild dunkelt ab, Flashback-Ton genau mit dem Bild
+Lynn: „Und Freitag.“
+@loop restaurant aus
+@schwarz langsam
+@warte .8
+@effekt traum
+@bild N34Z3 langsam
+@warte 3
+Lynn: „Auf dem Balkon.“
+… !2
+@bild N34Z3a langsam
+Lynn: „Denkst du, ich hab’s nicht gemerkt?“
+… !2.5
+Lynn: „Ich sag doch.“
+… !2
+@bild N34Z3 langsam
 Lynn: „Feigling.“
-@musik aus
-@effekt traum aus
-@bild LD1 schnitt
-@gesicht LD2
+… !2.5
+Lynn: „Und …“
+… !2
+@schwarz langsam
 Lynn: „Traust du dich nächstes Mal?“
-@gesicht aus
-@effekt vorstellung
-@bild N34ZA
-Ich: „Ja.“
-@effekt vorstellung aus weich
-@bild LD1 schnitt
 … !1.5
+Ich: „Ja.“
+… !1.5
+@effekt traum aus
+@effekt vorstellung
+@bild N34ZA sehrlangsam
+@warte 4
+@effekt vorstellung aus weich
+@schwarz langsam
+@bild LD1 schnitt
+@loop restaurant an
+… !2.5
 @ton bzzz
 @banner WhatsApp | Jonas | bereit für heute abend? 😏
 @warte 1.8
 Lynn: „Unwichtig?“
+… !2
 @banner aus
-Ich: „Ja.“
+Ich: „…“
 @gesicht LD4
 @ton handy_ablegen
 … !3

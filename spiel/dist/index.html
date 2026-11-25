@@ -79,7 +79,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #traumglow{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,rgba(255,230,190,.28) 0,rgba(255,210,150,.12) 45%,rgba(255,240,220,.55) 100%);mix-blend-mode:screen}
 #traumrand{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,transparent 40%,rgba(255,232,200,.22) 66%,rgba(255,238,215,.5) 88%,rgba(255,244,228,.66) 100%)}
 .traum #traumglow,.traum #traumrand{opacity:1}
-.vorstellung #traumrand{opacity:1;mix-blend-mode:screen;background:radial-gradient(ellipse at 50% 48%,transparent 45%,rgba(255,240,215,.35) 62%,rgba(255,246,230,.85) 80%,#fffaf2 96%)}
+.vorstellung #traumrand{opacity:1;mix-blend-mode:screen;background:radial-gradient(ellipse at 50% 48%,transparent 45%,rgba(255,226,185,.22) 62%,rgba(255,236,205,.5) 82%,rgba(255,244,222,.68) 98%)}
 .vorstellung #welt{filter:brightness(.92) saturate(1.05)}
 .vorstellung #vignette{opacity:0;transition:opacity 1.6s}
 .traum #welt{filter:sepia(.35) saturate(1.25) brightness(1.1) blur(.6px)}
@@ -3402,10 +3402,12 @@ Irgendwann sitzen wir auf dem Boden.
 @leer
 @warte 4.5
 @bild N34Z3 langsam
-@warte 3.5
-# V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht
+@warte 5
+# V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht – kurz, dann zurück und länger bleiben, bis sich die Party leert
 @bild N34Z3a
-@warte 2.5
+@warte 1.8
+@bild N34Z3
+@warte 4
 @bild N34Z4 langsam
 @warte 4
 @bild N34v sehrlangsam
@@ -5375,31 +5377,47 @@ Ich: „Und?“
 Lynn: „Hab’s wieder gelöscht.“
 @gesicht aus
 Ich: „… Kenn ich.“
-# V9.0 (Patrick 25.11.): Rückblende aufs Zögern auf dem Balkon, dann seine Vorstellung
-Lynn: „Und Freitag. Auf dem Balkon.“
-@bild N34Z3a traum
-@musik party fern
-Lynn: „Ich hab’s gemerkt.“
-… !1.5
+# V9.0 (Patrick 25.11.): Rückblende aufs Zögern. Date-Musik aus, Bild dunkelt ab, Flashback-Ton genau mit dem Bild
+Lynn: „Und Freitag.“
+@loop restaurant aus
+@schwarz langsam
+@warte .8
+@effekt traum
+@bild N34Z3 langsam
+@warte 3
+Lynn: „Auf dem Balkon.“
+… !2
+@bild N34Z3a langsam
+Lynn: „Denkst du, ich hab’s nicht gemerkt?“
+… !2.5
+Lynn: „Ich sag doch.“
+… !2
+@bild N34Z3 langsam
 Lynn: „Feigling.“
-@musik aus
-@effekt traum aus
-@bild LD1 schnitt
-@gesicht LD2
+… !2.5
+Lynn: „Und …“
+… !2
+@schwarz langsam
 Lynn: „Traust du dich nächstes Mal?“
-@gesicht aus
-@effekt vorstellung
-@bild N34ZA
-Ich: „Ja.“
-@effekt vorstellung aus weich
-@bild LD1 schnitt
 … !1.5
+Ich: „Ja.“
+… !1.5
+@effekt traum aus
+@effekt vorstellung
+@bild N34ZA sehrlangsam
+@warte 4
+@effekt vorstellung aus weich
+@schwarz langsam
+@bild LD1 schnitt
+@loop restaurant an
+… !2.5
 @ton bzzz
 @banner WhatsApp | Jonas | bereit für heute abend? 😏
 @warte 1.8
 Lynn: „Unwichtig?“
+… !2
 @banner aus
-Ich: „Ja.“
+Ich: „…“
 @gesicht LD4
 @ton handy_ablegen
 … !3
