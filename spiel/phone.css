@@ -423,3 +423,16 @@
 .nic.svgi.gross svg,.h-ic.svgi.gross svg{width:74%;height:74%}
 /* V8.9 (Patrick 24.11.): Akku-Zahl genau mittig (Ziffern haben keine Unterlänge) und ohne Schatten in Story/Live */
 #handy .akku b{line-height:1;display:block;transform:translateY(1.3px);text-shadow:none;letter-spacing:-.5px;margin-right:1px}
+/* V8.9 (Patrick 25.11.): Meldungen runder wie One UI – größere Rundung, App-Zeichen als abgerundetes Quadrat,
+   Uhrzeit oben beim App-Namen, Anzahl groß rechts (statt „n Nachrichten“) */
+.nk{border-radius:46px;padding:24px 26px 24px 22px;gap:18px;align-items:center;background:rgba(30,30,36,.9)}
+.nic{width:62px;height:62px;border-radius:30%;font-size:30px;align-self:center}
+.napp{margin:0 0 2px;font-size:20px}
+.napp .nzeit{color:#9aa0a6}
+.nrechts{display:flex;align-items:center;align-self:center;gap:6px;flex:none}
+.nrechts em.nz{font:400 32px system-ui;color:#a0a0a8;font-style:normal}
+.nrechts em.nz:empty{display:none}
+.nk.mehr .npf{display:none}
+.nkopf b{font-size:29px}
+.nt{font-size:28px;margin-top:2px}
+.h-ic{border-radius:30%}
