@@ -154,6 +154,7 @@ const BILDER = {
   N34S4: { datei: "img/N34S4.webp", text: "Von oben: beide am Geländer, sie lächelt ihn an (Gemini, Patrick 25.11.)", stimmung: "balkon", fahrtZiel: [0.38, 0.66] },
   N34S5: { datei: "img/N34S5.webp", text: "Nah: er von hinten, sie am Geländer lächelt ihn an (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
   N34Z2: { datei: "img/N34Z2.webp", text: "Zeitraffer wie N34S1, gleiche Plätze, sie lacht, Becher am Boden (Gemini, Hintergrund aus N34S1, Patrick 25.11.)", stimmung: "balkon" },
+  N34Z3: { datei: "img/N34Z3.webp", text: "Zeitraffer wie N34S1, jetzt beide hinten am Geländer von hinten, Becher am Boden (Gemini, Hintergrund aus N34S1, Patrick 25.11.)", stimmung: "balkon" },
   N34a1: { datei: "img/N34a1.webp", text: "Balkonboden: drinnen schon weniger Leute (V8.8)", stimmung: "balkon" },
   N34a2: { datei: "img/N34a2.webp", text: "Balkonboden: drinnen fast leer (V8.8)", stimmung: "balkon" },
   N34b: { datei: "img/N34b.webp", text: "Er und Lynn von hinten auf dem Balkonboden, drinnen leer (Fenster-Fassung, V8.8)", stimmung: "balkon" },

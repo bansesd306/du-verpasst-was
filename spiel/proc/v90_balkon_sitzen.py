@@ -23,3 +23,4 @@ def zeitraffer(code, datei, box):
     bild.save(H + '/dist/img/' + code + '.webp', quality=90); print(code, 'Anteil', round(float(m.mean()), 3))
 
 zeitraffer('N34Z2', 'zeit_2_lacht', (0.35, 0.5, 0.85, 1.0))
+zeitraffer('N34Z3', 'zeit_3_gelaender', (0.28, 0.42, 0.86, 1.0))

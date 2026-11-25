@@ -2005,11 +2005,13 @@ Lynn: „Geht schon mal.“
 # V8.9 (Patrick 24.11.): ruhiger Song leise über der Szene (gedämpft passte nicht, ist kein Party-Song)
 @musik lofi leise
 # V9.0 (Patrick 25.11.): Zeitraffer mit fester Kamera – nur die beiden bewegen sich, drinnen läuft die Party weiter, der Balkon ist ihre eigene Welt.
-# Nur EIN Platzwechsel (zum Geländer, weil alle späteren Bilder sie dort zeigen). N34Z3 (am Geländer, von hinten) folgt, sobald das Bild da ist.
+# Nur EIN Platzwechsel (zum Geländer, weil alle späteren Bilder sie dort zeigen).
 @bild N34S1 langsam
 Irgendwann sitzen wir auf dem Boden.
 @bild N34Z2 langsam
 @leer
+@warte 4.5
+@bild N34Z3 langsam
 @warte 4.5
 @bild N34v sehrlangsam
 @warte 3
