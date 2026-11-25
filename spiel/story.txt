@@ -1999,14 +1999,24 @@ Tim!: „Lynn! Wir gehen!“
 Lynn: „Geht schon mal.“
 … !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
-@bild N34v langsam
 @effekt waermer
 @musik aus langsam
 @warte 1.2
 # V8.9 (Patrick 24.11.): ruhiger Song leise über der Szene (gedämpft passte nicht, ist kein Party-Song)
 @musik lofi leise
-# Storycheck 3 (Patrick 24.11.): Schnitt – man soll merken, dass dazwischen Zeit vergangen ist
+# V9.0 (Patrick 25.11.): Bildfolge „die Zeit vergeht“ – sie sitzen mal hier, mal da, drinnen läuft die Party weiter, der Balkon ist ihre eigene Welt.
+# Erst weit (Kamera fährt heran), dann wechselnde Plätze, am Ende von hinten wie bisher (N34v leitet zu N34a1/a2/b über).
+@bild N34S3 fahrt-rein
 Irgendwann sitzen wir auf dem Boden.
+@bild N34S1 fahrt-links
+@leer
+@warte 4.5
+@bild N34S4 fahrt-rechts
+@warte 4.5
+@bild N34S2 fahrt-rein
+@warte 4.5
+@bild N34v sehrlangsam
+@warte 3
 @uhr Sa 00:20
 …
 @ton bzzz

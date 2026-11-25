@@ -41,6 +41,11 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes schwenk{0%{transform:scale(1.12) translateX(-60px)}100%{transform:scale(1.12) translateX(60px)}}
 .zoomrein{transition:transform 7s ease-out!important;transform:scale(1.18)!important}
 .zoomrein.kurz{transition-duration:3.5s!important}
+/* V9.0 (Patrick 25.11.): langsame Kamerafahrt über ein Standbild */
+.fahrt-rein{animation:fahrtRein 11s ease-out forwards}.fahrt-raus{animation:fahrtRaus 11s ease-out forwards}.fahrt-links{animation:fahrtLinks 11s ease-in-out forwards}.fahrt-rechts{animation:fahrtRechts 11s ease-in-out forwards}
+@keyframes fahrtRein{from{transform:scale(1.02)}to{transform:scale(1.16)}}@keyframes fahrtRaus{from{transform:scale(1.16)}to{transform:scale(1.02)}}
+@keyframes fahrtLinks{from{transform:scale(1.1) translateX(3%)}to{transform:scale(1.1) translateX(-3%)}}@keyframes fahrtRechts{from{transform:scale(1.1) translateX(-3%)}to{transform:scale(1.1) translateX(3%)}}
+.einfrieren .fahrt-rein,.einfrieren .fahrt-raus,.einfrieren .fahrt-links,.einfrieren .fahrt-rechts{animation-play-state:paused!important}
 
 /* Platzhalter */
 .ph{display:block;border:3px solid rgba(255,255,255,.18);overflow:hidden}
@@ -3381,14 +3386,24 @@ Tim!: „Lynn! Wir gehen!“
 Lynn: „Geht schon mal.“
 … !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
-@bild N34v langsam
 @effekt waermer
 @musik aus langsam
 @warte 1.2
 # V8.9 (Patrick 24.11.): ruhiger Song leise über der Szene (gedämpft passte nicht, ist kein Party-Song)
 @musik lofi leise
-# Storycheck 3 (Patrick 24.11.): Schnitt – man soll merken, dass dazwischen Zeit vergangen ist
+# V9.0 (Patrick 25.11.): Bildfolge „die Zeit vergeht“ – sie sitzen mal hier, mal da, drinnen läuft die Party weiter, der Balkon ist ihre eigene Welt.
+# Erst weit (Kamera fährt heran), dann wechselnde Plätze, am Ende von hinten wie bisher (N34v leitet zu N34a1/a2/b über).
+@bild N34S3 fahrt-rein
 Irgendwann sitzen wir auf dem Boden.
+@bild N34S1 fahrt-links
+@leer
+@warte 4.5
+@bild N34S4 fahrt-rechts
+@warte 4.5
+@bild N34S2 fahrt-rein
+@warte 4.5
+@bild N34v sehrlangsam
+@warte 3
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -5526,6 +5541,10 @@ const BILDER = {
   N34L:  { datei: "img/N34L.webp",  text: "Lynn sitzt auf dem Balkonboden, schaut dich an, roter Becher (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
   N34Lt: { datei: "img/N34Lt.webp", text: "Wie N34L, sie trinkt und lächelt hinter dem Becher (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
   N34Ls: { datei: "img/N34Ls.webp", text: "Wie N34L, sie schaut in die Stadt (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
+  N34S1: { datei: "img/N34S1.webp", text: "Beide sitzen an der Hauswand unter dem Partyfenster, er von hinten (Gemini, Patrick 25.11.)", stimmung: "balkon", fahrtZiel: [0.68, 0.78] },
+  N34S2: { datei: "img/N34S2.webp", text: "Beide an der Wand, Plätze getauscht (Gemini, Patrick 25.11.)", stimmung: "balkon", fahrtZiel: [0.66, 0.74] },
+  N34S3: { datei: "img/N34S3.webp", text: "Weit: beide sitzen sich am Geländer gegenüber, Fenster rechts (Gemini, Patrick 25.11.)", stimmung: "balkon", fahrtZiel: [0.4, 0.7] },
+  N34S4: { datei: "img/N34S4.webp", text: "Von oben: beide am Geländer, sie lächelt ihn an (Gemini, Patrick 25.11.)", stimmung: "balkon", fahrtZiel: [0.38, 0.66] },
   N34a1: { datei: "img/N34a1.webp", text: "Balkonboden: drinnen schon weniger Leute (V8.8)", stimmung: "balkon" },
   N34a2: { datei: "img/N34a2.webp", text: "Balkonboden: drinnen fast leer (V8.8)", stimmung: "balkon" },
   N34b: { datei: "img/N34b.webp", text: "Er und Lynn von hinten auf dem Balkonboden, drinnen leer (Fenster-Fassung, V8.8)", stimmung: "balkon" },
@@ -7740,10 +7759,12 @@ const Spiel = (() => {
     if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
-    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
+    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');
+    // V9.0 (Patrick 25.11.): langsame Kamerafahrt über ein Standbild (Bildfolge auf dem Balkon); Zielpunkt aus bilder.js „fahrtZiel“
+    if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
+    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'ruck') { neu.style.transform = 'scale(1.09)'; neu.style.transition += ', transform .32s cubic-bezier(.2,.9,.3,1)'; }

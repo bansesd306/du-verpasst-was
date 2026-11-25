@@ -4,7 +4,9 @@ import os
 from PIL import Image, ImageFilter
 H = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 Q = os.path.dirname(H) + '/quellen/uploads/v89/gemini_balkon_sitzen/'
-for code, datei in [('N34L', 'rot1_schaut'), ('N34Lt', 'rot2_trinkt'), ('N34Ls', 'rot3_weg')]:
+for code, datei in [('N34L', 'rot1_schaut'), ('N34Lt', 'rot2_trinkt'), ('N34Ls', 'rot3_weg'),
+                   # Bildfolge „die Zeit vergeht“ (Patrick 25.11.): beide sitzen, wechselnde Plätze, drinnen läuft die Party weiter
+                   ('N34S1', 'zwei_1_ecke'), ('N34S2', 'zwei_2_wand'), ('N34S3', 'zwei_3_weit'), ('N34S4', 'zwei_4_oben')]:
     im = Image.open(Q + datei + '.jpg').convert('RGB').resize((1920, 1080), Image.LANCZOS)
     im = im.filter(ImageFilter.UnsharpMask(radius=1.2, percent=35, threshold=0))   # leicht nachschärfen wie BR
     im.save(H + '/dist/img/' + code + '.webp', quality=90); print(code)

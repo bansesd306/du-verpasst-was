@@ -392,10 +392,12 @@ const Spiel = (() => {
     if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
     if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
-    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
+    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');
+    // V9.0 (Patrick 25.11.): langsame Kamerafahrt über ein Standbild (Bildfolge auf dem Balkon); Zielpunkt aus bilder.js „fahrtZiel“
+    if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
+    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'ruck') { neu.style.transform = 'scale(1.09)'; neu.style.transition += ', transform .32s cubic-bezier(.2,.9,.3,1)'; }
