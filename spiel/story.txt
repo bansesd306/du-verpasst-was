@@ -2019,6 +2019,8 @@ Irgendwann sitzen wir auf dem Boden.
 @bild N34Z3
 @warte 4
 @bild N34Z4 langsam
+@warte 3.5
+@bild N34Z5 langsam
 @warte 4
 @bild N34v sehrlangsam
 @warte 3
@@ -4017,7 +4019,9 @@ Lynn: „Traust du dich nächstes Mal?“
 @bild N34ZA sehrlangsam
 @warte 3.5
 Ich: „Ja.“
-@warte 3
+@warte 2
+@bild N34ZB sehrlangsam
+@warte 4
 @effekt vorstellung aus weich
 @schwarz langsam
 @bild LD1 schnitt
