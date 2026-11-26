@@ -1666,7 +1666,7 @@ Mia: „Bist du nicht der Jura-Typ …“
 Ich: „Kommt drauf an, wer fragt.“
 @bild N35b gesicht
 # V8.7 (C12)
-Mia: „Is doch son Juristensatz.“
+Mia: „Is doch so’n Juristensatz.“
 Ich: „Kommt drauf an.“
 @bild N35s schnitt
 @warte 2.2
@@ -3379,7 +3379,7 @@ Ich leg es wieder hin.
   @handy story lena.xo B12A 2 Min.
   @warte 1
   … !2
-  ~ Nen Award kriegt sie dafür wahrscheinlich nicht.
+  ~ ’Nen Award kriegt sie dafür wahrscheinlich nicht.
   @abzeichen Fotograf des Jahres
   … !2
   ~ Naja.

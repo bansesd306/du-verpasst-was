@@ -3115,7 +3115,7 @@ Mia: „Bist du nicht der Jura-Typ …“
 Ich: „Kommt drauf an, wer fragt.“
 @bild N35b gesicht
 # V8.7 (C12)
-Mia: „Is doch son Juristensatz.“
+Mia: „Is doch so’n Juristensatz.“
 Ich: „Kommt drauf an.“
 @bild N35s schnitt
 @warte 2.2
@@ -4828,7 +4828,7 @@ Ich leg es wieder hin.
   @handy story lena.xo B12A 2 Min.
   @warte 1
   … !2
-  ~ Nen Award kriegt sie dafür wahrscheinlich nicht.
+  ~ ’Nen Award kriegt sie dafür wahrscheinlich nicht.
   @abzeichen Fotograf des Jahres
   … !2
   ~ Naja.
@@ -6193,8 +6193,8 @@ const Ton = (() => {
     const t = now() + ab; const v = (dumpf ? .1 : .2) * (laut == null ? 1 : laut);
     const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .03); g.gain.setValueAtTime(v, t + dauer - .07); g.gain.linearRampToValueAtTime(0, t + dauer);
     const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = dumpf ? 200 : 520;
-    const fv = .96 + Math.random() * .08; const o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 168 * fv;
-    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 84 * fv; const m = ctx.createGain(); m.gain.value = .7;
+    const o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 168;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 84; const m = ctx.createGain(); m.gain.value = .7;
     const lfo = ctx.createOscillator(); lfo.frequency.value = 23; const lg = ctx.createGain(); lg.gain.value = v * .35; lfo.connect(lg); lg.connect(g.gain);
     o1.connect(f); o2.connect(m); m.connect(f); f.connect(g); g.connect(sfx);
     [o1, o2, lfo].forEach(o => { o.start(t); o.stop(t + dauer + .05); });
@@ -6349,15 +6349,11 @@ const Ton = (() => {
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
     vibration(ort, o = {}) {
       if (!ctx || gesperrt) return 0;
-      // Gemini-Prüfung 26.11.: ~50-mal derselbe Klang wirkte mechanisch – jedes Mal leicht anders (Tonhöhe ±5 %, Lautstärke ±8 %,
-      // mal kurz-lang statt zwei gleich), Lautstärke wie vorher (Patrick 26.11.: Handyton muss laut genug sein); Phantom etwas leiser und dumpfer
-      const leise = (o.leise ? .5 : 1) * (.92 + Math.random() * .16) * (o.phantom ? .85 : 1); const dumpf = ort === 'tasche' || o.dumpf;
-      const rate = .95 + Math.random() * .1, art = Math.random();
-      const zwei = (a) => { if (art < .3) { brumm(.25, .25, a, leise); brumm(.6, .5, a, leise); } else { brumm(.25, .4, a, leise); brumm(.7, .35, a, leise); } };
+      const leise = o.leise ? .5 : 1; const dumpf = ort === 'tasche' || o.dumpf;
       let d = 0;
-      if (ort === 'tisch') { const q = quelle('bzzz_tisch', sfx, { vol: 1.1 * leise, rate }); quelle('bzzz', sfx, { vol: .45 * leise, ab: .2, rate }); d = q ? q.laenge : 0; brumm(.1, .62, false, leise); }
-      else if (ort === 'bett') { const q = quelle('bzzz', sfx, { vol: 1.25 * leise, lp: 3400, rate }); d = q ? q.laenge : 0; zwei(false); }
-      else { const q = quelle('bzzz', sfx, { vol: (dumpf ? .9 : 1.15) * leise, lp: dumpf ? (o.phantom ? 300 : 380) : undefined, rate }); d = q ? q.laenge : 0; zwei(dumpf); }
+      if (ort === 'tisch') { const q = quelle('bzzz_tisch', sfx, { vol: 1.1 * leise }); quelle('bzzz', sfx, { vol: .45 * leise, ab: .2 }); d = q ? q.laenge : 0; brumm(.1, .62, false, leise); }
+      else if (ort === 'bett') { const q = quelle('bzzz', sfx, { vol: 1.25 * leise, lp: 3400 }); d = q ? q.laenge : 0; brumm(.25, .4, false, leise); brumm(.7, .35, false, leise); }
+      else { const q = quelle('bzzz', sfx, { vol: (dumpf ? .9 : 1.15) * leise, lp: dumpf ? 380 : undefined }); d = q ? q.laenge : 0; brumm(.25, .4, dumpf, leise); brumm(.7, .35, dumpf, leise); }
       vibriere(dumpf ? [180] : [350, 90, 350]); return d;
     },
     // Titelmusik im Hauptmenü: ab Sekunde 0, ohne Einblenden
