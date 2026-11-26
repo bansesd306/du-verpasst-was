@@ -16,7 +16,7 @@
 @media (prefers-reduced-motion:reduce){#handy.an .geraet{animation:none}}
 #handy .screen::after{content:"";position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;z-index:30;border-radius:inherit;transition:opacity .22s ease-in}
 #handy.aufwachen .screen::after{opacity:1;transition:none}
-#handy:not(.an) .screen::after{opacity:.85;transition:opacity .3s ease-in}
+#handy:not(.an) .screen::after{opacity:1;transition:opacity .17s cubic-bezier(.35,0,.65,1)}
 #handy.schnapp{transition:transform .18s ease-out;transform:scale(1.04) rotate(-1.5deg)}
 .geraet{position:absolute;inset:0;border-radius:64px;background:#111;padding:14px;box-shadow:0 0 0 3px #2a2a2e,0 30px 80px rgba(0,0,0,.7)}
 .screen{position:relative;width:100%;height:100%;border-radius:52px;overflow:hidden;background:#000;font-family:"Samsung Sans","Roboto",system-ui,sans-serif;color:#e9edef}
@@ -282,7 +282,7 @@
 .hhinweis b{font:600 26px system-ui;color:#fff}.h-x{font:400 24px system-ui;color:#ccc}
 .h-ic{width:46px;height:46px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px;overflow:hidden}
 .displayaus{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity .08s;z-index:20}
-.displayaus.an{opacity:1}
+.displayaus.an{opacity:1;transition:opacity .17s cubic-bezier(.35,0,.65,1)}   /* 26.11.: wie das echte Ausschalten (Patricks Video): ~0,17 s abdunkeln */
 
 .mfoto>*,.st-bild>*:not(.st-text),.f-b>*,.v-bild>*,.fotogross>*{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .mfoto .play,.mfoto .vdauer{position:absolute;inset:auto;width:auto;height:auto}
@@ -451,3 +451,50 @@
 .nkopf b{font-size:29px}
 .nt{font-size:28px;margin-top:2px}
 .h-ic{border-radius:30%}
+/* ---------- V8.9 (Patrick 26.11.): Homescreen (One UI) + App-Öffnen-Animation wie im Bildschirmvideo ---------- */
+[data-app=home]{background:#141a2e;padding-top:56px}
+/* alltäglicher, gedämpfter Hintergrund: ruhige Abendfarben in weichen Bögen, damit rote Zahlen auffallen */
+.hm-wall{position:absolute;inset:0;background:
+  radial-gradient(120% 60% at 110% 108%,#5b4a78 0,rgba(91,74,120,0) 60%),
+  radial-gradient(140% 55% at -20% 92%,#2f4a72 0,rgba(47,74,114,0) 62%),
+  radial-gradient(160% 70% at 50% 135%,#3c3560 0,rgba(60,53,96,0) 70%),
+  linear-gradient(178deg,#0f1424 0,#18203a 45%,#232848 100%)}
+.hm-wall::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.12)}
+.hm-widget{position:relative;margin:30px 40px 0;display:flex;flex-direction:column;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.35)}
+.hm-uhr{font:300 78px/1 system-ui;letter-spacing:1px}
+.hm-datum{font:500 24px system-ui;margin-top:8px;color:#e8ebf3}
+.hm-wetter{font:400 23px system-ui;margin-top:6px;color:#c9cfdd}
+.hm-raster{position:absolute;left:18px;right:18px;bottom:310px;display:grid;grid-template-columns:repeat(4,1fr);row-gap:30px}
+.hm-dock{position:absolute;left:18px;right:18px;bottom:44px;display:grid;grid-template-columns:repeat(4,1fr)}
+.hm-dock small{display:none}
+.hm-app{display:flex;flex-direction:column;align-items:center;gap:9px}
+.hm-app small{font:400 19px system-ui;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);white-space:nowrap}
+.hm-ic{position:relative;width:94px;height:94px;border-radius:30px;display:flex;align-items:center;justify-content:center;transition:filter .12s,transform .12s}
+.hm-ic svg{width:60%;height:60%}
+.hm-ic.voll svg{width:100%;height:100%}
+.hm-ic.voll{overflow:hidden}
+.hm-ic.voll[style*="#f98012"] svg{width:74%;height:74%}
+.hm-ic .svgi,.hm-ic>svg.svgi{width:60%}
+.hm-app.tipp .hm-ic{filter:brightness(.72);transform:scale(.94)}
+.hm-badge{position:absolute;right:-6px;top:-6px;min-width:34px;height:34px;padding:0 9px;border-radius:17px;background:#f0443a;color:#fff;font:600 20px/34px system-ui;font-style:normal;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.35);display:none}
+.hm-suche{position:absolute;left:30px;right:30px;bottom:200px;height:76px;border-radius:38px;background:rgba(255,255,255,.88);display:flex;align-items:center;padding:0 24px;gap:16px}
+.hm-suche svg{width:36px;height:36px}.hm-suche span{flex:1}
+/* Übergang: Home liegt darunter, die neue App wächst aus dem Symbol, die alte schrumpft hinein */
+.app.drunter,.app.schrumpft{display:flex}
+.app.drunter{z-index:0}
+.app.an{z-index:2}.app.schrumpft{z-index:3}
+.app.wartet{visibility:hidden}
+.app.drunter.kommt{animation:hmKommt .32s cubic-bezier(.2,.8,.2,1) both}
+@keyframes hmKommt{from{opacity:.35;transform:scale(1.06)}to{opacity:1;transform:none}}
+.app.drunter.weiter{animation:hmWeiter .4s cubic-bezier(.3,.7,.2,1) both}
+@keyframes hmWeiter{to{transform:scale(1.08);filter:brightness(.7)}}
+.app.waechst{animation:appWaechst .4s cubic-bezier(.22,.85,.25,1) both;will-change:transform}
+@keyframes appWaechst{
+  from{transform:translate(var(--dx),var(--dy)) scale(var(--s));clip-path:inset(var(--ci) 0 var(--ci) 0 round var(--cr));opacity:.2}
+  18%{opacity:1}
+  to{transform:none;clip-path:inset(0 0 0 0 round 52px);opacity:1}}
+.app.schrumpft{animation:appSchrumpft .32s cubic-bezier(.4,0,.6,1) both;will-change:transform}
+@keyframes appSchrumpft{
+  from{transform:none;clip-path:inset(0 0 0 0 round 52px);opacity:1}
+  82%{opacity:1}
+  to{transform:translate(var(--dx),var(--dy)) scale(var(--s));clip-path:inset(var(--ci) 0 var(--ci) 0 round var(--cr));opacity:0}}
