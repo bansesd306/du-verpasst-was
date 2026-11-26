@@ -35,7 +35,12 @@ const Spiel = (() => {
   }
   const zwei = n => String(n).padStart(2, '0');
   function uhrText(m = V.uhr) { m = ((Math.round(m) % 1440) + 1440) % 1440; return zwei(Math.floor(m / 60)) + ':' + zwei(m % 60); }
+  // V9.1 (Patrick 26.11., A16): Akku – Freitagabend 34 % beim Losgehen, nachts immer leerer, morgens (nach dem Laden) fast voll, über den Tag weniger
+  function akku(m = V.uhr) { m = m || 0; const d = Math.floor(m / 1440), t = m % 1440; let p;
+    if (d === 0 || (d === 1 && t < 540)) p = 41 - (m - 1204) / 17; else if (t >= 540) p = 98 - (t - 540) / 14; else p = 98 - (t + 900) / 14;
+    return Math.max(3, Math.min(100, Math.round(p))); }
   function datumText() { return DATUM[Math.max(0, Math.min(3, Math.floor((V.uhr || 0) / 1440)))]; }
+  let uhrAnim = 0;
   function zeigeUhr() {
     uhrEl.textContent = uhrText();
     const war = uhrEl.classList.contains('an'), jetzt = !!V.uhr_zeigen;
@@ -180,7 +185,7 @@ const Spiel = (() => {
   function blickAuf() {
     // V8.9: „Unruhe-Blick“ = Knopf ist grau (keine rote Zahl), bevor etwas als gelesen markiert wird
     const unruhe = Handy.zahl() === 0;
-    blick.offen = true; blick.zahl++; blick.neu = 0;
+    blick.offen = true; blick.zahl++; blick.neu = 0; V.knopf = (V.knopf || 0) + 1;   // V9.1 (E2)
     // Nur Unruhe-Blicke zählen (Bilanz „obwohl nichts Neues da war“ + Handy-Punkte): jeder zweite = 1 Punkt (höchstens 3).
     // Blicke bei roter Zahl geben nie einen Punkt (Elhai 2016: problematische, nicht häufige Nutzung).
     if (unruhe) { blick.leer++; if (blick.leer % 2 === 0 && blick.leer <= 6) V.punkte = (V.punkte || 0) + 1; }
@@ -459,15 +464,14 @@ const Spiel = (() => {
   // Blinzeln – 25.11. abends: nur EIN Zeitgeber (vorher zwei auf derselben Ebene → 3x Blinzeln in 1 s), Mindestabstand 2,5 s, hart umschalten (keine halben Augen)
   let letztesBlinzeln = 0;
   function blinzle() {
-    const naechst = () => setTimeout(blinzle, 2600 + Math.random() * 2400);
+    const naechst = () => setTimeout(blinzle, 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
     if (B.classList.contains('einfrieren')) return naechst();
     const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink, .ebene.an img.blink')].filter(b => !b.classList.contains('fest'));
     const jetzt = performance.now();
-    if (bls.length && jetzt - letztesBlinzeln > 2500 && Math.random() > .2) {
+    if (bls.length && jetzt - letztesBlinzeln > 3000) {
       letztesBlinzeln = jetzt;
       const bl = bls[Math.random() * bls.length | 0];
       bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140);
-      if (Math.random() < .1) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 380);
     }
     naechst();
   }
@@ -513,13 +517,15 @@ const Spiel = (() => {
   // ---------------- Uhr-Animationen ----------------
   async function uhrSpringe(ziel) {
     if (!(ziel > V.uhr)) return;   // V8.8 (G15): nie rückwärts
+    // Patrick 26.11. (B8): kurze Sprünge (bis 20 Min.) läuft die Uhr sichtbar Minute für Minute hoch
+    if (ziel - V.uhr <= 20 && V.uhr_zeigen) { const g = gen; while (V.uhr < ziel) { V.uhr++; zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 3 : 110)); pruef(g); } return; }
     const von = V.uhr; const g = gen; uhrEl.classList.add('springt');
     const n = 14; for (let i = 1; i <= n; i++) { V.uhr = Math.round(von + (ziel - von) * (1 - Math.pow(1 - i / n, 2))); zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 5 : 70)); pruef(g); }
     V.uhr = ziel; zeigeUhr(); uhrEl.classList.remove('springt');
   }
   async function uhrLaufen(ziel, schritt) {
     const g = gen; let d = 380;
-    while (V.uhr < ziel) { V.uhr++; zeigeUhr(); if (d > 120) Ton.spiele('tipp'); if (schritt) schritt(); await new Promise(r => setTimeout(r, schnell ? 3 : d)); pruef(g); d = Math.max(18, d * .86); }
+    while (V.uhr < ziel) { V.uhr++; zeigeUhr(); /* Patrick 26.11. (A2): kein Tick-Ton mehr beim Uhrlaufen */ if (schritt) schritt(); await new Promise(r => setTimeout(r, schnell ? 3 : d)); pruef(g); d = Math.max(18, d * .86); }
   }
 
   // ---------------- Effekte ----------------
@@ -827,6 +833,11 @@ const Spiel = (() => {
     await warte(erste ? 2.2 : 1.2); await tipp(); Ton.introAus(erste ? 6 : 2.4); k.classList.remove('an', 'vorspann'); await warte(erste ? 1.6 : .8);
   }
   function abzeichen(name) { if (!S.abz.includes(name)) { S.abz.push(name); speichere(S); abzQueue.push(name); if (!abzNeu.includes(name)) abzNeu.push(name); } }
+  function abzeichenSofort(n, unter) {
+    const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f'];
+    t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}${unter ? `<br><i style="font-size:26px;color:#ddd">${unter}</i>` : ''}</div>`;
+    t.classList.add('an'); Ton.spiele('abzeichen'); clearTimeout(abzeichenSofort.t); abzeichenSofort.t = setTimeout(() => t.classList.remove('an'), (unter ? 3600 : 2400) * (schnell ? .08 : 1));
+  }
   async function abzeichenZeigen() {
     while (abzQueue.length) {
       const n = abzQueue.shift(); const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f']; t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}</div>`;
@@ -853,13 +864,15 @@ const Spiel = (() => {
       case 'pfad': pfad.push(a); pfadPlus = false; break;
       case 'pfad+': if (pfadPlus) pfad[pfad.length - 1] += ' + ' + a; else pfad.push(a); pfadPlus = true; break;
       case 'abzeichen': abzeichen(a); break;
+      // V9.1 (Patrick 26.11., A6): sofort zeigen (nicht erst bei der nächsten Kapitelkarte), optional mit Unterzeile: @abzeichen! Name | Unterzeile
+      case 'abzeichen!': { const [n, unter] = a.split('|').map(x => x.trim()); abzeichen(n); const i = abzQueue.indexOf(n); if (i >= 0) abzQueue.splice(i, 1); abzeichenSofort(n, unter); break; }
       case 'uhr': {
         if (a.startsWith('zeigen')) { if (a.includes('sofort')) { uhrEl.style.transition = 'none'; setTimeout(() => uhrEl.style.transition = '', 50); } V.uhr_zeigen = true; zeigeUhr(); break; }
         if (a === 'aus' || a === 'verstecken') { V.uhr_zeigen = false; zeigeUhr(); break; }
         if (teile[0] === 'mind') { V.uhr = Math.max(V.uhr, zeit(teile.slice(1).join(' '))); zeigeUhr(); break; }
         if (teile[0] === 'springe') { await uhrSpringe(zeit(teile.slice(1).join(' '))); break; }
         if (teile[0] === 'laufen') { await uhrLaufen(zeit(teile.slice(1).join(' '))); break; }
-        if (a.startsWith('+')) { V.uhr += +wert(a.slice(1)) || 0; zeigeUhr(); break; }
+        if (a.startsWith('+')) { const n = +wert(a.slice(1)) || 0; const von = V.uhr; V.uhr += n; zeigeUhr(); if (n > 0 && n <= 20 && V.uhr_zeigen && !schnell) { const g = gen, z = V.uhr; uhrAnim = g; uhrEl.textContent = uhrText(von); (async () => { for (let m = von + 1; m <= z && g === gen && uhrAnim === g && V.uhr === z; m++) { uhrEl.textContent = uhrText(m); await new Promise(r => setTimeout(r, 110)); } if (V.uhr === z) uhrEl.textContent = uhrText(); })(); } break; }   // Patrick 26.11. (B8): kurze Sprünge laufen sichtbar (im Hintergrund, hält nichts auf)
         V.uhr = zeit(a); zeigeUhr(); break;
       }
       case 'karte': PR('karte', a); await karte(a); break;
@@ -1048,13 +1061,15 @@ const Spiel = (() => {
       sp.classList.add('zieh'); Ton.spiele('PR3_stift', { dauer: .7, vol: 1.1 }); await warte(.9);
       await warte(2); Ton.outro('warm');
       { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 1600); }
-      await warte(4); await tipp(); return;
+      await warte(4); await tipp(); sp.style.transition = 'opacity 1.2s ease'; sp.style.opacity = 0; await warte(1.4); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
     zeigeTextbox(false); Ton.outro(); Ton.ausklingen(5);
+    // V9.1 (Patrick 26.11., F): das Bild dahinter wird sofort schwarz, der Titel steht 3 s allein und blendet aus
+    { const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.style.transition = 'opacity .5s'; sw.classList.add('an'); }
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
-    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
-    await warte(4); await tipp();
+    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').style.transition = ''; }, 700); }
+    await warte(3.4); sp.style.transition = 'opacity 1.4s ease'; sp.style.opacity = 0; await warte(1.6);
   }
 
   // ---------------- Ablauf ----------------
@@ -1257,7 +1272,7 @@ const Spiel = (() => {
   }
 
   return {
-    init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
+    init, uhrText, datumText, akku, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
     _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };

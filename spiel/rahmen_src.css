@@ -377,6 +377,10 @@
 #s-bilanz .bilanz{display:flex;flex-direction:column;gap:18px;opacity:1}
 #s-bilanz .bilanz p{font:400 40px/1.35 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6;opacity:0;transition:opacity 1s}
 #s-bilanz .bilanz p.da{opacity:1}
+#s-bilanz .bilanz p.da.aus{opacity:0;transition:opacity 1.2s}
+#s-bilanz #p-handy{font-size:46px;text-align:center;width:1300px;margin-left:160px}
+#s-bilanz #p-handy .h2{opacity:0;transition:opacity 1.4s}
+#s-bilanz #p-handy .h2.da{opacity:1}
 #s-bilanz .bilanz b{color:#fff;font-weight:700}
 #s-bilanz #p-verpasst{display:flex;flex-direction:column;gap:8px;margin-top:22px}
 #s-bilanz #p-verpasst .vk,#s-bilanz #p-verpasst .vp{display:block;opacity:0;transition:opacity .8s}

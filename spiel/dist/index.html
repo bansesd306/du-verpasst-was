@@ -73,7 +73,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #vignette{background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
 #koernung{opacity:.045;animation:korn .5s steps(4) infinite}
 @keyframes korn{0%{transform:translate(0,0)}25%{transform:translate(-40px,20px)}50%{transform:translate(30px,-30px)}75%{transform:translate(-20px,-40px)}}
-#schwarz{background:#000;opacity:0;transition:opacity .5s}
+#schwarz{background:#000;opacity:0;transition:opacity .5s;inset:-6px}   /* V9.1 (A12): kein heller Streifen am Rand bei krummen Bildschirmbreiten */
 #schwarz.an{opacity:1}
 #schwarz.langsam{transition:opacity 1.8s}
 #traumglow{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,rgba(255,230,190,.28) 0,rgba(255,210,150,.12) 45%,rgba(255,240,220,.55) 100%);mix-blend-mode:screen}
@@ -651,7 +651,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 
 /* V8.9 (Patrick 24.11.): Stempel auf der Klausur unten rechts – ersetzt die Rotstift-5,0 (Schicht s4 aus) */
 #klausur .s4{display:none}
-#stempel.blatt{left:735px;top:690px;font-size:150px;border-width:9px;border-radius:14px;padding:0 24px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
+#stempel.blatt{left:735px;top:690px;font-size:105px;border-width:7px;border-radius:11px;padding:0 17px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
 .ebene .innen img.fw{opacity:0;transition:opacity 1.4s ease}
 .ebene .innen img.fw.aus{opacity:1}
 /* V9.0: niedrige Bildschirme (Handy quer) – ganzes Menü scrollt, damit die Szenenliste nicht zu klein wird */
@@ -1027,8 +1027,18 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 
 /* ---- V8.5: PDF-Anhang im Chat ---- */
 .mdoc{display:flex;align-items:center;gap:16px;background:rgba(0,0,0,.22);border-radius:14px;padding:14px 16px;margin:2px 0 6px;min-width:420px}
-.mdoc .md-ic{flex:none;width:58px;height:70px;border-radius:8px;background:#e5483f;color:#fff;font:700 20px system-ui;display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px}
-.mdoc b{display:block;font:500 30px/1.25 system-ui;color:#e9edef;word-break:break-all}
+.mdoc .md-ic{flex:none;position:relative;width:52px;height:64px;border-radius:5px 16px 5px 5px;background:#fff}
+.mdoc .md-ic i{position:absolute;left:-6px;bottom:10px;padding:2px 6px;border-radius:4px;background:#e5322d;color:#fff;font:700 17px/1.1 system-ui;font-style:normal}
+.mdoc b{display:block;font:500 30px/1.25 system-ui;color:#e9edef;overflow-wrap:anywhere;word-break:normal}
+/* V9.1 (B3): Antwort mit Zitat */
+.mzitat{display:block;margin:2px 0 8px;padding:8px 14px;border-left:6px solid;border-radius:8px;background:rgba(0,0,0,.22);font:400 27px/1.3 system-ui}
+.mzitat b{display:block;font-weight:600;font-size:25px}
+.mzitat span{color:rgba(233,237,239,.7)}
+/* V9.1 (A15): Foto-Blase wie bei WhatsApp – dünner Rahmen, Uhrzeit auf dem Bild */
+.blase.mitfoto{padding:5px 5px 5px}
+.blase.mitfoto .absender{padding:4px 10px 2px}
+.blase.mitfoto .mfoto{margin:0;border-radius:15px}
+.blase.mitfoto .mz{position:absolute;right:16px;bottom:12px;margin:0;float:none;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.8)}
 .mdoc small{display:block;font:400 24px system-ui;color:#8696a0;margin-top:4px}
 /* ---- V8.5: PDF-Ansicht ---- */
 [data-app=pdf]{background:#3b3b3f}
@@ -1110,6 +1120,9 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .nkopf b{font-size:29px}
 .nt{font-size:28px;margin-top:2px}
 .h-ic{border-radius:30%}
+
+/* V9.1 (A18): Chat beim Nachschauen sofort da */
+.c-msgs.sofort .blase{animation:none!important}
 
 #zimmer{
   --nacht:#0b1121;
@@ -1427,6 +1440,10 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #zimmer #z-s-bilanz .bilanz{display:flex;flex-direction:column;gap:18px;opacity:1}
 #zimmer #z-s-bilanz .bilanz p{font:400 40px/1.35 "Bricolage Grotesque",system-ui,sans-serif;color:#c9d2e6;opacity:0;transition:opacity 1s}
 #zimmer #z-s-bilanz .bilanz p.da{opacity:1}
+#zimmer #z-s-bilanz .bilanz p.da.aus{opacity:0;transition:opacity 1.2s}
+#zimmer #z-s-bilanz #z-p-handy{font-size:46px;text-align:center;width:1300px;margin-left:160px}
+#zimmer #z-s-bilanz #z-p-handy .h2{opacity:0;transition:opacity 1.4s}
+#zimmer #z-s-bilanz #z-p-handy .h2.da{opacity:1}
 #zimmer #z-s-bilanz .bilanz b{color:#fff;font-weight:700}
 #zimmer #z-s-bilanz #z-p-verpasst{display:flex;flex-direction:column;gap:8px;margin-top:22px}
 #zimmer #z-s-bilanz #z-p-verpasst .vk,#zimmer #z-s-bilanz #z-p-verpasst .vp{display:block;opacity:0;transition:opacity .8s}
@@ -1486,6 +1503,8 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @setze LERN_MITTEL = 3
 @setze LERN_HOCH = 5
 @setze lernstand = 0
+# V9.1 (Patrick 26.11., E2): wie oft der Handy-Knopf gedrückt wurde (Balkon/Flow: wer schaut, verpasst einen Satz)
+@setze knopf = 0
 # glücklicher Weg: Lynns „und? 🙂“ nach der Prüfung (Option im Dokument). 1 = an, 0 = aus
 @setze OPTION_LYNN_UND = 1
 # Bildschirmzeit-Bericht (EN2): Stunden mehr (+) bzw. weniger (−) je Weg – B und Party vorläufig
@@ -1639,6 +1658,18 @@ Fast drei Jahre Studium. Alles hängt an Montag.
 … !2
 @bild N31d langsam
 Zehn Minuten Pause. Hab ich mir verdient.
+# V9.1 (Patrick 26.11., C3): Mikrowahl – beide Wege laufen gleich weiter. Liegen lassen: es vibriert auf dem Tisch, kein Text dazu
+? „Handy mitnehmen.“ -> PROLOG_MIT
+? „Handy liegen lassen.“ -> PROLOG_LIEGEN
+
+== PROLOG_LIEGEN
+@leer
+@warte 1.2
+@vibrieren 2
+@warte 1.4
+Na gut. Zehn Minuten.
+
+== PROLOG_MIT
 @ton handy_ablegen
 @bild N1L langsam
 @warte 1
@@ -1680,6 +1711,8 @@ Der hält es halt nicht lange ohne seine große Liebe aus.
 @tipp
 …
 @handy zu
+# V9.1 (Patrick 26.11., E1): nur über den Handy-Knopf zu sehen
+@handy meldung Instagram | x.mia.x | x.mia.x hat ein Reel geteilt
 @bild N03
 Rechts: der Schreibtisch. Die zwei 5,0 liegen obendrauf.
 @bild K12
@@ -2322,13 +2355,21 @@ Lena: „Leute, gleich kommt die Torte!“
 
 == ANRUF_FLOW
 @bild K10P
+@setze knopfF = knopf
 „V verkauft K ein Auto und verschweigt den Unfall …“
+# V9.1 (Patrick 26.11., D1): Flow klingt und sieht aus wie der Balkon – warmes Licht, ruhiges Lied ganz leise
+@effekt waermer
+@musik lofi leise
 Easy.
 @anruf_unbemerkt Jonas
 @warte 2.5
 ~~ Ha.
 @anruf_unbemerkt aus
 @warte 2.5
+@wenn knopf>knopfF
+  ~ … Wo war ich?
+  … !1.5
+@ende
 Manchmal ist es echt cool, Dinge zu verstehen.
 ~ Kalt.
 @ton tasse
@@ -2337,6 +2378,8 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 @uhr laufen 23:38
 … !2
 @uhr laufen 23:40
+@musik aus langsam
+@effekt waermer aus
 -> L5
 
 == ANRUF_NICHTFLOW
@@ -2529,6 +2572,8 @@ Wieder auf ein dummes Gefühl hören?
 @loop uhr an
 Sie verschwindet ja nicht. !3
 … Aber sie hat heute gefragt. !3
+# V9.1 (Patrick 26.11., B2)
+… Nicht morgen. !2
 @bild N34 traum
 @musik party fern
 ~ Was, wenn …
@@ -2969,6 +3014,8 @@ Ich steck es wieder ein.
 @setze kueche
 @uhr +5
 @bild N13
+# V9.1 (E1): nur über den Handy-Knopf zu sehen
+@handy meldung Instagram | tim_k97 | tim_k97 ist jetzt live 🔴
 # Storycheck 3 (Patrick 24.11.): Jonas äfft nach, was der Ich ihm geschrieben hat, dann ehrlich
 @wenn k1=="raus"
   Jonas: „‚Ich bin raus. Muss eeecht noch leeernen.‘“
@@ -3178,6 +3225,9 @@ Ich: „Alles okay?“
 Mia: „Klar.“
 @warte .8
 @musik party laut langsam
+# V9.1 (Patrick 26.11., A12): erst Mia, dann der Ruf
+@bild MIA_GRINST_c schnitt
+@warte .9
 @bild N32b schnitt
 Mia!: „TIM! DAS IST MEIN LIED!“
 # Mias Lied: setzt mit dem Bass ein, dann dumpf und schwarz, dann zum Refrain die Lichtshow
@@ -3250,6 +3300,7 @@ Mia: „Party Nummer vieeer.“
 @ton tuer_auf leise
 @bild N14
 @loop wind an
+@setze knopfB = knopf
 Lynn: „Du bist ja doch gekommen.“
 …
 Lynn: „Jetzt bin ich ’nen Zehner reicher.“
@@ -3268,6 +3319,8 @@ Ich: „Ach so. Klar hab ich den noch.“
 @bild N14d gesicht
 Lynn: „Und? Schon alle vier Farben durch?“
 Ich: „Rot ist fast leer.“
+@bild N14s gesicht
+@warte .5
 @bild N14b gesicht
 @ton lynn_lacht1
 … !2
@@ -3281,6 +3334,8 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
   …
   Ich: „Wow.“
   Ich: „Das tut weh.“
+  @bild N14s gesicht
+  @warte .5
   @bild N14b gesicht
   @ton lynn_lacht2
   … !2
@@ -3298,11 +3353,21 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
   Lynn: „Aber gleich geht’s weiter. Ich darf ja nicht den unangenehmsten Moment des Tages verpassen.“
   Ich: „Welchen?“
   Lynn: „Wenn alle Happy Birthday krächzen. Und Lena komplett im Cringe versinkt.“
+  @bild N14s gesicht
+  @warte .5
   @bild N14b gesicht
   @ton lynn_lacht2
   @tipp
   @bild N14 gesicht
   Ich: „Nee. Das sollte man nicht verpassen.“
+@ende
+# V9.1 (Patrick 26.11., E2): wer während des Gesprächs aufs Handy schaut, hat etwas verpasst
+@wenn knopf>knopfB
+  Ich: „Hm? Sorry, was?“
+  @bild N14c gesicht
+  Lynn: „Schon gut.“
+  … !1.5
+  @bild N14 gesicht
 @ende
 @ton bzzz
 @effekt wackeln
@@ -3313,9 +3378,10 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 @setze lynn = "geschaut"
 @handy sperr
 @benachrichtigung Wetter | Wetter · Morgen 4 °C |
-@warte 2
-@handy zu
+@warte 1.2
+# V9.1 (Patrick 26.11., B1): sie sagt es, während er noch aufs Handy starrt
 Lynn: „Ich geh mal wieder rein. Bin gleich wieder da.“
+@handy zu
 @bild N14g pose
 @warte 1.2
 @ton tuer_auf leise
@@ -3326,6 +3392,11 @@ Morgen 4 Grad.
 Sie kommt nicht wieder. !2
 @bild BR langsam
 Ich stehe eine Weile allein draußen.
+# V9.1 (Patrick 26.11., G): zweite Chance – reingehen oder warten
+? „Reingehen.“ -> BALKON_REIN
+? „Warten.“ -> BALKON_WARTEN
+
+== BALKON_REIN
 # Storycheck 3 (Z3, Patrick 24.11.): allein höchstens ca. 10 Minuten. Lied nur, wenn es in diese 10 Minuten fällt, sonst kommt es später im Flur
 @wenn !lied && ankunft<=22:45 && uhr>=22:37
   @setze lied
@@ -3339,6 +3410,57 @@ Ich stehe eine Weile allein draußen.
 @ende
 Irgendwann gehe ich rein.
 -> HUB_ZURUECK
+
+# ---- V9.1 (Patrick 26.11., G): Er wartet auf dem Balkon. Beim Warten vibriert es noch einmal. ----
+== BALKON_WARTEN
+@wenn !lied && ankunft<=22:45 && uhr>=22:37
+  @setze lied
+  @uhr springe 22:45
+  @musik lied dumpf
+  Drinnen singen alle Happy Birthday.
+  @musik lied aus
+  @uhr +2
+@sonst
+  @uhr +6
+@ende
+Sie hat gesagt, gleich.
+… !3
+@ton bzzz
+@effekt wackeln
+Bzzz.
+? „Draufschauen.“ -> BW_DRAUF +handy
+? „Stecken lassen.“ -> BW_STECKEN
+
+== BW_DRAUF
+@handy sperr
+@benachrichtigung Instagram | x.mia.x | x.mia.x hat eine Story gepostet
+@warte 1.6
+# Er weiß nicht mal, was er verpasst hat: nur die Tür hinter ihm
+@ton tuer_klack
+Hinter mir klackt es leise.
+@handy zu
+@bild BR
+Als ich hochschau, ist keiner da.
+… !2
+Sie kommt nicht wieder. !2
+@uhr +5
+Irgendwann gehe ich rein.
+-> HUB_ZURUECK
+
+== BW_STECKEN
+@setze lynn = ""
+@warte 1.4
+@bild BALKON_AUSSEN langsam
+@warte 2.4
+@bild N14zb
+Lynn: „Oh. Du bist ja noch da.“
+Lynn: „Hab dir einen mitgebracht.“
+Ich: „Hast mich ganz schön lang warten lassen.“
+Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
+# Patrick 26.11.: kein Lachen, nur ein leichtes Grinsen
+@bild N14be gesicht
+… !2
+-> GM_UHR
 
 == BALKON_IGN1
 @wenn !lied && ankunft<=22:45
@@ -3367,6 +3489,8 @@ Bzzz. Nochmal.
 # ---- „Gar nicht gemerkt“ (wer zweimal ignoriert) ----
 == GM_START
 Ich lass es.
+== GM_UHR
+@setze knopfB = knopf
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
 # Storycheck 3 (Z4): nie rückwärts – ist es schon später als 23:25, zeigt sie die echte Zeit
@@ -3377,10 +3501,20 @@ Ich lass es.
 Lynn: „Drinnen erklärt Tim übrigens gerade schon wieder sein Krypto-Ding.“
 Ich: „Ist er schon Millionär?“
 Lynn: „Er sagt, über Nacht.“
+# Patrick 26.11. (C2): vor jedem Lachen erst ein halbes Lächeln
+@bild N14s gesicht
+@warte .6
 @bild N14b gesicht
 @ton lynn_lacht1
 @tipp
 @bild N14 gesicht
+@wenn knopf>knopfB
+  Ich: „Hm? Sorry, was?“
+  @bild N14c gesicht
+  Lynn: „Schon gut.“
+  … !1.5
+  @bild N14 gesicht
+@ende
 # V8.7 (D34)
 Irgendwann fragt sie, warum ich fast nicht gekommen wär.
 Ich erzähl ihr vom dritten Versuch.
@@ -3395,6 +3529,8 @@ Lynn: „Feigling.“
 Ich: „Hast du darauf auch gewettet?“
 @bild N14 gesicht
 Lynn: „Kein Kommentar.“
+@bild N14s gesicht
+@warte .5
 @bild N14b gesicht
 @ton lynn_lacht2
 Wir lachen beide.
@@ -3454,7 +3590,8 @@ Lynn: „… Naja.“
 # V8.9 (Philip 24.11.): Lynn verpasst Tims Afterparty mit Absicht; Tim ruft nur sie
 Tim!: „Lynn! Wir gehen!“
 … !1.5
-@bild N14 gesicht
+# V9.1 (Patrick 25.11.): sie winkt drinnen ab
+@bild N14w gesicht
 Lynn: „Geht schon mal.“
 … !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
@@ -3675,12 +3812,18 @@ Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 
 # ---- Abschied mit Lynn (wer auf dem Balkon aufs Handy geschaut hat) ----
 == ABSCHIED_A
+# V9.1 (Patrick 26.11., A20): nach dem Feuerlöscher erst kurz schwarz, Party dumpf
+@schwarz
+@musik party dumpf
+@warte 2.2
 @party an
 @musik party laut
 @bild A1
-Ich muss echt nach Hause. Morgen ist Lerntag.
+# Patrick 26.11. (vorläufig): er sagt es laut, Jonas antwortet darauf
+Ich: „So, Leute …“
+… !1.2
+Ich: „Ich muss echt nach Hause. Morgen ist Lerntag.“
 @bild A1W
-Ich verabschiede mich.
 Jonas: „Langweiler.“
 # Gemini-Prüfung 26.11.: Umarmungston (Jonas)
 @ton umarmung
@@ -3717,11 +3860,8 @@ Fast draußen.
   …
 @ende
 Ich: „Ich wollt mich nur … also, ich wollt mich …“
-@wenn lynn=="gm_geschaut"
-  @bild N19n
-@sonst
-  @bild N19
-@ende
+# V9.1 (Patrick 26.11., A9): Mund zu statt übertriebenem Lachen
+@bild N19n
 Lynn: „Du kommst doch noch mit zu Tim, oder?“
 …
 # V8.7 (A6): normaler Blick, Mund zu
@@ -3764,11 +3904,13 @@ Lynn: „Viel Glück am Montag.“
 -> HEIMWEG
 
 == A_SCHAUMAL
-@bild N19
+# V9.1 (Patrick 26.11.): skeptischer Blick statt Lachen
+@bild N19sk
 Lynn: „Dann schau halt.“
 Sie geht. Ich stehe im Gang mit der Jacke in der Hand.
 @bild N20
-@ton schritte_holz
+# A10: Schritte enden, bevor sie vorne steht
+@ton schritte_holz 1.2s
 …
 @bild N21 halb
 …
@@ -3985,7 +4127,8 @@ Hm.
 @warte 1
 # V8.8 (A5/J1-12): Tims Feier (Mia ist auch da – „Die vierte“)
 @bild TIM_FEIER_1 langsam
-@musik spaet leise
+# Patrick 26.11. (A13): weniger gedämpft
+@musik spaet mittel
 @wenn tanz
   # V8.7 (Philip 03:03): Mias „Party Nummer vier“
   ~ Die vierte war’s dann wohl.
@@ -4014,6 +4157,13 @@ Also sind zwei … eine. !2
 @analoguhr Sa 02:47
 Und eine ist ja keine. !3
 @analoguhr aus
+# V9.1 (Patrick 26.11., B5): das Beste der Afterparty passiert hinter ihm – er sieht es erst Samstag
+@handy sperr
+@ton gelaechter leise
+Hinter mir lachen alle über irgendwas.
+Ich scroll weiter.
+@warte 1.2
+@handy zu
 @musik aus
 @stille
 # V8.5: nach der Afterparty angezogen aufs Bett (N07)
@@ -4061,10 +4211,9 @@ Und eine ist ja keine. !3
   @wenn zugesagt
     @warte 1.5
   @ende
+  # Patrick 26.11. (A3): keine Schrittgeräusche
   @ton decke2
-  @warte .4
-  @ton schritte_holz leise
-  @warte 1.6
+  @warte 1.8
   @setze handyweit = 0
   @abzeichen Außer Reichweite
 @sonst
@@ -4292,7 +4441,6 @@ Ich bin auf keinem Foto. !3
   Verdammte Scheiße, aber wenn’s nichts wird …
   … !4
   dann bleibt das unter uns.
-  Ich freu mich so drauf.
   Ich hab jetzt sogar ein bisschen mehr Bock zu lernen.
   Und falls das alles schiefgeht …
   kommt Jonas wieder mit Pizza.
@@ -4356,7 +4504,8 @@ Ich bin auf keinem Foto. !3
     @nachricht Mia: DER FORSTER MORITZ 😭🧯
   @ende
   @nachricht Jonas: musst du dabei gewesen sein 😂
-  @tippe war ich nicht. war woanders
+  # Patrick 26.11. (C13): er schreibt nichts
+  @warte 1.5
   @wenn tanz
     @nachricht Mia: ich auch nicht 😭
   @ende
@@ -4380,10 +4529,21 @@ Ich bin auf keinem Foto. !3
   @nachricht Jonas: du warst dabei 😭
   @nachricht Mia: ja genau das ist ja das problem
   @nachricht Ben: wer war das eigentlich mit dem feuerlöscher?
-  @nachricht Mia: DER FORSTER MORITZ 😭🧯
+  # Patrick 26.11. (A7): Mia weiß ja nicht mehr, was war – Jonas sagt es
+  @nachricht Jonas: DER FORSTER MORITZ 😭🧯
 @ende
+# Patrick 26.11. (B5): wer nicht auf der Afterparty war, sieht Tim erst hier
+@foto TIM_SCHLAEFT Jonas
+@nachricht Jonas: LEGENDÄR 😭😭
+@nachricht Ben: tim wir haben alles
 @tipp
 @wenn typ=="zuhause"
+  # Patrick 26.11. (D3, vorläufig): wer gut gelernt hat, ist nicht neidisch
+  @wenn lernstand>=LERN_HOCH
+    ~ Klingt nach ’nem guten Abend.
+    … !1.5
+    ~ Meiner war auch gut.
+  @ende
   @wenn weg=="B" && notiz
     # Lernplan trifft die Uhrzeit (V8): kein Text. V8.7 (D13): beide Zeiten schieben, damit die Reihenfolge stimmt
     @handy notizen
@@ -4412,8 +4572,8 @@ Ich bin auf keinem Foto. !3
 == M3_FRAGEN
 @tippe was war mit dem feuerlöscher?? 😂
 @nachricht Jonas: musst du dabei gewesen sein 😂
-# Storycheck 3 (Patrick 24.11.): Mia weiß es ja auch nicht mehr
-@nachricht Mia: hau mal raus jetzt 😭
+# Patrick 26.11. (A7): Ben hat gefragt und war nicht dabei – nicht Mia
+@nachricht Ben: hau mal raus jetzt 😭
 @abzeichen Musst du dabei gewesen sein
 @tipp
 -> M4
@@ -4505,10 +4665,14 @@ Ich bin auf keinem Foto. !3
 … !2
 # V8.8 (L): Lenas Story von der Nacht
 @handy story lena.xo LENA_FEGT 13 Std. | | aufräumen 🥲
-@warte 3
+@warte 1.6
+# V9.1 (Patrick 26.11., B6): Tims Nachricht kommt mitten in die Story, dann geht er in den Chat
+@ton bzzz
+@banner WhatsApp | Tim | tja. alle wege führen wohl zu tim 😎
+@warte 1.8
+@banner aus
 @handy chat Tim
-@schreibt Tim 2
-@nachricht! Tim: tja. alle wege führen wohl zu tim 😎
+@nachricht Tim: tja. alle wege führen wohl zu tim 😎
 # V8.7 (D19): nur, wer mit Lynn auf dem Balkon war
 @wenn lynn!=""
   @schreibt Tim 3
@@ -4531,6 +4695,15 @@ Ich bin auf keinem Foto. !3
 # V8.7 (D7)
 @nachricht Lena: wer war eigentlich der feuerlöscher-typ 🧯
 @nachricht Jonas: MORITZ 😭
+# V9.1 (Patrick 26.11., B5): Tim auf dem Sofa – passiert, während er gescrollt hat
+@foto TIM_SCHLAEFT Jonas
+@nachricht Jonas: LEGENDÄR 😭😭
+@nachricht Ben: tim wir haben alles
+@tipp
+~ Wann war das?
+… !2
+~ Ich war doch da.
+… !1.5
 # V8.5: Balkonfoto auch auf dem Afterparty-Weg
 @foto BALKON_GRUPPE Lena
 @warte 1.5
@@ -4592,8 +4765,63 @@ Glaub ich.
   @nachricht Lena: ich hab mich echt gefreut, dass du da warst. wirklich ❤️
 @ende
 @tipp
+# V9.1 (Patrick 26.11., B7): er bleibt am Handy, scrollt woanders – und es kommt nichts
+@handy feed
+@warte 3.5
+@handy gruppe
+@warte 2.5
 @handy zu
 Ich leg das Handy weg. Zwei Tage noch.
+# V9.1 (Patrick 26.11., B9): der Samstag vergeht sichtbar – ohne Text
+@wenn typ=="afterparty"
+  # Karteikarten am Schreibtisch, er nickt darüber ein
+  @bild TAG1 langsam
+  @raum tag
+  @loop uhr an
+  @karteikarten auto
+  @uhr springe Sa 17:40
+  @handy meldung Instagram | lynn | lynn hat eine Story gepostet
+  @karteikarten aus
+  @warte 1.5
+  @loop uhr aus
+  @effekt einschlafen
+  @schwarz langsam
+  @warte 1.5
+  @uhr Sa 23:40
+  -> SAMSTAGABEND
+@ende
+@wenn typ=="zuhause" && weg=="B"
+  # Weg B: der Tag vergeht im Bett mit dem Handy
+  @bild SO langsam
+  @uhr springe Sa 15:10
+  @warte 1.2
+  @uhr springe Sa 19:30
+  @warte 1.2
+  -> SAMSTAGABEND
+@ende
+# alle anderen: Lern-Zeitraffer am Schreibtisch bei Tag, die Uhr läuft bis zum Abend
+@bild TAG1 langsam
+@raum tag
+@loop uhr an
+@ton blaettern
+@uhr springe Sa 13:30
+@warte .8
+@ton haken
+@uhr springe Sa 16:00
+# V9.1 (C16): Meldung, er lernt weiter
+@ton bzzz leise
+@banner Instagram | x.mia.x | x.mia.x hat eine Story gepostet
+@warte 1.6
+@banner aus
+@handy meldung Instagram | lynn | lynn hat eine Story gepostet
+@ton blaettern
+@warte .8
+@ton haken
+@uhr springe Sa 18:45
+@bild N31d langsam
+@raum nacht
+@warte 1.2
+@loop uhr aus
 -> SAMSTAGABEND
 
 # ---- Samstagabend (V8, alle außer Afterparty): die nächste Party kommt immer ----
@@ -4680,9 +4908,10 @@ Ich leg das Handy weg. Zwei Tage noch.
 ~ Ein Tag reicht.
 … !2
 ~ Muss reichen.
-@schwarz schnitt
+# Patrick 26.11. (A4): überblenden statt kurzem Schwarz
+@schwarz langsam
 @uhr So 09:00
-@warte 2
+@warte 1.2
 -> SONNTAG
 
 # ---- Sonntag ----
@@ -4701,13 +4930,20 @@ Ich leg das Handy weg. Zwei Tage noch.
 @raum tag
 @loop regen an
 @lernplan an
-@bild SO1a schnitt
+@bild SO1a langsam
 @warte 1
 @lernplan haken 1
 @bild SO1b schnitt
 @warte .6
 @lernplan haken 2
-@wenn typ!="party" || lernstand>=LERN_HOCH
+# V9.1 (C16): Meldung, er lernt weiter
+@ton bzzz leise
+@banner Instagram | tim_k97 | tim_k97 hat ein Reel geteilt
+@warte 1.6
+@banner aus
+# Patrick 26.11. (A5): auf dem Party-Weg wird Deliktsrecht ab Lernstand „mittel“ abgehakt
+@wenn typ!="party" || lernstand>=LERN_MITTEL
+  @setze lp3 = 1
   @lernplan haken 3
   # Patrick 25.11. (Flagge): wer Sonntag alles abgehakt hat, dem fehlt Fall drei Montag nicht ganz
   @setze sonntagAlles = 1
@@ -4736,8 +4972,10 @@ Ich leg das Handy weg. Zwei Tage noch.
 @ton ausatmen
 … !3
 ~ Ruhe.
+# V9.1 (E1): nur über den Handy-Knopf zu sehen
+@handy meldung WhatsApp | Lenas Geburtstag 🎂 | Lena: 📷 Foto
 … !2
-@wenn typ!="party" || lernstand>=LERN_HOCH
+@wenn lp3
   @lernplan stand ok1 ok2 ok3
 @sonst
   @lernplan stand ok1 ok2
@@ -4762,7 +5000,7 @@ Ich leg das Handy weg. Zwei Tage noch.
 …
 # V8.8 (K): Verschreiber, ganz kurz, kein Gedanke dazu
 „Lynn kauft bei V einen gebrauchten Laptop …“ ⌫ynn
-@schwarz
+@schwarz langsam
 # V8.9: erst schreibt der Stift, der erste Haken beendet ihn
 @ton PR3_stift
 @warte 1.4
@@ -4790,6 +5028,16 @@ Ich leg es wieder hin.
 == SO4
 # V8.9: Handy liegen lassen und weiterlernen zählt
 @setze lernstand + 1
+# Patrick 26.11. (A5): die gute Entscheidung hakt sofort sichtbar etwas ab
+@setze lp5 = 1
+@wenn lp3
+  @lernplan stand ok1 ok2 ok3 ok4
+@sonst
+  @lernplan stand ok1 ok2 ok4
+@ende
+@lernplan haken 5
+@warte 1
+@lernplan aus
 # Patrick 25.11. (Flagge): nach „Liegen lassen“ nimmt er das Handy nicht von selbst – es leuchtet auf, er entscheidet
 @bild K10P
 @ton bzzz
@@ -4828,8 +5076,9 @@ Ich leg es wieder hin.
   @handy story lena.xo B12A 2 Min.
   @warte 1
   … !2
+  # Patrick 26.11. (A6): Abzeichen kommt sofort mit dem Gedanken, darunter seine Antwort
+  @abzeichen! Fotograf des Jahres | Du schon.
   ~ ’Nen Award kriegt sie dafür wahrscheinlich nicht.
-  @abzeichen Fotograf des Jahres
   … !2
   ~ Naja.
   @handy herz
@@ -4950,8 +5199,20 @@ Ich krieg das hin.
 @raum nacht
 @bild K10P schnitt
 @loop lampe an
+# V9.1 (Patrick 26.11., B7): er schaut nach, scrollt, wartet – nichts. Dann legt er es weg.
+@warte .8
+@handy sperr
+@warte 1
+@handy feed
+@warte 3
+@handy liste
+@warte 2.2
+@handy zu
+@warte 1.5
 # V8.8 (L, Philip 17:42): Lena, locker
+@warte 1
 @ton bzzz
+@warte .9
 @handy sperr
 @benachrichtigung WhatsApp | Lena | und diesmal nicht bis 4 uhr lernen 🙄
 @tipp
@@ -4972,6 +5233,10 @@ Ich krieg das hin.
 @handy chat Lerngruppe Schuldrecht
 @nachricht! Paul: hat jemand noch ne zusammenfassung bereicherungsrecht?? 😩
 @nachricht Mara: senner fragt angeblich IMMER bereicherungsrecht
+# V9.1 (Patrick 26.11., B3)
+@nachricht Ben: ayrton senner 🏎
+@nachricht Paul: ↪ Ben: ayrton senner 🏎 ⏎ leider nicht. der ist wenigstens tot
+@nachricht Mara: broo
 @nachricht Paul: woher weißt du das
 @nachricht Mara: hat einer aus dem letzten durchgang gesagt
 … !2
@@ -4991,8 +5256,19 @@ Ich krieg das hin.
 @nachricht Mara: ich schick euch gleich meine
 @nachricht Mara: 📄 Bereicherungsrecht_komplett.pdf (34 Seiten)
 … !2
+# V9.1 (Patrick 26.11., B11): wer keine Ahnung hat, tippt es – senden oder löschen entscheidet der Spieler
+?? „fickt euch einfach“ -> SN_FICK wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
 ? „Aufmachen.“ -> SN_AUF +handy
 ? „Gruppe stummschalten.“ -> SN_STUMM
+
+# gesendet: keiner antwortet, Stille, er schaltet selbst stumm
+== SN_FICK
+@setze gefickt = 1
+@warte 3
+… !3
+@handy gruppestumm Lerngruppe Schuldrecht
+@handy zu
+-> SN_BETT
 
 == SN_AUF
 # V8.9: wer den Stoff noch nicht kennt, lernt in letzter Minute ein bisschen
@@ -5015,7 +5291,12 @@ Ich krieg das hin.
   ~ … Saldotheorie. Hatte ich auch.
 @ende
 @handy pdfweiter 19
-~ … die trollt doch.
+# Patrick 26.11. (C21): „die trollt doch“ nur, wer es nicht kann
+@wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
+  ~ … die trollt doch.
+@sonst
+  ~ … easy.
+@ende
 @handy gruppestumm Lerngruppe Schuldrecht
 @handy zu
 -> SN_BETT
@@ -5034,8 +5315,13 @@ Ich krieg das hin.
 @wenn typ=="zuhause" && weg=="A"
   # Weg A: ruhiger – Stummschalten fühlt sich richtig an, er schläft eher ein
   @uhr Mo 00:04
+  # Patrick 26.11. (B4): erst hinlegen, kurz liegen, dann Handy
+  @ton decke1
+  @schwarz
+  @warte 2
+  @bild N02D
+  @warte 1
   @handy sperr
-  @ton display_klick
   Wecker auf 6:30.
   @handy zu
   … !3
@@ -5143,6 +5429,11 @@ Ich schau nur, wie spät es ist.
 == MO_MORGEN
 @bild MO_KAFFEE schnitt
 @raum tag
+# V9.1 (C16): Meldung, er reagiert nicht
+@ton bzzz leise
+@banner Outlook | Uni | Erinnerung: Prüfung Mo 9:00
+@warte 1.6
+@banner aus
 ~ Kaffee. Jacke. Los.
 … !1.5
 -> MONTAG
@@ -5190,8 +5481,11 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
   Ich: „Kausalität.“
   Paul: „Ehrenmann.“
 @ende
-@wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
-  Die Buchstaben auf den Karteikarten der anderen verschwimmen kurz.
+# V9.1 (Patrick 26.11., B12): bei allen, die schlecht gelernt haben
+@wenn lernstand<LERN_MITTEL
+  ~ Ich les die Karteikarte von dem vor mir. Nichts bleibt hängen.
+  … !2
+  ~ Das wird was.
 @ende
 # Zwei letzte Nachrichten. Zählen nie als Handy-Punkt: Schauen ist hier richtig.
 # V8.9 (Patrick 24.11.): erst vibriert es, dann nimmt er das Handy
@@ -5275,6 +5569,25 @@ Senner: „Noch zehn Minuten.“
 @wenn sonntagAlles && lernstand<LERN_MITTEL
   @setze lernstand = LERN_MITTEL
 @ende
+# Patrick 26.11. (A5): der Sonntagsplan blitzt auf – was abgehakt war, trägt jetzt
+@wenn (typ=="zuhause" && weg=="B") || typ=="afterparty"
+  @lernplan stand ok1 ok2 durch3 durch4 durch5
+@sonst
+  @wenn lp3 && lp5
+    @lernplan stand ok1 ok2 ok3 ok4 ok5
+  @ende
+  @wenn lp3 && !lp5
+    @lernplan stand ok1 ok2 ok3 ok4
+  @ende
+  @wenn !lp3 && lp5
+    @lernplan stand ok1 ok2 ok4 ok5
+  @ende
+  @wenn !lp3 && !lp5
+    @lernplan stand ok1 ok2 ok4
+  @ende
+@ende
+@warte 2.4
+@lernplan aus
 # V8.8 (G27): drei Stufen nach Lernstand (auch Lynn-Weg)
 @wenn lernstand>=LERN_HOCH
   # V8.9 (Philip): gute Stufe – alles fertig
@@ -5343,8 +5656,10 @@ Senner: „Noch zehn Minuten.“
 # V8.9: beginnt wie das Pizza-Ende (Halle, zu Hause, Endlich …), dann statt Türklingel: Bzzz
 …
 … !3
+# Patrick 26.11. (A19): Hallen-Geräusch blendet weich aus statt abzubrechen
+@loop halle laut 0.05 2.2
+@warte 2.2
 @loop halle aus
-@warte 2
 @bild N09T langsam
 @raum tag
 Zu Hause …
@@ -5422,8 +5737,10 @@ Und jetzt wieder warten, bis – >>
 @loop halle an
 …
 … !3
+# Patrick 26.11. (A19): Hallen-Geräusch blendet weich aus statt abzubrechen
+@loop halle laut 0.05 2.2
+@warte 2.2
 @loop halle aus
-@warte 2
 @bild N09T langsam
 @raum tag
 Zu Hause …
@@ -5460,6 +5777,15 @@ Jonas: „Für alle Fälle.“
 Jonas: „Bereit für heute Abend?“
 …
 @gesicht N37b
+@wenn lernstand>=LERN_HOCH
+  # Patrick 26.11. (D2): Weg A hat sein eigenes warmes Ende
+  Jonas: „Du verpasst was.“
+  @gesicht aus
+  Ich: „Glaub ich nicht.“
+  @warte 1
+  @titel durch
+  -> ENDE
+@ende
 Jonas: „Du verpasst was.“ >>
 @warte 1
 @titel text
@@ -5495,6 +5821,8 @@ Lynn: „Jonas.“
 … !1.5
 # Storycheck 3 (Patrick 24.11.): kurzer Rückgriff – Jonas hat so gedrängt, weil er wollte, dass er kommt
 Lynn: „Ich glaub, der wollte verlieren.“
+# Patrick 26.11. (C28)
+Ich: „Du nicht.“
 … !1.5
 @gesicht LDh
 Lynn: „Ich wollt dir übrigens schreiben. Zweimal.“
@@ -5634,10 +5962,10 @@ const BILDER = {
 
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
-  W0:   { datei: "img/B14.webp", text: "Straße, Partyhaus noch im Nebel", stimmung: "strasse" },
+  W0:   { datei: "img/W0n.webp", text: "Straße, Partyhaus weit weg im Dunst (Patrick 26.11. C5: Haus schon halb erkennbar)", stimmung: "strasse" },
   B15:  { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
   N11:  { datei: "img/HAUS_WEIT.webp", text: "Straße, Haus näher", stimmung: "strasse" },
-  N12:  { datei: "img/HAUS.webp", text: "Straße, Haus ganz nah, Fenster bunt", stimmung: "strasse" },
+  N12:  { datei: "img/HAUS_MITTE.webp", text: "Straße, Haus nah (Ausschnitt HAUS_WEIT, Zwischenschritt vor HAUS)", stimmung: "strasse" },
   B16:  { datei: "img/HAUS.webp", imHandy: "img/N12_h.webp", text: "Haus mit leuchtenden Fenstern, Treppe", stimmung: "strasse" },
   B14:  { datei: "img/B14.webp", text: "Leere Straße, Laternen (Heimweg)", stimmung: "strasse" },
 
@@ -5671,6 +5999,14 @@ const BILDER = {
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
 
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
+  // V9.1 (Patrick 26.11.): neue Bilder
+  TAG1: { datei: "img/TAG1.webp", text: "Schreibtisch bei Tag, Hände auf dem Tisch, Handy rechts (Patrick 25.11.)", stimmung: "tag", tisch: true, handy: [0.84, 0.71, 0.14, 0.16] },
+  N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true },
+  N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true },
+  N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true },
+  BALKON_AUSSEN: { datei: "img/BALKON_AUSSEN.webp", text: "Balkon-Totale von außen: er mit Kapuze am Geländer, Lynn mit Becher an der Tür", stimmung: "balkon" },
+  N19sk: { datei: "img/N19sk.webp", text: "Flur: Lynn skeptisch („Dann schau halt.“)", stimmung: "flur", figur: true },
+  TIM_SCHLAEFT: { datei: "img/TIM_SCHLAEFT.webp", imHandy: "img/TIM_SCHLAEFT_h.webp", text: "Afterparty: Tim schläft mit Sonnenbrille auf dem Sofa, alle filmen", stimmung: "party" },
   N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral); 25.11.: Haare bewegen sich leicht (proc/v90_haare.py, Veo)", stimmung: "balkon", figur: true,
           // 25.11. abends: Haar-Video (vid/N14_haar.mp4) raus – verzerrt Hals und Gesicht (Patrick)
           lichter: [[0.28,0.606],[0.296,0.616],[0.264,0.646],[0.314,0.676],[0.854,0.678],[0.01,0.684],[0.131,0.681],[0.349,0.69],[0.241,0.699],[0.881,0.705],[0.216,0.728],[0.914,0.729],[0.997,0.731],[0.029,0.736],[0.939,0.74],[0.365,0.748],[0.401,0.751],[0.972,0.754],[0.066,0.753],[0.154,0.752],[0.182,0.757],[0.09,0.767],[0.121,0.768],[0.484,0.78],[0.423,0.789],[0.457,0.796]] },
@@ -5681,8 +6017,8 @@ const BILDER = {
   N14g: { datei: "img/N14g.webp", text: "Lynn dreht sich weg und geht", stimmung: "balkon", lichterVon: "N14" },
   N14z: { datei: "img/N14z.webp", text: "Lynn, Augen zu (zum Blinzeln)", stimmung: "balkon" },
   N14b: { datei: "img/N14b.webp", text: "Lynn lacht", stimmung: "balkon", figur: true, lichterVon: "N14" },
-  N14c: { datei: "img/LNN.webp", text: "Lynn nah, hört zu", stimmung: "balkon", figur: true },
-  N14d: { datei: "img/LNL.webp", text: "Lynn nah, lächelt frech", stimmung: "balkon", figur: true },
+  N14c: { datei: "img/LNN2.webp", text: "Lynn nah, hört zu, leises Lächeln (Patrick 25.11., ersetzt LNN)", stimmung: "balkon", figur: true },
+  N14d: { datei: "img/LNL2.webp", text: "Lynn nah, lächelt frech (Patrick 25.11., ersetzt LNL)", stimmung: "balkon", figur: true },
   N14e: { datei: "img/LNU.webp", text: "Lynn nah, leise überrascht (LNU, Gemini, V8.8)", stimmung: "balkon", figur: true },
   N14t: { datei: "img/N14t.webp", text: "Lynn redet, Kopf leicht geneigt (Gemini, V8.8)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14s: { datei: "img/N14s.webp", text: "Lynn lächelt still (Gemini, V8.8)", stimmung: "balkon", figur: true, lichterVon: "N14" },
@@ -5814,7 +6150,7 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "LNz": {"basis": "N14c", "box": [0.275, 0.0, 0.55, 0.5373]}, "LNLz": {"basis": "N14d", "box": [0.275, 0.0, 0.55, 0.5289]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}, "N35ns": {"basis": "N35n", "box": [0.5948, 0.35, 0.1115, 0.1676]}, "N35ss": {"basis": "N35s", "box": [0.6036, 0.3498, 0.0964, 0.166]}, "MIA_GRINST_cs": {"basis": "MIA_GRINST_c", "box": [0.4526, 0.3639, 0.1031, 0.1611]}, "N35bes": {"basis": "N35be", "box": [0.5917, 0.35, 0.1292, 0.1694]}, "N35ts": {"basis": "N35t", "box": [0.599, 0.3537, 0.0948, 0.1565]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}, "N35ns": {"basis": "N35n", "box": [0.5948, 0.35, 0.1115, 0.1676]}, "N35ss": {"basis": "N35s", "box": [0.6036, 0.3498, 0.0964, 0.166]}, "MIA_GRINST_cs": {"basis": "MIA_GRINST_c", "box": [0.4526, 0.3639, 0.1031, 0.1611]}, "N35bes": {"basis": "N35be", "box": [0.5917, 0.35, 0.1292, 0.1694]}, "N35ts": {"basis": "N35t", "box": [0.599, 0.3537, 0.0948, 0.1565]}, "LNN2z": {"basis": "N14c", "box": [0.4042, 0.2948, 0.199, 0.1297]}, "LNL2z": {"basis": "N14d", "box": [0.4047, 0.2463, 0.1974, 0.1772]}, "N14bez": {"basis": "N14be", "box": [0.4828, 0.2593, 0.1672, 0.1139]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
   N35t: { spricht: { Mia: "N35ts" } },   // V8.9 Gemini-Mund
@@ -5831,8 +6167,8 @@ const VARIANTEN = {
   N35f: { spricht: { Mia: "N35fg" } },
   N19: { blink: ["N19z"], spricht: { Lynn: "N19s" } },
   N19n: { blink: ["N19nz"] },
-  N14c: { blink: ["LNz"] },
-  N14d: { blink: ["LNLz"] },
+  N14c: { blink: ["LNN2z"] },
+  N14d: { blink: ["LNL2z"] },  N14be: { blink: ["N14bez"] },
   LD1: { blink: ["LDz"], spricht: { Lynn: "LDs" } },
   N37: { blink: ["N37z"], spricht: { Jonas: "N37s" } },
   N38b: { blink: ["N38bz"] },
@@ -5880,6 +6216,7 @@ const TOENE = {
   herzschlag:      { datei: "ton/herzschlag.mp3" },
   // Draußen
   haustuer:        { datei: "ton/haustuer.mp3" },
+  tuer_klack:      { datei: "ton/tuer_klack.mp3" },
   wind:            { datei: "ton/wind.mp3" },              // draußen laut, im Zimmer leise als Raumton
   schritte:        { datei: "ton/schritte.mp3" },        // 4 Schritte, gleichmäßig (Kies, V8.2)
   schritte_lauf:   { datei: "ton/schritte_lauf.mp3" },   // nahtlose Schleife 16 Schritte (Kamerafahrt Weg)
@@ -6428,7 +6765,7 @@ const Handy = (() => {
   const APPICON = { WhatsApp: ['#25d366', '<svg viewBox="0 0 24 24" fill="#fff"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>', 'svgi'], Instagram: ['radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285aeb 90%)', '<svg viewBox="0 0 24 24" fill="#fff"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg>', 'svgi'], Kleinanzeigen: ['#b5e941', '<svg viewBox="0 0 24 24" fill="#1d4b00"><path d="M17.064 24c-3.234 0-4.816-2.245-5.137-2.71-.955.935-2.396 2.71-4.991 2.71-2.998 0-5.524-2.254-5.524-5.908V5.907C1.412 2.245 3.942 0 6.936 0c2.993 0 5.524 2.385 5.524 5.852a5.512 5.512 0 0 1 1.842-.314c3.083 0 5.524 2.515 5.524 5.538 0 .848-.161 1.602-.513 2.324a5.539 5.539 0 0 1 3.275 5.062c0 3.053-2.478 5.538-5.524 5.538zm-3.802-4.048c.795 1.383 2.132 2.202 3.802 2.202a3.692 3.692 0 0 0 3.683-3.692 3.689 3.689 0 0 0-2.518-3.505l-4.967 4.995zM6.936 1.846c-1.832 0-3.683 1.256-3.683 4.061v12.185c0 2.806 1.85 4.062 3.683 4.062 1.456 0 2.26-.736 3.557-2.037l.575-.576c-.297-.886-.45-1.869-.45-2.926V5.908c0-2.806-1.849-4.062-3.682-4.062zm5.524 6.031v8.738c0 .495.042.966.12 1.409l4.003-4.013c1.163-1.165 1.402-2.016 1.402-2.934 0-1.962-1.573-3.692-3.683-3.692-.657 0-1.285.169-1.842.493z"/></svg>', 'svgi'], Outlook: ['linear-gradient(135deg,#28a8ea,#0f6cbd)', '<svg viewBox="0 0 24 24"><path d="M9 6.5h11.2c.7 0 1.3.6 1.3 1.3v8.4c0 .7-.6 1.3-1.3 1.3H9z" fill="#fff" fill-opacity=".55"/><path d="M9.5 8l6 4.6L21 8" fill="none" stroke="#fff" stroke-width="1.3"/><rect x="2.5" y="4.5" width="10.5" height="15" rx="1.6" fill="#0a4f9e"/><ellipse cx="7.75" cy="12" rx="2.6" ry="3.4" fill="none" stroke="#fff" stroke-width="1.9"/></svg>', 'svgi gross'], Galerie: ['#fff', '<svg viewBox="0 0 24 24"><path d="M12 12V2a5 5 0 0 1 0 10z" fill="#EA4335"/><path d="M12 12h10a5 5 0 0 1-10 0z" fill="#4285F4"/><path d="M12 12v10a5 5 0 0 1 0-10z" fill="#34A853"/><path d="M12 12H2a5 5 0 0 1 10 0z" fill="#FBBC04"/></svg>', 'svgi gross'], Wetter: ['#f0a030', '☀'], System: ['#607d8b', '⚙'], Livestream: ['#8e44ad', '▶'], YouNow: ['#2fd171', '▶'], Telefon: ['#2e7d32', '✆'], Wohlbefinden: ['#2e9e5b', '♥'] };
   const APPNAME = { Galerie: 'Google Fotos', Outlook: 'Outlook', System: 'Einstellungen', Wohlbefinden: 'Digitales Wohlbefinden', Telefon: 'Telefon' };   // V8.9: App-Name oben in der Karte (wie Android)
   const istGruppe = n => n === 'gruppe' || !!(meta[n] && meta[n].gruppe);
-  function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : m.text; return (m.von === 'Ich' ? (istGruppe(aktChat) ? '✓✓ Du: ' : '✓✓ ') : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
+  function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : String(m.text).replace(/^↪ [^:]+: .+? ⏎ /, ''); return (m.von === 'Ich' ? (istGruppe(aktChat) ? '✓✓ Du: ' : '✓✓ ') : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
   let gruppe = { name: 'Gruppe', mitglieder: 'Jonas, Lena, Tim' };
   let offen = false, app = null, aktChat = null, notifs = [], callTimer = null, klingelt = false;
   const warteZ = (f, r) => { if (!Spiel.schnell) return warte(r); Spiel._debug && Spiel._debug.vzPlus((r - f) / 1000); return warte(f); };
@@ -6513,7 +6850,7 @@ const Handy = (() => {
 
   function uhrText() { return Spiel.uhrText(); }
   function aktualisiereZeit() {
-    $('.szeit').textContent = uhrText(); $('.sp-uhr').textContent = uhrText(); $('.sp-datum').textContent = Spiel.datumText();
+    $('.szeit').textContent = uhrText(); $('.sp-uhr').textContent = uhrText(); if (Spiel.akku) el.querySelectorAll('.akku b').forEach(b => b.textContent = Spiel.akku()); $('.sp-datum').textContent = Spiel.datumText();
   }
   function zeige(name) {
     el.querySelectorAll('.app').forEach(a => a.classList.toggle('an', a.dataset.app === name)); app = name;
@@ -6589,11 +6926,12 @@ const Handy = (() => {
     if (istGruppe(aktChat) && !ich && !reihe) kopf = `<div class="absender" style="color:${GRUPPENFARBE[m.von] || '#aaa'}">${m.von}</div>`;
     let inhalt = '';
     if (m.typ === 'foto' || m.typ === 'video') inhalt = `<div class="mfoto">${Spiel.bildHTML(m.bild, true)}${m.typ === 'video' ? '<div class="play">▶</div><div class="vdauer">0:12</div>' : ''}</div>`;
-    else if (/^📄 .+\.pdf \(\d+ Seiten\)$/.test(m.text)) { const d0 = m.text.match(/^📄 (.+\.pdf) \((\d+) Seiten\)$/); inhalt = `<div class="mdoc"><span class="md-ic">PDF</span><div><b>${esc(d0[1])}</b><small>${d0[2]} Seiten · PDF · 2,1 MB</small></div></div>`; }
+    else if (/^📄 .+\.pdf \(\d+ Seiten\)$/.test(m.text)) { const d0 = m.text.match(/^📄 (.+\.pdf) \((\d+) Seiten\)$/); inhalt = `<div class="mdoc"><span class="md-ic"><i>PDF</i></span><div><b>${esc(d0[1]).replace(/_/g, '_&#8203;')}</b><small>${d0[2]} Seiten • 2,1 MB • PDF</small></div></div>`; }   // V9.1 (A21): wie bei WhatsApp
+    else if (/^↪ [^:]+: .+ ⏎ /.test(m.text)) { const q = m.text.match(/^↪ ([^:]+): (.+?) ⏎ (.+)$/); inhalt = `<div class="mzitat" style="border-color:${GRUPPENFARBE[q[1]] || '#53bdeb'}"><b style="color:${GRUPPENFARBE[q[1]] || '#53bdeb'}">${esc(q[1])}</b><span>${esc(q[2])}</span></div><span class="mt">${esc(q[3])}</span>`; }   // V9.1 (B3): Antwort mit Zitat
     else inhalt = `<span class="mt">${esc(m.text)}</span>`;
     const haken = ich ? `<span class="hk ${m.haken || 'grau1'}">${m.haken === 'grau1' ? '✓' : '✓✓'}</span>` : '';
     d.innerHTML = (istGruppe(aktChat) && !ich && !reihe ? avatar(m.von) : (istGruppe(aktChat) && !ich ? '<span class="av leer"></span>' : '')) +
-      `<div class="blase">${kopf}${inhalt}<span class="mz">${m.zeit}${haken}</span></div>`;
+      `<div class="blase${m.typ === 'foto' || m.typ === 'video' ? ' mitfoto' : ''}">${kopf}${inhalt}<span class="mz">${m.zeit}${haken}</span></div>`;
     m.el = d; return d;
   }
   function anhaengen(m) {
@@ -6775,7 +7113,7 @@ const Handy = (() => {
     lesen(n) {
       if (this._lesenAlt === undefined) this._lesenAlt = aktChat;
       aktChat = n; setzeKopf(); tastatur(false);
-      const box = $('.c-msgs'); box.innerHTML = '';
+      const box = $('.c-msgs'); box.innerHTML = ''; box.classList.add('sofort'); clearTimeout(this._sofortT); this._sofortT = setTimeout(() => box.classList.remove('sofort'), 400);   // V9.1 (A18): beim Nachschauen sofort da, keine Einblend-Animation
       const orig = chatListe(n); const m0 = meta[n];
       if (m0 && m0.ungelesen && m0.vorschau) {
         const letzte = orig[orig.length - 1]; const vtxt = m0.vorschau;
@@ -6815,7 +7153,7 @@ const Handy = (() => {
       d.innerHTML = `<b>${esc(frage)}</b>` + optionen.map((o, i) => `<div class="uo" data-i="${i}"><span class="ukreis"></span><span class="utext">${esc(o)}</span><span class="uzahl">0</span><div class="ubalken"><i></i></div><div class="uavs"></div></div>`).join('');
       const bl = m.el ? m.el.querySelector('.blase') : null; if (bl) { bl.innerHTML = ''; bl.appendChild(d); bl.classList.add('ublase'); }
       this._umfrage = { d, n: optionen.map(() => 0), avs: optionen.map(() => []) };
-      $('.c-msgs').scrollTop = 1e6; Ton.spiele('tipp', { vol: .28, rate: 1.5 }); await warteZ(20, 600);
+      $('.c-msgs').scrollTop = 1e6; await warteZ(20, 600);
     },
     async stimme(i, wer) {
       const u = this._umfrage; if (!u) return; u.n[i]++; if (wer) u.avs[i].push(wer);
@@ -6885,7 +7223,7 @@ const Handy = (() => {
         else await schreibt(von, lang);
       }
       const m = anhaengen({ von, text, zeit: uhrText() });
-      if (!sofort && !schonGewartet) Ton.spiele('tipp', { vol: .28, rate: 1.5 });   // V8.8 (G2): offener Chat vibriert nicht
+      /* Patrick 26.11. (A14): kein Mini-Ton mehr im offenen Chat */   // V8.8 (G2): offener Chat vibriert nicht
       // Antwort → eigene Nachrichten blau
       chatListe(aktChat).forEach(x => { if (x.von === 'Ich' && x.haken !== 'blau') setHaken(x, 'blau'); });
       
@@ -7318,7 +7656,7 @@ const Rahmen = (() => {
     const l = Math.min(laeufe(), 3);
     bw.style.setProperty('--lebhaft', l);
     feuerRate = .025 * (1 + .6 * l);
-    $('hinweis').textContent = laeufe() === 0 ? T('start_hinweis', 'Kopfhörer, Ton an, Querformat') : laeufe() === 1 ? 'Draußen läuft’s noch.' : 'Immer noch.';
+    $('hinweis').textContent = laeufe() === 0 ? T('start_hinweis', 'Kopfhörer, Ton an, Querformat') : laeufe() === 1 ? 'Die Party läuft noch.' : 'Immer noch.';
     $('enden').textContent = T('menue_enden', 'Enden gefunden: {n} von 3').replace('{n}', S().enden.length);
   }
   function startZeigen(nachWeg) {
@@ -7386,20 +7724,29 @@ const Rahmen = (() => {
   // ---------------- Abzeichen ----------------
   let letzter = null;
   // Bilanz Zeile für Zeile auf Schwarz, dann „Weiter“
+  // V9.1 (Patrick 26.11., F): erst der Handy-Satz allein (blendet aus), dann „Du hast verpasst:“ eins nach dem anderen, Lynn mit längerer Pause, dann Enden/Entscheidungen
   function bilanzZeigen() {
     const bil = $('bilanz'), knopf = $('k-bweiter'); bil.classList.add('da'); knopf.classList.remove('da');
     zeige('s-bilanz'); bw.classList.add('bilanz-an');
-    const zeilen = [...bil.querySelectorAll('p')].filter(x => x.id !== 'p-verpasst' && x.innerHTML.trim());
-    let u = reduziert ? 0 : 900;
-    zeilen.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 1600; });
-    const vp = verpasstLauf, pv = $('p-verpasst');
-    if (vp) {
-      pv.classList.add('da'); const sp = [...pv.querySelectorAll('.vk, .vp')];
-      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 900; });
-      if (vp.lynn) { u += reduziert ? 0 : 1400; plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += reduziert ? 0 : 2400; }
+    const ph = $('p-handy'), pv = $('p-verpasst'), rest = [$('p-enden'), $('p-entsch')].filter(x => x && x.innerHTML.trim());
+    [ph, pv, ...rest].forEach(x => { if (x) { x.style.display = 'none'; x.classList.remove('aus'); } });
+    let u = reduziert ? 0 : 1000; const z = ms => reduziert ? 0 : ms;
+    if (ph && ph.innerHTML.trim()) {
+      const h2 = ph.querySelector('.h2');
+      plan(() => { ph.style.display = ''; void ph.offsetWidth; ph.classList.add('da'); }, u);
+      if (h2) { plan(() => h2.classList.add('da'), u + z(2600)); u += z(6200); } else u += z(4000);
+      plan(() => ph.classList.add('aus'), u); u += z(1400); plan(() => { ph.style.display = 'none'; }, u); u += z(400);
     }
-    plan(() => knopf.classList.add('da'), u + (reduziert ? 0 : 600));
-    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); r(); }; });
+    const vp = verpasstLauf;
+    if (vp && pv) {
+      plan(() => { pv.style.display = ''; pv.classList.add('da'); }, u); const sp = [...pv.querySelectorAll('.vk, .vp')];
+      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += z(1500); });
+      if (vp.lynn) { u += z(2600); plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += z(3000); }
+      u += z(600);
+    }
+    rest.forEach(x => { plan(() => { x.style.display = ''; void x.offsetWidth; x.classList.add('da'); }, u); u += z(1600); });
+    plan(() => knopf.classList.add('da'), u + z(600));
+    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); [ph, pv, ...rest].forEach(x => { if (x) x.style.display = ''; }); r(); }; });
   }
   function abzeichen(modus, nurText) {
     if (nurText) { const pl = plaene; plaene = []; abzeichen(modus); plaene.forEach(clearTimeout); plaene = pl; return; }
@@ -7443,7 +7790,8 @@ const Rahmen = (() => {
       $('p-entsch').innerHTML = T('entscheidungen', 'Du hast {x} von {y} Entscheidungen nie getroffen.').replace('{x} von {y} Entscheidungen', '<b>{x} von {y} Entscheidungen</b>').replace('{x}', nie).replace('{y}', gesamt);
       // V8.4: wie oft man von sich aus aufs Handy geschaut hat
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
-      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
+      // C31 (Patrick 26.11.): wer nie gedrückt hat – erster Satz, Pause, dann „Geschaut hat er trotzdem.“
+      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? '<span class="h1">' + T('bilanz_handy0', 'Du hast den Handy-Knopf kein einziges Mal gedrückt.') + '</span><br><span class="h2">' + T('bilanz_handy0b', 'Geschaut hat er trotzdem.') + '</span>'
         : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
       // V8.9 (Patrick 24.11.): Verpasst-Liste wie Schlagzeilen, eine nach der anderen; dann verschwindet alles, nur „… und Lynn.“ bleibt
       const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
@@ -7579,14 +7927,16 @@ const Rahmen = (() => {
       S().laeufe = laeufe() + 1; sichern();
       letzter = { ende: name, neu: neu || [] };
       bzzzZaehler = 0; besuch();
-      endeKarte(name, .9);
-      await new Promise(r => weiterWarter = r);
-      if (nachKarte) { zeige(null); await nachKarte(); }
+      // V9.1 (Patrick 26.11., F): direkt nach dem Titel die Bilanz auf Schwarz, dann die Gefühlsfrage, dann Endkarte und Abzeichen
+      abzeichen('lauf', true);
+      endeVorbereiten(name);   // Menü weg, sonst scheint es hinter der Gefühlsfrage durch
+      await bilanzZeigen();
       $('g-frage').textContent = T('gefuehl_frage', 'Wie hast du dich gerade gefühlt?');
       const liste = $('g-liste'); liste.innerHTML = '';
       await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; b.textContent = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.onclick = ev => { ev.stopPropagation(); r(i); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
-      abzeichen('lauf', true);
-      await bilanzZeigen();
+      endeKarte(name, .9);
+      await new Promise(r => weiterWarter = r);
+      if (nachKarte) { zeige(null); await nachKarte(); }
       abzeichen('lauf'); zeige('s-abz');
     },
   };
@@ -7631,7 +7981,12 @@ const Spiel = (() => {
   }
   const zwei = n => String(n).padStart(2, '0');
   function uhrText(m = V.uhr) { m = ((Math.round(m) % 1440) + 1440) % 1440; return zwei(Math.floor(m / 60)) + ':' + zwei(m % 60); }
+  // V9.1 (Patrick 26.11., A16): Akku – Freitagabend 34 % beim Losgehen, nachts immer leerer, morgens (nach dem Laden) fast voll, über den Tag weniger
+  function akku(m = V.uhr) { m = m || 0; const d = Math.floor(m / 1440), t = m % 1440; let p;
+    if (d === 0 || (d === 1 && t < 540)) p = 41 - (m - 1204) / 17; else if (t >= 540) p = 98 - (t - 540) / 14; else p = 98 - (t + 900) / 14;
+    return Math.max(3, Math.min(100, Math.round(p))); }
   function datumText() { return DATUM[Math.max(0, Math.min(3, Math.floor((V.uhr || 0) / 1440)))]; }
+  let uhrAnim = 0;
   function zeigeUhr() {
     uhrEl.textContent = uhrText();
     const war = uhrEl.classList.contains('an'), jetzt = !!V.uhr_zeigen;
@@ -7776,7 +8131,7 @@ const Spiel = (() => {
   function blickAuf() {
     // V8.9: „Unruhe-Blick“ = Knopf ist grau (keine rote Zahl), bevor etwas als gelesen markiert wird
     const unruhe = Handy.zahl() === 0;
-    blick.offen = true; blick.zahl++; blick.neu = 0;
+    blick.offen = true; blick.zahl++; blick.neu = 0; V.knopf = (V.knopf || 0) + 1;   // V9.1 (E2)
     // Nur Unruhe-Blicke zählen (Bilanz „obwohl nichts Neues da war“ + Handy-Punkte): jeder zweite = 1 Punkt (höchstens 3).
     // Blicke bei roter Zahl geben nie einen Punkt (Elhai 2016: problematische, nicht häufige Nutzung).
     if (unruhe) { blick.leer++; if (blick.leer % 2 === 0 && blick.leer <= 6) V.punkte = (V.punkte || 0) + 1; }
@@ -8055,15 +8410,14 @@ const Spiel = (() => {
   // Blinzeln – 25.11. abends: nur EIN Zeitgeber (vorher zwei auf derselben Ebene → 3x Blinzeln in 1 s), Mindestabstand 2,5 s, hart umschalten (keine halben Augen)
   let letztesBlinzeln = 0;
   function blinzle() {
-    const naechst = () => setTimeout(blinzle, 2600 + Math.random() * 2400);
+    const naechst = () => setTimeout(blinzle, 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
     if (B.classList.contains('einfrieren')) return naechst();
     const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink, .ebene.an img.blink')].filter(b => !b.classList.contains('fest'));
     const jetzt = performance.now();
-    if (bls.length && jetzt - letztesBlinzeln > 2500 && Math.random() > .2) {
+    if (bls.length && jetzt - letztesBlinzeln > 3000) {
       letztesBlinzeln = jetzt;
       const bl = bls[Math.random() * bls.length | 0];
       bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140);
-      if (Math.random() < .1) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 380);
     }
     naechst();
   }
@@ -8109,13 +8463,15 @@ const Spiel = (() => {
   // ---------------- Uhr-Animationen ----------------
   async function uhrSpringe(ziel) {
     if (!(ziel > V.uhr)) return;   // V8.8 (G15): nie rückwärts
+    // Patrick 26.11. (B8): kurze Sprünge (bis 20 Min.) läuft die Uhr sichtbar Minute für Minute hoch
+    if (ziel - V.uhr <= 20 && V.uhr_zeigen) { const g = gen; while (V.uhr < ziel) { V.uhr++; zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 3 : 110)); pruef(g); } return; }
     const von = V.uhr; const g = gen; uhrEl.classList.add('springt');
     const n = 14; for (let i = 1; i <= n; i++) { V.uhr = Math.round(von + (ziel - von) * (1 - Math.pow(1 - i / n, 2))); zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 5 : 70)); pruef(g); }
     V.uhr = ziel; zeigeUhr(); uhrEl.classList.remove('springt');
   }
   async function uhrLaufen(ziel, schritt) {
     const g = gen; let d = 380;
-    while (V.uhr < ziel) { V.uhr++; zeigeUhr(); if (d > 120) Ton.spiele('tipp'); if (schritt) schritt(); await new Promise(r => setTimeout(r, schnell ? 3 : d)); pruef(g); d = Math.max(18, d * .86); }
+    while (V.uhr < ziel) { V.uhr++; zeigeUhr(); /* Patrick 26.11. (A2): kein Tick-Ton mehr beim Uhrlaufen */ if (schritt) schritt(); await new Promise(r => setTimeout(r, schnell ? 3 : d)); pruef(g); d = Math.max(18, d * .86); }
   }
 
   // ---------------- Effekte ----------------
@@ -8423,6 +8779,11 @@ const Spiel = (() => {
     await warte(erste ? 2.2 : 1.2); await tipp(); Ton.introAus(erste ? 6 : 2.4); k.classList.remove('an', 'vorspann'); await warte(erste ? 1.6 : .8);
   }
   function abzeichen(name) { if (!S.abz.includes(name)) { S.abz.push(name); speichere(S); abzQueue.push(name); if (!abzNeu.includes(name)) abzNeu.push(name); } }
+  function abzeichenSofort(n, unter) {
+    const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f'];
+    t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}${unter ? `<br><i style="font-size:26px;color:#ddd">${unter}</i>` : ''}</div>`;
+    t.classList.add('an'); Ton.spiele('abzeichen'); clearTimeout(abzeichenSofort.t); abzeichenSofort.t = setTimeout(() => t.classList.remove('an'), (unter ? 3600 : 2400) * (schnell ? .08 : 1));
+  }
   async function abzeichenZeigen() {
     while (abzQueue.length) {
       const n = abzQueue.shift(); const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f']; t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}</div>`;
@@ -8449,13 +8810,15 @@ const Spiel = (() => {
       case 'pfad': pfad.push(a); pfadPlus = false; break;
       case 'pfad+': if (pfadPlus) pfad[pfad.length - 1] += ' + ' + a; else pfad.push(a); pfadPlus = true; break;
       case 'abzeichen': abzeichen(a); break;
+      // V9.1 (Patrick 26.11., A6): sofort zeigen (nicht erst bei der nächsten Kapitelkarte), optional mit Unterzeile: @abzeichen! Name | Unterzeile
+      case 'abzeichen!': { const [n, unter] = a.split('|').map(x => x.trim()); abzeichen(n); const i = abzQueue.indexOf(n); if (i >= 0) abzQueue.splice(i, 1); abzeichenSofort(n, unter); break; }
       case 'uhr': {
         if (a.startsWith('zeigen')) { if (a.includes('sofort')) { uhrEl.style.transition = 'none'; setTimeout(() => uhrEl.style.transition = '', 50); } V.uhr_zeigen = true; zeigeUhr(); break; }
         if (a === 'aus' || a === 'verstecken') { V.uhr_zeigen = false; zeigeUhr(); break; }
         if (teile[0] === 'mind') { V.uhr = Math.max(V.uhr, zeit(teile.slice(1).join(' '))); zeigeUhr(); break; }
         if (teile[0] === 'springe') { await uhrSpringe(zeit(teile.slice(1).join(' '))); break; }
         if (teile[0] === 'laufen') { await uhrLaufen(zeit(teile.slice(1).join(' '))); break; }
-        if (a.startsWith('+')) { V.uhr += +wert(a.slice(1)) || 0; zeigeUhr(); break; }
+        if (a.startsWith('+')) { const n = +wert(a.slice(1)) || 0; const von = V.uhr; V.uhr += n; zeigeUhr(); if (n > 0 && n <= 20 && V.uhr_zeigen && !schnell) { const g = gen, z = V.uhr; uhrAnim = g; uhrEl.textContent = uhrText(von); (async () => { for (let m = von + 1; m <= z && g === gen && uhrAnim === g && V.uhr === z; m++) { uhrEl.textContent = uhrText(m); await new Promise(r => setTimeout(r, 110)); } if (V.uhr === z) uhrEl.textContent = uhrText(); })(); } break; }   // Patrick 26.11. (B8): kurze Sprünge laufen sichtbar (im Hintergrund, hält nichts auf)
         V.uhr = zeit(a); zeigeUhr(); break;
       }
       case 'karte': PR('karte', a); await karte(a); break;
@@ -8644,13 +9007,15 @@ const Spiel = (() => {
       sp.classList.add('zieh'); Ton.spiele('PR3_stift', { dauer: .7, vol: 1.1 }); await warte(.9);
       await warte(2); Ton.outro('warm');
       { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 1600); }
-      await warte(4); await tipp(); return;
+      await warte(4); await tipp(); sp.style.transition = 'opacity 1.2s ease'; sp.style.opacity = 0; await warte(1.4); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
     zeigeTextbox(false); Ton.outro(); Ton.ausklingen(5);
+    // V9.1 (Patrick 26.11., F): das Bild dahinter wird sofort schwarz, der Titel steht 3 s allein und blendet aus
+    { const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.style.transition = 'opacity .5s'; sw.classList.add('an'); }
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
-    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
-    await warte(4); await tipp();
+    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').style.transition = ''; }, 700); }
+    await warte(3.4); sp.style.transition = 'opacity 1.4s ease'; sp.style.opacity = 0; await warte(1.6);
   }
 
   // ---------------- Ablauf ----------------
@@ -8853,7 +9218,7 @@ const Spiel = (() => {
   }
 
   return {
-    init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
+    init, uhrText, datumText, akku, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
     _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };

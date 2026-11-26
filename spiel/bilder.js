@@ -68,10 +68,10 @@ const BILDER = {
 
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
-  W0:   { datei: "img/B14.webp", text: "Straße, Partyhaus noch im Nebel", stimmung: "strasse" },
+  W0:   { datei: "img/W0n.webp", text: "Straße, Partyhaus weit weg im Dunst (Patrick 26.11. C5: Haus schon halb erkennbar)", stimmung: "strasse" },
   B15:  { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
   N11:  { datei: "img/HAUS_WEIT.webp", text: "Straße, Haus näher", stimmung: "strasse" },
-  N12:  { datei: "img/HAUS.webp", text: "Straße, Haus ganz nah, Fenster bunt", stimmung: "strasse" },
+  N12:  { datei: "img/HAUS_MITTE.webp", text: "Straße, Haus nah (Ausschnitt HAUS_WEIT, Zwischenschritt vor HAUS)", stimmung: "strasse" },
   B16:  { datei: "img/HAUS.webp", imHandy: "img/N12_h.webp", text: "Haus mit leuchtenden Fenstern, Treppe", stimmung: "strasse" },
   B14:  { datei: "img/B14.webp", text: "Leere Straße, Laternen (Heimweg)", stimmung: "strasse" },
 
@@ -105,6 +105,14 @@ const BILDER = {
   AO4:  { datei: "img/AO4.webp", text: "Blick zurück: Küche links, Balkontür Mitte, Tanzfläche rechts (Gemini, V8.5)", stimmung: "party" },
 
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
+  // V9.1 (Patrick 26.11.): neue Bilder
+  TAG1: { datei: "img/TAG1.webp", text: "Schreibtisch bei Tag, Hände auf dem Tisch, Handy rechts (Patrick 25.11.)", stimmung: "tag", tisch: true, handy: [0.84, 0.71, 0.14, 0.16] },
+  N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true },
+  N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true },
+  N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true },
+  BALKON_AUSSEN: { datei: "img/BALKON_AUSSEN.webp", text: "Balkon-Totale von außen: er mit Kapuze am Geländer, Lynn mit Becher an der Tür", stimmung: "balkon" },
+  N19sk: { datei: "img/N19sk.webp", text: "Flur: Lynn skeptisch („Dann schau halt.“)", stimmung: "flur", figur: true },
+  TIM_SCHLAEFT: { datei: "img/TIM_SCHLAEFT.webp", imHandy: "img/TIM_SCHLAEFT_h.webp", text: "Afterparty: Tim schläft mit Sonnenbrille auf dem Sofa, alle filmen", stimmung: "party" },
   N14:  { datei: "img/N14.webp",  text: "Balkon nachts, Lynn am Geländer (neutral); 25.11.: Haare bewegen sich leicht (proc/v90_haare.py, Veo)", stimmung: "balkon", figur: true,
           // 25.11. abends: Haar-Video (vid/N14_haar.mp4) raus – verzerrt Hals und Gesicht (Patrick)
           lichter: [[0.28,0.606],[0.296,0.616],[0.264,0.646],[0.314,0.676],[0.854,0.678],[0.01,0.684],[0.131,0.681],[0.349,0.69],[0.241,0.699],[0.881,0.705],[0.216,0.728],[0.914,0.729],[0.997,0.731],[0.029,0.736],[0.939,0.74],[0.365,0.748],[0.401,0.751],[0.972,0.754],[0.066,0.753],[0.154,0.752],[0.182,0.757],[0.09,0.767],[0.121,0.768],[0.484,0.78],[0.423,0.789],[0.457,0.796]] },
@@ -115,8 +123,8 @@ const BILDER = {
   N14g: { datei: "img/N14g.webp", text: "Lynn dreht sich weg und geht", stimmung: "balkon", lichterVon: "N14" },
   N14z: { datei: "img/N14z.webp", text: "Lynn, Augen zu (zum Blinzeln)", stimmung: "balkon" },
   N14b: { datei: "img/N14b.webp", text: "Lynn lacht", stimmung: "balkon", figur: true, lichterVon: "N14" },
-  N14c: { datei: "img/LNN.webp", text: "Lynn nah, hört zu", stimmung: "balkon", figur: true },
-  N14d: { datei: "img/LNL.webp", text: "Lynn nah, lächelt frech", stimmung: "balkon", figur: true },
+  N14c: { datei: "img/LNN2.webp", text: "Lynn nah, hört zu, leises Lächeln (Patrick 25.11., ersetzt LNN)", stimmung: "balkon", figur: true },
+  N14d: { datei: "img/LNL2.webp", text: "Lynn nah, lächelt frech (Patrick 25.11., ersetzt LNL)", stimmung: "balkon", figur: true },
   N14e: { datei: "img/LNU.webp", text: "Lynn nah, leise überrascht (LNU, Gemini, V8.8)", stimmung: "balkon", figur: true },
   N14t: { datei: "img/N14t.webp", text: "Lynn redet, Kopf leicht geneigt (Gemini, V8.8)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14s: { datei: "img/N14s.webp", text: "Lynn lächelt still (Gemini, V8.8)", stimmung: "balkon", figur: true, lichterVon: "N14" },
@@ -248,7 +256,7 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "LNz": {"basis": "N14c", "box": [0.275, 0.0, 0.55, 0.5373]}, "LNLz": {"basis": "N14d", "box": [0.275, 0.0, 0.55, 0.5289]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}, "N35ns": {"basis": "N35n", "box": [0.5948, 0.35, 0.1115, 0.1676]}, "N35ss": {"basis": "N35s", "box": [0.6036, 0.3498, 0.0964, 0.166]}, "MIA_GRINST_cs": {"basis": "MIA_GRINST_c", "box": [0.4526, 0.3639, 0.1031, 0.1611]}, "N35bes": {"basis": "N35be", "box": [0.5917, 0.35, 0.1292, 0.1694]}, "N35ts": {"basis": "N35t", "box": [0.599, 0.3537, 0.0948, 0.1565]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}, "N35ns": {"basis": "N35n", "box": [0.5948, 0.35, 0.1115, 0.1676]}, "N35ss": {"basis": "N35s", "box": [0.6036, 0.3498, 0.0964, 0.166]}, "MIA_GRINST_cs": {"basis": "MIA_GRINST_c", "box": [0.4526, 0.3639, 0.1031, 0.1611]}, "N35bes": {"basis": "N35be", "box": [0.5917, 0.35, 0.1292, 0.1694]}, "N35ts": {"basis": "N35t", "box": [0.599, 0.3537, 0.0948, 0.1565]}, "LNN2z": {"basis": "N14c", "box": [0.4042, 0.2948, 0.199, 0.1297]}, "LNL2z": {"basis": "N14d", "box": [0.4047, 0.2463, 0.1974, 0.1772]}, "N14bez": {"basis": "N14be", "box": [0.4828, 0.2593, 0.1672, 0.1139]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
   N35t: { spricht: { Mia: "N35ts" } },   // V8.9 Gemini-Mund
@@ -265,8 +273,8 @@ const VARIANTEN = {
   N35f: { spricht: { Mia: "N35fg" } },
   N19: { blink: ["N19z"], spricht: { Lynn: "N19s" } },
   N19n: { blink: ["N19nz"] },
-  N14c: { blink: ["LNz"] },
-  N14d: { blink: ["LNLz"] },
+  N14c: { blink: ["LNN2z"] },
+  N14d: { blink: ["LNL2z"] },  N14be: { blink: ["N14bez"] },
   LD1: { blink: ["LDz"], spricht: { Lynn: "LDs" } },
   N37: { blink: ["N37z"], spricht: { Jonas: "N37s" } },
   N38b: { blink: ["N38bz"] },
@@ -314,6 +322,7 @@ const TOENE = {
   herzschlag:      { datei: "ton/herzschlag.mp3" },
   // Draußen
   haustuer:        { datei: "ton/haustuer.mp3" },
+  tuer_klack:      { datei: "ton/tuer_klack.mp3" },
   wind:            { datei: "ton/wind.mp3" },              // draußen laut, im Zimmer leise als Raumton
   schritte:        { datei: "ton/schritte.mp3" },        // 4 Schritte, gleichmäßig (Kies, V8.2)
   schritte_lauf:   { datei: "ton/schritte_lauf.mp3" },   // nahtlose Schleife 16 Schritte (Kamerafahrt Weg)

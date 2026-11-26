@@ -213,7 +213,7 @@ const Rahmen = (() => {
     const l = Math.min(laeufe(), 3);
     bw.style.setProperty('--lebhaft', l);
     feuerRate = .025 * (1 + .6 * l);
-    $('hinweis').textContent = laeufe() === 0 ? T('start_hinweis', 'Kopfhörer, Ton an, Querformat') : laeufe() === 1 ? 'Draußen läuft’s noch.' : 'Immer noch.';
+    $('hinweis').textContent = laeufe() === 0 ? T('start_hinweis', 'Kopfhörer, Ton an, Querformat') : laeufe() === 1 ? 'Die Party läuft noch.' : 'Immer noch.';
     $('enden').textContent = T('menue_enden', 'Enden gefunden: {n} von 3').replace('{n}', S().enden.length);
   }
   function startZeigen(nachWeg) {
@@ -281,20 +281,29 @@ const Rahmen = (() => {
   // ---------------- Abzeichen ----------------
   let letzter = null;
   // Bilanz Zeile für Zeile auf Schwarz, dann „Weiter“
+  // V9.1 (Patrick 26.11., F): erst der Handy-Satz allein (blendet aus), dann „Du hast verpasst:“ eins nach dem anderen, Lynn mit längerer Pause, dann Enden/Entscheidungen
   function bilanzZeigen() {
     const bil = $('bilanz'), knopf = $('k-bweiter'); bil.classList.add('da'); knopf.classList.remove('da');
     zeige('s-bilanz'); bw.classList.add('bilanz-an');
-    const zeilen = [...bil.querySelectorAll('p')].filter(x => x.id !== 'p-verpasst' && x.innerHTML.trim());
-    let u = reduziert ? 0 : 900;
-    zeilen.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 1600; });
-    const vp = verpasstLauf, pv = $('p-verpasst');
-    if (vp) {
-      pv.classList.add('da'); const sp = [...pv.querySelectorAll('.vk, .vp')];
-      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += reduziert ? 0 : 900; });
-      if (vp.lynn) { u += reduziert ? 0 : 1400; plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += reduziert ? 0 : 2400; }
+    const ph = $('p-handy'), pv = $('p-verpasst'), rest = [$('p-enden'), $('p-entsch')].filter(x => x && x.innerHTML.trim());
+    [ph, pv, ...rest].forEach(x => { if (x) { x.style.display = 'none'; x.classList.remove('aus'); } });
+    let u = reduziert ? 0 : 1000; const z = ms => reduziert ? 0 : ms;
+    if (ph && ph.innerHTML.trim()) {
+      const h2 = ph.querySelector('.h2');
+      plan(() => { ph.style.display = ''; void ph.offsetWidth; ph.classList.add('da'); }, u);
+      if (h2) { plan(() => h2.classList.add('da'), u + z(2600)); u += z(6200); } else u += z(4000);
+      plan(() => ph.classList.add('aus'), u); u += z(1400); plan(() => { ph.style.display = 'none'; }, u); u += z(400);
     }
-    plan(() => knopf.classList.add('da'), u + (reduziert ? 0 : 600));
-    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); r(); }; });
+    const vp = verpasstLauf;
+    if (vp && pv) {
+      plan(() => { pv.style.display = ''; pv.classList.add('da'); }, u); const sp = [...pv.querySelectorAll('.vk, .vp')];
+      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += z(1500); });
+      if (vp.lynn) { u += z(2600); plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += z(3000); }
+      u += z(600);
+    }
+    rest.forEach(x => { plan(() => { x.style.display = ''; void x.offsetWidth; x.classList.add('da'); }, u); u += z(1600); });
+    plan(() => knopf.classList.add('da'), u + z(600));
+    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); [ph, pv, ...rest].forEach(x => { if (x) x.style.display = ''; }); r(); }; });
   }
   function abzeichen(modus, nurText) {
     if (nurText) { const pl = plaene; plaene = []; abzeichen(modus); plaene.forEach(clearTimeout); plaene = pl; return; }
@@ -338,7 +347,8 @@ const Rahmen = (() => {
       $('p-entsch').innerHTML = T('entscheidungen', 'Du hast {x} von {y} Entscheidungen nie getroffen.').replace('{x} von {y} Entscheidungen', '<b>{x} von {y} Entscheidungen</b>').replace('{x}', nie).replace('{y}', gesamt);
       // V8.4: wie oft man von sich aus aufs Handy geschaut hat
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
-      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
+      // C31 (Patrick 26.11.): wer nie gedrückt hat – erster Satz, Pause, dann „Geschaut hat er trotzdem.“
+      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? '<span class="h1">' + T('bilanz_handy0', 'Du hast den Handy-Knopf kein einziges Mal gedrückt.') + '</span><br><span class="h2">' + T('bilanz_handy0b', 'Geschaut hat er trotzdem.') + '</span>'
         : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
       // V8.9 (Patrick 24.11.): Verpasst-Liste wie Schlagzeilen, eine nach der anderen; dann verschwindet alles, nur „… und Lynn.“ bleibt
       const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
@@ -474,14 +484,16 @@ const Rahmen = (() => {
       S().laeufe = laeufe() + 1; sichern();
       letzter = { ende: name, neu: neu || [] };
       bzzzZaehler = 0; besuch();
-      endeKarte(name, .9);
-      await new Promise(r => weiterWarter = r);
-      if (nachKarte) { zeige(null); await nachKarte(); }
+      // V9.1 (Patrick 26.11., F): direkt nach dem Titel die Bilanz auf Schwarz, dann die Gefühlsfrage, dann Endkarte und Abzeichen
+      abzeichen('lauf', true);
+      endeVorbereiten(name);   // Menü weg, sonst scheint es hinter der Gefühlsfrage durch
+      await bilanzZeigen();
       $('g-frage').textContent = T('gefuehl_frage', 'Wie hast du dich gerade gefühlt?');
       const liste = $('g-liste'); liste.innerHTML = '';
       await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; b.textContent = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.onclick = ev => { ev.stopPropagation(); r(i); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
-      abzeichen('lauf', true);
-      await bilanzZeigen();
+      endeKarte(name, .9);
+      await new Promise(r => weiterWarter = r);
+      if (nachKarte) { zeige(null); await nachKarte(); }
       abzeichen('lauf'); zeige('s-abz');
     },
   };

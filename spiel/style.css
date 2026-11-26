@@ -64,7 +64,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #vignette{background:radial-gradient(ellipse at 50% 50%,transparent 55%,rgba(0,0,0,.55) 100%)}
 #koernung{opacity:.045;animation:korn .5s steps(4) infinite}
 @keyframes korn{0%{transform:translate(0,0)}25%{transform:translate(-40px,20px)}50%{transform:translate(30px,-30px)}75%{transform:translate(-20px,-40px)}}
-#schwarz{background:#000;opacity:0;transition:opacity .5s}
+#schwarz{background:#000;opacity:0;transition:opacity .5s;inset:-6px}   /* V9.1 (A12): kein heller Streifen am Rand bei krummen Bildschirmbreiten */
 #schwarz.an{opacity:1}
 #schwarz.langsam{transition:opacity 1.8s}
 #traumglow{opacity:0;transition:opacity 1.6s;background:radial-gradient(ellipse at 50% 45%,rgba(255,230,190,.28) 0,rgba(255,210,150,.12) 45%,rgba(255,240,220,.55) 100%);mix-blend-mode:screen}
@@ -642,7 +642,7 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 
 /* V8.9 (Patrick 24.11.): Stempel auf der Klausur unten rechts – ersetzt die Rotstift-5,0 (Schicht s4 aus) */
 #klausur .s4{display:none}
-#stempel.blatt{left:735px;top:690px;font-size:150px;border-width:9px;border-radius:14px;padding:0 24px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
+#stempel.blatt{left:735px;top:690px;font-size:105px;border-width:7px;border-radius:11px;padding:0 17px;text-shadow:2px 1px 0 rgba(120,0,0,.5);z-index:3}
 .ebene .innen img.fw{opacity:0;transition:opacity 1.4s ease}
 .ebene .innen img.fw.aus{opacity:1}
 /* V9.0: niedrige Bildschirme (Handy quer) – ganzes Menü scrollt, damit die Szenenliste nicht zu klein wird */
