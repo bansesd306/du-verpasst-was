@@ -106,6 +106,7 @@ const Rahmen = (() => {
   // Das Element startet sofort (Autoplay-Versuch); sobald Web Audio läuft und die Datei dekodiert ist,
   // übernimmt der Web-Audio-Loop „party_fern“ (wie bis V8.1) und das Element wird ausgeblendet.
   const fern = (() => {
+    const START_VOL = .4;   // Gemini-Prüfung 26.11.: Startbildschirm −8 dB, damit die Titelmusik nicht leiser wirkt
     let el = null, soll = false, fadeT = null, web = false, webT = null;
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
     const mach = () => { if (!el) { el = new Audio('ton/muffled_party_start.mp3'); el.loop = true; el.preload = 'auto'; el.setAttribute('playsinline', ''); } return el; };
@@ -128,10 +129,10 @@ const Rahmen = (() => {
         soll = true;
         if (window.Ton && Ton.bereit) { webAn(); if (web && Ton.hat('muffled_party')) return; }
         const e = mach();
-        if (!e.paused) { blende(1, 600); return; }
+        if (!e.paused) { blende(START_VOL, 600); return; }
         try { e.volume = 0; } catch (x) { }
         const p = e.play(); if (p && p.catch) p.catch(() => { });
-        blende(1, 900);
+        blende(START_VOL, 900);
       },
       stopp(ms = 900) {
         soll = false; clearInterval(webT);

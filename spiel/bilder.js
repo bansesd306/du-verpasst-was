@@ -276,18 +276,18 @@ const VARIANTEN = {
 const TOENE = {
   kerze:           { datei: "ton/kerze.mp3", vol: 1.1 },      // Wunderkerzen auspusten (kai_audio 446030)
   umarmung:        { datei: "ton/umarmung.mp3", vol: 1.2 },   // Jonas’ Umarmung (Philips Aufnahme)
-  feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: 1 },  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
+  feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB (klang wie im selben Raum)  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
   klopfen:         { datei: "ton/klopfen.mp3", vol: .9 },               // Sophie klopft (Pixabay, Philip)
-  treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: .8 },     // Schritte im Treppenhaus
-  strasse:         { datei: "ton/strasse_betrunken.mp3", vol: 1 },       // Leute unten auf der Straße
-  tasse:           { datei: "ton/teller_abstellen.mp3", sprite: [[2.76, .9], [31.95, .9]], vol: .9 },
-  aufraeumen:      { datei: "ton/teller_abstellen.mp3", sprite: [[5.25, 1.4], [10.03, 1.4], [16.65, 1.4], [24.59, 1.4]], vol: .7 },
+  treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: 1.4 }, // Gemini-Prüfung 26.11.: +5 dB     // Schritte im Treppenhaus
+  strasse:         { datei: "ton/strasse_betrunken.mp3", vol: .4 }, // Gemini-Prüfung 26.11.: −8 dB + Tiefpass 800 im Skript       // Leute unten auf der Straße
+  tasse:           { datei: "ton/teller_abstellen.mp3", sprite: [[2.76, .9], [31.95, .9]], vol: 1.5 }, // Gemini-Prüfung 26.11.: +4 dB
+  aufraeumen:      { datei: "ton/teller_abstellen.mp3", sprite: [[5.25, 1.4], [10.03, 1.4], [16.65, 1.4], [24.59, 1.4]], vol: 1.4 }, // Gemini-Prüfung 26.11.: +6 dB (Datei falsch: Geschirr statt Fegen, Ersatz offen)
   regen_strasse:   { datei: "ton/regen_strasse.mp3" },
-  mia:             { datei: "ton/mia_lied.mp3", vol: 1 },                // Mias Lied (KI-Song von Philip)
-  jubel:           { datei: "ton/crowd_cheers.mp3", vol: .8 },
+  mia:             { datei: "ton/mia_lied.mp3", vol: .84 },  // Gemini-Prüfung 26.11.: −1,5 dB                // Mias Lied (KI-Song von Philip)
+  jubel:           { datei: "ton/crowd_cheers.mp3", vol: .3 }, // Gemini-Prüfung 26.11.: −8,5 dB (Stadion-Jubel war lauter als die Party)
   schrei:          { datei: "ton/man_screaming.mp3", vol: .55 },
   kotzen:          { datei: "ton/ich_koennt_kotzen.mp3", vol: .5 },
-  handy_ablegen:   { datei: "ton/handy_ablegen.mp3", vol: .7 },   // Handy auf den Tisch (kurz, dumpf, synthetisch)
+  handy_ablegen:   { datei: "ton/handy_ablegen.mp3", vol: 1.3 }, // Gemini-Prüfung 26.11.: +5 dB   // Handy auf den Tisch (kurz, dumpf, synthetisch)
   display_klick:   { datei: "ton/tipp.mp3", sprite: [[0, .09]], vol: .8 },
   bzzz_dumpf:      { datei: "ton/bzzz_tisch.mp3", vol: .55 },
   bzzz_doppel:     { datei: "ton/bzzz.mp3" },                            // Sophie klopft (fehlt noch)
@@ -295,18 +295,18 @@ const TOENE = {
   // Handy
   bzzz:            { datei: "ton/bzzz.mp3" },              // Nachricht (phone-vibration-96623)
   bzzz_tisch:      { datei: "ton/bzzz_tisch.mp3" },        // Vibration auf dem Tisch (konpeito 305372)
-  anruf:           { datei: "ton/anruf.mp3" },             // Anruf (mobile-phone-vibration-77849)
+  anruf:           { datei: "ton/anruf.mp3", vol: .4 }, // Gemini-Prüfung 26.11.: −8 dB (Schreckmoment)             // Anruf (mobile-phone-vibration-77849)
   tipp:            { datei: "ton/tipp.mp3", vol: .9 },     // 8 einzelne Anschläge (wattsapp-29575), fürs Löschen
   tipplauf:        { datei: "ton/tipplauf.mp3", anschlaege: [0.09,0.345,0.58,0.73,0.835,0.915,1.03,1.21,1.475,1.555,1.74,1.82,1.9,2.01,2.11,2.19,2.945,3.115,3.26,3.495,3.715,3.935,4.08,4.24,4.36,4.495,4.655,4.86,5.14,5.445,5.8,6.055,6.26,6.555,6.81] },  // echtes Tippen mit Rhythmus (wattsapp-29575, nur saubere Stellen)
   senden:          { datei: "ton/senden.mp3", vol: .8 },
   klick:           { datei: "ton/lichtschalter.mp3", vol: .35 },  // Display/Stumm (vorläufig Lichtschalter, leise)
   // Zimmer
   lichtschalter:   { datei: "ton/lichtschalter.mp3" },
-  stift:           { datei: "ton/stift.mp3", vol: 1.3 },   // Vierfarb-Stift (K16b, Prüfung)
+  stift:           { datei: "ton/stift.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −9 dB (Spitze)   // Vierfarb-Stift (K16b, Prüfung)
   PR3_stift:       { datei: "ton/PR3_stift.mp3" },         // Stift schreibt
   haken:           { datei: "ton/haken.mp3", sprite: [[0.02, .55], [1.56, .5], [3.01, .62], [4.31, .62]] },   // „Check“: 4 echte Stift-Haken (check-83184)
   blaettern:       { datei: "ton/blaettern.mp3" },
-  reissverschluss: { datei: "ton/reissverschluss.mp3" },
+  reissverschluss: { datei: "ton/reissverschluss.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB
   tuer_auf:        { datei: "ton/tuer_auf.mp3", vol: .8 },
   decke1:          { datei: "ton/decke1.mp3", vol: .8 },
   decke2:          { datei: "ton/decke2.mp3", vol: .8 },
@@ -325,20 +325,20 @@ const TOENE = {
   halle:           { datei: "ton/halle.mp3" },             // Crowd talking (138493): Halle nach der Prüfung
   party_fern:      { datei: "ton/party_fern.mp3" },        // muffled party music (Fenster auf)
   lied:            { datei: "ton/lied.mp3", start: 0 },    // Happy Birthday – V8: Ausschnitt 0:13–0:42 der Bar-Aufnahme (dort wird gesungen; vorher 1:58 = nur Gemurmel)
-  muffled_party:   { datei: "ton/muffled_party.mp3", vol: .5 },   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
+  muffled_party:   { datei: "ton/muffled_party.mp3", vol: .2 }, // Gemini-Prüfung 26.11.: −8 dB, Übergang ins Menü   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
   glas:            { datei: "ton/glas.mp3" },
   johlen:          { datei: "ton/johlen.mp3", vol: .8 },
-  gelaechter:      { datei: "ton/gelaechter.mp3" },
+  gelaechter:      { datei: "ton/gelaechter.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB (Ersatz offen)
   schloss:         { datei: "ton/schloss.mp3" },
   badtuer:         { datei: "ton/badtuer.mp3" },           // Wasser hört auf, Schloss, Tür (A4)
   schritte_holz:   { datei: "ton/schritte_holz.mp3" },
   tinnitus:        { datei: "ton/tinnitus.mp3" },
   ausatmen:        { datei: "ton/ausatmen.mp3", vol: .8 },   // V8.9 Sonntag vor „Ruhe.“ (Pixabay, freesound_community „sigh“, von Patrick)          // V8.6 Kater: hohes Pfeifen beim Aufwachen (synthetisch)
   lynn_lacht1:     { datei: "ton/lynn_lacht1.mp3" },
-  lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3" },
+  lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3", vol: .55 }, // Gemini-Prüfung 26.11.: −5 dB, so laut wie lynn_lacht1
   // Morgen, Prüfung
   voegel:          { datei: "ton/voegel.mp3" },
-  wecker:          { datei: "ton/wecker.mp3", vol: .8 },  // Handywecker Montag früh (alarm-327234, Philip, 7 s)
+  wecker:          { datei: "ton/wecker.mp3", vol: 2.2 }, // Gemini-Prüfung 26.11.: +9 dB (war flüsterleise)  // Handywecker Montag früh (alarm-327234, Philip, 7 s)
   raum_tag:        { datei: "ton/raum_tag.mp3" },
   tuerklingel:     { datei: "ton/tuerklingel.mp3" },
   // Übergänge, FoMO-Rahmen
@@ -349,7 +349,7 @@ const TOENE = {
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)
-  party_club2:     { datei: "ton/party_club2.mp3", vol: .6 },     // zweiter Party-Song (mondamusic, Philip)
+  party_club2:     { datei: "ton/party_club2.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −2,5 dB     // zweiter Party-Song (mondamusic, Philip)
   ende_warm:       { datei: "ton/ende_warm.mp3", vol: 1 },       // Outro Lynn-Ende (andriig „Warm“, Philip)
   flashback:       { datei: "ton/flashback.mp3", vol: .8 },
   abzeichen:       { datei: "ton/abzeichen.mp3" },

@@ -2150,7 +2150,7 @@ Ein anderes Wohnzimmer. Andere Leute. … Sieht voller aus.
 @uhr mind 23:35
 # V8.7: Feuerlöscher durch die Tür (wie bad_vorschau_feuerloescher.mp3: Zischen 1,5 s, Johlen 3,8 s, Gelächter 4,8 s)
 @warte 1.5
-@ton feuerloescher lp1400 vol1.7
+@ton feuerloescher lp1000 vol1.7
 @warte 2.3
 @ton johlen dumpf vol1.6
 @warte 1
@@ -2188,6 +2188,8 @@ Kann ich nicht einfach an beiden Orten sein?
 -> BAD_RAUS
 
 == BAD_WEG
+# Gemini-Prüfung 26.11.: er schließt das Bad wieder auf
+@ton! schloss
 @setze handyweit = 1
 @musik party laut
 # V8.7 (D3): er ist schon draußen – V8.8 (J1-4): Sekunden nach dem Feuerlöscher
@@ -2203,6 +2205,8 @@ Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 -> BAD_ENDE
 
 == BAD_RAUS
+# Gemini-Prüfung 26.11.: er schließt das Bad wieder auf
+@ton! schloss
 @abzeichen Musst du dabei gewesen sein
 @musik party laut
 @bild FEUER
@@ -2228,6 +2232,8 @@ Ich muss echt nach Hause. Morgen ist Lerntag.
 @bild A1W
 Ich verabschiede mich.
 Jonas: „Langweiler.“
+# Gemini-Prüfung 26.11.: Umarmungston (Jonas)
+@ton umarmung
 Umarmung trotzdem.
 @schwarz schnitt
 @musik club dumpf
@@ -2344,6 +2350,8 @@ Na gut …
 Morgen ist Lerntag.
 @bild A1W
 Jonas: „Langweiler.“
+# Gemini-Prüfung 26.11.: Umarmungston (Jonas)
+@ton umarmung
 Umarmung trotzdem.
 @schwarz schnitt
 @musik club dumpf
@@ -2451,7 +2459,7 @@ Lena: „… Okay. Den schon.“
 
 # ---- Nacht zu Hause: unten auf der Straße (Szene 6) ----
 == NACHT_STRASSE
-@ton strasse fenster ab17 13s
+@ton strasse fenster lp800 ab17 13s
 @warte 7
 ~ Von Lena?
 @wenn heimgedreht && wo>=3
@@ -3064,9 +3072,12 @@ Ich bin auf keinem Foto. !3
   @warte 2.5
 @ende
 @handy gruppe
-@nachricht Mia: ich weiß nicht mehr was gestern passiert ist
-@nachricht Jonas: du warst dabei 😭
-@nachricht Mia: ja genau das ist ja das problem
+# Gemini-Prüfung 26.11.: wer auf der Tanzfläche war, weiß: Mia war früh weg (wie in SAMSTAG) – dann nicht „du warst dabei“
+@wenn !tanz
+  @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
+  @nachricht Jonas: du warst dabei 😭
+  @nachricht Mia: ja genau das ist ja das problem
+@ende
 # V8.7 (D7)
 @nachricht Lena: wer war eigentlich der feuerlöscher-typ 🧯
 @nachricht Jonas: MORITZ 😭
@@ -3989,6 +4000,9 @@ Und jetzt wieder warten, bis – >>
 Hm?
 @schwarz
 @ton! schritte_holz
+# Gemini-Prüfung 26.11.: Tür geht auf, bevor Jonas spricht
+@ton tuer_auf leise
+@warte .8
 @raum aus
 @bild N37
 Jonas: „Für alle Fälle.“
