@@ -173,7 +173,7 @@ const Handy = (() => {
   function renderListe(ziel) {
     const namen = Object.keys(meta).filter(n => meta[n].vorschau !== undefined && (meta[n].vorschau || n === ziel)).sort((a, b) => (meta[b].pin ? 1 : 0) - (meta[a].pin ? 1 : 0) || meta[b].n - meta[a].n);
     const unz = namen.filter(n => meta[n].ungelesen && !meta[n].stumm).length; const ue = $('.l-unz'); if (ue) ue.textContent = unz || ''; const nb = $('.l-nbadge'); if (nb) { nb.textContent = unz || ''; nb.style.display = unz ? '' : 'none'; }
-    const vorschauHTML = v => { v = esc(v || ''); return v.startsWith('✓✓ ') ? `<svg viewBox="0 0 18 12" class="hk-blau"><path d="M1 6.5 4.5 10 11 2.5M7 10l.6.6L14 2.5" fill="none" stroke="#53bdeb" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>${v.slice(3)}` : v; };   // V8.8 (C16)
+    const vorschauHTML = v => { v = esc(v || ''); return v.startsWith('✓✓ ') ? `<svg viewBox="0 0 18 12" class="hk-blau"><path d="M1 6.5 4.5 10 11 2.5M7 10l.6.6L14 2.5" fill="none" stroke="${v.startsWith('✓✓ Du: ') ? '#8696a0' : '#53bdeb'}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>${v.slice(3)}` : v; };   // V8.8 (C16)
     $('.l-zeilen').innerHTML = namen.map(n => { const m = meta[n]; const titel = anzeige(n);
       return `<div class="l-zeile${n === ziel ? ' ziel' : ''}" data-n="${n}">${avatar(n)}<div class="l-mitte"><b>${esc(titel)}</b><span>${vorschauHTML(m.vorschau)}</span></div><div class="l-rechts"><small class="${m.ungelesen && !m.stumm ? 'neu' : ''}">${m.tagText ? m.tagText : m.tagIdx != null && m.tagIdx < heute() ? tagLabel(m.tagIdx) : (m.zeit || '')}</small><div class="l-sym">${m.stumm ? '<u class="st">🔕</u>' : ''}${m.pin ? '<u>📌</u>' : ''}${m.ungelesen ? `<i${m.stumm ? ' class="grau"' : ''}>${m.ungelesen}</i>` : ''}</div></div></div>`; }).join('');
   }
@@ -282,7 +282,8 @@ const Handy = (() => {
   }
   function setHaken(m, h) {
     if (!m) { const l = chatListe(aktChat); for (let i = l.length - 1; i >= 0; i--) if (l[i].von === 'Ich') { m = l[i]; break; } }
-    if (!m) return; clearTimeout(m._t); m.haken = h; if (m.el) { const e = m.el.querySelector('.hk'); if (e) { e.className = 'hk ' + h; e.textContent = h === 'grau1' ? '✓' : '✓✓'; } }
+    if (!m) return; clearTimeout(m._t); if (h === 'blau' && istGruppe(aktChat)) h = 'grau2';   // Patrick 26.11.: in Gruppen werden die Haken nicht blau (erst, wenn alle gelesen haben)
+    m.haken = h; if (m.el) { const e = m.el.querySelector('.hk'); if (e) { e.className = 'hk ' + h; e.textContent = h === 'grau1' ? '✓' : '✓✓'; } }
   }
   async function schreibt(name, sek) {
     if (app === 'liste' && warteAuf) {
@@ -485,7 +486,7 @@ const Handy = (() => {
       const m = meta[name] || (meta[name] = { ungelesen: 0 }); if (g) m.gruppe = true; if (name === 'Jonas') m.pin = true;
       // V8.8 (G14): unbekannte Tage (z. B. „12. Juli“, „02.12.“) bleiben so stehen, wie sie im Skript stehen
       const bek = TAG_AUS_TEXT[tag] != null; const ti = bek ? TAG_AUS_TEXT[tag] : -30;
-      chatListe(name).push({ von, text, zeit, tag, tagIdx: ti, tagText: bek ? null : tag, haken: von === 'Ich' ? 'blau' : null });
+      chatListe(name).push({ von, text, zeit, tag, tagIdx: ti, tagText: bek ? null : tag, haken: von === 'Ich' ? ((g || name === 'gruppe') ? 'grau2' : 'blau') : null });
       merke(name, (von === 'Ich' ? ((g || name === 'gruppe') ? '✓✓ Du: ' : '✓✓ ') : ((g || name === 'gruppe') ? von + ': ' : '')) + text, zeit, 0, ti); meta[name].tagText = bek ? null : tag;
     },
     gruppeOeffnen() { return this.chat('gruppe'); },

@@ -24,7 +24,7 @@
   const ab = re => { const i = src.findIndex(z => re.test(z)); return i < 0 ? 1e9 : i; };
   const SETZT = {
     party: ab(/@setze typ = "party"/), afterparty: ab(/@setze typ = "afterparty"/), gluecklich: ab(/@setze typ = "gluecklich"/),
-    zuhause: ab(/@setze typ = "zuhause"/), lynn_geschaut: ab(/@setze lynn = "geschaut"/), lynn_gm: ab(/@setze lynn = "gm"/), kap3: ab(/KAPITEL 3/),
+    mama: ab(/^== W4_REIN/), zuhause: ab(/@setze typ = "zuhause"/), lynn_geschaut: ab(/@setze lynn = "geschaut"/), lynn_gm: ab(/@setze lynn = "gm"/), kap3: ab(/KAPITEL 3/),
   };
   const PARTY = { zugesagt: true, aufbruch: '21:20', ankunft: '21:40', besucht: 2, kueche: true, balkon: true };
   const WEGE = {
@@ -50,6 +50,7 @@
     const vw = Object.assign({}, w.v);
     if (partyWeg && z < SETZT.kap3) { delete vw.ankunft; delete vw.kueche; delete vw.balkon; delete vw.besucht; delete vw.tanz; delete vw.mittanzen; delete vw.punkte; delete vw.afterpartyStory; }
     setze(vw);
+    if (partyWeg && z > SETZT.mama) V.mama = true;   // Patrick 26.11.: Mama kam schon vor dem Haus – nach dem Sprung nicht nochmal in der Küche
     // typ / lynn nur, wenn das Skript sie an dieser Stelle schon gesetzt hätte
     if (z > SETZT[w.typ]) V.typ = w.typ; else if (partyWeg && z > SETZT.party) V.typ = 'party';
     if (w.lynn === 'gm' && z > SETZT.lynn_gm) V.lynn = 'gm'; else if (w.lynn && z > SETZT.lynn_geschaut) V.lynn = 'geschaut';

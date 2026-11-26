@@ -48,7 +48,7 @@ const Ton = (() => {
     kette.connect(g); g.connect(ziel || sfx);
     const ab = o.ab || 0, dauer = o.dauer;
     if (o.einblenden) { g.gain.setValueAtTime(0, now()); g.gain.linearRampToValueAtTime((eintrag(k).vol || 1) * (o.vol == null ? 1 : o.vol), now() + o.einblenden); }
-    s.start(0, ab, dauer); if (dauer) { g.gain.setValueAtTime(g.gain.value, now() + Math.max(0, dauer - .05)); g.gain.linearRampToValueAtTime(0, now() + dauer); }
+    s.start(0, ab, dauer); if (dauer) { const aus = Math.min(o.ausblenden || .05, dauer * .8); g.gain.setValueAtTime(g.gain.value, now() + Math.max(0, dauer - aus)); g.gain.linearRampToValueAtTime(0, now() + dauer); }   // Patrick 26.11.: ausN = am Ende N s weich ausblenden
     const laenge = (dauer || (b.duration - ab)) / (o.rate || 1);
     return { s, g, laenge, stop(weich) { try { if (weich) { g.gain.setTargetAtTime(0, now(), weich / 3); setTimeout(() => { try { s.stop(); } catch (e) { } }, weich * 1000 + 100); } else s.stop(); } catch (e) { } } };
   }
@@ -80,7 +80,7 @@ const Ton = (() => {
     wind: [['wind', { vol: .55 }]],
     raum_nacht: [['wind', { vol: .16, lp: 600 }]],
     raum_tag: [['raum_tag', { vol: .3, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
-    uhr: [['uhr', { vol: .55 }]],
+    uhr: [['uhr', { vol: .32 }]],   // Patrick 26.11.: Uhrticken allgemein leiser
     herzschlag: [['herzschlag', { vol: .5 }]],   // Gemini-Prüfung 26.11.: −5 dB
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
     regen: [['regen_strasse', { vol: .75, lp: 2600 }]],   // Gemini-Prüfung 26.11.: +6 dB (war kaum hörbar; +10 wäre Rauschen)
@@ -96,7 +96,7 @@ const Ton = (() => {
     restaurant: [['restaurant_lofi', { vol: .24, lp: 5200 }], ['gemurmel', { vol: .15, lp: 1500 }]],   // Gemini-Prüfung 26.11.: −5 dB (war lauter als die Party)   // Lynn-Ende
     lampe: 'lampe', rauschen: 'rauschen',
   };
-  const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
+  const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: 1.2, herzschlag: .5, bass_fern: 1.5, halle: .7, wind: .4, gemurmel: .5 };
   let ausklingNr = 0;
   function loop(name, an) {
     if (!ctx) return;
@@ -138,7 +138,8 @@ const Ton = (() => {
     if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
       if (a) qs.push(a); }
     if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
-    if (welche === 'flow') { const a = quelle('lernflow', musikBus, { loop: true, vol: .5, einblenden: 4 }); if (a) qs.push(a); }   // Patrick 26.11.: eigenes Lied für den Lern-Flow
+    if (welche === 'flow') { const a = quelle('lernflow', musikBus, { loop: true, vol: .5, einblenden: 7 });   // Patrick 26.11.: kommt langsam, nachdem die Party im Kopf verstummt ist
+      if (a) qs.push(a); }   // Patrick 26.11.: eigenes Lied für den Lern-Flow
     if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
     musik = { art: welche, qs };

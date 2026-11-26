@@ -183,7 +183,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes uhrAuf{0%{transform:scale(.94);text-shadow:none}30%{transform:scale(1.06);color:#fff;text-shadow:0 0 18px rgba(255,255,255,.95),0 0 42px rgba(170,205,255,.7);box-shadow:0 0 30px rgba(170,205,255,.35)}100%{transform:scale(1);text-shadow:none;box-shadow:none}}
 #uhr.springt{color:#fff;text-shadow:0 0 12px rgba(255,255,255,.5)}
 .handyoffen #uhr{opacity:.35}
-#toast{position:absolute;left:50%;top:130px;transform:translate(-50%,-30px);padding:22px 40px;border-radius:40px;background:rgba(20,20,24,.95);color:#fff;font:500 32px system-ui;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;gap:18px;align-items:center;white-space:nowrap}
+#toast{position:absolute;z-index:40;left:50%;top:130px;transform:translate(-50%,-30px);padding:22px 40px;border-radius:40px;background:rgba(20,20,24,.95);color:#fff;font:500 32px system-ui;opacity:0;transition:all .4s;pointer-events:none;box-shadow:0 10px 30px rgba(0,0,0,.5);display:flex;gap:18px;align-items:center;white-space:nowrap}
 #toast.an{opacity:1;transform:translate(-50%,0)}
 #toast .ic{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#ffcf4a,#ff7a2f);display:flex;align-items:center;justify-content:center;font-size:32px}
 
@@ -496,7 +496,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #karte .k-inhalt{left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;width:1600px}
 #karte::after{background:radial-gradient(ellipse 60% 70% at 50% 50%,rgba(11,17,33,.9),rgba(11,17,33,.55) 70%,rgba(11,17,33,.3))}
 /* Gesichts-Varianten über dem Bild */
-.ebene .innen img.ov-v{position:absolute;inset:auto;object-fit:fill;opacity:0;transition:opacity .18s ease;pointer-events:none}
+.ebene .innen img.ov-v{position:absolute;inset:auto;object-fit:fill;opacity:0;transition:opacity .7s ease;pointer-events:none}   /* Patrick 26.11.: Lächeln geht weich zurück statt schlagartig */
+.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.kurz{transition:opacity .18s ease}
+.ebene .innen.laedt img.ov-v,.ebene .innen.laedt img.fw,.ebene .innen.laedt img.blink{visibility:hidden}   /* Patrick 26.11.: kein Mund auf Schwarz, solange das Bild lädt */
 .ebene .innen img.ov-v.blink{transition:none}   /* 25.11.: hart umschalten, sonst kurz Geisteraugen */
 .ebene .innen img.ov-v.zu,.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.fest{opacity:1}
 .ebene .innen img.ov-v.mimik{opacity:1;transition:opacity .9s ease}
@@ -647,3 +649,5 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .ebene .innen img.fw.aus{opacity:1}
 /* V9.0: niedrige Bildschirme (Handy quer) – ganzes Menü scrollt, damit die Szenenliste nicht zu klein wird */
 @media (max-height:520px){#sprungmenue{overflow:auto}#sprungmenue .liste{overflow:visible;flex:none}#sprungmenue .wegstart{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}
+/* Patrick 26.11.: bei Schwarz am Handy blieb am Rand eine dünne Bildlinie stehen – Bild darunter nach dem Abblenden ganz ausblenden */
+#buehne:has(#schwarz.an) #welt{visibility:hidden;transition:visibility 0s 2s}

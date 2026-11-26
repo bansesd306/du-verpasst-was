@@ -197,11 +197,29 @@ Zehn Minuten Pause. Hab ich mir verdient.
 ? „Handy liegen lassen.“ -> PROLOG_LIEGEN
 
 == PROLOG_LIEGEN
+# Patrick 26.11. (Flagge): er liegt schon im Bett, das Handy auf dem Schreibtisch vibriert – dann holt er es doch
 @leer
-@warte 1.2
-@vibrieren 2
+@bild N1L langsam
+@warte 1
+@ton decke1
+@bild N02 langsam
+@warte 1.8
+@ton bzzz leise
+@effekt handylicht fern
 @warte 1.4
+@ton bzzz leise
+@effekt handylicht fern
+@warte 1.6
 Na gut. Zehn Minuten.
+@ton decke2
+@warte .4
+@ton schritte_holz leise
+@warte 1.2
+@ton schritte_holz leise
+@warte .6
+@ton decke1
+@warte 1
+-> K1
 
 == PROLOG_MIT
 @ton handy_ablegen
@@ -324,13 +342,15 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 @warte 1.6
 @bild LP11 langsam
 … !2
+# Patrick 26.11. (Flagge): das Vibrieren reißt ihn aus der Erinnerung
+@ton bzzz
 @loop seminar aus
-@effekt traum aus weich
+@effekt traum aus
 @raum nacht
-@bild N02 langsam
+@bild N02 schnitt
+@warte .8
 @handy her
 @handy chat Jonas
-@schreibt Jonas 5
 @nachricht! Jonas: hallo?? 😄
 ?? „nee, ich glaub ich bin raus. muss echt noch lernen 😕“ -> S18_A
 ?? „weiß noch nicht… mal schauen“ -> S18_B
@@ -893,9 +913,12 @@ Lena: „Leute, gleich kommt die Torte!“
 „V verkauft K ein Auto und verschweigt den Unfall …“
 # V9.1 (Patrick 26.11., D1): Flow klingt und sieht aus wie der Balkon – warmes Licht, ruhiges Lied ganz leise
 @effekt waermer
+# Patrick 26.11. (Flagge): erst verstummt die Party in seinem Kopf, dann kommt langsam das Lern-Lied
+@loop bass_fern aus
+@warte 3
+Easy.
 # Patrick 26.11. abends: eigenes Lied für den Flow
 @musik flow sanft
-Easy.
 @anruf_unbemerkt Jonas
 @warte 2.5
 ~~ Ha.
@@ -1101,7 +1124,13 @@ Ich darf den Scheiß nicht versauen.
 Aber Lynn …
 Das eigentlich auch nicht.
 Wieder auf ein dummes Gefühl hören?
-… Und wer sagt eigentlich, dass es dumm ist?
+# Patrick 26.11. (Flagge): ohne „Und“, längere Pause davor
+@leer
+@warte 2
+… Wer sagt eigentlich, dass es dumm ist?
+# Patrick 26.11. (Flagge): er macht die Lampe bewusst aus (vorher war sie an)
+@ton lichtschalter leise
+@loop lampe aus
 @bild L7
 @effekt handylicht an
 @loop uhr an
@@ -1109,6 +1138,8 @@ Sie verschwindet ja nicht. !3
 … Aber sie hat heute gefragt. !3
 # V9.1 (Patrick 26.11., B2)
 … Nicht morgen. !2
+# Patrick 26.11. (Flagge): Uhr klingt vor dem Flashback aus
+@loop uhr aus
 @bild N34 traum
 @musik party fern
 ~ Was, wenn …
@@ -1119,7 +1150,6 @@ Sie verschwindet ja nicht. !3
 @musik aus
 @effekt traum aus
 @bild L7 schnitt
-@loop uhr aus
 @effekt handylicht aus
 … !2
 ? „Jetzt noch hin.“ -> AUFBRUCH
@@ -2527,16 +2557,20 @@ Fast draußen. Ich dreh mich nochmal um.
 @musik club laut
 @ton johlen leise
 @bild HW_TUER langsam
+# Patrick 26.11. (Flagge): bei „Ein Lied noch“ fängt drinnen wirklich ein neues Lied an; der Weg raus dauert länger, damit Gehen schwerfällt
+@musik party laut
 ~ Ein Lied noch.
-… !3
+… !4
 @ton schloss leise
-@musik club dumpf
+@musik party dumpf
 @setze treppe
 @bild TREPPE schnitt
-@ton treppe 4s
-… !2
+@ton treppe 6s
+… !3
+@musik party strasse 2
 @bild HAUS langsam
-… !1.5
+@warte 2
+… !2.5
 -> HEIMWEG
 
 # ---- Spät auf der Party (Ankunft nach 23:30) ----
@@ -2598,7 +2632,7 @@ Lena: „… Okay. Den schon.“
 
 # ---- Nacht zu Hause: unten auf der Straße (Szene 6) ----
 == NACHT_STRASSE
-@ton strasse fenster lp800 ab17 13s
+@ton strasse fenster lp800 ab17 13s aus5
 @warte 7
 ~ Von Lena?
 @wenn heimgedreht && wo>=3
@@ -3283,7 +3317,13 @@ Glaub ich.
   @warte 1.4
   @schreibt Jonas 2.5
   @nachricht! Jonas: sag mir nicht, dass du gestern nichts gelernt hast
-  … !3
+  # Patrick 26.11. (Flagge): auf dem Lernweg hat er wirklich gelernt
+  @wenn weg=="A"
+    @tippe tatsächlich
+    @nachricht Jonas: crazy
+  @sonst
+    … !3
+  @ende
 @sonst
   @nachricht Jonas: haha kenn ich 😂 aber hat sich gelohnt
 @ende
@@ -3300,7 +3340,11 @@ Glaub ich.
 == M5_LENA
 # Patrick 25.11. (Flagge): nicht so schnell aus Jonas’ Chat raus
 @warte 1.8
-@tipp
+# Patrick 26.11. (Flagge): er legt das Handy weg – dann vibriert es wieder
+@handy zu
+@warte 2.5
+@ton bzzz
+@warte 1.2
 @handy chat Lena
 @wenn typ=="zuhause" && lenaGesendet
   @nachricht Lena: danke nochmal für deine nachricht gestern 🥹 hat mich voll gefreut
@@ -3480,8 +3524,9 @@ Ich leg das Handy weg. Zwei Tage noch.
 @bild SO1a langsam
 @warte 1
 @lernplan haken 1
-@bild SO1b schnitt
-@warte .6
+# Patrick 26.11. (Flagge): Zeitraffer wie am Freitag (Wusch und Ticken), Uhr läuft mit
+@uhr So 11:10
+@zeitraffer SO1b
 @lernplan haken 2
 # V9.1 (C16): Meldung, er lernt weiter
 @ton bzzz leise
@@ -3527,13 +3572,13 @@ Ich leg das Handy weg. Zwei Tage noch.
 @sonst
   @lernplan stand ok1 ok2
 @ende
-@bild SO1c schnitt
-@warte .6
+@uhr So 15:50
+@zeitraffer SO1c
 # V8.6 (Philip): nicht mehr alles schaffen. Zu Hause/Lynn-Weg: Fälle 1–5 bleiben offen. Party: auch Deliktsrecht offen.
 @lernplan haken 4
-@bild SO1d schnitt
-@warte 1.2
-@warte 1.4
+@uhr So 19:20
+@zeitraffer SO1d
+@warte 1.6
 @wenn typ=="zuhause" && weg=="A"
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
   @klausur
@@ -3553,6 +3598,8 @@ Ich leg das Handy weg. Zwei Tage noch.
 @warte 1.4
 {haken}Check. {haken}Check. {haken}Check.
 # V8.7 (D11): erst das stille Handy, dann der Foto-Dump
+# Patrick 26.11. (Flagge): draußen dunkel – Uhr passt zum Bild
+@uhr So 20:35
 @bild K10P
 # Storycheck 3 (Z15, Patrick 24.11.): seit Mittag (12:40 „lern grad“); statt „Es ist still.“ eine Pause, Regen und Zimmer laufen weiter
 Es liegt da seit Mittag.
@@ -3588,15 +3635,15 @@ Ich leg es wieder hin.
 # Patrick 25.11. (Flagge): nach „Liegen lassen“ nimmt er das Handy nicht von selbst – es leuchtet auf, er entscheidet
 @bild K10P
 @ton bzzz
-@warte 1.2
-@handy sperr
-@benachrichtigung Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
+# Patrick 26.11. (Flagge): er nimmt es nicht in die Hand – es leuchtet nur auf dem Tisch
+@effekt handylicht kurz
+@banner Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
 @warte 1.2
 ? „Anschauen.“ -> SO4_STORYS
 ? „Liegen lassen.“ -> SO4_LIEGEN
 
 == SO4_LIEGEN
-@handy zu
+@banner aus
 -> SO4_ENDE
 
 == SO4_FOTOS
@@ -3608,6 +3655,7 @@ Ich leg es wieder hin.
 @tipp
 
 == SO4_STORYS
+@banner aus
 # V8.5: zu Hause hat man diese Bilder noch nie gesehen, auf den Party-Wegen andere (keine Wiederholungen)
 @wenn typ=="zuhause"
   @handy story lena.xo N32d 2 Min.
@@ -3784,7 +3832,8 @@ Ich krieg das hin.
 @nachricht Ben: ayrton senner 🏎
 @nachricht Paul: ↪ Ben: ayrton senner 🏎 ⏎ leider nicht. der ist wenigstens tot
 @nachricht Mara: broo
-@nachricht Paul: woher weißt du das
+# Patrick 26.11. (Flagge): als Antwort auf Mara, nicht auf den Witz
+@nachricht Paul: ↪ Mara: senner fragt angeblich IMMER bereicherungsrecht ⏎ woher weißt du das
 @nachricht Mara: hat einer aus dem letzten durchgang gesagt
 … !2
 ~ … aus dem letzten Durchgang.
