@@ -1705,10 +1705,13 @@ Mia: „Wo warst du vorher?“
 Ich: „Zu Hause.“
 Mia: „Allein?“
 Ich: „Mit Schuldrecht.“
-@bild MIA_GRINST_c schnitt
+# V9.2 (Patrick 26.11.): verschmitzt, gleicher Ausschnitt wie N35n
+@bild MIA_SM gesicht
 Mia: „Klingt nach einem, der dich ghostet.“
 Ich: „Zweimal schon.“
+@bild MIA_GR gesicht
 Mia: „Typisch.“
+@bild N35n gesicht
 Mia: „Und du rennst ihm trotzdem hinterher.“
 Ich: „Was bleibt mir übrig?“
 Ich: „Montag. Dritter Versuch.“
@@ -1719,6 +1722,8 @@ Mia: „Kannst du mich verklagen? Bitte.“
 Ich: „Wofür?“
 @bild N35n gesicht
 Mia: „Egal. Ich will einmal im Leben einen Brief, der nicht von der Bank ist.“
+# V9.2: die Hand geht erst hoch
+@bild MIA_HAND pose
 @bild N35d gesicht
 Mia: „Ich hab heute schon drei Leute geheiratet. Ist das rechtlich bindend?“
 Ich: „Nicht ohne Standesamt.“
@@ -1740,10 +1745,11 @@ Mia: „Zumindest nicht für mich.“
 Ich: „Und die drei ghostest du dann alle?“
 @bild N35n gesicht
 @warte .9
-@bild N35s langsam
+# V9.2: Kopf neigen statt Sprung in die Mitte
+@bild MIA_TILT langsam
 Mia: „Denkst du, ich mach sowas?“
 … !1.5
-@bild MIA_SMIRK schnitt
+@bild MIA_SM2 gesicht
 Mia: „Ich geh halt immer zuerst.“
 # stiller Moment (Philip: nur ein Mini-Moment, Musik nur leicht leiser)
 @leer
@@ -1898,7 +1904,8 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 # V9.1 (Patrick 26.11., E2): wer während des Gesprächs aufs Handy schaut, hat etwas verpasst
 @wenn knopf>knopfB
   Ich: „Hm? Sorry, was?“
-  @bild N14c gesicht
+  # V9.2: sie schaut kurz runter
+  @bild N14ru gesicht
   Lynn: „Schon gut.“
   … !1.5
   @bild N14 gesicht
@@ -1916,6 +1923,8 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 # V9.1 (Patrick 26.11., B1): sie sagt es, während er noch aufs Handy starrt
 Lynn: „Ich geh mal wieder rein. Bin gleich wieder da.“
 @handy zu
+# V9.2: erst halb wegdrehen
+@bild N14dw pose
 @bild N14g pose
 @warte 1.2
 @ton tuer_auf leise
@@ -1990,9 +1999,11 @@ Irgendwann gehe ich rein.
 Lynn: „Oh. Du bist ja noch da.“
 Lynn: „Hab dir einen mitgebracht.“
 Ich: „Hast mich ganz schön lang warten lassen.“
+# V9.2: sie nippt, schaut über den Becher
+@bild N14zs gesicht
 Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
 # Patrick 26.11.: kein Lachen, nur ein leichtes Grinsen
-@bild N14be gesicht
+@bild N14zg gesicht
 … !2
 -> GM_UHR
 
@@ -2044,7 +2055,8 @@ Lynn: „Er sagt, über Nacht.“
 @bild N14 gesicht
 @wenn knopf>knopfB
   Ich: „Hm? Sorry, was?“
-  @bild N14c gesicht
+  # V9.2: sie schaut kurz runter
+  @bild N14ru gesicht
   Lynn: „Schon gut.“
   … !1.5
   @bild N14 gesicht
@@ -2353,7 +2365,7 @@ Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 @party an
 @musik party laut
 @bild A1
-# Patrick 26.11. (vorläufig): er sagt es laut, Jonas antwortet darauf
+# Patrick 26.11. (A20, okay): er sagt es laut, Jonas antwortet darauf
 Ich: „So, Leute …“
 … !1.2
 Ich: „Ich muss echt nach Hause. Morgen ist Lerntag.“
@@ -3072,11 +3084,11 @@ Ich bin auf keinem Foto. !3
 @nachricht Ben: tim wir haben alles
 @tipp
 @wenn typ=="zuhause"
-  # Patrick 26.11. (D3, vorläufig): wer gut gelernt hat, ist nicht neidisch
+  # Patrick 26.11. (D3, sein Text): wer gut gelernt hat, ist nicht neidisch
   @wenn lernstand>=LERN_HOCH
-    ~ Klingt nach ’nem guten Abend.
+    ~ Hm.
     … !1.5
-    ~ Meiner war auch gut.
+    ~ Ich dachte, ich würde es mehr bereuen.
   @ende
   @wenn weg=="B" && notiz
     # Lernplan trifft die Uhrzeit (V8): kein Text. V8.7 (D13): beide Zeiten schieben, damit die Reihenfolge stimmt

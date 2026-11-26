@@ -232,7 +232,8 @@ const Spiel = (() => {
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
   let lynnHand = 0, lynnHaende = -1;
-  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k'];
+  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k', 'N14gr', 'N14hh'];
+  const LYNN_HAENDE = ['N14r', 'N14h', 'N14rz'];
   let gesteGeskriptet = false;
   async function lynnGeste(ins) {
     if (gesteGeskriptet) { gesteGeskriptet = false; return; }
@@ -241,10 +242,12 @@ const Spiel = (() => {
     // V8.5: Zwischenposen aus Gemini: N14m (redet, ohne Hände), Hände wechseln zwischen N14r, N14h, N14rz
     // V8.8 (A3): mehr Gesichter (N14t, N14s, N14k) – Lynn wechselt flüssiger, Hände nur jede dritte Zeile
     let ziel = 'N14';
-    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14k', 'H'];
+    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14gr', 'N14k', 'H'];   // V9.2: N14gr (leichtes Grinsen)
     if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % FOLGE.length; ziel = FOLGE[lynnHand]; if (ziel === 'H') { lynnHaende = (lynnHaende + 1) % 3; ziel = ['N14r', 'N14h', 'N14rz'][lynnHaende]; } }
-    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
+    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k' || aktBild.code === 'N14gr') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
     if (BILDER[ziel] && !BILDER[ziel].datei) ziel = 'N14';
+    // V9.2 (Patrick 26.11.): Hände nicht plötzlich oben/unten – kurz das Zwischenbild „Hände halb oben“
+    if (ziel !== aktBild.code && !schnell && BILDER.N14hh && LYNN_HAENDE.includes(ziel) !== LYNN_HAENDE.includes(aktBild.code) && aktBild.code !== 'N14hh') await zeigeBild('N14hh', 'pose');
     if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
   let textZahl = 0;

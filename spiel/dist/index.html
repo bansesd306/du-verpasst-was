@@ -3171,10 +3171,13 @@ Mia: „Wo warst du vorher?“
 Ich: „Zu Hause.“
 Mia: „Allein?“
 Ich: „Mit Schuldrecht.“
-@bild MIA_GRINST_c schnitt
+# V9.2 (Patrick 26.11.): verschmitzt, gleicher Ausschnitt wie N35n
+@bild MIA_SM gesicht
 Mia: „Klingt nach einem, der dich ghostet.“
 Ich: „Zweimal schon.“
+@bild MIA_GR gesicht
 Mia: „Typisch.“
+@bild N35n gesicht
 Mia: „Und du rennst ihm trotzdem hinterher.“
 Ich: „Was bleibt mir übrig?“
 Ich: „Montag. Dritter Versuch.“
@@ -3185,6 +3188,8 @@ Mia: „Kannst du mich verklagen? Bitte.“
 Ich: „Wofür?“
 @bild N35n gesicht
 Mia: „Egal. Ich will einmal im Leben einen Brief, der nicht von der Bank ist.“
+# V9.2: die Hand geht erst hoch
+@bild MIA_HAND pose
 @bild N35d gesicht
 Mia: „Ich hab heute schon drei Leute geheiratet. Ist das rechtlich bindend?“
 Ich: „Nicht ohne Standesamt.“
@@ -3206,10 +3211,11 @@ Mia: „Zumindest nicht für mich.“
 Ich: „Und die drei ghostest du dann alle?“
 @bild N35n gesicht
 @warte .9
-@bild N35s langsam
+# V9.2: Kopf neigen statt Sprung in die Mitte
+@bild MIA_TILT langsam
 Mia: „Denkst du, ich mach sowas?“
 … !1.5
-@bild MIA_SMIRK schnitt
+@bild MIA_SM2 gesicht
 Mia: „Ich geh halt immer zuerst.“
 # stiller Moment (Philip: nur ein Mini-Moment, Musik nur leicht leiser)
 @leer
@@ -3364,7 +3370,8 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 # V9.1 (Patrick 26.11., E2): wer während des Gesprächs aufs Handy schaut, hat etwas verpasst
 @wenn knopf>knopfB
   Ich: „Hm? Sorry, was?“
-  @bild N14c gesicht
+  # V9.2: sie schaut kurz runter
+  @bild N14ru gesicht
   Lynn: „Schon gut.“
   … !1.5
   @bild N14 gesicht
@@ -3382,6 +3389,8 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 # V9.1 (Patrick 26.11., B1): sie sagt es, während er noch aufs Handy starrt
 Lynn: „Ich geh mal wieder rein. Bin gleich wieder da.“
 @handy zu
+# V9.2: erst halb wegdrehen
+@bild N14dw pose
 @bild N14g pose
 @warte 1.2
 @ton tuer_auf leise
@@ -3456,9 +3465,11 @@ Irgendwann gehe ich rein.
 Lynn: „Oh. Du bist ja noch da.“
 Lynn: „Hab dir einen mitgebracht.“
 Ich: „Hast mich ganz schön lang warten lassen.“
+# V9.2: sie nippt, schaut über den Becher
+@bild N14zs gesicht
 Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
 # Patrick 26.11.: kein Lachen, nur ein leichtes Grinsen
-@bild N14be gesicht
+@bild N14zg gesicht
 … !2
 -> GM_UHR
 
@@ -3510,7 +3521,8 @@ Lynn: „Er sagt, über Nacht.“
 @bild N14 gesicht
 @wenn knopf>knopfB
   Ich: „Hm? Sorry, was?“
-  @bild N14c gesicht
+  # V9.2: sie schaut kurz runter
+  @bild N14ru gesicht
   Lynn: „Schon gut.“
   … !1.5
   @bild N14 gesicht
@@ -3819,7 +3831,7 @@ Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 @party an
 @musik party laut
 @bild A1
-# Patrick 26.11. (vorläufig): er sagt es laut, Jonas antwortet darauf
+# Patrick 26.11. (A20, okay): er sagt es laut, Jonas antwortet darauf
 Ich: „So, Leute …“
 … !1.2
 Ich: „Ich muss echt nach Hause. Morgen ist Lerntag.“
@@ -4538,11 +4550,11 @@ Ich bin auf keinem Foto. !3
 @nachricht Ben: tim wir haben alles
 @tipp
 @wenn typ=="zuhause"
-  # Patrick 26.11. (D3, vorläufig): wer gut gelernt hat, ist nicht neidisch
+  # Patrick 26.11. (D3, sein Text): wer gut gelernt hat, ist nicht neidisch
   @wenn lernstand>=LERN_HOCH
-    ~ Klingt nach ’nem guten Abend.
+    ~ Hm.
     … !1.5
-    ~ Meiner war auch gut.
+    ~ Ich dachte, ich würde es mehr bereuen.
   @ende
   @wenn weg=="B" && notiz
     # Lernplan trifft die Uhrzeit (V8): kein Text. V8.7 (D13): beide Zeiten schieben, damit die Reihenfolge stimmt
@@ -5962,7 +5974,7 @@ const BILDER = {
 
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
-  W0:   { datei: "img/W0n.webp", text: "Straße, Partyhaus weit weg im Dunst (Patrick 26.11. C5: Haus schon halb erkennbar)", stimmung: "strasse" },
+  W0:   { datei: "img/W0g.webp", text: "Straße wie das Ende des Weg-Videos, Partyhaus klein im Nebel (Gemini, Patrick 26.11. abends)", stimmung: "strasse" },
   B15:  { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
   N11:  { datei: "img/HAUS_WEIT.webp", text: "Straße, Haus näher", stimmung: "strasse" },
   N12:  { datei: "img/HAUS_MITTE.webp", text: "Straße, Haus nah (Ausschnitt HAUS_WEIT, Zwischenschritt vor HAUS)", stimmung: "strasse" },
@@ -6001,6 +6013,18 @@ const BILDER = {
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
   // V9.1 (Patrick 26.11.): neue Bilder
   TAG1: { datei: "img/TAG1.webp", text: "Schreibtisch bei Tag, Hände auf dem Tisch, Handy rechts (Patrick 25.11.)", stimmung: "tag", tisch: true, handy: [0.84, 0.71, 0.14, 0.16] },
+  // V9.2 (Patrick 26.11. abends): Gemini-Zwischenbilder, genau auf die Basisbilder ausgerichtet (proc/v92_zwischen.py)
+  N14hh: { datei: "img/N14hh.webp", text: "Lynn, Hände halb oben (Zwischenbild zu den Hand-Posen)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14gr: { datei: "img/N14gr.webp", text: "Lynn, leichtes Grinsen, Kopf geneigt", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14ru: { datei: "img/N14ru.webp", text: "Lynn schaut kurz runter, leises Lächeln", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14dw: { datei: "img/N14dw.webp", text: "Lynn fängt an, sich wegzudrehen (vor N14g)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14zg: { datei: "img/N14zg.webp", text: "Lynn mit zwei Bechern, leichtes Grinsen", stimmung: "balkon", figur: true },
+  N14zs: { datei: "img/N14zs.webp", text: "Lynn mit zwei Bechern, nippt", stimmung: "balkon", figur: true },
+  MIA_GR: { datei: "img/MIA_GR.webp", text: "Mia grinst (Ausschnitt wie N35n)", stimmung: "party", figur: true },
+  MIA_SM: { datei: "img/MIA_SM.webp", text: "Mia, verschmitztes Lächeln (Ausschnitt wie N35n)", stimmung: "party", figur: true },
+  MIA_SM2: { datei: "img/MIA_SM2.webp", text: "Mia, verschmitzt, Kopf leicht geneigt", stimmung: "party", figur: true },
+  MIA_TILT: { datei: "img/MIA_TILT.webp", text: "Mia neigt den Kopf, verspielt", stimmung: "party", figur: true },
+  MIA_HAND: { datei: "img/MIA_HAND.webp", text: "Mia hebt die Hand (vor den drei Fingern N35d)", stimmung: "party", figur: true },
   N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true },
   N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true },
   N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true },
@@ -8178,7 +8202,8 @@ const Spiel = (() => {
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
   let lynnHand = 0, lynnHaende = -1;
-  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k'];
+  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k', 'N14gr', 'N14hh'];
+  const LYNN_HAENDE = ['N14r', 'N14h', 'N14rz'];
   let gesteGeskriptet = false;
   async function lynnGeste(ins) {
     if (gesteGeskriptet) { gesteGeskriptet = false; return; }
@@ -8187,10 +8212,12 @@ const Spiel = (() => {
     // V8.5: Zwischenposen aus Gemini: N14m (redet, ohne Hände), Hände wechseln zwischen N14r, N14h, N14rz
     // V8.8 (A3): mehr Gesichter (N14t, N14s, N14k) – Lynn wechselt flüssiger, Hände nur jede dritte Zeile
     let ziel = 'N14';
-    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14k', 'H'];
+    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14gr', 'N14k', 'H'];   // V9.2: N14gr (leichtes Grinsen)
     if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % FOLGE.length; ziel = FOLGE[lynnHand]; if (ziel === 'H') { lynnHaende = (lynnHaende + 1) % 3; ziel = ['N14r', 'N14h', 'N14rz'][lynnHaende]; } }
-    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
+    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k' || aktBild.code === 'N14gr') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
     if (BILDER[ziel] && !BILDER[ziel].datei) ziel = 'N14';
+    // V9.2 (Patrick 26.11.): Hände nicht plötzlich oben/unten – kurz das Zwischenbild „Hände halb oben“
+    if (ziel !== aktBild.code && !schnell && BILDER.N14hh && LYNN_HAENDE.includes(ziel) !== LYNN_HAENDE.includes(aktBild.code) && aktBild.code !== 'N14hh') await zeigeBild('N14hh', 'pose');
     if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
   let textZahl = 0;

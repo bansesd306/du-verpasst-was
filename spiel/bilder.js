@@ -68,7 +68,7 @@ const BILDER = {
 
   // ---------- Straße ----------
   B10:  { datei: "img/B10.webp", text: "Haustür von außen, Treppe, Laterne", stimmung: "strasse" },
-  W0:   { datei: "img/W0n.webp", text: "Straße, Partyhaus weit weg im Dunst (Patrick 26.11. C5: Haus schon halb erkennbar)", stimmung: "strasse" },
+  W0:   { datei: "img/W0g.webp", text: "Straße wie das Ende des Weg-Videos, Partyhaus klein im Nebel (Gemini, Patrick 26.11. abends)", stimmung: "strasse" },
   B15:  { datei: "img/HAUS_WEIT_a.webp", text: "Straße, Partyhaus weit weg", stimmung: "strasse" },
   N11:  { datei: "img/HAUS_WEIT.webp", text: "Straße, Haus näher", stimmung: "strasse" },
   N12:  { datei: "img/HAUS_MITTE.webp", text: "Straße, Haus nah (Ausschnitt HAUS_WEIT, Zwischenschritt vor HAUS)", stimmung: "strasse" },
@@ -107,6 +107,18 @@ const BILDER = {
   // ---------- Balkon (Lynn-Testbilder vom 18.11.) ----------
   // V9.1 (Patrick 26.11.): neue Bilder
   TAG1: { datei: "img/TAG1.webp", text: "Schreibtisch bei Tag, Hände auf dem Tisch, Handy rechts (Patrick 25.11.)", stimmung: "tag", tisch: true, handy: [0.84, 0.71, 0.14, 0.16] },
+  // V9.2 (Patrick 26.11. abends): Gemini-Zwischenbilder, genau auf die Basisbilder ausgerichtet (proc/v92_zwischen.py)
+  N14hh: { datei: "img/N14hh.webp", text: "Lynn, Hände halb oben (Zwischenbild zu den Hand-Posen)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14gr: { datei: "img/N14gr.webp", text: "Lynn, leichtes Grinsen, Kopf geneigt", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14ru: { datei: "img/N14ru.webp", text: "Lynn schaut kurz runter, leises Lächeln", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14dw: { datei: "img/N14dw.webp", text: "Lynn fängt an, sich wegzudrehen (vor N14g)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14zg: { datei: "img/N14zg.webp", text: "Lynn mit zwei Bechern, leichtes Grinsen", stimmung: "balkon", figur: true },
+  N14zs: { datei: "img/N14zs.webp", text: "Lynn mit zwei Bechern, nippt", stimmung: "balkon", figur: true },
+  MIA_GR: { datei: "img/MIA_GR.webp", text: "Mia grinst (Ausschnitt wie N35n)", stimmung: "party", figur: true },
+  MIA_SM: { datei: "img/MIA_SM.webp", text: "Mia, verschmitztes Lächeln (Ausschnitt wie N35n)", stimmung: "party", figur: true },
+  MIA_SM2: { datei: "img/MIA_SM2.webp", text: "Mia, verschmitzt, Kopf leicht geneigt", stimmung: "party", figur: true },
+  MIA_TILT: { datei: "img/MIA_TILT.webp", text: "Mia neigt den Kopf, verspielt", stimmung: "party", figur: true },
+  MIA_HAND: { datei: "img/MIA_HAND.webp", text: "Mia hebt die Hand (vor den drei Fingern N35d)", stimmung: "party", figur: true },
   N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true },
   N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true },
   N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true },
