@@ -67,8 +67,8 @@ const Ton = (() => {
     const t = now() + ab; const v = (dumpf ? .1 : .2) * (laut == null ? 1 : laut);
     const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .03); g.gain.setValueAtTime(v, t + dauer - .07); g.gain.linearRampToValueAtTime(0, t + dauer);
     const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = dumpf ? 200 : 520;
-    const o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 168;
-    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 84; const m = ctx.createGain(); m.gain.value = .7;
+    const fv = .96 + Math.random() * .08; const o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 168 * fv;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 84 * fv; const m = ctx.createGain(); m.gain.value = .7;
     const lfo = ctx.createOscillator(); lfo.frequency.value = 23; const lg = ctx.createGain(); lg.gain.value = v * .35; lfo.connect(lg); lg.connect(g.gain);
     o1.connect(f); o2.connect(m); m.connect(f); f.connect(g); g.connect(sfx);
     [o1, o2, lfo].forEach(o => { o.start(t); o.stop(t + dauer + .05); });
@@ -81,19 +81,19 @@ const Ton = (() => {
     raum_nacht: [['wind', { vol: .16, lp: 600 }]],
     raum_tag: [['raum_tag', { vol: .3, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
     uhr: [['uhr', { vol: .55 }]],
-    herzschlag: [['herzschlag', { vol: .9 }]],
+    herzschlag: [['herzschlag', { vol: .5 }]],   // Gemini-Prüfung 26.11.: −5 dB
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
-    regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
+    regen: [['regen_strasse', { vol: 1.2, lp: 2600 }]],   // Gemini-Prüfung 26.11.: +10 dB (war kaum hörbar)
     oben: [['M1_party', { vol: .5, lp: 160 }]],
-    bass_fern: [['M1_party', { vol: .16, lp: 110 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
-    bass_leiser: [['M1_party', { vol: .09, lp: 95 }]],   // ab ca. 23:30 noch leiser
+    bass_fern: [['M1_party', { vol: .28, lp: 160 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
+    bass_leiser: [['M1_party', { vol: .16, lp: 140 }]],   // Gemini-Prüfung 26.11.: beide +5 dB, Tiefpass höher – war auf Laptops stumm   // ab ca. 23:30 noch leiser
     halle: [['halle', { vol: .75 }]],
     schritte: [['schritte_lauf', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
     klingel: [['anruf', { vol: 1 }]],
     party_fern: [['muffled_party', { vol: .9 }]],   // Startbildschirm: Party hinter dem Fenster, gedämpft (Philips Datei)
-    seminar: [['tippen_laptop', { vol: .38 }], ['gemurmel', { vol: .08, lp: 700 }]],   // Rückblende Seminar
-    restaurant: [['restaurant_lofi', { vol: .42, lp: 5200 }], ['gemurmel', { vol: .26, lp: 1500 }]],   // Lynn-Ende
+    seminar: [['tippen_laptop', { vol: 1.2 }], ['gemurmel', { vol: .25, lp: 700 }]],   // Gemini-Prüfung 26.11.: +10 dB   // Rückblende Seminar
+    restaurant: [['restaurant_lofi', { vol: .24, lp: 5200 }], ['gemurmel', { vol: .15, lp: 1500 }]],   // Gemini-Prüfung 26.11.: −5 dB (war lauter als die Party)   // Lynn-Ende
     lampe: 'lampe', rauschen: 'rauschen',
   };
   const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
@@ -175,7 +175,7 @@ const Ton = (() => {
     // spielt einen Ton; gibt die Länge in Sekunden zurück (0, wenn es ihn nicht gibt)
     spiele(name, o = {}) {
       if (!ctx || gesperrt) return 0;
-      if (name === 'tinnitus') { if (P.tinnitus) { const q = quelle('tinnitus', master, { vol: .6 }); return q ? q.laenge : 4; } tinnitus(); return 4; }   // V8.8 (G36): Datei (7,4 kHz mit Unterton) statt reinem Sinus
+      if (name === 'tinnitus') { if (P.tinnitus) { const q = quelle('tinnitus', master, { vol: .45 }); return q ? q.laenge : 4; } tinnitus(); return 4; }   // V8.8 (G36): Datei (7,4 kHz mit Unterton) statt reinem Sinus
       if (name === 'tipp' && P.tipp) { const i = Math.floor(Math.random() * 8); return (quelle('tipp', sfx, Object.assign({ ab: i * .25, dauer: .09 }, o)) || {}).laenge || 0; }
       const sp = eintrag(name).sprite; if (sp && P[name]) { const [ab, d] = sp[Math.floor(Math.random() * sp.length)]; return (quelle(name, sfx, Object.assign({ ab, dauer: d }, o)) || {}).laenge || 0; }
       if (name === 'bzzz') vibriere(o.dumpf ? [] : [300, 120, 300]);
@@ -223,11 +223,15 @@ const Ton = (() => {
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
     vibration(ort, o = {}) {
       if (!ctx || gesperrt) return 0;
-      const leise = o.leise ? .5 : 1; const dumpf = ort === 'tasche' || o.dumpf;
+      // Gemini-Prüfung 26.11.: ~50-mal derselbe Klang wirkte mechanisch – jedes Mal leicht anders (Tonhöhe ±5 %, Lautstärke ±10 %,
+      // mal kurz-lang statt zwei gleich), insgesamt 1 dB leiser; Phantom-Vibration noch etwas leiser und dumpfer
+      const leise = (o.leise ? .5 : 1) * .9 * (.9 + Math.random() * .2) * (o.phantom ? .75 : 1); const dumpf = ort === 'tasche' || o.dumpf;
+      const rate = .95 + Math.random() * .1, art = Math.random();
+      const zwei = (a) => { if (art < .3) { brumm(.25, .25, a, leise); brumm(.6, .5, a, leise); } else { brumm(.25, .4, a, leise); brumm(.7, .35, a, leise); } };
       let d = 0;
-      if (ort === 'tisch') { const q = quelle('bzzz_tisch', sfx, { vol: 1.1 * leise }); quelle('bzzz', sfx, { vol: .45 * leise, ab: .2 }); d = q ? q.laenge : 0; brumm(.1, .62, false, leise); }
-      else if (ort === 'bett') { const q = quelle('bzzz', sfx, { vol: 1.25 * leise, lp: 3400 }); d = q ? q.laenge : 0; brumm(.25, .4, false, leise); brumm(.7, .35, false, leise); }
-      else { const q = quelle('bzzz', sfx, { vol: (dumpf ? .9 : 1.15) * leise, lp: dumpf ? 380 : undefined }); d = q ? q.laenge : 0; brumm(.25, .4, dumpf, leise); brumm(.7, .35, dumpf, leise); }
+      if (ort === 'tisch') { const q = quelle('bzzz_tisch', sfx, { vol: 1.1 * leise, rate }); quelle('bzzz', sfx, { vol: .45 * leise, ab: .2, rate }); d = q ? q.laenge : 0; brumm(.1, .62, false, leise); }
+      else if (ort === 'bett') { const q = quelle('bzzz', sfx, { vol: 1.25 * leise, lp: 3400, rate }); d = q ? q.laenge : 0; zwei(false); }
+      else { const q = quelle('bzzz', sfx, { vol: (dumpf ? .9 : 1.15) * leise, lp: dumpf ? (o.phantom ? 300 : 380) : undefined, rate }); d = q ? q.laenge : 0; zwei(dumpf); }
       vibriere(dumpf ? [180] : [350, 90, 350]); return d;
     },
     // Titelmusik im Hauptmenü: ab Sekunde 0, ohne Einblenden
@@ -240,7 +244,7 @@ const Ton = (() => {
     outro(welche) {
       if (!ctx) return; musikStopp(true); liedStopp(); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
       const k = welche === 'warm' ? 'ende_warm' : 'Outro'; const nr = ++outroNr;
-      const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
+      const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .57, einblenden: 4 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
       if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten
     },
     outroAus() { outroNr++; if (outroNode) { outroNode.stop(3); outroNode = null; } },

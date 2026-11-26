@@ -3600,7 +3600,7 @@ Ein anderes Wohnzimmer. Andere Leute. … Sieht voller aus.
 @uhr mind 23:35
 # V8.7: Feuerlöscher durch die Tür (wie bad_vorschau_feuerloescher.mp3: Zischen 1,5 s, Johlen 3,8 s, Gelächter 4,8 s)
 @warte 1.5
-@ton feuerloescher lp1400 vol1.7
+@ton feuerloescher lp1000 vol1.7
 @warte 2.3
 @ton johlen dumpf vol1.6
 @warte 1
@@ -3638,6 +3638,8 @@ Kann ich nicht einfach an beiden Orten sein?
 -> BAD_RAUS
 
 == BAD_WEG
+# Gemini-Prüfung 26.11.: er schließt das Bad wieder auf
+@ton! schloss
 @setze handyweit = 1
 @musik party laut
 # V8.7 (D3): er ist schon draußen – V8.8 (J1-4): Sekunden nach dem Feuerlöscher
@@ -3653,6 +3655,8 @@ Jonas wischt sich die Augen. Keiner erklärt’s mir. !2
 -> BAD_ENDE
 
 == BAD_RAUS
+# Gemini-Prüfung 26.11.: er schließt das Bad wieder auf
+@ton! schloss
 @abzeichen Musst du dabei gewesen sein
 @musik party laut
 @bild FEUER
@@ -3678,6 +3682,8 @@ Ich muss echt nach Hause. Morgen ist Lerntag.
 @bild A1W
 Ich verabschiede mich.
 Jonas: „Langweiler.“
+# Gemini-Prüfung 26.11.: Umarmungston (Jonas)
+@ton umarmung
 Umarmung trotzdem.
 @schwarz schnitt
 @musik club dumpf
@@ -3794,6 +3800,8 @@ Na gut …
 Morgen ist Lerntag.
 @bild A1W
 Jonas: „Langweiler.“
+# Gemini-Prüfung 26.11.: Umarmungston (Jonas)
+@ton umarmung
 Umarmung trotzdem.
 @schwarz schnitt
 @musik club dumpf
@@ -3901,7 +3909,7 @@ Lena: „… Okay. Den schon.“
 
 # ---- Nacht zu Hause: unten auf der Straße (Szene 6) ----
 == NACHT_STRASSE
-@ton strasse fenster ab17 13s
+@ton strasse fenster lp800 ab17 13s
 @warte 7
 ~ Von Lena?
 @wenn heimgedreht && wo>=3
@@ -4514,9 +4522,12 @@ Ich bin auf keinem Foto. !3
   @warte 2.5
 @ende
 @handy gruppe
-@nachricht Mia: ich weiß nicht mehr was gestern passiert ist
-@nachricht Jonas: du warst dabei 😭
-@nachricht Mia: ja genau das ist ja das problem
+# Gemini-Prüfung 26.11.: wer auf der Tanzfläche war, weiß: Mia war früh weg (wie in SAMSTAG) – dann nicht „du warst dabei“
+@wenn !tanz
+  @nachricht Mia: ich weiß nicht mehr was gestern passiert ist
+  @nachricht Jonas: du warst dabei 😭
+  @nachricht Mia: ja genau das ist ja das problem
+@ende
 # V8.7 (D7)
 @nachricht Lena: wer war eigentlich der feuerlöscher-typ 🧯
 @nachricht Jonas: MORITZ 😭
@@ -5439,6 +5450,9 @@ Und jetzt wieder warten, bis – >>
 Hm?
 @schwarz
 @ton! schritte_holz
+# Gemini-Prüfung 26.11.: Tür geht auf, bevor Jonas spricht
+@ton tuer_auf leise
+@warte .8
 @raum aus
 @bild N37
 Jonas: „Für alle Fälle.“
@@ -5828,18 +5842,18 @@ const VARIANTEN = {
 const TOENE = {
   kerze:           { datei: "ton/kerze.mp3", vol: 1.1 },      // Wunderkerzen auspusten (kai_audio 446030)
   umarmung:        { datei: "ton/umarmung.mp3", vol: 1.2 },   // Jonas’ Umarmung (Philips Aufnahme)
-  feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: 1 },  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
+  feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB (klang wie im selben Raum)  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
   klopfen:         { datei: "ton/klopfen.mp3", vol: .9 },               // Sophie klopft (Pixabay, Philip)
-  treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: .8 },     // Schritte im Treppenhaus
-  strasse:         { datei: "ton/strasse_betrunken.mp3", vol: 1 },       // Leute unten auf der Straße
-  tasse:           { datei: "ton/teller_abstellen.mp3", sprite: [[2.76, .9], [31.95, .9]], vol: .9 },
-  aufraeumen:      { datei: "ton/teller_abstellen.mp3", sprite: [[5.25, 1.4], [10.03, 1.4], [16.65, 1.4], [24.59, 1.4]], vol: .7 },
+  treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: 1.4 }, // Gemini-Prüfung 26.11.: +5 dB     // Schritte im Treppenhaus
+  strasse:         { datei: "ton/strasse_betrunken.mp3", vol: .4 }, // Gemini-Prüfung 26.11.: −8 dB + Tiefpass 800 im Skript       // Leute unten auf der Straße
+  tasse:           { datei: "ton/teller_abstellen.mp3", sprite: [[2.76, .9], [31.95, .9]], vol: 1.5 }, // Gemini-Prüfung 26.11.: +4 dB
+  aufraeumen:      { datei: "ton/teller_abstellen.mp3", sprite: [[5.25, 1.4], [10.03, 1.4], [16.65, 1.4], [24.59, 1.4]], vol: 1.4 }, // Gemini-Prüfung 26.11.: +6 dB (Datei falsch: Geschirr statt Fegen, Ersatz offen)
   regen_strasse:   { datei: "ton/regen_strasse.mp3" },
-  mia:             { datei: "ton/mia_lied.mp3", vol: 1 },                // Mias Lied (KI-Song von Philip)
-  jubel:           { datei: "ton/crowd_cheers.mp3", vol: .8 },
+  mia:             { datei: "ton/mia_lied.mp3", vol: .84 },  // Gemini-Prüfung 26.11.: −1,5 dB                // Mias Lied (KI-Song von Philip)
+  jubel:           { datei: "ton/crowd_cheers.mp3", vol: .3 }, // Gemini-Prüfung 26.11.: −8,5 dB (Stadion-Jubel war lauter als die Party)
   schrei:          { datei: "ton/man_screaming.mp3", vol: .55 },
   kotzen:          { datei: "ton/ich_koennt_kotzen.mp3", vol: .5 },
-  handy_ablegen:   { datei: "ton/handy_ablegen.mp3", vol: .7 },   // Handy auf den Tisch (kurz, dumpf, synthetisch)
+  handy_ablegen:   { datei: "ton/handy_ablegen.mp3", vol: 1.3 }, // Gemini-Prüfung 26.11.: +5 dB   // Handy auf den Tisch (kurz, dumpf, synthetisch)
   display_klick:   { datei: "ton/tipp.mp3", sprite: [[0, .09]], vol: .8 },
   bzzz_dumpf:      { datei: "ton/bzzz_tisch.mp3", vol: .55 },
   bzzz_doppel:     { datei: "ton/bzzz.mp3" },                            // Sophie klopft (fehlt noch)
@@ -5847,18 +5861,18 @@ const TOENE = {
   // Handy
   bzzz:            { datei: "ton/bzzz.mp3" },              // Nachricht (phone-vibration-96623)
   bzzz_tisch:      { datei: "ton/bzzz_tisch.mp3" },        // Vibration auf dem Tisch (konpeito 305372)
-  anruf:           { datei: "ton/anruf.mp3" },             // Anruf (mobile-phone-vibration-77849)
+  anruf:           { datei: "ton/anruf.mp3", vol: .4 }, // Gemini-Prüfung 26.11.: −8 dB (Schreckmoment)             // Anruf (mobile-phone-vibration-77849)
   tipp:            { datei: "ton/tipp.mp3", vol: .9 },     // 8 einzelne Anschläge (wattsapp-29575), fürs Löschen
   tipplauf:        { datei: "ton/tipplauf.mp3", anschlaege: [0.09,0.345,0.58,0.73,0.835,0.915,1.03,1.21,1.475,1.555,1.74,1.82,1.9,2.01,2.11,2.19,2.945,3.115,3.26,3.495,3.715,3.935,4.08,4.24,4.36,4.495,4.655,4.86,5.14,5.445,5.8,6.055,6.26,6.555,6.81] },  // echtes Tippen mit Rhythmus (wattsapp-29575, nur saubere Stellen)
   senden:          { datei: "ton/senden.mp3", vol: .8 },
   klick:           { datei: "ton/lichtschalter.mp3", vol: .35 },  // Display/Stumm (vorläufig Lichtschalter, leise)
   // Zimmer
   lichtschalter:   { datei: "ton/lichtschalter.mp3" },
-  stift:           { datei: "ton/stift.mp3", vol: 1.3 },   // Vierfarb-Stift (K16b, Prüfung)
+  stift:           { datei: "ton/stift.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −9 dB (Spitze)   // Vierfarb-Stift (K16b, Prüfung)
   PR3_stift:       { datei: "ton/PR3_stift.mp3" },         // Stift schreibt
   haken:           { datei: "ton/haken.mp3", sprite: [[0.02, .55], [1.56, .5], [3.01, .62], [4.31, .62]] },   // „Check“: 4 echte Stift-Haken (check-83184)
   blaettern:       { datei: "ton/blaettern.mp3" },
-  reissverschluss: { datei: "ton/reissverschluss.mp3" },
+  reissverschluss: { datei: "ton/reissverschluss.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB
   tuer_auf:        { datei: "ton/tuer_auf.mp3", vol: .8 },
   decke1:          { datei: "ton/decke1.mp3", vol: .8 },
   decke2:          { datei: "ton/decke2.mp3", vol: .8 },
@@ -5877,20 +5891,20 @@ const TOENE = {
   halle:           { datei: "ton/halle.mp3" },             // Crowd talking (138493): Halle nach der Prüfung
   party_fern:      { datei: "ton/party_fern.mp3" },        // muffled party music (Fenster auf)
   lied:            { datei: "ton/lied.mp3", start: 0 },    // Happy Birthday – V8: Ausschnitt 0:13–0:42 der Bar-Aufnahme (dort wird gesungen; vorher 1:58 = nur Gemurmel)
-  muffled_party:   { datei: "ton/muffled_party.mp3", vol: .5 },   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
+  muffled_party:   { datei: "ton/muffled_party.mp3", vol: .2 }, // Gemini-Prüfung 26.11.: −8 dB, Übergang ins Menü   // Startbildschirm: gedämpfte Partymusik (mccrunchy, Philip)
   glas:            { datei: "ton/glas.mp3" },
   johlen:          { datei: "ton/johlen.mp3", vol: .8 },
-  gelaechter:      { datei: "ton/gelaechter.mp3" },
+  gelaechter:      { datei: "ton/gelaechter.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB (Ersatz offen)
   schloss:         { datei: "ton/schloss.mp3" },
   badtuer:         { datei: "ton/badtuer.mp3" },           // Wasser hört auf, Schloss, Tür (A4)
   schritte_holz:   { datei: "ton/schritte_holz.mp3" },
   tinnitus:        { datei: "ton/tinnitus.mp3" },
   ausatmen:        { datei: "ton/ausatmen.mp3", vol: .8 },   // V8.9 Sonntag vor „Ruhe.“ (Pixabay, freesound_community „sigh“, von Patrick)          // V8.6 Kater: hohes Pfeifen beim Aufwachen (synthetisch)
   lynn_lacht1:     { datei: "ton/lynn_lacht1.mp3" },
-  lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3" },
+  lynn_lacht2:     { datei: "ton/lynn_lacht2.mp3", vol: .55 }, // Gemini-Prüfung 26.11.: −5 dB, so laut wie lynn_lacht1
   // Morgen, Prüfung
   voegel:          { datei: "ton/voegel.mp3" },
-  wecker:          { datei: "ton/wecker.mp3", vol: .8 },  // Handywecker Montag früh (alarm-327234, Philip, 7 s)
+  wecker:          { datei: "ton/wecker.mp3", vol: 2.2 }, // Gemini-Prüfung 26.11.: +9 dB (war flüsterleise)  // Handywecker Montag früh (alarm-327234, Philip, 7 s)
   raum_tag:        { datei: "ton/raum_tag.mp3" },
   tuerklingel:     { datei: "ton/tuerklingel.mp3" },
   // Übergänge, FoMO-Rahmen
@@ -5901,7 +5915,7 @@ const TOENE = {
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)
-  party_club2:     { datei: "ton/party_club2.mp3", vol: .6 },     // zweiter Party-Song (mondamusic, Philip)
+  party_club2:     { datei: "ton/party_club2.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −2,5 dB     // zweiter Party-Song (mondamusic, Philip)
   ende_warm:       { datei: "ton/ende_warm.mp3", vol: 1 },       // Outro Lynn-Ende (andriig „Warm“, Philip)
   flashback:       { datei: "ton/flashback.mp3", vol: .8 },
   abzeichen:       { datei: "ton/abzeichen.mp3" },
@@ -6179,8 +6193,8 @@ const Ton = (() => {
     const t = now() + ab; const v = (dumpf ? .1 : .2) * (laut == null ? 1 : laut);
     const g = ctx.createGain(); g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(v, t + .03); g.gain.setValueAtTime(v, t + dauer - .07); g.gain.linearRampToValueAtTime(0, t + dauer);
     const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = dumpf ? 200 : 520;
-    const o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 168;
-    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 84; const m = ctx.createGain(); m.gain.value = .7;
+    const fv = .96 + Math.random() * .08; const o1 = ctx.createOscillator(); o1.type = 'sawtooth'; o1.frequency.value = 168 * fv;
+    const o2 = ctx.createOscillator(); o2.type = 'sine'; o2.frequency.value = 84 * fv; const m = ctx.createGain(); m.gain.value = .7;
     const lfo = ctx.createOscillator(); lfo.frequency.value = 23; const lg = ctx.createGain(); lg.gain.value = v * .35; lfo.connect(lg); lg.connect(g.gain);
     o1.connect(f); o2.connect(m); m.connect(f); f.connect(g); g.connect(sfx);
     [o1, o2, lfo].forEach(o => { o.start(t); o.stop(t + dauer + .05); });
@@ -6193,19 +6207,19 @@ const Ton = (() => {
     raum_nacht: [['wind', { vol: .16, lp: 600 }]],
     raum_tag: [['raum_tag', { vol: .3, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
     uhr: [['uhr', { vol: .55 }]],
-    herzschlag: [['herzschlag', { vol: .9 }]],
+    herzschlag: [['herzschlag', { vol: .5 }]],   // Gemini-Prüfung 26.11.: −5 dB
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
-    regen: [['regen_strasse', { vol: .38, lp: 2600 }]],
+    regen: [['regen_strasse', { vol: 1.2, lp: 2600 }]],   // Gemini-Prüfung 26.11.: +10 dB (war kaum hörbar)
     oben: [['M1_party', { vol: .5, lp: 160 }]],
-    bass_fern: [['M1_party', { vol: .16, lp: 110 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
-    bass_leiser: [['M1_party', { vol: .09, lp: 95 }]],   // ab ca. 23:30 noch leiser
+    bass_fern: [['M1_party', { vol: .28, lp: 160 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
+    bass_leiser: [['M1_party', { vol: .16, lp: 140 }]],   // Gemini-Prüfung 26.11.: beide +5 dB, Tiefpass höher – war auf Laptops stumm   // ab ca. 23:30 noch leiser
     halle: [['halle', { vol: .75 }]],
     schritte: [['schritte_lauf', { vol: .85 }]],   // Schritte während der Kamerafahrt (Weg)
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
     klingel: [['anruf', { vol: 1 }]],
     party_fern: [['muffled_party', { vol: .9 }]],   // Startbildschirm: Party hinter dem Fenster, gedämpft (Philips Datei)
-    seminar: [['tippen_laptop', { vol: .38 }], ['gemurmel', { vol: .08, lp: 700 }]],   // Rückblende Seminar
-    restaurant: [['restaurant_lofi', { vol: .42, lp: 5200 }], ['gemurmel', { vol: .26, lp: 1500 }]],   // Lynn-Ende
+    seminar: [['tippen_laptop', { vol: 1.2 }], ['gemurmel', { vol: .25, lp: 700 }]],   // Gemini-Prüfung 26.11.: +10 dB   // Rückblende Seminar
+    restaurant: [['restaurant_lofi', { vol: .24, lp: 5200 }], ['gemurmel', { vol: .15, lp: 1500 }]],   // Gemini-Prüfung 26.11.: −5 dB (war lauter als die Party)   // Lynn-Ende
     lampe: 'lampe', rauschen: 'rauschen',
   };
   const AUSKLANG = { seminar: .6, restaurant: 1.2, party_fern: 1.2, uhr: .8, herzschlag: .5, halle: .7, wind: .4, gemurmel: .5 };
@@ -6287,7 +6301,7 @@ const Ton = (() => {
     // spielt einen Ton; gibt die Länge in Sekunden zurück (0, wenn es ihn nicht gibt)
     spiele(name, o = {}) {
       if (!ctx || gesperrt) return 0;
-      if (name === 'tinnitus') { if (P.tinnitus) { const q = quelle('tinnitus', master, { vol: .6 }); return q ? q.laenge : 4; } tinnitus(); return 4; }   // V8.8 (G36): Datei (7,4 kHz mit Unterton) statt reinem Sinus
+      if (name === 'tinnitus') { if (P.tinnitus) { const q = quelle('tinnitus', master, { vol: .45 }); return q ? q.laenge : 4; } tinnitus(); return 4; }   // V8.8 (G36): Datei (7,4 kHz mit Unterton) statt reinem Sinus
       if (name === 'tipp' && P.tipp) { const i = Math.floor(Math.random() * 8); return (quelle('tipp', sfx, Object.assign({ ab: i * .25, dauer: .09 }, o)) || {}).laenge || 0; }
       const sp = eintrag(name).sprite; if (sp && P[name]) { const [ab, d] = sp[Math.floor(Math.random() * sp.length)]; return (quelle(name, sfx, Object.assign({ ab, dauer: d }, o)) || {}).laenge || 0; }
       if (name === 'bzzz') vibriere(o.dumpf ? [] : [300, 120, 300]);
@@ -6335,11 +6349,15 @@ const Ton = (() => {
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
     vibration(ort, o = {}) {
       if (!ctx || gesperrt) return 0;
-      const leise = o.leise ? .5 : 1; const dumpf = ort === 'tasche' || o.dumpf;
+      // Gemini-Prüfung 26.11.: ~50-mal derselbe Klang wirkte mechanisch – jedes Mal leicht anders (Tonhöhe ±5 %, Lautstärke ±10 %,
+      // mal kurz-lang statt zwei gleich), insgesamt 1 dB leiser; Phantom-Vibration noch etwas leiser und dumpfer
+      const leise = (o.leise ? .5 : 1) * .9 * (.9 + Math.random() * .2) * (o.phantom ? .75 : 1); const dumpf = ort === 'tasche' || o.dumpf;
+      const rate = .95 + Math.random() * .1, art = Math.random();
+      const zwei = (a) => { if (art < .3) { brumm(.25, .25, a, leise); brumm(.6, .5, a, leise); } else { brumm(.25, .4, a, leise); brumm(.7, .35, a, leise); } };
       let d = 0;
-      if (ort === 'tisch') { const q = quelle('bzzz_tisch', sfx, { vol: 1.1 * leise }); quelle('bzzz', sfx, { vol: .45 * leise, ab: .2 }); d = q ? q.laenge : 0; brumm(.1, .62, false, leise); }
-      else if (ort === 'bett') { const q = quelle('bzzz', sfx, { vol: 1.25 * leise, lp: 3400 }); d = q ? q.laenge : 0; brumm(.25, .4, false, leise); brumm(.7, .35, false, leise); }
-      else { const q = quelle('bzzz', sfx, { vol: (dumpf ? .9 : 1.15) * leise, lp: dumpf ? 380 : undefined }); d = q ? q.laenge : 0; brumm(.25, .4, dumpf, leise); brumm(.7, .35, dumpf, leise); }
+      if (ort === 'tisch') { const q = quelle('bzzz_tisch', sfx, { vol: 1.1 * leise, rate }); quelle('bzzz', sfx, { vol: .45 * leise, ab: .2, rate }); d = q ? q.laenge : 0; brumm(.1, .62, false, leise); }
+      else if (ort === 'bett') { const q = quelle('bzzz', sfx, { vol: 1.25 * leise, lp: 3400, rate }); d = q ? q.laenge : 0; zwei(false); }
+      else { const q = quelle('bzzz', sfx, { vol: (dumpf ? .9 : 1.15) * leise, lp: dumpf ? (o.phantom ? 300 : 380) : undefined, rate }); d = q ? q.laenge : 0; zwei(dumpf); }
       vibriere(dumpf ? [180] : [350, 90, 350]); return d;
     },
     // Titelmusik im Hauptmenü: ab Sekunde 0, ohne Einblenden
@@ -6352,7 +6370,7 @@ const Ton = (() => {
     outro(welche) {
       if (!ctx) return; musikStopp(true); liedStopp(); this.introAus(); if (outroNode) { outroNode.stop(.8); outroNode = null; }
       const k = welche === 'warm' ? 'ende_warm' : 'Outro'; const nr = ++outroNr;
-      const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .9, einblenden: 2.5 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
+      const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .57, einblenden: 4 }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5 }); };
       if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten
     },
     outroAus() { outroNr++; if (outroNode) { outroNode.stop(3); outroNode = null; } },
@@ -7197,6 +7215,7 @@ const Rahmen = (() => {
   // Das Element startet sofort (Autoplay-Versuch); sobald Web Audio läuft und die Datei dekodiert ist,
   // übernimmt der Web-Audio-Loop „party_fern“ (wie bis V8.1) und das Element wird ausgeblendet.
   const fern = (() => {
+    const START_VOL = .4;   // Gemini-Prüfung 26.11.: Startbildschirm −8 dB, damit die Titelmusik nicht leiser wirkt
     let el = null, soll = false, fadeT = null, web = false, webT = null;
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
     const mach = () => { if (!el) { el = new Audio('ton/muffled_party_start.mp3'); el.loop = true; el.preload = 'auto'; el.setAttribute('playsinline', ''); } return el; };
@@ -7219,10 +7238,10 @@ const Rahmen = (() => {
         soll = true;
         if (window.Ton && Ton.bereit) { webAn(); if (web && Ton.hat('muffled_party')) return; }
         const e = mach();
-        if (!e.paused) { blende(1, 600); return; }
+        if (!e.paused) { blende(START_VOL, 600); return; }
         try { e.volume = 0; } catch (x) { }
         const p = e.play(); if (p && p.catch) p.catch(() => { });
-        blende(1, 900);
+        blende(START_VOL, 900);
       },
       stopp(ms = 900) {
         soll = false; clearInterval(webT);
