@@ -193,6 +193,14 @@ const Handy = (() => {
     appEl.style.setProperty('--s', s); appEl.style.setProperty('--ci', ((H - W) / 2) + 'px'); appEl.style.setProperty('--cr', (W * .27) + 'px');
     return true;
   }
+  // Kopie des App-Symbols, die über dem wachsenden/schrumpfenden Fenster liegt (wie bei Android)
+  function flugSymbol(fam, zurueck) {
+    const ic = el.querySelector(`[data-h=${fam}] .hm-ic`), sc = $('.screen'); if (!ic) return;
+    const r = sc.getBoundingClientRect(), q = ic.getBoundingClientRect(), k = sc.offsetWidth / r.width;
+    const f = ic.cloneNode(true); f.classList.add('flug-ic'); if (zurueck) f.classList.add('zurueck'); f.querySelector('.hm-badge') && f.querySelector('.hm-badge').remove();
+    Object.assign(f.style, { left: (q.left - r.left) * k + 'px', top: (q.top - r.top) * k + 'px', width: q.width * k + 'px', height: q.height * k + 'px' });
+    sc.appendChild(f); uebergang.push(setTimeout(() => f.remove(), 450));
+  }
   function appUebergang(name, alt, famAlt) {
     const fam = APPFAMILIE[name];
     const home = $('[data-app=home]'), neu = $(`[data-app=${name}]`), altEl = alt && $(`[data-app=${alt}]`);
@@ -200,15 +208,16 @@ const Handy = (() => {
     homeZahlen(); aktualisiereZeit();
     home.classList.add('drunter'); neu.classList.add('wartet');
     let t = el.classList.contains('aufwachen') ? 280 : 0;
-    if (famAlt && altEl && zielVon(altEl, famAlt)) { altEl.classList.add('schrumpft'); T(() => altEl.classList.remove('schrumpft'), 330); t += 400; }
+    if (famAlt && altEl && zielVon(altEl, famAlt)) { altEl.classList.add('schrumpft'); flugSymbol(famAlt, true); T(() => altEl.classList.remove('schrumpft'), 330); t += 400; }
     else { home.classList.add('kommt'); t += 480; }
     const tipp = el.querySelector(`[data-h=${fam}]`);
     T(() => tipp && tipp.classList.add('tipp'), t - 150);
-    T(() => { tipp && tipp.classList.remove('tipp'); neu.classList.remove('wartet'); if (zielVon(neu, fam)) { neu.classList.add('waechst'); home.classList.add('weiter'); } }, t);
+    T(() => { tipp && tipp.classList.remove('tipp'); neu.classList.remove('wartet'); if (zielVon(neu, fam)) { neu.classList.add('waechst'); home.classList.add('weiter'); flugSymbol(fam); } }, t);
     T(() => { neu.classList.remove('waechst'); home.classList.remove('drunter', 'kommt', 'weiter'); }, t + 420);
     return t + 420;
   }
   function zeige(name) {
+    el.querySelectorAll('.flug-ic').forEach(f => f.remove());
     const alt = app, famAlt = frischAuf ? null : APPFAMILIE[alt]; frischAuf = false; uebergang.forEach(clearTimeout); uebergang = [];
     el.querySelectorAll('.app').forEach(a => a.classList.remove('wartet', 'waechst', 'schrumpft', 'drunter', 'kommt', 'weiter')); el.querySelectorAll('.hm-app.tipp').forEach(a => a.classList.remove('tipp'));
     const mitAnim = APPFAMILIE[name] && APPFAMILIE[name] !== famAlt && offen && !Spiel.schnell && !el.classList.contains('weg');

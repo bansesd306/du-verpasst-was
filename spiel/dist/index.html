@@ -1119,25 +1119,25 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
   radial-gradient(160% 70% at 50% 135%,#3c3560 0,rgba(60,53,96,0) 70%),
   linear-gradient(178deg,#0f1424 0,#18203a 45%,#232848 100%)}
 .hm-wall::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.12)}
-.hm-widget{position:relative;margin:30px 40px 0;display:flex;flex-direction:column;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.35)}
-.hm-uhr{font:300 78px/1 system-ui;letter-spacing:1px}
+.hm-widget{position:relative;margin:70px 0 0;align-items:center;text-align:center;display:flex;flex-direction:column;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.35)}
+.hm-uhr{font:200 96px/1 system-ui;letter-spacing:1px}
 .hm-datum{font:500 24px system-ui;margin-top:8px;color:#e8ebf3}
 .hm-wetter{font:400 23px system-ui;margin-top:6px;color:#c9cfdd}
-.hm-raster{position:absolute;left:18px;right:18px;bottom:310px;display:grid;grid-template-columns:repeat(4,1fr);row-gap:30px}
-.hm-dock{position:absolute;left:18px;right:18px;bottom:44px;display:grid;grid-template-columns:repeat(4,1fr)}
+.hm-raster{position:absolute;left:22px;right:22px;bottom:250px;display:grid;grid-template-columns:repeat(4,1fr);row-gap:26px}
+.hm-dock{position:absolute;left:22px;right:22px;bottom:40px;display:grid;grid-template-columns:repeat(4,1fr)}
 .hm-dock small{display:none}
 .hm-app{display:flex;flex-direction:column;align-items:center;gap:9px}
-.hm-app small{font:400 19px system-ui;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);white-space:nowrap}
-.hm-ic{position:relative;width:94px;height:94px;border-radius:30px;display:flex;align-items:center;justify-content:center;transition:filter .12s,transform .12s}
+.hm-app small{font:400 17px system-ui;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);white-space:nowrap}
+.hm-ic{position:relative;width:78px;height:78px;border-radius:25px;display:flex;align-items:center;justify-content:center;transition:filter .12s,transform .12s}
 .hm-ic svg{width:60%;height:60%}
 .hm-ic.voll svg{width:100%;height:100%}
 .hm-ic.voll{overflow:hidden}
 .hm-ic.voll[style*="#f98012"] svg{width:74%;height:74%}
 .hm-ic .svgi,.hm-ic>svg.svgi{width:60%}
 .hm-app.tipp .hm-ic{filter:brightness(.72);transform:scale(.94)}
-.hm-badge{position:absolute;right:-6px;top:-6px;min-width:34px;height:34px;padding:0 9px;border-radius:17px;background:#f0443a;color:#fff;font:600 20px/34px system-ui;font-style:normal;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.35);display:none}
-.hm-suche{position:absolute;left:30px;right:30px;bottom:200px;height:76px;border-radius:38px;background:rgba(255,255,255,.88);display:flex;align-items:center;padding:0 24px;gap:16px}
-.hm-suche svg{width:36px;height:36px}.hm-suche span{flex:1}
+.hm-badge{position:absolute;right:-7px;top:-7px;min-width:30px;height:30px;padding:0 8px;border-radius:15px;background:#f0443a;color:#fff;font:600 18px/30px system-ui;font-style:normal;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.35);display:none}
+.hm-suche{position:absolute;left:40px;right:40px;bottom:150px;height:64px;border-radius:32px;background:transparent;display:flex;align-items:center;padding:0 24px;gap:16px}
+.hm-suche svg{width:32px;height:32px}.hm-suche span{flex:1}
 /* Übergang: Home liegt darunter, die neue App wächst aus dem Symbol, die alte schrumpft hinein */
 .app.drunter,.app.schrumpft{display:flex}
 .app.drunter{z-index:0}
@@ -1148,15 +1148,22 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 .app.drunter.weiter{animation:hmWeiter .4s cubic-bezier(.3,.7,.2,1) both}
 @keyframes hmWeiter{to{transform:scale(1.08);filter:brightness(.7)}}
 .app.waechst{animation:appWaechst .4s cubic-bezier(.22,.85,.25,1) both;will-change:transform}
+/* Inhalt erscheint erst, wenn das Fenster schon groß ist; vorher sieht man nur die Farbe der App und das Symbol obendrauf */
+.app.waechst>*{animation:appInhaltRein .4s linear both}
+@keyframes appInhaltRein{0%,35%{opacity:0}75%,100%{opacity:1}}
+.app.schrumpft>*{animation:appInhaltRaus .32s linear both}
+@keyframes appInhaltRaus{0%{opacity:1}45%,100%{opacity:0}}
+.flug-ic{position:absolute;z-index:5;pointer-events:none;animation:flugIc .4s cubic-bezier(.22,.85,.25,1) both}
+.flug-ic.zurueck{animation:flugIcZurueck .32s cubic-bezier(.4,0,.6,1) both}
+@keyframes flugIc{0%{opacity:1;transform:scale(1)}22%{opacity:1;transform:scale(1.5)}50%,100%{opacity:0;transform:scale(2.3)}}
+@keyframes flugIcZurueck{0%,40%{opacity:0;transform:scale(2.3)}75%{opacity:1}100%{opacity:1;transform:scale(1)}}
 @keyframes appWaechst{
-  from{transform:translate(var(--dx),var(--dy)) scale(var(--s));clip-path:inset(var(--ci) 0 var(--ci) 0 round var(--cr));opacity:.2}
-  18%{opacity:1}
+  from{transform:translate(var(--dx),var(--dy)) scale(var(--s));clip-path:inset(var(--ci) 0 var(--ci) 0 round var(--cr))}
   to{transform:none;clip-path:inset(0 0 0 0 round 52px);opacity:1}}
 .app.schrumpft{animation:appSchrumpft .32s cubic-bezier(.4,0,.6,1) both;will-change:transform}
 @keyframes appSchrumpft{
   from{transform:none;clip-path:inset(0 0 0 0 round 52px);opacity:1}
-  82%{opacity:1}
-  to{transform:translate(var(--dx),var(--dy)) scale(var(--s));clip-path:inset(var(--ci) 0 var(--ci) 0 round var(--cr));opacity:0}}
+  to{transform:translate(var(--dx),var(--dy)) scale(var(--s));clip-path:inset(var(--ci) 0 var(--ci) 0 round var(--cr))}}
 
 #zimmer{
   --nacht:#0b1121;
@@ -6618,6 +6625,14 @@ const Handy = (() => {
     appEl.style.setProperty('--s', s); appEl.style.setProperty('--ci', ((H - W) / 2) + 'px'); appEl.style.setProperty('--cr', (W * .27) + 'px');
     return true;
   }
+  // Kopie des App-Symbols, die über dem wachsenden/schrumpfenden Fenster liegt (wie bei Android)
+  function flugSymbol(fam, zurueck) {
+    const ic = el.querySelector(`[data-h=${fam}] .hm-ic`), sc = $('.screen'); if (!ic) return;
+    const r = sc.getBoundingClientRect(), q = ic.getBoundingClientRect(), k = sc.offsetWidth / r.width;
+    const f = ic.cloneNode(true); f.classList.add('flug-ic'); if (zurueck) f.classList.add('zurueck'); f.querySelector('.hm-badge') && f.querySelector('.hm-badge').remove();
+    Object.assign(f.style, { left: (q.left - r.left) * k + 'px', top: (q.top - r.top) * k + 'px', width: q.width * k + 'px', height: q.height * k + 'px' });
+    sc.appendChild(f); uebergang.push(setTimeout(() => f.remove(), 450));
+  }
   function appUebergang(name, alt, famAlt) {
     const fam = APPFAMILIE[name];
     const home = $('[data-app=home]'), neu = $(`[data-app=${name}]`), altEl = alt && $(`[data-app=${alt}]`);
@@ -6625,15 +6640,16 @@ const Handy = (() => {
     homeZahlen(); aktualisiereZeit();
     home.classList.add('drunter'); neu.classList.add('wartet');
     let t = el.classList.contains('aufwachen') ? 280 : 0;
-    if (famAlt && altEl && zielVon(altEl, famAlt)) { altEl.classList.add('schrumpft'); T(() => altEl.classList.remove('schrumpft'), 330); t += 400; }
+    if (famAlt && altEl && zielVon(altEl, famAlt)) { altEl.classList.add('schrumpft'); flugSymbol(famAlt, true); T(() => altEl.classList.remove('schrumpft'), 330); t += 400; }
     else { home.classList.add('kommt'); t += 480; }
     const tipp = el.querySelector(`[data-h=${fam}]`);
     T(() => tipp && tipp.classList.add('tipp'), t - 150);
-    T(() => { tipp && tipp.classList.remove('tipp'); neu.classList.remove('wartet'); if (zielVon(neu, fam)) { neu.classList.add('waechst'); home.classList.add('weiter'); } }, t);
+    T(() => { tipp && tipp.classList.remove('tipp'); neu.classList.remove('wartet'); if (zielVon(neu, fam)) { neu.classList.add('waechst'); home.classList.add('weiter'); flugSymbol(fam); } }, t);
     T(() => { neu.classList.remove('waechst'); home.classList.remove('drunter', 'kommt', 'weiter'); }, t + 420);
     return t + 420;
   }
   function zeige(name) {
+    el.querySelectorAll('.flug-ic').forEach(f => f.remove());
     const alt = app, famAlt = frischAuf ? null : APPFAMILIE[alt]; frischAuf = false; uebergang.forEach(clearTimeout); uebergang = [];
     el.querySelectorAll('.app').forEach(a => a.classList.remove('wartet', 'waechst', 'schrumpft', 'drunter', 'kommt', 'weiter')); el.querySelectorAll('.hm-app.tipp').forEach(a => a.classList.remove('tipp'));
     const mitAnim = APPFAMILIE[name] && APPFAMILIE[name] !== famAlt && offen && !Spiel.schnell && !el.classList.contains('weg');
