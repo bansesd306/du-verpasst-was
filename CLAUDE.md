@@ -18,7 +18,7 @@
 `cd spiel/dist && python3 -m http.server 8765`, dann `python3 spiel/t8.py` (alle Wege, Spielzeit `vz`; `K=1` wenn nebenbei hochskaliert wird, sonst stürzt Chrome wegen Speicher ab) bzw. `t_echt.py WEG` (Echtzeit). Szenen sichtbar prüfen: `t_film.py LABEL '{"typ":"zuhause"}' SCHRITTE /tmp/x` + `t_sheet.py /tmp/x 1,2,3 /tmp/bogen.jpg`; Endbildschirme `t_ende.py`.
 
 ## Veröffentlichen
-- Test-Link (privat): Artefakt-Slug `5d6f857a-23db-4da8-8501-add017b70699`. Alle Dateien aus `dist/` hochladen (Overlay-Bilder werden dynamisch geladen!). Öffentlicher Link V5 nur mit Philips Okay ersetzen.
+- Test-Link (privat): Artefakt-Slug `2nowNrHNp443dXNKWcG6QF (seit 26.11.; davor 8WcdYdUJ56NqUcna4CG6Xu)`. Alle Dateien aus `dist/` hochladen (Overlay-Bilder werden dynamisch geladen!). Öffentlicher Link V5 nur mit Philips Okay ersetzen.
 - Galerie: Artefakt-Slug `26fa13a7-d8e2-4e18-b7fb-15d961d90eaf`, Projekt-Doc `claude/bilder-liste.md`.
 
 ## Story-Datei (Philips Textquelle, seit 20.11. abends)
