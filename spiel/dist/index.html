@@ -19,7 +19,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 
 /* ---------- Hintergrund ---------- */
 #kamera{position:absolute;inset:0;transition:transform 1.2s ease}
-#welt{position:absolute;inset:0;transition:filter 1.5s ease}
+#welt{position:absolute;inset:0;isolation:isolate;transition:filter 1.5s ease}
 .ebene{position:absolute;inset:0;opacity:0;transition:opacity .7s ease}
 .ebene.an{opacity:1}
 .ebene img,.ebene .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
@@ -660,6 +660,13 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 @media (max-height:520px){#sprungmenue{overflow:auto}#sprungmenue .liste{overflow:visible;flex:none}#sprungmenue .wegstart{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}}
 /* Patrick 26.11.: bei Schwarz am Handy blieb am Rand eine dünne Bildlinie stehen – Bild darunter nach dem Abblenden ganz ausblenden */
 #buehne:has(#schwarz.an) #welt{visibility:hidden;transition:visibility 0s 2s}
+
+/* V9.3: Haken hinter „Kausalität?!“ auf der alten Klausur */
+#klausur .kl-haken{position:absolute;left:72.6%;top:36.5%;width:6.5%;z-index:3}
+#klausur .kl-haken svg{width:100%;display:block;overflow:visible}
+#klausur .kl-haken path{fill:none;stroke:#2a3f9e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:90;stroke-dashoffset:90}
+#klausur .kl-haken.an path{transition:stroke-dashoffset .35s ease-out;stroke-dashoffset:0}
+#sprungmenue .kopf .neu{background:#2a6df4;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
 
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 /* V8.9 (Patrick 24.11., Animation 3): Handy kommt leicht schräg aus der Hand unten rechts, richtet sich auf, liegt ruhig in der Hand (minimales Wackeln);
@@ -3357,10 +3364,10 @@ Lynn: „Na, der Stift.“
 @bild N14 geste
 …
 Ich: „Ach so. Klar hab ich den noch.“
-@bild N14d gesicht
+@bild N14d schnitt
 Lynn: „Und? Schon alle vier Farben durch?“
 Ich: „Rot ist fast leer.“
-@bild N14s gesicht
+@bild N14s schnitt
 @warte .5
 @bild N14b gesicht
 @ton lynn_lacht1
@@ -3369,13 +3376,13 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 @abzeichen Rot ist fast leer
 @bild N14 gesicht
 @wenn gesungen
-  @bild N14c gesicht
+  @bild N14c schnitt
   Lynn: „Warst du das vorhin? Beim Lied?“
   Lynn: „Der so falsch gesungen hat?“
   …
   Ich: „Wow.“
   Ich: „Das tut weh.“
-  @bild N14s gesicht
+  @bild N14s schnitt
   @warte .5
   @bild N14b gesicht
   @ton lynn_lacht2
@@ -3517,7 +3524,7 @@ Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
   @musik lied dumpf
   Lynn: „Jetzt verpass ich’s doch.“
   …
-  @bild N14d gesicht
+  @bild N14d schnitt
   Lynn: „Egal.“
   @musik lied aus
 @sonst
@@ -3525,7 +3532,7 @@ Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
   Lynn: „Wichtig?“
   Ich: „Nah.“
 @ende
-@bild N14 gesicht
+@bild N14 schnitt
 @ton bzzz
 @effekt wackeln
 Bzzz. Nochmal.
@@ -3565,16 +3572,16 @@ Lynn: „Er sagt, über Nacht.“
 # V8.7 (D34)
 Irgendwann fragt sie, warum ich fast nicht gekommen wär.
 Ich erzähl ihr vom dritten Versuch.
-@bild N14c gesicht
+@bild N14c schnitt
 Lynn: „Dritter Versuch? Dann hast du ja zweimal nicht aufgegeben.“
-@bild N14 gesicht
+@bild N14 schnitt
 Lynn: „… Oder du bist einfach stur.“
 Ich: „Hartnäckig.“
 Lynn: „Hartnäckig? Du hast dich ja nicht mal getraut, mit mir zu reden.“
-@bild N14d gesicht
+@bild N14d schnitt
 Lynn: „Feigling.“
 Ich: „Hast du darauf auch gewettet?“
-@bild N14 gesicht
+@bild N14 schnitt
 Lynn: „Kein Kommentar.“
 @bild N14s gesicht
 @warte .5
@@ -3588,7 +3595,7 @@ Lynn: „Dritter Versuch.“
 Lynn: „Wie viele hast du denn noch?“
 Ich: „Letzter.“
 … !3
-@bild N14c gesicht
+@bild LNSe langsam
 Lynn: „Oh.“
 … !2
 Lynn: „Und dann stehst du hier. Auf einem Balkon.“
@@ -3600,6 +3607,7 @@ Ich: „Frag mich Montag.“
 Sie dreht ihren Becher in der Hand.
 Lynn: „Hm.“
 … !3
+@bild LNSt langsam
 Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
 Lynn: „Erste Beziehung. Drei Jahre.“
 Ich: „Shit.“
@@ -3612,10 +3620,10 @@ Lynn: „Was hätte ich machen sollen.“
 Lynn: „Hättest sie hören müssen.“
 … !3
 Ich: „Kann ich mir vorstellen.“
-@bild N14 gesicht
 Lynn: „Alle anderen waren an dem Abend am See.“
 Lynn: „Hab ich erst am nächsten Morgen gesehen. Auf Insta.“
 … !2
+@bild LNS gesicht
 Lynn: „War mir egal.“
 Lynn: „Bestanden hab ich trotzdem. Knapp.“
 … !2
@@ -3624,12 +3632,12 @@ Ich: „Bisschen was anderes, oder?“
 @bild N14d gesicht
 Lynn: „Bisschen.“
 … !3
-@bild N14 gesicht
+@bild N14 schnitt
 Ich: „Ich hatte nur so ein Gefühl.“
 … !3
 Lynn: „Man verpasst immer irgendwas.“
 Ich: „Fragt sich nur, was.“
-@bild N14d gesicht
+@bild N14d schnitt
 Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
 … !2
 Lynn: „… Naja.“
@@ -3638,7 +3646,7 @@ Lynn: „… Naja.“
 Tim!: „Lynn! Wir gehen!“
 … !1.5
 # V9.1 (Patrick 25.11.): sie winkt drinnen ab
-@bild N14w gesicht
+@bild N14w schnitt
 Lynn: „Geht schon mal.“
 … !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
@@ -3706,7 +3714,7 @@ Ich: „Hm?“
 Lynn: „Schon was vor?“
 … !2
 Ich: „Kommt drauf an, wer fragt.“
-@bild N34L
+@bild N34Ll
 Lynn: „Ich frag.“
 … !1.5
 Lynn: „Montagabend?“
@@ -5053,10 +5061,10 @@ Ich leg das Handy weg. Zwei Tage noch.
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
   @klausur
   … !2
-  @klausur aus
   ~ Kausalität.
-  @ton haken
-  @warte .8
+  @klausur haken
+  @warte 1
+  @klausur aus
 @ende
 @lernplan aus
 …
@@ -5109,8 +5117,9 @@ Ich leg es wieder hin.
 @effekt handylicht kurz
 @banner Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
 @warte 1.2
-? „Anschauen.“ -> SO4_STORYS
-? „Liegen lassen.“ -> SO4_LIEGEN
+# V9.3 (Patrick 27.11., Frage 24): keine zweite Wahl mehr – es leuchtet, er lässt es liegen (SO4_STORYS ruht)
+@warte 1
+-> SO4_LIEGEN
 
 == SO4_LIEGEN
 @banner aus
@@ -5522,10 +5531,8 @@ Ich schau nur, wie spät es ist.
 @handy wegwischen
 @warte 1.5
 @handy zu
-@wenn !(typ=="zuhause" && weg=="A")
-  -> MO_MORGEN
-@ende
--> MONTAG
+# V9.3 (Patrick 27.11.): Kaffee für alle, auch Lernweg
+-> MO_MORGEN
 
 # ---- Montag ----
 == MONTAG
@@ -6127,6 +6134,11 @@ const BILDER = {
   BALKON_LEER: { datei: "img/BALKON_LEER.webp", text: "Balkon leer, Lichterkette, Stadt (Gemini, V8.5 – Reserve)", stimmung: "balkon" },
   N34:  { datei: "img/N34.webp", text: "Er und Lynn von hinten auf dem Balkonboden, großes Fenster, Party drinnen (V8.8)", stimmung: "balkon" },
   N34v: { datei: "img/N34.webp", video: "vid/N34v.mp4", text: "Wie N34, als bewegter Hintergrund (Veo-Video, 4-s-Schleife, V8.8)", stimmung: "balkon" },
+  LNS:  { datei: "img/LNS.webp",  text: "Lynn nah, lächelt (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true },
+  LNSt: { datei: "img/LNSt.webp", text: "Lynn nah, traurig, Blick gesenkt (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true },
+  LNSe: { datei: "img/LNSe.webp", text: "Lynn nah, ernst (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true },
+  N34Ll: { datei: "img/N34Ll.webp", text: "Wie N34L, lächelt dezent (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true, blinzeln: "N34Llz" },
+  N34Llz: { datei: "img/N34Llz.webp", text: "N34Ll mit geschlossenen Augen", stimmung: "balkon", figur: true },
   N34L:  { datei: "img/N34L.webp",  text: "Lynn sitzt auf dem Balkonboden, schaut dich an, roter Becher (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
   N34Lt: { datei: "img/N34Lt.webp", text: "Wie N34L, sie trinkt und lächelt hinter dem Becher (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
   N34Ls: { datei: "img/N34Ls.webp", text: "Wie N34L, sie schaut in die Stadt (Gemini, Patrick 25.11.)", stimmung: "balkon", figur: true },
@@ -8217,11 +8229,14 @@ const Spiel = (() => {
     // Nur Unruhe-Blicke zählen (Bilanz „obwohl nichts Neues da war“ + Handy-Punkte): jeder zweite = 1 Punkt (höchstens 3).
     // Blicke bei roter Zahl geben nie einen Punkt (Elhai 2016: problematische, nicht häufige Nutzung).
     if (unruhe) { blick.leer++; if (blick.leer % 2 === 0 && blick.leer <= 6) V.punkte = (V.punkte || 0) + 1; }
-    Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
+    blickSeit = Date.now(); Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu(still) { if (!blick.offen) return; blick.offen = false; Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
+  // V9.3 (Patrick 27.11., Frage 29): Zeit verschwindet am Handy – jeder Blick +2 Min., wer lange drauf bleibt, verliert mehr (+1 je 20 s)
+  let blickSeit = 0, blickPlus = 0;
+  function blickZeit() { const sek = (Date.now() - blickSeit) / 1000; const n = 2 + Math.min(8, Math.floor(Math.max(0, sek - 10) / 20)); V.uhr += n; blickPlus += n; zeigeUhr(); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; blickZeit(); Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
@@ -8909,7 +8924,7 @@ const Spiel = (() => {
         if (teile[0] === 'springe') { await uhrSpringe(zeit(teile.slice(1).join(' '))); break; }
         if (teile[0] === 'laufen') { await uhrLaufen(zeit(teile.slice(1).join(' '))); break; }
         if (a.startsWith('+')) { const n = +wert(a.slice(1)) || 0; const von = V.uhr; V.uhr += n; zeigeUhr(); if (n > 0 && n <= 20 && V.uhr_zeigen && !schnell) { const g = gen, z = V.uhr; uhrAnim = g; uhrEl.textContent = uhrText(von); (async () => { for (let m = von + 1; m <= z && g === gen && uhrAnim === g && V.uhr === z; m++) { uhrEl.textContent = uhrText(m); await new Promise(r => setTimeout(r, 110)); } if (V.uhr === z) uhrEl.textContent = uhrText(); })(); } break; }   // Patrick 26.11. (B8): kurze Sprünge laufen sichtbar (im Hintergrund, hält nichts auf)
-        V.uhr = zeit(a); zeigeUhr(); break;
+        { const z = zeit(a); if (!(V.uhr > z && V.uhr - z <= blickPlus)) V.uhr = z; blickPlus = 0; } zeigeUhr(); break;   // V9.3: Handy-Minuten nicht wieder zurückdrehen
       }
       case 'karte': PR('karte', a); await karte(a); break;
       case 'bild': if (teile[1] === 'geste' && LYNN_POSEN.includes(teile[0])) gesteGeskriptet = true; await zeigeBild(teile[0], teile[1] || ''); break;
@@ -8924,7 +8939,10 @@ const Spiel = (() => {
         void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
         await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
       }
-      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
+      case 'klausur': if (a === 'haken') { // V9.3 (Patrick 27.11.): er hakt „Kausalität?!“ auf der alten Klausur ab
+          const kl = $('#klausur'); let h = kl.querySelector('.kl-haken'); if (!h) { h = document.createElement('div'); h.className = 'kl-haken'; h.innerHTML = '<svg viewBox="0 0 60 50"><path d="M5 27 L22 44 L56 5"/></svg>'; kl.appendChild(h); }
+          void h.offsetWidth; h.classList.add('an'); Ton.spiele('haken'); await warte(.6); break; }
+        $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const h = $('#klausur .kl-haken'); if (h) setTimeout(() => h.remove(), 600); } if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
       case 'zuruf': { Ton.spiele('jubel', { vol: .9 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); await text({ t: 'text', text: a, sprecher: 'Alle', schrei: true, auto: true, stil: '' }); await warte(.5); break; }
@@ -9118,6 +9136,13 @@ const Spiel = (() => {
   }
 
   // ---------------- Ablauf ----------------
+  // V9.3 (Patrick 27.11., Frage 28): Testversion – aktuelle Szene mit dem Stand von ihrem Anfang neu starten
+  let szeneStart = null;
+  function szeneNeu() {
+    if (!szeneStart) return null; const s = szeneStart;
+    neustart(s.name, V2 => { Object.keys(V2).forEach(k => delete V2[k]); Object.assign(V2, JSON.parse(s.V)); stack = s.stack.slice(); zeigeUhr(); });
+    return s.name;
+  }
   function springe(ziel) {
     if (labels[ziel] === undefined) { console.error('Sprungziel fehlt:', ziel); toast('Sprungziel fehlt: ' + ziel); pc = prog.length; return; }
     pc = labels[ziel];
@@ -9129,7 +9154,7 @@ const Spiel = (() => {
         pruef(g); const ins = prog[pc];
         if (DEBUG) dbgInfo(ins);
         switch (ins.t) {
-          case 'label': besuchtL.add(ins.name); pc++; break;
+          case 'label': besuchtL.add(ins.name); if (TESTMODUS) try { szeneStart = { name: ins.name, V: JSON.stringify(V), stack: stack.slice() }; } catch (e) { } pc++; break;
           case 'sprung': springe(ins.ziel); break;
           case 'text': await text(ins); pc++; break;
           case 'wahl': await wahl(ins); break;
@@ -9319,7 +9344,7 @@ const Spiel = (() => {
   return {
     init, uhrText, datumText, akku, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
+    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, szeneNeu, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };
 })();
 
@@ -9402,7 +9427,7 @@ Spiel.init();
   knopf.id = 'sprungknopf'; knopf.type = 'button'; knopf.textContent = '⏭'; knopf.title = 'Sprungmenü (nur Testversion)';
   const panel = document.createElement('div'); panel.id = 'sprungmenue';
   const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="zu" aria-label="Schließen">✕</button></div>
+  panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="neu">↺ Szene neu starten</button><button type="button" class="zu" aria-label="Schließen">✕</button></div>
     <div class="titel1">1 · Weg starten <small>(springt sofort an den Anfang des Wegs)</small></div>
     <div class="wegstart">${Object.entries(WEGE).map(([w, d]) => `<button type="button" data-start="${esc(w)}"><b>▶ ${esc(w)}</b><i>${esc(d.info)}</i></button>`).join('')}</div>
     <div class="titel1">2 · Oder Szene wählen <small>– gespielt als Weg:</small></div>
@@ -9421,6 +9446,7 @@ Spiel.init();
   panel.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.classList.contains('zu')) panel.classList.remove('an');
+    else if (b.classList.contains('neu')) { if (window.Ton) Ton.init(); Spiel._debug.szeneNeu(); panel.classList.remove('an'); }
     else if (b.dataset.tab) { tabNr = +b.dataset.tab; try { localStorage.setItem('dvw-sprung-tab', tabNr); } catch (x) { } tabsZeigen(); }
     else if (b.dataset.start) { const w = b.dataset.start; wegWahl = w; try { localStorage.setItem('dvw-sprung-weg', w); } catch (x) { } wegeZeigen(); const l = WEGE[w].start, k = kapitel.find(k => k.abs.some(a => a.szenen.includes(l))), a = k && k.abs.find(a => a.szenen.includes(l)); springen(l, k ? k.id : '', a ? a.name : '', WEGE[w].uhr); }
     else if (b.dataset.weg) { wegWahl = b.dataset.weg; try { localStorage.setItem('dvw-sprung-weg', wegWahl); } catch (x) { } wegeZeigen(); }

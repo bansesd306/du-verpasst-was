@@ -189,11 +189,14 @@ const Spiel = (() => {
     // Nur Unruhe-Blicke zählen (Bilanz „obwohl nichts Neues da war“ + Handy-Punkte): jeder zweite = 1 Punkt (höchstens 3).
     // Blicke bei roter Zahl geben nie einen Punkt (Elhai 2016: problematische, nicht häufige Nutzung).
     if (unruhe) { blick.leer++; if (blick.leer % 2 === 0 && blick.leer <= 6) V.punkte = (V.punkte || 0) + 1; }
-    Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
+    blickSeit = Date.now(); Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu(still) { if (!blick.offen) return; blick.offen = false; Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
+  // V9.3 (Patrick 27.11., Frage 29): Zeit verschwindet am Handy – jeder Blick +2 Min., wer lange drauf bleibt, verliert mehr (+1 je 20 s)
+  let blickSeit = 0, blickPlus = 0;
+  function blickZeit() { const sek = (Date.now() - blickSeit) / 1000; const n = 2 + Math.min(8, Math.floor(Math.max(0, sek - 10) / 20)); V.uhr += n; blickPlus += n; zeigeUhr(); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; blickZeit(); Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
@@ -881,7 +884,7 @@ const Spiel = (() => {
         if (teile[0] === 'springe') { await uhrSpringe(zeit(teile.slice(1).join(' '))); break; }
         if (teile[0] === 'laufen') { await uhrLaufen(zeit(teile.slice(1).join(' '))); break; }
         if (a.startsWith('+')) { const n = +wert(a.slice(1)) || 0; const von = V.uhr; V.uhr += n; zeigeUhr(); if (n > 0 && n <= 20 && V.uhr_zeigen && !schnell) { const g = gen, z = V.uhr; uhrAnim = g; uhrEl.textContent = uhrText(von); (async () => { for (let m = von + 1; m <= z && g === gen && uhrAnim === g && V.uhr === z; m++) { uhrEl.textContent = uhrText(m); await new Promise(r => setTimeout(r, 110)); } if (V.uhr === z) uhrEl.textContent = uhrText(); })(); } break; }   // Patrick 26.11. (B8): kurze Sprünge laufen sichtbar (im Hintergrund, hält nichts auf)
-        V.uhr = zeit(a); zeigeUhr(); break;
+        { const z = zeit(a); if (!(V.uhr > z && V.uhr - z <= blickPlus)) V.uhr = z; blickPlus = 0; } zeigeUhr(); break;   // V9.3: Handy-Minuten nicht wieder zurückdrehen
       }
       case 'karte': PR('karte', a); await karte(a); break;
       case 'bild': if (teile[1] === 'geste' && LYNN_POSEN.includes(teile[0])) gesteGeskriptet = true; await zeigeBild(teile[0], teile[1] || ''); break;
@@ -896,7 +899,10 @@ const Spiel = (() => {
         void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
         await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
       }
-      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
+      case 'klausur': if (a === 'haken') { // V9.3 (Patrick 27.11.): er hakt „Kausalität?!“ auf der alten Klausur ab
+          const kl = $('#klausur'); let h = kl.querySelector('.kl-haken'); if (!h) { h = document.createElement('div'); h.className = 'kl-haken'; h.innerHTML = '<svg viewBox="0 0 60 50"><path d="M5 27 L22 44 L56 5"/></svg>'; kl.appendChild(h); }
+          void h.offsetWidth; h.classList.add('an'); Ton.spiele('haken'); await warte(.6); break; }
+        $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const h = $('#klausur .kl-haken'); if (h) setTimeout(() => h.remove(), 600); } if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
       case 'zuruf': { Ton.spiele('jubel', { vol: .9 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); await text({ t: 'text', text: a, sprecher: 'Alle', schrei: true, auto: true, stil: '' }); await warte(.5); break; }
@@ -1090,6 +1096,13 @@ const Spiel = (() => {
   }
 
   // ---------------- Ablauf ----------------
+  // V9.3 (Patrick 27.11., Frage 28): Testversion – aktuelle Szene mit dem Stand von ihrem Anfang neu starten
+  let szeneStart = null;
+  function szeneNeu() {
+    if (!szeneStart) return null; const s = szeneStart;
+    neustart(s.name, V2 => { Object.keys(V2).forEach(k => delete V2[k]); Object.assign(V2, JSON.parse(s.V)); stack = s.stack.slice(); zeigeUhr(); });
+    return s.name;
+  }
   function springe(ziel) {
     if (labels[ziel] === undefined) { console.error('Sprungziel fehlt:', ziel); toast('Sprungziel fehlt: ' + ziel); pc = prog.length; return; }
     pc = labels[ziel];
@@ -1101,7 +1114,7 @@ const Spiel = (() => {
         pruef(g); const ins = prog[pc];
         if (DEBUG) dbgInfo(ins);
         switch (ins.t) {
-          case 'label': besuchtL.add(ins.name); pc++; break;
+          case 'label': besuchtL.add(ins.name); if (TESTMODUS) try { szeneStart = { name: ins.name, V: JSON.stringify(V), stack: stack.slice() }; } catch (e) { } pc++; break;
           case 'sprung': springe(ins.ziel); break;
           case 'text': await text(ins); pc++; break;
           case 'wahl': await wahl(ins); break;
@@ -1291,6 +1304,6 @@ const Spiel = (() => {
   return {
     init, uhrText, datumText, akku, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
+    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, szeneNeu, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };
 })();

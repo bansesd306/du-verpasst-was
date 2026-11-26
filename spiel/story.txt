@@ -1887,10 +1887,10 @@ Lynn: „Na, der Stift.“
 @bild N14 geste
 …
 Ich: „Ach so. Klar hab ich den noch.“
-@bild N14d gesicht
+@bild N14d schnitt
 Lynn: „Und? Schon alle vier Farben durch?“
 Ich: „Rot ist fast leer.“
-@bild N14s gesicht
+@bild N14s schnitt
 @warte .5
 @bild N14b gesicht
 @ton lynn_lacht1
@@ -1899,13 +1899,13 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 @abzeichen Rot ist fast leer
 @bild N14 gesicht
 @wenn gesungen
-  @bild N14c gesicht
+  @bild N14c schnitt
   Lynn: „Warst du das vorhin? Beim Lied?“
   Lynn: „Der so falsch gesungen hat?“
   …
   Ich: „Wow.“
   Ich: „Das tut weh.“
-  @bild N14s gesicht
+  @bild N14s schnitt
   @warte .5
   @bild N14b gesicht
   @ton lynn_lacht2
@@ -2047,7 +2047,7 @@ Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
   @musik lied dumpf
   Lynn: „Jetzt verpass ich’s doch.“
   …
-  @bild N14d gesicht
+  @bild N14d schnitt
   Lynn: „Egal.“
   @musik lied aus
 @sonst
@@ -2055,7 +2055,7 @@ Ich: „Aber mit Alkohol verzeih ich’s dir sogar.“
   Lynn: „Wichtig?“
   Ich: „Nah.“
 @ende
-@bild N14 gesicht
+@bild N14 schnitt
 @ton bzzz
 @effekt wackeln
 Bzzz. Nochmal.
@@ -2095,16 +2095,16 @@ Lynn: „Er sagt, über Nacht.“
 # V8.7 (D34)
 Irgendwann fragt sie, warum ich fast nicht gekommen wär.
 Ich erzähl ihr vom dritten Versuch.
-@bild N14c gesicht
+@bild N14c schnitt
 Lynn: „Dritter Versuch? Dann hast du ja zweimal nicht aufgegeben.“
-@bild N14 gesicht
+@bild N14 schnitt
 Lynn: „… Oder du bist einfach stur.“
 Ich: „Hartnäckig.“
 Lynn: „Hartnäckig? Du hast dich ja nicht mal getraut, mit mir zu reden.“
-@bild N14d gesicht
+@bild N14d schnitt
 Lynn: „Feigling.“
 Ich: „Hast du darauf auch gewettet?“
-@bild N14 gesicht
+@bild N14 schnitt
 Lynn: „Kein Kommentar.“
 @bild N14s gesicht
 @warte .5
@@ -2118,7 +2118,7 @@ Lynn: „Dritter Versuch.“
 Lynn: „Wie viele hast du denn noch?“
 Ich: „Letzter.“
 … !3
-@bild N14c gesicht
+@bild LNSe langsam
 Lynn: „Oh.“
 … !2
 Lynn: „Und dann stehst du hier. Auf einem Balkon.“
@@ -2130,6 +2130,7 @@ Ich: „Frag mich Montag.“
 Sie dreht ihren Becher in der Hand.
 Lynn: „Hm.“
 … !3
+@bild LNSt langsam
 Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
 Lynn: „Erste Beziehung. Drei Jahre.“
 Ich: „Shit.“
@@ -2142,10 +2143,10 @@ Lynn: „Was hätte ich machen sollen.“
 Lynn: „Hättest sie hören müssen.“
 … !3
 Ich: „Kann ich mir vorstellen.“
-@bild N14 gesicht
 Lynn: „Alle anderen waren an dem Abend am See.“
 Lynn: „Hab ich erst am nächsten Morgen gesehen. Auf Insta.“
 … !2
+@bild LNS gesicht
 Lynn: „War mir egal.“
 Lynn: „Bestanden hab ich trotzdem. Knapp.“
 … !2
@@ -2154,12 +2155,12 @@ Ich: „Bisschen was anderes, oder?“
 @bild N14d gesicht
 Lynn: „Bisschen.“
 … !3
-@bild N14 gesicht
+@bild N14 schnitt
 Ich: „Ich hatte nur so ein Gefühl.“
 … !3
 Lynn: „Man verpasst immer irgendwas.“
 Ich: „Fragt sich nur, was.“
-@bild N14d gesicht
+@bild N14d schnitt
 Lynn: „Hab ich mich heute natürlich noch gar nicht gefragt.“
 … !2
 Lynn: „… Naja.“
@@ -2168,7 +2169,7 @@ Lynn: „… Naja.“
 Tim!: „Lynn! Wir gehen!“
 … !1.5
 # V9.1 (Patrick 25.11.): sie winkt drinnen ab
-@bild N14w gesicht
+@bild N14w schnitt
 Lynn: „Geht schon mal.“
 … !3
 # V8.8 (7c): Balkonboden mit großem Fenster, drinnen bewegt sich die Party (Video-Schleife)
@@ -2236,7 +2237,7 @@ Ich: „Hm?“
 Lynn: „Schon was vor?“
 … !2
 Ich: „Kommt drauf an, wer fragt.“
-@bild N34L
+@bild N34Ll
 Lynn: „Ich frag.“
 … !1.5
 Lynn: „Montagabend?“
@@ -3583,10 +3584,10 @@ Ich leg das Handy weg. Zwei Tage noch.
   # Neben dem Lernplan liegt noch die alte Klausur. Er schiebt sie unter den Stapel.
   @klausur
   … !2
-  @klausur aus
   ~ Kausalität.
-  @ton haken
-  @warte .8
+  @klausur haken
+  @warte 1
+  @klausur aus
 @ende
 @lernplan aus
 …
@@ -3639,8 +3640,9 @@ Ich leg es wieder hin.
 @effekt handylicht kurz
 @banner Instagram | lena.xo | lena.xo hat 12 Fotos gepostet
 @warte 1.2
-? „Anschauen.“ -> SO4_STORYS
-? „Liegen lassen.“ -> SO4_LIEGEN
+# V9.3 (Patrick 27.11., Frage 24): keine zweite Wahl mehr – es leuchtet, er lässt es liegen (SO4_STORYS ruht)
+@warte 1
+-> SO4_LIEGEN
 
 == SO4_LIEGEN
 @banner aus
@@ -4052,10 +4054,8 @@ Ich schau nur, wie spät es ist.
 @handy wegwischen
 @warte 1.5
 @handy zu
-@wenn !(typ=="zuhause" && weg=="A")
-  -> MO_MORGEN
-@ende
--> MONTAG
+# V9.3 (Patrick 27.11.): Kaffee für alle, auch Lernweg
+-> MO_MORGEN
 
 # ---- Montag ----
 == MONTAG

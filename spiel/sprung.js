@@ -74,7 +74,7 @@
   knopf.id = 'sprungknopf'; knopf.type = 'button'; knopf.textContent = '⏭'; knopf.title = 'Sprungmenü (nur Testversion)';
   const panel = document.createElement('div'); panel.id = 'sprungmenue';
   const esc = t => t.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-  panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="zu" aria-label="Schließen">✕</button></div>
+  panel.innerHTML = `<div class="kopf"><b>Springen</b><span>Testversion</span><button type="button" class="neu">↺ Szene neu starten</button><button type="button" class="zu" aria-label="Schließen">✕</button></div>
     <div class="titel1">1 · Weg starten <small>(springt sofort an den Anfang des Wegs)</small></div>
     <div class="wegstart">${Object.entries(WEGE).map(([w, d]) => `<button type="button" data-start="${esc(w)}"><b>▶ ${esc(w)}</b><i>${esc(d.info)}</i></button>`).join('')}</div>
     <div class="titel1">2 · Oder Szene wählen <small>– gespielt als Weg:</small></div>
@@ -93,6 +93,7 @@
   panel.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.classList.contains('zu')) panel.classList.remove('an');
+    else if (b.classList.contains('neu')) { if (window.Ton) Ton.init(); Spiel._debug.szeneNeu(); panel.classList.remove('an'); }
     else if (b.dataset.tab) { tabNr = +b.dataset.tab; try { localStorage.setItem('dvw-sprung-tab', tabNr); } catch (x) { } tabsZeigen(); }
     else if (b.dataset.start) { const w = b.dataset.start; wegWahl = w; try { localStorage.setItem('dvw-sprung-weg', w); } catch (x) { } wegeZeigen(); const l = WEGE[w].start, k = kapitel.find(k => k.abs.some(a => a.szenen.includes(l))), a = k && k.abs.find(a => a.szenen.includes(l)); springen(l, k ? k.id : '', a ? a.name : '', WEGE[w].uhr); }
     else if (b.dataset.weg) { wegWahl = b.dataset.weg; try { localStorage.setItem('dvw-sprung-weg', wegWahl); } catch (x) { } wegeZeigen(); }
