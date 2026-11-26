@@ -6627,7 +6627,7 @@ const Ton = (() => {
     if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
       if (a) qs.push(a); }
     if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
-    if (welche === 'flow') { const a = quelle('lernflow', musikBus, { loop: true, vol: 1.25, einblenden: 4 }); if (a) qs.push(a); }   // Patrick 26.11.: eigenes Lied für den Lern-Flow
+    if (welche === 'flow') { const a = quelle('lernflow', musikBus, { loop: true, vol: .9, einblenden: 4 }); if (a) qs.push(a); }   // Patrick 26.11.: eigenes Lied für den Lern-Flow
     if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
     musik = { art: welche, qs };
