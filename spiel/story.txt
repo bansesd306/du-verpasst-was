@@ -893,7 +893,8 @@ Lena: „Leute, gleich kommt die Torte!“
 „V verkauft K ein Auto und verschweigt den Unfall …“
 # V9.1 (Patrick 26.11., D1): Flow klingt und sieht aus wie der Balkon – warmes Licht, ruhiges Lied ganz leise
 @effekt waermer
-@musik lofi leise
+# Patrick 26.11. abends: eigenes Lied für den Flow
+@musik flow sanft
 Easy.
 @anruf_unbemerkt Jonas
 @warte 2.5

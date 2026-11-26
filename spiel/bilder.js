@@ -368,6 +368,7 @@ const TOENE = {
   aufbau_lang:     { datei: "ton/aufbau_lang.mp3", vol: 1 },
   aufbau_shutdown: { datei: "ton/aufbau_shutdown.mp3", vol: 1 },   // V8.9 (Patrick 24.11.): wie aufbau_lang, Piepen steigt bis zum Woosh, am Ende harter Schnitt in die Stille   // Crashout Weg B: Rauschen baut sich auf, Piepsen, Woosh (8 s, aus Philips Woosh gebaut)
   tippen_laptop:   { datei: "ton/tippen_laptop.mp3", vol: 1 },   // Seminar (freesound_community, Philip)
+  lernflow:        { datei: "ton/lernflow.mp3", vol: 1 },   // Freitag Lern-Flow (Patrick 26.11., ersetzt dort das Lofi)
   lofi_melancholy: { datei: "ton/lofi_melancholy.mp3", vol: 1 }, // Balkon, wenn sie sich hinsetzen (zephiramusic, Philip)
   restaurant_lofi: { datei: "ton/restaurant_lofi.mp3", vol: 1 }, // Restaurant Lynn-Ende (alex-morgan, Philip)
   party_club2:     { datei: "ton/party_club2.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −2,5 dB     // zweiter Party-Song (mondamusic, Philip)

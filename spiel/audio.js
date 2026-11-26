@@ -23,7 +23,7 @@ const Ton = (() => {
     musikBus = ctx.createGain(); musikBus.connect(musikFilter); musikFilter.connect(musikGain); musikGain.connect(master);
     analyser = ctx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = .55; musikGain.connect(analyser); fftDaten = new Uint8Array(analyser.frequencyBinCount);
     // kurze Töne zuerst, Musik danach
-    const MUSIK = /^M\d|^mia$|Outro|lofi|restaurant|club2|ende_warm|tippen_laptop|lied/;
+    const MUSIK = /^M\d|^mia$|Outro|lofi|lernflow|restaurant|club2|ende_warm|tippen_laptop|lied/;
     const namen = Object.keys(TOENE).filter(k => eintrag(k).datei).sort((a, b) => (b === 'muffled_party') - (a === 'muffled_party') || MUSIK.test(a) - MUSIK.test(b));
     // V8.8 (G47): nicht alle ~45 Dateien gleichzeitig – Warteschlange mit 3 gleichzeitig
     let i = 0; const naechste = () => { if (i >= namen.length) return; lade(namen[i++]).then(naechste); };
@@ -121,7 +121,7 @@ const Ton = (() => {
 
   // ---------- Musik ----------
   const STUFEN = {
-    laut: [1, 18000], mittel: [.7, 9000], leise: [.45, 2600], dumpf: [.6, 380], tuer: [.55, 650], fern: [.22, 300], telefon: [.3, 1300],
+    laut: [1, 18000], mittel: [.7, 9000], leise: [.45, 2600], sanft: [.45, 14000], dumpf: [.6, 380], tuer: [.55, 650], fern: [.22, 300], telefon: [.3, 1300],
     still: [0, 18000], strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
   };
   function stelle(art, langsam) {
@@ -138,6 +138,7 @@ const Ton = (() => {
     if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
       if (a) qs.push(a); }
     if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
+    if (welche === 'flow') { const a = quelle('lernflow', musikBus, { loop: true, vol: 1.25, einblenden: 4 }); if (a) qs.push(a); }   // Patrick 26.11.: eigenes Lied für den Lern-Flow
     if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
     if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
     musik = { art: welche, qs };
@@ -146,7 +147,7 @@ const Ton = (() => {
   function musikStopp(sofort) {
     if (!musik) return; const m = musik; musik = null;
     if (sofort) { m.qs.forEach(q => q.stop()); return; }
-    m.qs.forEach(q => q.stop(1.2));   // V8.8 (G33): jede alte Spur einzeln ausblenden (neue Musik dreht den Bus sonst wieder hoch)
+    m.qs.forEach(q => q.stop(m.art === 'flow' ? 3.5 : 1.2));   // Flow-Lied weicher ausblenden   // V8.8 (G33): jede alte Spur einzeln ausblenden (neue Musik dreht den Bus sonst wieder hoch)
   }
   function lied(modus) {
     liedStopp();
@@ -193,7 +194,7 @@ const Ton = (() => {
       if (art === 'aus') { liedStopp(); return musikStopp(false); }
       if (art === 'lied') { if (opt === 'aus') return liedStopp(); return lied(opt); }
       if (art === 'fern') { musikStart('fern'); stelle('aufnahme'); return; }
-      if (art === 'spaet' || art === 'party' || art === 'club' || art === 'lofi') { musikStart(art); stelle(opt || 'laut'); return; }
+      if (art === 'spaet' || art === 'party' || art === 'club' || art === 'lofi' || art === 'flow') { musikStart(art); stelle(opt || 'laut'); return; }
       if (art === 'mia') { if (opt && /^\d/.test(opt)) { miaAb = +opt; if (musik && musik.art === 'mia') this.miaSpring(miaAb); else { musikStart('mia'); } stelle('laut'); } else stelle(opt || 'laut', true); return; }
     },
     musikStufe(art, langsam) { if (ctx) stelle(art, langsam); },
