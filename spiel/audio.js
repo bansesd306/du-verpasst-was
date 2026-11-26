@@ -83,7 +83,7 @@ const Ton = (() => {
     uhr: [['uhr', { vol: .55 }]],
     herzschlag: [['herzschlag', { vol: .5 }]],   // Gemini-Prüfung 26.11.: −5 dB
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
-    regen: [['regen_strasse', { vol: 1.2, lp: 2600 }]],   // Gemini-Prüfung 26.11.: +10 dB (war kaum hörbar)
+    regen: [['regen_strasse', { vol: .75, lp: 2600 }]],   // Gemini-Prüfung 26.11.: +6 dB (war kaum hörbar; +10 wäre Rauschen)
     oben: [['M1_party', { vol: .5, lp: 160 }]],
     bass_fern: [['M1_party', { vol: .28, lp: 160 }]],    // V8.9 (Patrick 24.11.): Freitag zu Hause – irgendwo wird gefeiert, kaum hörbar
     bass_leiser: [['M1_party', { vol: .16, lp: 140 }]],   // Gemini-Prüfung 26.11.: beide +5 dB, Tiefpass höher – war auf Laptops stumm   // ab ca. 23:30 noch leiser
@@ -223,9 +223,9 @@ const Ton = (() => {
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
     vibration(ort, o = {}) {
       if (!ctx || gesperrt) return 0;
-      // Gemini-Prüfung 26.11.: ~50-mal derselbe Klang wirkte mechanisch – jedes Mal leicht anders (Tonhöhe ±5 %, Lautstärke ±10 %,
-      // mal kurz-lang statt zwei gleich), insgesamt 1 dB leiser; Phantom-Vibration noch etwas leiser und dumpfer
-      const leise = (o.leise ? .5 : 1) * .9 * (.9 + Math.random() * .2) * (o.phantom ? .75 : 1); const dumpf = ort === 'tasche' || o.dumpf;
+      // Gemini-Prüfung 26.11.: ~50-mal derselbe Klang wirkte mechanisch – jedes Mal leicht anders (Tonhöhe ±5 %, Lautstärke ±8 %,
+      // mal kurz-lang statt zwei gleich), Lautstärke wie vorher (Patrick 26.11.: Handyton muss laut genug sein); Phantom etwas leiser und dumpfer
+      const leise = (o.leise ? .5 : 1) * (.92 + Math.random() * .16) * (o.phantom ? .85 : 1); const dumpf = ort === 'tasche' || o.dumpf;
       const rate = .95 + Math.random() * .1, art = Math.random();
       const zwei = (a) => { if (art < .3) { brumm(.25, .25, a, leise); brumm(.6, .5, a, leise); } else { brumm(.25, .4, a, leise); brumm(.7, .35, a, leise); } };
       let d = 0;

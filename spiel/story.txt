@@ -216,7 +216,7 @@ Bzzz.
 @effekt einfrieren
 Jonas. !2
 Mein bester Freund. Manchmal zumindest.
-Seit der Fünften. Nach beiden 5,0 stand er mit Pizza vor meiner Tür. Ungefragt.
+Seit der Fünften. Nach beiden 5,0ern stand er mit Pizza vor meiner Tür. Ungefragt.
 Der hält es halt nicht lange ohne seine große Liebe aus.
 @effekt einfrieren aus
 @handy chat Jonas
@@ -903,7 +903,7 @@ Manchmal ist es echt cool, Dinge zu verstehen.
 @musik party telefon
 @musik lied telefon
 Jonas!: „BRO. Wo bist du?!“
-Ich: „Zuhause. Ich lern.“
+Ich: „Zu Hause. Ich lern.“
 Jonas!: „Du lernst?! Es ist Freitag! Hier geht’s übel ab!“
 Jonas!: „Und Lynn hat nach dir gefragt.“
 Ich: „Du verarschst mich.“
@@ -1671,7 +1671,7 @@ Ich: „Kommt drauf an.“
 @warte 2.2
 @bild N35n gesicht
 Mia: „Wo warst du vorher?“
-Ich: „Zuhause.“
+Ich: „Zu Hause.“
 Mia: „Allein?“
 Ich: „Mit Schuldrecht.“
 @bild MIA_GRINST_c schnitt
