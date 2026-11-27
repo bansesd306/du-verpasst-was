@@ -426,11 +426,13 @@ const Spiel = (() => {
     if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .45 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
+    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .45 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
+    if (modus === 'zoom' || modus === 'schock') { neu.style.transform = 'scale(1.05)'; neu.style.transition += ', transform .4s cubic-bezier(.2,.9,.3,1)'; }   // V9.3c: Schnitt + kleiner Zoom (dynamisch) / + Lichtblitz (Schock)
     if (modus === 'ruck') { neu.style.transform = 'scale(1.09)'; neu.style.transition += ', transform .32s cubic-bezier(.2,.9,.3,1)'; }
     welt.appendChild(neu); void neu.offsetWidth; neu.classList.add('an');
+    if (modus === 'zoom' || modus === 'schock') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'schock' && !schnell) { const w = $('#weiss'); w.classList.remove('an', 'kurz'); void w.offsetWidth; w.classList.add('an', 'kurz'); } }
     if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
     if (modus === 'ran') alt.forEach(a => { const h = a.querySelector('.innen'); if (h) { h.style.transition = 'transform .7s ease-in'; h.style.transform = 'scale(1.1)'; } });
     umgebung(e);
@@ -444,7 +446,7 @@ const Spiel = (() => {
     fensterOverlay(e.fenster);
     { const h = $('#handylicht'); if (e.fernLicht) { h.style.setProperty('--fx', e.fernLicht[0]); h.style.setProperty('--fy', e.fernLicht[1]); } else { h.style.removeProperty('--fx'); h.style.removeProperty('--fy'); } }
     const hl = $('#handylicht .g'); if (e.handy) { const [x, y, w, h] = e.handy; Object.assign(hl.style, { left: x * 1920 + 'px', top: y * 1080 + 'px', width: w * 1920 + 'px', height: h * 1080 + 'px' }); }
-    if (modus === 'schnitt') return;
+    if (modus === 'schnitt' || modus === 'zoom' || modus === 'schock') return;
     await warte(Math.min(dauer, .5));
   }
   // ---------------- Gesichts-Varianten (Overlays) ----------------
