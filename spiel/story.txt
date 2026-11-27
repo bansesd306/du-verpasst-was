@@ -2118,7 +2118,7 @@ Lynn: „Dritter Versuch.“
 Lynn: „Wie viele hast du denn noch?“
 Ich: „Letzter.“
 … !3
-@bild LNSe langsam
+@bild LNSe schnitt
 Lynn: „Oh.“
 … !2
 Lynn: „Und dann stehst du hier. Auf einem Balkon.“
@@ -2130,7 +2130,7 @@ Ich: „Frag mich Montag.“
 Sie dreht ihren Becher in der Hand.
 Lynn: „Hm.“
 … !3
-@bild LNSt langsam
+@bild LNSt gesicht
 Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
 Lynn: „Erste Beziehung. Drei Jahre.“
 Ich: „Shit.“

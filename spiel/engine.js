@@ -368,7 +368,7 @@ const Spiel = (() => {
   }
   function vorladenAlle() {
     // in Spielreihenfolge: die Bilder, die als Erstes kommen, zuerst
-    const reihe = []; prog.forEach(p => { if (p.t === 'cmd' && p.name === 'bild') { const c = p.arg.split(/\s+/)[0]; const e = eintrag(c); if (e.datei && !reihe.includes(e.datei)) reihe.push(e.datei); if (e.blinzeln && BILDER[e.blinzeln]) reihe.push(BILDER[e.blinzeln].datei); } });
+    const reihe = []; prog.forEach(p => { if (p.t === 'cmd' && p.name === 'bild') { const c = p.arg.split(/\s+/)[0]; const e = eintrag(c); if (e.datei && !reihe.includes(e.datei)) reihe.push(e.datei); if (e.blinzeln && BILDER[e.blinzeln]) reihe.push(BILDER[e.blinzeln].datei); } }); if (typeof ZWISCHEN !== 'undefined') Object.values(ZWISCHEN).forEach(c => { if (BILDER[c] && !reihe.includes(BILDER[c].datei)) reihe.push(BILDER[c].datei); });
     // V8.8 (G52): nur Bilder, die das Skript irgendwo nennt (auch im Handy), nicht die ganze Liste
     const roh = document.getElementById('story').textContent;
     Object.keys(BILDER).forEach(k => { const e = eintrag(k); if (e.datei && !reihe.includes(e.datei) && new RegExp('(^|[\\s|])' + k + '($|[\\s|])', 'm').test(roh)) reihe.push(e.datei); });
@@ -387,6 +387,9 @@ const Spiel = (() => {
   })();
   let bildNr = 0;
   async function zeigeBild(code, modus = '') {
+    // V9.3b: Zwischenbild bei Gesichtswechseln (z. B. Lächeln → Lachen), damit es nicht springt
+    const zw = modus === 'gesicht' && !schnell && aktBild && typeof ZWISCHEN !== 'undefined' && ZWISCHEN[aktBild.code + '>' + code];
+    if (zw && BILDER[zw]) { await zeigeBild(zw, 'gesicht'); await warte(.32); }
     const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
     if (e.datei) {   // V8.9: Bild und seine Gesichts-Overlays zusammen abwarten
       const ovs = typeof OVERLAYS !== 'undefined' ? Object.keys(OVERLAYS).filter(k => OVERLAYS[k].basis === code).map(k => lade('img/' + k + '.webp')) : [];
