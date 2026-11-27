@@ -1564,6 +1564,8 @@ Ich steck es wieder ein.
   @setze ben
   @bild HB1 langsam
   Ben erzählt Lynn irgendwas. Sie lacht.
+  # V9.3d (Patrick 27.11.): kleiner Schreck-Wackler
+  @effekt wackeln
   @ton herzschlag vol.45
   @warte 1
   @ton herzschlag vol.4
@@ -2455,6 +2457,7 @@ Ich: „Ich … eigentlich wollt ich grad …“
   Lynn: „Jonas kommt. Lena und Ben. Mia ist wohl schon da.“
 @sonst
   Lynn: „Jonas kommt. Lena, Mia. Und Ben.“
+  @effekt wackeln
   @ton herzschlag vol.4
 @ende
 … !3

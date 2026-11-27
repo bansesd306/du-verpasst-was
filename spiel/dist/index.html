@@ -3041,6 +3041,8 @@ Ich steck es wieder ein.
   @setze ben
   @bild HB1 langsam
   Ben erzählt Lynn irgendwas. Sie lacht.
+  # V9.3d (Patrick 27.11.): kleiner Schreck-Wackler
+  @effekt wackeln
   @ton herzschlag vol.45
   @warte 1
   @ton herzschlag vol.4
@@ -3932,6 +3934,7 @@ Ich: „Ich … eigentlich wollt ich grad …“
   Lynn: „Jonas kommt. Lena und Ben. Mia ist wohl schon da.“
 @sonst
   Lynn: „Jonas kommt. Lena, Mia. Und Ben.“
+  @effekt wackeln
   @ton herzschlag vol.4
 @ende
 … !3
@@ -8478,7 +8481,7 @@ const Spiel = (() => {
     if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .45 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
+    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .45 : modus === 'weich' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'zoom' || modus === 'schock') { neu.style.transform = 'scale(1.05)'; neu.style.transition += ', transform .4s cubic-bezier(.2,.9,.3,1)'; }   // V9.3c: Schnitt + kleiner Zoom (dynamisch) / + Lichtblitz (Schock)
@@ -8786,24 +8789,24 @@ const Spiel = (() => {
     const g = gen;
     // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
     if (!schnell) {
-      const pos = Ton.miaPos(); if (pos < 0 || pos > 34 || pos < 26) Ton.miaSpring(29.2);
-      Ton.crescendo(6.2, 'laut');
+      const pos = Ton.miaPos(); if (pos < 0 || pos > 36 || pos < 30) Ton.miaSpring(33.2);   // V9.3d (Patrick 27.11.): Aufbau 4 s kürzer
+      Ton.crescendo(3.2, 'laut');
       $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 5s ease'; $('#schwarz').classList.remove('an');
       await zeigeBild('MM04', 'schnitt'); kamera.style.transition = 'transform 6s ease-in'; kamera.style.transform = 'scale(1.12)';
       while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .03) { await new Promise(r => setTimeout(r, 15)); pruef(g); }
       $('#schwarz').style.transition = '';
     }
-    if (schnell) vz += 6.2 + (MIA_BEATS[MIA_BEATS.length - 1] - MIA_BEATS[0]);
+    if (schnell) vz += 3.2 + (MIA_BEATS[44] - MIA_BEATS[0]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
     const schritte = []; let i = 0, f = 0;
-    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
+    while (i < 44) { /* V9.3d: ohne die letzten 7 Schläge */ const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
         const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
         schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); f++; } i += doppel ? 2 : 1; }
     const weiss = $('#weiss'); const strobo = $('#strobo');
     for (const [zeit, code] of schritte) {
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
       pruef(g);
-      await zeigeBild(code, 'schnitt');
+      await zeigeBild(code, schritte.indexOf(schritte.find(x => x[0] === zeit)) % 3 === 2 ? 'weich' : 'schnitt');   // V9.3d: jedes dritte Bild weich überblenden
       const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
