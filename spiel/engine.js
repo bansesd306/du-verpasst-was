@@ -460,8 +460,9 @@ const Spiel = (() => {
   function ovEl(k) { return welt.querySelector(`.ebene.an .ov-v[data-k="${k}"]`); }
   let gesichtFest = null;
   function gesicht(k, an = true) {
-    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => { if (e.dataset.k !== k || !an) e.classList.remove('fest'); });
-    gesichtFest = an ? k : null; const e = k && ovEl(k); if (e && an) e.classList.add('fest');
+    const ks = k ? String(k).split(',') : [];   // V9.3g: mehrere Teile gleichzeitig (z. B. Mund zuerst, Augen danach)
+    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => { if (!ks.includes(e.dataset.k) || !an) e.classList.remove('fest'); });
+    gesichtFest = an ? k : null; if (an) ks.forEach(x => { const e = ovEl(x); if (e) e.classList.add('fest'); });
   }
   // Mimik zwischendurch (kleines Lächeln o. ä.), nur wenn gerade niemand spricht
   setInterval(() => {
@@ -731,42 +732,48 @@ const Spiel = (() => {
 
   // ---------------- Mias Lied: Lichtshow im Takt ----------------
   const MIA_BEATS = [36.966, 37.314, 37.64, 37.988, 38.313, 38.638, 38.986, 39.311, 39.636, 39.985, 40.31, 40.658, 40.983, 41.308, 41.657, 41.982, 42.307, 42.655, 42.98, 43.305, 43.654, 43.979, 44.327, 44.652, 44.977, 45.325, 45.65, 45.976, 46.301, 46.626, 46.974, 47.322, 47.647, 47.996, 48.321, 48.646, 48.971, 49.319, 49.644, 49.993, 50.318, 50.643, 50.968, 51.316, 51.641, 51.989, 52.315, 52.64, 52.988, 53.313, 53.638];
-  async function montage() {
-    const g = gen;
-    // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
-    if (!schnell) {
-      const pos = Ton.miaPos(); if (pos < 0 || pos > 36 || pos < 30) Ton.miaSpring(33.2);   // V9.3d (Patrick 27.11.): Aufbau 4 s kürzer
-      Ton.crescendo(3.2, 'laut');
+  // V9.3f (Patrick 27.11.): Montage in zwei Teilen – Teil 1: Daumenkino, dann der Ausraster; Schwarzbild (Musik gedimmt); Teil 2: letzte Eskalation. Der Song läuft durch, Anfang und Ende wie vorher.
+  const MIA_TEIL1_BIS = 28, MIA_TEIL2_AB = 38;   // Schlag-Nummern
+  async function montage(arg = '') {
+    const g = gen; const teil = arg === '2' ? 2 : 1;
+    if (teil === 1 && !schnell) {
+      // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
+      const pos = Ton.miaPos(); if (pos < 0 || pos > 34 || pos < 26) Ton.miaSpring(29.2);
+      Ton.crescendo(6.2, 'laut');
       $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 5s ease'; $('#schwarz').classList.remove('an');
       await zeigeBild('MM04', 'schnitt'); kamera.style.transition = 'transform 6s ease-in'; kamera.style.transform = 'scale(1.12)';
       while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .03) { await new Promise(r => setTimeout(r, 15)); pruef(g); }
       $('#schwarz').style.transition = '';
     }
-    if (schnell) vz += 3.2 + (MIA_BEATS[44] - MIA_BEATS[0]);
+    if (teil === 2 && !schnell) Ton.crescendo(.8, 'laut');   // nach dem Schwarzbild wieder voll
+    const von = teil === 1 ? 0 : MIA_TEIL2_AB, bis = teil === 1 ? MIA_TEIL1_BIS : MIA_BEATS.length;
+    if (schnell) vz += (teil === 1 ? 6.2 : 0) + (MIA_BEATS[Math.min(bis, MIA_BEATS.length) - 1] - MIA_BEATS[von]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
-    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // V9.3e (Patrick 27.11.): erst lässig wippen (Daumenkino), dann wild
-    const schritte = []; let i = 0, f = 0;
-    while (i < 44) { /* V9.3d: ohne die letzten 7 Schläge */ const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
-        const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
-        if (i < 12) { schritte.push([MIA_BEATS[i], DK[f % DK.length]]); f++; } else schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); } i += doppel ? 2 : 1; }
+    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // erst lässig wippen (Daumenkino), dann wild
+    const schritte = []; let i = von, f = 0;
+    while (i < bis) { const doppel = !(i >= 16 && i < 24) && !(i >= 40);
+      const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));   // V9.0: kein Bild zweimal in den letzten 5 Schritten
+      schritte.push([MIA_BEATS[i], teil === 1 && i < 12 ? DK[f++ % DK.length] : frei[Math.random() * frei.length | 0]]); i += teil === 2 ? 1 : doppel ? 2 : 1; }   // Teil 2: jeder Schlag ein Bild
     const weiss = $('#weiss'); const strobo = $('#strobo');
+    let n = 0; const jetzt = teil === 2 && !schnell ? Ton.miaPos() : -1;
     for (const [zeit, code] of schritte) {
+      if (jetzt >= 0 && zeit < jetzt) continue;   // V9.3g: wer beim Gedanken länger gebraucht hat, überspringt schon vergangene Schläge
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
-      pruef(g);
+      pruef(g); n++;
       const dk = code.startsWith('MD');
-      await zeigeBild(code, dk || schritte.indexOf(schritte.find(x => x[0] === zeit)) % 3 === 2 ? 'weich' : 'schnitt');
-      if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (schritte.findIndex(x => x[0] === zeit) % 2) * .015) + ')'; continue; }   // V9.3d: jedes dritte Bild weich überblenden
-      const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
+      await zeigeBild(code, dk || (teil === 1 && n % 3 === 0) ? 'weich' : 'schnitt');   // jedes dritte Bild weich überblenden
+      if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (n % 2) * .015) + ')'; continue; }
+      const z = 1.04 + Math.random() * (teil === 2 ? .34 : .22), x = (Math.random() - .5) * (teil === 2 ? 12 : 8), y = (Math.random() - .5) * 6, r = (Math.random() - .5) * (teil === 2 ? 7 : 4);
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
       welt.classList.remove('spiegel');   // V9.0: Mia nicht mehr spiegeln (wirkte wie Doppelbild)
-      if (Math.random() < .6) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
-      // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze
-      if (!schnell && Math.random() < .42) { const n = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= n; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
+      if (Math.random() < (teil === 2 ? .9 : .6)) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
+      // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze (im letzten Teil öfter)
+      if (!schnell && Math.random() < (teil === 2 ? .75 : .42)) { const m = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= m; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
       B.style.setProperty('--farbe', ['#ff3fa4', '#7a5cff', '#00d1ff', '#ffb000'][Math.random() * 4 | 0]);
       if (schnell) await warte(.05);
     }
-    welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = '';
+    if (teil === 2) { welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = ''; }
   }
 
   // ---------------- Lebendige Umgebung ----------------
@@ -900,7 +907,7 @@ const Spiel = (() => {
       case 'schwarz': zeigeTextbox(false); $('#schwarz').classList.toggle('langsam', a === 'langsam'); $('#schwarz').style.transition = a === 'schnitt' ? 'none' : ''; $('#schwarz').classList.add('an'); await warte(a === 'langsam' ? 1.8 : a === 'schnitt' ? .05 : .5); $('#schwarz').style.transition = ''; break;
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
-      case 'montage': await montage(); break;
+      case 'montage': await montage(a); break;
       case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
         // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
         const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');

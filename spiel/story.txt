@@ -1831,11 +1831,18 @@ Alle Hände oben. Meine nicht.
 
 == TANZ_SHOW
 @montage
+# V9.3f (Patrick 27.11.): nach dem Ausraster Schwarzbild, Musik gedimmt, Patricks Jinx-Gedanke, dann die letzte Eskalation
+@musik mia leise langsam
+@schwarz
+@warte .8
+~ Fehlen nur die blauen Haare.
+@montage 2
 ~ Hm.
 … !1.5
-~ Fehlen nur die blauen Haare.
 @bild N35f schnitt
-@gesicht N35fl 1.3
+# V9.3g (Patrick 27.11.): Mund zuerst, Augen/Brauen kurz danach – nicht alles auf einmal
+@gesicht N35flm .45
+@gesicht N35flm,N35fla 1
 @gesicht N35fg .6
 @gesicht aus
 Mia: „So.“

@@ -3308,11 +3308,18 @@ Alle Hände oben. Meine nicht.
 
 == TANZ_SHOW
 @montage
+# V9.3f (Patrick 27.11.): nach dem Ausraster Schwarzbild, Musik gedimmt, Patricks Jinx-Gedanke, dann die letzte Eskalation
+@musik mia leise langsam
+@schwarz
+@warte .8
+~ Fehlen nur die blauen Haare.
+@montage 2
 ~ Hm.
 … !1.5
-~ Fehlen nur die blauen Haare.
 @bild N35f schnitt
-@gesicht N35fl 1.3
+# V9.3g (Patrick 27.11.): Mund zuerst, Augen/Brauen kurz danach – nicht alles auf einmal
+@gesicht N35flm .45
+@gesicht N35flm,N35fla 1
 @gesicht N35fg .6
 @gesicht aus
 Mia: „So.“
@@ -6252,7 +6259,7 @@ const BILDER = {
 //   TÖNE: Name → Datei (leer = still). vol = Lautstärke (1 = normal)
 //   Neue Datei: in den Ordner ton/ legen und hier eintragen.
 // =====================================================================
-const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}, "N35ns": {"basis": "N35n", "box": [0.5948, 0.35, 0.1115, 0.1676]}, "N35ss": {"basis": "N35s", "box": [0.6036, 0.3498, 0.0964, 0.166]}, "MIA_GRINST_cs": {"basis": "MIA_GRINST_c", "box": [0.4526, 0.3639, 0.1031, 0.1611]}, "N35bes": {"basis": "N35be", "box": [0.5917, 0.35, 0.1292, 0.1694]}, "N35ts": {"basis": "N35t", "box": [0.599, 0.3537, 0.0948, 0.1565]}, "LNN2z": {"basis": "N14c", "box": [0.4042, 0.2948, 0.199, 0.1297]}, "LNL2z": {"basis": "N14d", "box": [0.4047, 0.2463, 0.1974, 0.1772]}, "N14bez": {"basis": "N14be", "box": [0.4828, 0.2593, 0.1672, 0.1139]}, "LNN2s": {"basis": "N14c", "box": [0.4286, 0.4487, 0.1505, 0.1959]}, "LNSez": {"basis": "LNSe", "box": [0.3979, 0.2836, 0.2026, 0.1511]}};
+const OVERLAYS = {"B12z": {"basis": "B12", "box": [0.4099, 0.2929, 0.1953, 0.1716]}, "B12g": {"basis": "B12", "box": [0.4146, 0.3946, 0.1896, 0.2295]}, "B12s": {"basis": "B12", "box": [0.4427, 0.4748, 0.1349, 0.2491]}, "N13Lz1": {"basis": "N13L", "box": [0.5974, 0.2276, 0.1766, 0.2659]}, "N13Lz2": {"basis": "N13L", "box": [0.2792, 0.2659, 0.101, 0.1203]}, "N13Ls": {"basis": "N13L", "box": [0.2844, 0.3526, 0.1042, 0.1549]}, "B12Az": {"basis": "B12A", "box": [0.2938, 0.3611, 0.0786, 0.0509]}, "B12Ag": {"basis": "B12A", "box": [0.5589, 0.162, 0.1604, 0.4185]}, "N35cz": {"basis": "N35c", "box": [0.5359, 0.237, 0.2042, 0.2046]}, "N35cs": {"basis": "N35c", "box": [0.5776, 0.3898, 0.1646, 0.2556]}, "N35ck": {"basis": "N35c", "box": [0.5318, 0.2333, 0.2151, 0.1972]}, "N35bg": {"basis": "N35b", "box": [0.5698, 0.2843, 0.1427, 0.1741]}, "N35bs": {"basis": "N35b", "box": [0.5818, 0.3204, 0.1406, 0.2194]}, "N35fl": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35fg": {"basis": "N35f", "box": [0.3688, 0.2287, 0.2594, 0.45]}, "N35fgz": {"basis": "N35f", "box": [0.3682, 0.2278, 0.2625, 0.4519]}, "N19z": {"basis": "N19", "box": [0.5188, 0.2139, 0.2068, 0.2009]}, "N19s": {"basis": "N19", "box": [0.5094, 0.1769, 0.2224, 0.4352]}, "N19t": {"basis": "N19", "box": [0.5089, 0.1787, 0.1901, 0.4213]}, "N19l": {"basis": "N19", "box": [0.5193, 0.1917, 0.1786, 0.3278]}, "N20g": {"basis": "N20", "box": [0.5354, 0.2333, 0.0891, 0.1722]}, "LDz": {"basis": "LD1", "box": [0.4354, 0.188, 0.1307, 0.1204]}, "LDs": {"basis": "LD1", "box": [0.4615, 0.2907, 0.0823, 0.1435]}, "LD2": {"basis": "LD1", "box": [0.4172, 0.0435, 0.1781, 0.3944]}, "LD3": {"basis": "LD1", "box": [0.4375, 0.6287, 0.2839, 0.3713]}, "LD4": {"basis": "LD1", "box": [0.2484, 0.8204, 0.2297, 0.1796]}, "LDw": {"basis": "LD1", "box": [0.4328, 0.0954, 0.1396, 0.313]}, "LDa": {"basis": "LD1", "box": [0.438, 0.1574, 0.1307, 0.1213]}, "LDh": {"basis": "LD1", "box": [0.3766, 0.263, 0.2823, 0.5546]}, "N37z": {"basis": "N37", "box": [0.3932, 0.1546, 0.1115, 0.1213]}, "N37s": {"basis": "N37", "box": [0.401, 0.225, 0.1021, 0.1741]}, "N37b": {"basis": "N37", "box": [0.3693, 0.0287, 0.1365, 0.3148]}, "N38bz": {"basis": "N38b", "box": [0.2135, 0.262, 0.1391, 0.113]}, "N38bl": {"basis": "N38b", "box": [0.2115, 0.2444, 0.1401, 0.2861]}, "TV3": {"basis": "TV1", "box": [0.4682, 0.1685, 0.0693, 0.0972]}, "LENA_NAH_z": {"basis": "LENA_NAH", "box": [0.4495, 0.2972, 0.1734, 0.1694]}, "LENA_NAH_s": {"basis": "LENA_NAH", "box": [0.4557, 0.2685, 0.1578, 0.3611]}, "LENA_NAH_l": {"basis": "LENA_NAH", "box": [0.4547, 0.2685, 0.1526, 0.3611]}, "N19nz": {"basis": "N19n", "box": [0.5292, 0.2352, 0.1922, 0.1435]}, "N19nl": {"basis": "N19n", "box": [0.5245, 0.3426, 0.0573, 0.1333]}, "N14zo": {"basis": "N14", "box": [0.5766, 0.2108, 0.1505, 0.1129]}, "N35ns": {"basis": "N35n", "box": [0.5948, 0.35, 0.1115, 0.1676]}, "N35ss": {"basis": "N35s", "box": [0.6036, 0.3498, 0.0964, 0.166]}, "MIA_GRINST_cs": {"basis": "MIA_GRINST_c", "box": [0.4526, 0.3639, 0.1031, 0.1611]}, "N35bes": {"basis": "N35be", "box": [0.5917, 0.35, 0.1292, 0.1694]}, "N35ts": {"basis": "N35t", "box": [0.599, 0.3537, 0.0948, 0.1565]}, "LNN2z": {"basis": "N14c", "box": [0.4042, 0.2948, 0.199, 0.1297]}, "LNL2z": {"basis": "N14d", "box": [0.4047, 0.2463, 0.1974, 0.1772]}, "N14bez": {"basis": "N14be", "box": [0.4828, 0.2593, 0.1672, 0.1139]}, "LNN2s": {"basis": "N14c", "box": [0.4286, 0.4487, 0.1505, 0.1959]}, "LNSez": {"basis": "LNSe", "box": [0.3979, 0.2836, 0.2026, 0.1511]}, "N35fla": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}, "N35flm": {"basis": "N35f", "box": [0.3672, 0.112, 0.2755, 0.6861]}};
 // Gesichts-Varianten pro Bild: blink (Augen zu), spricht {Sprecher: Variante}, mimik (gelegentlich, wenn niemand spricht)
 const VARIANTEN = {
   N35t: { spricht: { Mia: "N35ts" } },   // V8.9 Gemini-Mund
@@ -8519,8 +8526,9 @@ const Spiel = (() => {
   function ovEl(k) { return welt.querySelector(`.ebene.an .ov-v[data-k="${k}"]`); }
   let gesichtFest = null;
   function gesicht(k, an = true) {
-    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => { if (e.dataset.k !== k || !an) e.classList.remove('fest'); });
-    gesichtFest = an ? k : null; const e = k && ovEl(k); if (e && an) e.classList.add('fest');
+    const ks = k ? String(k).split(',') : [];   // V9.3g: mehrere Teile gleichzeitig (z. B. Mund zuerst, Augen danach)
+    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => { if (!ks.includes(e.dataset.k) || !an) e.classList.remove('fest'); });
+    gesichtFest = an ? k : null; if (an) ks.forEach(x => { const e = ovEl(x); if (e) e.classList.add('fest'); });
   }
   // Mimik zwischendurch (kleines Lächeln o. ä.), nur wenn gerade niemand spricht
   setInterval(() => {
@@ -8790,42 +8798,48 @@ const Spiel = (() => {
 
   // ---------------- Mias Lied: Lichtshow im Takt ----------------
   const MIA_BEATS = [36.966, 37.314, 37.64, 37.988, 38.313, 38.638, 38.986, 39.311, 39.636, 39.985, 40.31, 40.658, 40.983, 41.308, 41.657, 41.982, 42.307, 42.655, 42.98, 43.305, 43.654, 43.979, 44.327, 44.652, 44.977, 45.325, 45.65, 45.976, 46.301, 46.626, 46.974, 47.322, 47.647, 47.996, 48.321, 48.646, 48.971, 49.319, 49.644, 49.993, 50.318, 50.643, 50.968, 51.316, 51.641, 51.989, 52.315, 52.64, 52.988, 53.313, 53.638];
-  async function montage() {
-    const g = gen;
-    // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
-    if (!schnell) {
-      const pos = Ton.miaPos(); if (pos < 0 || pos > 36 || pos < 30) Ton.miaSpring(33.2);   // V9.3d (Patrick 27.11.): Aufbau 4 s kürzer
-      Ton.crescendo(3.2, 'laut');
+  // V9.3f (Patrick 27.11.): Montage in zwei Teilen – Teil 1: Daumenkino, dann der Ausraster; Schwarzbild (Musik gedimmt); Teil 2: letzte Eskalation. Der Song läuft durch, Anfang und Ende wie vorher.
+  const MIA_TEIL1_BIS = 28, MIA_TEIL2_AB = 38;   // Schlag-Nummern
+  async function montage(arg = '') {
+    const g = gen; const teil = arg === '2' ? 2 : 1;
+    if (teil === 1 && !schnell) {
+      // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
+      const pos = Ton.miaPos(); if (pos < 0 || pos > 34 || pos < 26) Ton.miaSpring(29.2);
+      Ton.crescendo(6.2, 'laut');
       $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 5s ease'; $('#schwarz').classList.remove('an');
       await zeigeBild('MM04', 'schnitt'); kamera.style.transition = 'transform 6s ease-in'; kamera.style.transform = 'scale(1.12)';
       while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .03) { await new Promise(r => setTimeout(r, 15)); pruef(g); }
       $('#schwarz').style.transition = '';
     }
-    if (schnell) vz += 3.2 + (MIA_BEATS[44] - MIA_BEATS[0]);
+    if (teil === 2 && !schnell) Ton.crescendo(.8, 'laut');   // nach dem Schwarzbild wieder voll
+    const von = teil === 1 ? 0 : MIA_TEIL2_AB, bis = teil === 1 ? MIA_TEIL1_BIS : MIA_BEATS.length;
+    if (schnell) vz += (teil === 1 ? 6.2 : 0) + (MIA_BEATS[Math.min(bis, MIA_BEATS.length) - 1] - MIA_BEATS[von]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
-    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // V9.3e (Patrick 27.11.): erst lässig wippen (Daumenkino), dann wild
-    const schritte = []; let i = 0, f = 0;
-    while (i < 44) { /* V9.3d: ohne die letzten 7 Schläge */ const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
-        const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
-        if (i < 12) { schritte.push([MIA_BEATS[i], DK[f % DK.length]]); f++; } else schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); } i += doppel ? 2 : 1; }
+    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // erst lässig wippen (Daumenkino), dann wild
+    const schritte = []; let i = von, f = 0;
+    while (i < bis) { const doppel = !(i >= 16 && i < 24) && !(i >= 40);
+      const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));   // V9.0: kein Bild zweimal in den letzten 5 Schritten
+      schritte.push([MIA_BEATS[i], teil === 1 && i < 12 ? DK[f++ % DK.length] : frei[Math.random() * frei.length | 0]]); i += teil === 2 ? 1 : doppel ? 2 : 1; }   // Teil 2: jeder Schlag ein Bild
     const weiss = $('#weiss'); const strobo = $('#strobo');
+    let n = 0; const jetzt = teil === 2 && !schnell ? Ton.miaPos() : -1;
     for (const [zeit, code] of schritte) {
+      if (jetzt >= 0 && zeit < jetzt) continue;   // V9.3g: wer beim Gedanken länger gebraucht hat, überspringt schon vergangene Schläge
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
-      pruef(g);
+      pruef(g); n++;
       const dk = code.startsWith('MD');
-      await zeigeBild(code, dk || schritte.indexOf(schritte.find(x => x[0] === zeit)) % 3 === 2 ? 'weich' : 'schnitt');
-      if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (schritte.findIndex(x => x[0] === zeit) % 2) * .015) + ')'; continue; }   // V9.3d: jedes dritte Bild weich überblenden
-      const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
+      await zeigeBild(code, dk || (teil === 1 && n % 3 === 0) ? 'weich' : 'schnitt');   // jedes dritte Bild weich überblenden
+      if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (n % 2) * .015) + ')'; continue; }
+      const z = 1.04 + Math.random() * (teil === 2 ? .34 : .22), x = (Math.random() - .5) * (teil === 2 ? 12 : 8), y = (Math.random() - .5) * 6, r = (Math.random() - .5) * (teil === 2 ? 7 : 4);
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
       welt.classList.remove('spiegel');   // V9.0: Mia nicht mehr spiegeln (wirkte wie Doppelbild)
-      if (Math.random() < .6) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
-      // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze
-      if (!schnell && Math.random() < .42) { const n = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= n; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
+      if (Math.random() < (teil === 2 ? .9 : .6)) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
+      // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze (im letzten Teil öfter)
+      if (!schnell && Math.random() < (teil === 2 ? .75 : .42)) { const m = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= m; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
       B.style.setProperty('--farbe', ['#ff3fa4', '#7a5cff', '#00d1ff', '#ffb000'][Math.random() * 4 | 0]);
       if (schnell) await warte(.05);
     }
-    welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = '';
+    if (teil === 2) { welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = ''; }
   }
 
   // ---------------- Lebendige Umgebung ----------------
@@ -8959,7 +8973,7 @@ const Spiel = (() => {
       case 'schwarz': zeigeTextbox(false); $('#schwarz').classList.toggle('langsam', a === 'langsam'); $('#schwarz').style.transition = a === 'schnitt' ? 'none' : ''; $('#schwarz').classList.add('an'); await warte(a === 'langsam' ? 1.8 : a === 'schnitt' ? .05 : .5); $('#schwarz').style.transition = ''; break;
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
       case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
-      case 'montage': await montage(); break;
+      case 'montage': await montage(a); break;
       case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
         // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
         const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');
