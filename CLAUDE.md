@@ -1,6 +1,7 @@
 # „Du verpasst was.“ – Visual Novel zu FoMO (Philip, KSH München, Abgabe Mo 30.11.)
 
 **Neuer Chat/Account? Zuerst `docs/00_START_HIER.md` lesen** (Bauliste V8.9, Entscheidungen, Bilder, Arbeitsweise).
+## ÜBERGABE: zuerst `docs/UEBERGABE.md` lesen (Stand, offene Punkte, Regeln)
 
 ## Einrichten in einer neuen Sitzung
 `bash setup.sh` → verlinkt `spiel/` nach `/home/claude/game` und `tools/` nach `/home/claude/tools` (alle Skripte nutzen diese Pfade).
@@ -17,7 +18,7 @@
 `cd spiel/dist && python3 -m http.server 8765`, dann `python3 spiel/t8.py` (alle Wege, Spielzeit `vz`; `K=1` wenn nebenbei hochskaliert wird, sonst stürzt Chrome wegen Speicher ab) bzw. `t_echt.py WEG` (Echtzeit). Szenen sichtbar prüfen: `t_film.py LABEL '{"typ":"zuhause"}' SCHRITTE /tmp/x` + `t_sheet.py /tmp/x 1,2,3 /tmp/bogen.jpg`; Endbildschirme `t_ende.py`.
 
 ## Veröffentlichen
-- Test-Link (privat): Artefakt-Slug `5d6f857a-23db-4da8-8501-add017b70699`. Alle Dateien aus `dist/` hochladen (Overlay-Bilder werden dynamisch geladen!). Öffentlicher Link V5 nur mit Philips Okay ersetzen.
+- Test-Link (privat): Artefakt-Slug `2nowNrHNp443dXNKWcG6QF (seit 26.11.; davor 8WcdYdUJ56NqUcna4CG6Xu)`. Alle Dateien aus `dist/` hochladen (Overlay-Bilder werden dynamisch geladen!). Öffentlicher Link V5 nur mit Philips Okay ersetzen.
 - Galerie: Artefakt-Slug `26fa13a7-d8e2-4e18-b7fb-15d961d90eaf`, Projekt-Doc `claude/bilder-liste.md`.
 
 ## Story-Datei (Philips Textquelle, seit 20.11. abends)
@@ -30,7 +31,7 @@
 `proc/v8_prep.py [ABSCHNITT]` → `bilder_neu/v8_src/` → `tools/upscale_v8_lauf.sh CODES…` (ein Prozess pro Bild, ncnn hält sonst Speicher) → `bilder_neu/v8_hq/` → `proc/v8_finish.py` (Spielbilder + Gesichts-Overlays, schreibt OVERLAYS in bilder.js). v8_src/v8_hq sind nicht im Repo.
 
 ## Regeln (Philip)
-- Antworten auf Deutsch. Nur erfundene Namen. Feedback zu Philips Texten fair, aber relativ hart.
+- Antworten auf Deutsch. ~~Nur erfundene Namen~~ (gilt nicht mehr, Philip 24.11.: echte Namen wie „drachenlordofficial“ erlaubt). Feedback zu Philips Texten fair, aber relativ hart.
 - ElevenLabs nur nach Rückfrage. Keine Weichzeichner über Bilder. Mia in Montagen nie verkleinern.
 - Stand: V8.8 gebaut (22.11. abends), siehe Projekt-Doc `claude/v8-8-stand-bau.md`; davor `claude/v8-7-stand-bau.md`. Ziele: `claude/ziele.md`.
 - V8.8-Bildwerkzeug: `proc/v88_bilder.py [a1|a2|neu|tim|handy|balkon|ov]` (wiederholbar; Originale vor dem Aufhellen in `bilder_neu/v88_vorhell/`). Balkonboden: N34/N34a1/N34a2/N34b auf den Bildausschnitt des Videos `dist/vid/N34v.mp4` gebracht (4-s-Schleife, Ton aus).

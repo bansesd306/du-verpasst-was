@@ -8,14 +8,14 @@ const Rahmen = (() => {
   const bw = document.getElementById('zimmer');
   const $ = id => document.getElementById(id === 'bw' ? 'zimmer' : 'z-' + id);
   const reduziert = matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const ENDEN = ['Leiser', 'Hier oder da', 'Blaues Licht'];
+  const ENDEN = ['Leiser', 'Blaues Licht', 'Montagabend'];   // V8.9: ein Name pro Schluss (Pizza / Jonas schreibt / Lynn)
   const TOENUNG = {
     'Leiser': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(90,110,220,.18),transparent 70%)',
-    'Hier oder da': 'radial-gradient(ellipse 700px 500px at 800px 760px,rgba(240,160,64,.14),transparent 70%)',
-    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)'
+    'Blaues Licht': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(54,180,255,.28),transparent 70%)',
+    'Montagabend': 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'
   };
   // Handy auf dem Tisch je Ende: umgedreht / meldet sich ab und zu / Display dauerhaft an
-  const HANDY = { 'Leiser': 'unten', 'Hier oder da': 'oben', 'Blaues Licht': 'hell' };
+  const HANDY = { 'Leiser': 'unten', 'Blaues Licht': 'hell', 'Montagabend': 'unten' };
   const T = (k, d) => (api && api.TEXTE[k] != null && api.TEXTE[k] !== '') ? api.TEXTE[k] : d;
   const S = () => api.S();
   // Abzeichen: [Name, Symbol, Farbe 1, Farbe 2, was man getan hat, vager Hinweis]
@@ -27,6 +27,7 @@ const Rahmen = (() => {
 
   // Zeitpläne, damit Wechsel sauber abbrechen
   let plaene = [];
+  let verpasstPlan = null, verpasstLauf = null;
   function plan(fn, ms) { const id = setTimeout(fn, ms); plaene.push(id); return id; }
   function planStopp() { plaene.forEach(clearTimeout); plaene = []; }
 
@@ -105,6 +106,7 @@ const Rahmen = (() => {
   // Das Element startet sofort (Autoplay-Versuch); sobald Web Audio läuft und die Datei dekodiert ist,
   // übernimmt der Web-Audio-Loop „party_fern“ (wie bis V8.1) und das Element wird ausgeblendet.
   const fern = (() => {
+    const START_VOL = .4;   // Gemini-Prüfung 26.11.: Startbildschirm −8 dB, damit die Titelmusik nicht leiser wirkt
     let el = null, soll = false, fadeT = null, web = false, webT = null;
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
     const mach = () => { if (!el) { el = new Audio('ton/muffled_party_start.mp3'); el.loop = true; el.preload = 'auto'; el.setAttribute('playsinline', ''); } return el; };
@@ -127,10 +129,10 @@ const Rahmen = (() => {
         soll = true;
         if (window.Ton && Ton.bereit) { webAn(); if (web && Ton.hat('muffled_party')) return; }
         const e = mach();
-        if (!e.paused) { blende(1, 600); return; }
+        if (!e.paused) { blende(START_VOL, 600); return; }
         try { e.volume = 0; } catch (x) { }
         const p = e.play(); if (p && p.catch) p.catch(() => { });
-        blende(1, 900);
+        blende(START_VOL, 900);
       },
       stopp(ms = 900) {
         soll = false; clearInterval(webT);
@@ -182,7 +184,7 @@ const Rahmen = (() => {
     }
     ton('bzzz');
     // V8.6: Lampe flackert nur noch bei jeder dritten Nachricht, weich
-    if (!reduziert && (++flackZ % 3 === 1)) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
+    if (!reduziert) { bw.classList.remove('flack'); void bw.offsetWidth; bw.classList.add('flack'); }
     sichern();
   }
   function nachrichtenStart(verz) { nachrichtenStopp(); nStart = setTimeout(() => { neu(); nTimer = setInterval(neu, 3600); }, verz); }
@@ -211,7 +213,7 @@ const Rahmen = (() => {
     const l = Math.min(laeufe(), 3);
     bw.style.setProperty('--lebhaft', l);
     feuerRate = .025 * (1 + .6 * l);
-    $('hinweis').textContent = laeufe() === 0 ? T('start_hinweis', 'Kopfhörer, Ton an, Querformat') : laeufe() === 1 ? 'Draußen läuft’s noch.' : 'Immer noch.';
+    $('hinweis').textContent = laeufe() === 0 ? T('start_hinweis', 'Kopfhörer, Ton an, Querformat') : laeufe() === 1 ? 'Die Party läuft noch.' : 'Immer noch.';
     $('enden').textContent = T('menue_enden', 'Enden gefunden: {n} von 3').replace('{n}', S().enden.length);
   }
   function startZeigen(nachWeg) {
@@ -223,7 +225,7 @@ const Rahmen = (() => {
     sp.classList.remove('gelesen');
     bzzzZaehler = 0; besuch(); uhrzeitSetzen();
     if (nachWeg && laeufe() > 0) { S().nachr = (S().nachr || 0) + 6 + Math.floor(Math.random() * 7); zaehlerText(); kopf.classList.add('an'); sichern(); }
-    if (nachWeg && window.Ton) Ton.outroAus();
+    if (window.Ton) Ton.outroAus();   // V8.9: auch beim Zurückkommen ins Menü nach dem Ende (Endmusik lief doppelt mit)
     ton('party_fern');   // beim allerersten Laden: Autoplay-Versuch (Browser blockt evtl. bis zum ersten Tippen)
     bw.classList.remove('anlauf'); void bw.offsetWidth; bw.classList.add('anlauf');
     bw.classList.add('tippbar'); tippAb = Date.now() + 500;
@@ -271,14 +273,40 @@ const Rahmen = (() => {
     $('e-nr').textContent = T('ende_nr', 'Ende {x} von 3').replace('{x}', ENDEN.indexOf(n) + 1);
     $('e-name').textContent = n;
     $('e-satz').textContent = s[4].replace('Ende: ', '');
-    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Montagabend. Das Handy liegt umgedreht auf dem Tisch.'; $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
+    if (api && api.variante === 'lynn') { $('e-satz').textContent = 'Das Handy liegt umgedreht auf dem Tisch.';   /* V8.9: Titel heißt jetzt selbst „Montagabend“ */ $('toenung').style.background = 'radial-gradient(ellipse 900px 600px at 900px 740px,rgba(255,140,170,.22),transparent 70%)'; }
     zeige(null); void bw.offsetWidth;
     zeige('s-ende');
   }
 
   // ---------------- Abzeichen ----------------
   let letzter = null;
-  function abzeichen(modus) {
+  // Bilanz Zeile für Zeile auf Schwarz, dann „Weiter“
+  // V9.1 (Patrick 26.11., F): erst der Handy-Satz allein (blendet aus), dann „Du hast verpasst:“ eins nach dem anderen, Lynn mit längerer Pause, dann Enden/Entscheidungen
+  function bilanzZeigen() {
+    const bil = $('bilanz'), knopf = $('k-bweiter'); bil.classList.add('da'); knopf.classList.remove('da');
+    zeige('s-bilanz'); bw.classList.add('bilanz-an');
+    const ph = $('p-handy'), pv = $('p-verpasst'), rest = [$('p-enden'), $('p-entsch')].filter(x => x && x.innerHTML.trim());
+    [ph, pv, ...rest].forEach(x => { if (x) { x.style.display = 'none'; x.classList.remove('aus'); } });
+    let u = reduziert ? 0 : 1000; const z = ms => reduziert ? 0 : ms;
+    if (ph && ph.innerHTML.trim()) {
+      const h2 = ph.querySelector('.h2');
+      plan(() => { ph.style.display = ''; void ph.offsetWidth; ph.classList.add('da'); }, u);
+      if (h2) { plan(() => h2.classList.add('da'), u + z(2600)); u += z(6200); } else u += z(4000);
+      plan(() => ph.classList.add('aus'), u); u += z(1400); plan(() => { ph.style.display = 'none'; }, u); u += z(400);
+    }
+    const vp = verpasstLauf;
+    if (vp && pv) {
+      plan(() => { pv.style.display = ''; pv.classList.add('da'); }, u); const sp = [...pv.querySelectorAll('.vk, .vp')];
+      sp.forEach(x => { plan(() => x.classList.add('da'), u); u += z(1500); });
+      if (vp.lynn) { u += z(2600); plan(() => pv.insertAdjacentHTML('beforeend', '<span class="vl">… und <b>' + vp.tx('lynn') + '</b>.</span>'), u); plan(() => { const l = pv.querySelector('.vl'); if (l) l.classList.add('da'); }, u + 60); u += z(3000); }
+      u += z(600);
+    }
+    rest.forEach(x => { plan(() => { x.style.display = ''; void x.offsetWidth; x.classList.add('da'); }, u); u += z(1600); });
+    plan(() => knopf.classList.add('da'), u + z(600));
+    return new Promise(r => { knopf.onclick = ev => { ev.stopPropagation(); bw.classList.remove('bilanz-an'); [ph, pv, ...rest].forEach(x => { if (x) x.style.display = ''; }); r(); }; });
+  }
+  function abzeichen(modus, nurText) {
+    if (nurText) { const pl = plaene; plaene = []; abzeichen(modus); plaene.forEach(clearTimeout); plaene = pl; return; }
     const sek = $('s-abz'); sek.classList.toggle('sammlung', modus === 'sammlung');
     $('a-titel').textContent = T('menue_abzeichen', 'Abzeichen');
     const r = $('raster'); r.innerHTML = '';
@@ -304,19 +332,34 @@ const Rahmen = (() => {
       r.appendChild(k);
     });
     const bil = $('bilanz'); bil.classList.remove('da');
+    // Patrick 25.11.: nach dem Spiel steht die Bilanz auf einem eigenen schwarzen Schirm (Zeile für Zeile), der Abzeichen-Schirm bleibt leer davon
+    const lauf = modus === 'lauf';
+    if (lauf) $('s-bilanz').insertBefore(bil, $('k-bweiter')); else $('s-abz').insertBefore(bil, $('s-abz').querySelector('.knopfreihe'));
+    bil.classList.toggle('zeilen', lauf); [...bil.querySelectorAll('p')].forEach(x => x.classList.remove('da'));
     const offen = 3 - S().enden.length;
     if (modus === 'sammlung' && laeufe() === 0) {
       $('p-enden').innerHTML = 'Noch nichts gespielt.';
       $('p-entsch').innerHTML = 'Also auch noch nichts verpasst. Noch.';
-      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; }
+      { const ph = $('p-handy'); if (ph) ph.innerHTML = ''; const pv = $('p-verpasst'); if (pv) pv.innerHTML = ''; }
     } else {
       $('p-enden').innerHTML = offen > 0 ? T('enden_verpasst', 'Du hast {n} von 3 Enden verpasst. Schade.').replace('{n} von 3 Enden', '<b>{n} von 3 Enden</b>').replace('{n}', offen) : 'Du hast alle Enden gesehen. Und trotzdem.';
       const [nie, gesamt] = api.entscheidungen();
       $('p-entsch').innerHTML = T('entscheidungen', 'Du hast {x} von {y} Entscheidungen nie getroffen.').replace('{x} von {y} Entscheidungen', '<b>{x} von {y} Entscheidungen</b>').replace('{x}', nie).replace('{y}', gesamt);
       // V8.4: wie oft man von sich aus aufs Handy geschaut hat
       const bl = api.blick ? api.blick() : null, ph = $('p-handy');
-      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? T('bilanz_handy0', 'Du hast kein einziges Mal von dir aus aufs Handy geschaut.')
-        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal war nichts Neues.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+      // C31 (Patrick 26.11.): wer nie gedrückt hat – erster Satz, Pause, dann „Geschaut hat er trotzdem.“
+      if (ph) ph.innerHTML = !bl || modus !== 'lauf' ? '' : bl.zahl === 0 ? '<span class="h1">' + T('bilanz_handy0', 'Du hast den Handy-Knopf kein einziges Mal gedrückt.') + '</span><br><span class="h2">' + T('bilanz_handy0b', 'Geschaut hat er trotzdem.') + '</span>'
+        : T('bilanz_handy', 'Du hast <b>{n}-mal</b> von dir aus aufs Handy geschaut. {m}-mal, obwohl nichts Neues da war.').replace('{n}', bl.zahl).replace('{m}', bl.leer);
+      // V8.9 (Patrick 24.11.): Verpasst-Liste wie Schlagzeilen, eine nach der anderen; dann verschwindet alles, nur „… und Lynn.“ bleibt
+      const vl = api.verpasst && modus === 'lauf' ? api.verpasst() : [], pv = $('p-verpasst');
+      if (pv) { pv.innerHTML = ''; pv.classList.remove('weg'); }
+      if (pv && vl.length) {
+        const VT = { geburtstag: 'Lenas Party des Jahres', lied: 'Lena heult bei Happy Birthday', feuerloescher: 'Die Feuerlöscher-Eskalation', mia: 'Mias Crashout auf der Tanzfläche', tim: 'Tims Absturz auf Lenas Teppich', afterparty: 'Tims Afterparty bis 3 Uhr', lynn: 'Lynn' };
+        const tx = k => T('verpasst_' + k, VT[k]);
+        const lynn = vl.includes('lynn'), rest = vl.filter(k => k !== 'lynn');
+        pv.innerHTML = '<span class="vk">' + T('verpasst_liste', 'Du hast verpasst:') + '</span> ' + rest.map((k, i) => '<span class="vp">' + (i ? '<i class="trenn"> · </i>' : '') + '<b>' + tx(k) + '</b></span>').join('');
+        verpasstPlan = { pv, lynn, tx };
+      } else verpasstPlan = null;
     }
     $('k-nochmal').textContent = T('nochmal_knopf', 'Nochmal');
     $('k-beenden').textContent = T('beenden', 'Beenden');
@@ -329,7 +372,14 @@ const Rahmen = (() => {
       if (!reduziert) { z.classList.remove('hoch'); void z.offsetWidth; z.classList.add('hoch'); }
     }, t + j * (reduziert ? 0 : 720)));
     t += frische.length * (reduziert ? 0 : 720) + (reduziert ? 0 : 250);
-    plan(() => bil.classList.add('da'), t);
+    if (lauf) { verpasstLauf = verpasstPlan; verpasstPlan = null; }
+    else plan(() => bil.classList.add('da'), t);
+    if (verpasstPlan) { const { pv, lynn, tx } = verpasstPlan; const sp = [...pv.querySelectorAll('.vp')];
+      if (reduziert) { sp.forEach(x => x.classList.add('da')); if (lynn) pv.insertAdjacentHTML('beforeend', ' <span class="vp da">… und <b>' + tx('lynn') + '</b>.</span>'); }
+      else {
+        let u = t + 700; sp.forEach((x, i) => plan(() => x.classList.add('da'), u + i * 450)); u += sp.length * 450 + 1800;
+        if (lynn) { plan(() => pv.classList.add('weg'), u); plan(() => { pv.classList.remove('weg'); pv.innerHTML = '<span class="vl">… und <b>' + tx('lynn') + '</b>.</span>'; void pv.offsetWidth; pv.querySelector('.vl').classList.add('da'); }, u + 1500); }
+      } }
     if (!reduziert && laeufe() > 0) zu.forEach((k, j) => plan(() => { k.classList.add('blick'); plan(() => k.classList.remove('blick'), 520); }, t + 500 + j * 190));
   }
 
@@ -421,7 +471,7 @@ const Rahmen = (() => {
         b.querySelector('.mt').textContent = T(k, b.dataset.t);
       });
       $('tippen').textContent = T('start_tippen', 'Tippen zum Starten');
-      $('iosnote').textContent = a.iosHinweis || '';
+      $('iosnote').textContent = [a.iosHinweis, 'Tipp: Dunkelmodus für Webseiten ausschalten.'].filter(Boolean).join(' ');
       zaehlerText();
     },
     start: startZeigen,
@@ -434,12 +484,16 @@ const Rahmen = (() => {
       S().laeufe = laeufe() + 1; sichern();
       letzter = { ende: name, neu: neu || [] };
       bzzzZaehler = 0; besuch();
-      endeKarte(name, .9);
-      await new Promise(r => weiterWarter = r);
-      if (nachKarte) { zeige(null); await nachKarte(); }
+      // V9.1 (Patrick 26.11., F): direkt nach dem Titel die Bilanz auf Schwarz, dann die Gefühlsfrage, dann Endkarte und Abzeichen
+      abzeichen('lauf', true);
+      endeVorbereiten(name);   // Menü weg, sonst scheint es hinter der Gefühlsfrage durch
+      await bilanzZeigen();
       $('g-frage').textContent = T('gefuehl_frage', 'Wie hast du dich gerade gefühlt?');
       const liste = $('g-liste'); liste.innerHTML = '';
       await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; b.textContent = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.onclick = ev => { ev.stopPropagation(); r(i); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
+      endeKarte(name, .9);
+      await new Promise(r => weiterWarter = r);
+      if (nachKarte) { zeige(null); await nachKarte(); }
       abzeichen('lauf'); zeige('s-abz');
     },
   };

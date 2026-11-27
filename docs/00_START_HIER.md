@@ -16,7 +16,7 @@ Spiel: „Du verpasst was.“ – Visual Novel zu FoMO (Philip, KSH München, **
 9. `09_ziele.md` – Endziel/Abnahme.
 
 ## Arbeitsweise (Philip)
-Antworten auf Deutsch, kurz (Nutzungslimit knapp, Fragen bündeln). Philips Ideen bewerten mit: schwach / geht so / gut / sehr gut / hervorragend / Meisterwerk (und sagen, was zur nächsten Stufe fehlt). Feedback zu seinen Texten fair, aber relativ hart. Nur erfundene Namen. Keine Weichzeichner über Bildern, Mia in Montagen nie verkleinern. ElevenLabs nur nach Rückfrage. Texte nur mit Philips Okay ändern (alles in diesen Docs ist sein Okay). Öffentlichen Link (zeigt noch V5) nur mit Philips Okay ersetzen. Besprechen auf Mittel, Bauen auf Hoch.
+Antworten auf Deutsch, kurz (Nutzungslimit knapp, Fragen bündeln). Philips Ideen bewerten mit: schwach / geht so / gut / sehr gut / hervorragend / Meisterwerk (und sagen, was zur nächsten Stufe fehlt). Feedback zu seinen Texten fair, aber relativ hart. ~~Nur erfundene Namen.~~ (gilt nicht mehr, 24.11.) Keine Weichzeichner über Bildern, Mia in Montagen nie verkleinern. ElevenLabs nur nach Rückfrage. Texte nur mit Philips Okay ändern (alles in diesen Docs ist sein Okay). Öffentlichen Link (zeigt noch V5) nur mit Philips Okay ersetzen. Besprechen auf Mittel, Bauen auf Hoch.
 
 ## Artefakte (gehören Philips Hauptaccount, von einem anderen Account NICHT erreichbar)
 Test-Link-Slug `5d6f857a-23db-4da8-8501-add017b70699` (V8.8 + neue Balkon-Schleife), Galerie `26fa13a7-…`, Story-Datei `9d2f17e7-…`. Ein neuer Account muss die Seite aus `spiel/dist/` neu als Artefakt veröffentlichen (`bash setup.sh`, dann `python3 spiel/build.py` bzw. `ABGABE=1 python3 build.py` für die öffentliche Fassung ohne Testsachen).
