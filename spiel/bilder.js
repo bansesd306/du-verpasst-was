@@ -311,6 +311,7 @@ const TOENE = {
   kerze:           { datei: "ton/kerze.mp3", vol: 1.1 },      // Wunderkerzen auspusten (kai_audio 446030)
   umarmung:        { datei: "ton/umarmung.mp3", vol: 1.2 },   // Jonas’ Umarmung (Philips Aufnahme)
   feuerloescher:   { datei: "ton/feuerloescher.mp3", vol: .45 }, // Gemini-Prüfung 26.11.: −7 dB (klang wie im selben Raum)  // Bad, durch die Tür (V8.7, Hörprobe von Philip abgenommen)
+  stempel:         { datei: "ton/stempel.mp3", vol: 1 },                 // Patrick 27.11.: dumpfer Stempel statt Türklopfen
   klopfen:         { datei: "ton/klopfen.mp3", vol: .9 },               // Sophie klopft (Pixabay, Philip)
   treppe:          { datei: "ton/treppenhaus_runter.mp3", vol: 1.4 }, // Gemini-Prüfung 26.11.: +5 dB     // Schritte im Treppenhaus
   strasse:         { datei: "ton/strasse_betrunken.mp3", vol: .4 }, // Gemini-Prüfung 26.11.: −8 dB + Tiefpass 800 im Skript       // Leute unten auf der Straße

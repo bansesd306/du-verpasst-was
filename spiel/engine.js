@@ -209,6 +209,8 @@ const Spiel = (() => {
       // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
       if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
       if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
+      if (Handy.app === 'home') { const h = e.target.closest('.hm-app'); if (h) { const id = h.dataset.h; Ton.spiele('tipp', { vol: .5 }); if (id === 'whatsapp') Handy.liste(); else if (id === 'instagram') Handy.feed(); else { h.classList.add('tipp'); setTimeout(() => h.classList.remove('tipp'), 160); } } return; }
+      if (['feed', 'story', 'liste'].includes(Handy.app)) return;
     }
     blickZu();
   }, true);
@@ -217,9 +219,11 @@ const Spiel = (() => {
   B.addEventListener('pointermove', e => { const d = blickDruck; if (!d || !blick.offen) return; e.stopPropagation(); const dy = e.clientY - d.y; d.y = e.clientY; if (Math.abs(e.clientY - d.y0) > 10) d.zug = true; if (d.zug) Handy.sperrScroll(-dy); }, true);
   B.addEventListener('pointerup', e => {
     const d = blickDruck; blickDruck = null; if (!d || !blick.offen) return; e.stopPropagation(); if (d.zug) return;
-    const nk = d.ziel && d.ziel.closest && d.ziel.closest('.nk'); const n = nk && Handy.chatVonKarte(nk);
+    const nk = (d.ziel && d.ziel.closest && d.ziel.closest('.nk')) || document.elementsFromPoint(e.clientX, e.clientY).map(x => x.closest && x.closest('.nk')).find(Boolean);   // Patrick 27.11.: auch wenn etwas Unsichtbares darüber liegt
+    const n = nk && Handy.chatVonKarte(nk);
     if (aktBild && aktBild.stimmung === 'pruefung') { if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } return; }   // vor der Prüfung: nur Sperrbildschirm
-    if (n) { Handy.lesen(n); Ton.spiele('tipp', { vol: .5 }); } else if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } else { Handy.liste(); Ton.spiele('display_klick'); }
+    const ig = nk && !n && Handy.instaVonKarte(nk);
+    if (n) { Handy.lesen(n); Ton.spiele('tipp', { vol: .5 }); } else if (ig) { Handy.selbstInsta(ig); Ton.spiele('tipp', { vol: .5 }); } else if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } else { Handy.home(); Ton.spiele('display_klick'); }   // Patrick 27.11.: Insta-Meldung → Story/Feed, sonst Homescreen
   }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
   let blickErstmals = true, blickZahl = -1;
@@ -412,6 +416,8 @@ const Spiel = (() => {
     // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
     if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
+    // Patrick 27.11.: schwarze Zwischenbilder am Handy – erst zeigen, wenn das Bild fertig dekodiert ist (das alte bleibt so lange stehen)
+    { const gi = innen.querySelector('img'); if (gi && e.datei && gi.decode && !schnell) { await Promise.race([gi.decode().catch(() => {}), new Promise(r => setTimeout(r, 2500))]); if (nr !== bildNr) return; } }
     { const gi = innen.querySelector('img'); if (gi && e.datei && !gi.complete) { innen.classList.add('laedt'); const f = () => innen.classList.remove('laedt'); gi.addEventListener('load', f, { once: true }); gi.addEventListener('error', f, { once: true }); } }   // Patrick 26.11.: nie nur der Mund auf Schwarz
     { const v = innen.querySelector('video.bv'); if (v && e.videoKasten) v.addEventListener('loadedmetadata', () => { try { v.currentTime = ((performance.now() - t0) / 1000) % v.duration; } catch (_) {} }, { once: true }); }   // Schleife läuft beim Posenwechsel weiter
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
@@ -912,7 +918,7 @@ const Spiel = (() => {
         // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
         const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');
         const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; if (aufBlatt) { st.classList.add('blatt'); kl.appendChild(st); } else B.appendChild(st);
-        void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('klopfen', { vol: 1.8, rate: .8 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
+        void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('stempel', { vol: 1.6 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
         await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
       }
       case 'klausur': if (a === 'haken') { // V9.3 (Patrick 27.11.): er hakt „Kausalität?!“ auf der alten Klausur ab
