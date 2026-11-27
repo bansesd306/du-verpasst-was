@@ -512,6 +512,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .ebene .innen img.ov-v.zu,.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.fest{opacity:1}
 .ebene .innen img.ov-v.mimik{opacity:1;transition:opacity .9s ease}
 .ebene .innen img.ov-v.fest{transition:opacity .45s ease}
+.ebene .innen img.ov-v.ov-raus{transition:opacity .22s ease!important}
 .ebene .innen img.wechsel{opacity:0;transition:opacity 3.2s ease-in-out}
 .ebene .innen img.wechsel.an{opacity:1}
 /* Tanzfläche: Lichtkegel, Farbe im Takt, dunkle Gestalten vorne */
@@ -3057,6 +3058,8 @@ Ich steck es wieder ein.
 @pfad+ Küche
 @setze kueche
 @uhr +5
+@party an
+@musik party laut
 @bild N13
 # V9.1 (E1): nur über den Handy-Knopf zu sehen
 @handy meldung Instagram | tim_k97 | tim_k97 ist jetzt live 🔴
@@ -3179,6 +3182,8 @@ Lena: „Jetzt bleibst du aber auch.“
 @pfad+ Tanzfläche
 @setze tanz
 @uhr +5
+@party an
+@musik party laut
 @bild N35M1 langsam
 @warte 1.6
 @bild N35M2 langsam
@@ -3262,11 +3267,11 @@ Mia: „Denkst du, ich mach sowas?“
 … !1.5
 @bild MIA_SM2 gesicht
 Mia: „Ich geh halt immer zuerst.“
-# stiller Moment (Testversion: weiches Auflösen der Leute, Musik dumpf, dann sauberer Schnitt zurück)
+# stiller Moment (Testversion v2: weicherer Übergang in die Handy-Position, weiches Auflösen der Leute, Musik dumpf, dann Schnitt zurück)
 @leer
 @musik party mittel langsam
-@bild MIA_HANDY gesicht
-@warte 1.6
+@bild MIA_HANDY sanft
+@warte 1.5
 @musik party dumpf langsam
 @bild MIA_HANDY_LEER sanft
 @warte 1.3
@@ -3318,12 +3323,10 @@ Alle Hände oben. Meine nicht.
 @montage 2
 ~ Hm.
 … !1.5
-@bild N35f schnitt
-# V9.3g (Patrick 27.11.): Mund zuerst, Augen/Brauen kurz danach – nicht alles auf einmal
-@gesicht N35flm .45
-@gesicht N35flm,N35fla 1
-@gesicht N35fg .6
-@gesicht aus
+@bild N35f weich
+# Testversion v2: vollständiges Lachen (N35fl) ohne Augen-Versatz im ersten Frame, dann sauber ins Grinsen
+@gesicht N35fl 1.15
+@gesicht N35fg .7
 Mia: „So.“
 … !1
 Mia: „Party Nummer vieeer.“
@@ -3556,6 +3559,8 @@ Bzzz. Nochmal.
 Ich lass es.
 == GM_UHR
 @setze knopfB = knopf
+@loop wind an
+@musik party tuer
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
 # Storycheck 3 (Z4): nie rückwärts – ist es schon später als 23:25, zeigt sie die echte Zeit
@@ -6606,7 +6611,7 @@ const Ton = (() => {
     musikGain = ctx.createGain(); musikGain.gain.value = 0;
     musikBus = ctx.createGain(); musikBus.connect(musikFilter); musikFilter.connect(musikGain); musikGain.connect(master);
     analyser = ctx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = .55; musikGain.connect(analyser); fftDaten = new Uint8Array(analyser.frequencyBinCount);
-    // Testversion: leichte Geräusche + Start/Prolog sofort laden; große Musikstücke gezielt nachladen (schont Mobilfunk & RAM)
+    // Testversion v2: leichte Geräusche + Start/Prolog sofort laden; große Musikstücke gezielt nachladen (schont Mobilfunk & RAM)
     const SPAET_MUSIK = /^M\d|^mia$|lofi|lernflow|restaurant|club2|ende_warm|lied|tim_party|party_fern/;
     const namen = Object.keys(TOENE).filter(k => eintrag(k).datei && !SPAET_MUSIK.test(k)).sort((a, b) => (b === 'muffled_party') - (a === 'muffled_party') || (b === 'Outro') - (a === 'Outro'));
     // V8.8 (G47): nicht alle Dateien gleichzeitig – Warteschlange mit 3 gleichzeitig
@@ -6684,6 +6689,7 @@ const Ton = (() => {
   let ausklingNr = 0;
   function loop(name, an) {
     if (!ctx) return;
+    if (an && loops[name]) return;
     if (loops[name]) { loops[name](); delete loops[name]; }
     if (!an || gesperrt) return;
     const g = ctx.createGain(); g.connect(loopsBus); g.gain.setValueAtTime(0, now()); g.gain.linearRampToValueAtTime(1, now() + .4);
@@ -6754,6 +6760,7 @@ const Ton = (() => {
   return {
     init,
     vorladen(...namen) { if (!ctx) return; namen.forEach(k => { if (TOENE[k] && eintrag(k).datei && !P[k]) lade(k); }); },
+    bereitFuer(k) { if (!ctx || !TOENE[k] || !eintrag(k).datei) return Promise.resolve(); return P[k] ? Promise.resolve(P[k]) : lade(k); },
     get bereit() { return !!ctx; },
     // V8.5: ist ein Ton schon geladen und dekodiert? (Startbild: Web-Audio-Partymusik übernimmt vom Audio-Element)
     hat(k) { return !!P[k]; },
@@ -8456,7 +8463,7 @@ const Spiel = (() => {
     // V8.9: Gesichts-Overlays (blinzeln, sprechen, Mimik) mitladen – sonst poppen sie erst nach dem Bild auf
     if (typeof OVERLAYS !== 'undefined') Object.keys(OVERLAYS).forEach(k => { const d = 'img/' + k + '.webp'; if (!reihe.includes(d)) reihe.push(d); });
     ['MD1', 'MD2', 'MD3', 'MD4', 'MM01', 'MM02', 'MM03', 'MM04', 'MM05', 'MM06', 'MM07', 'MM08', 'MM09', 'MK1', 'MK2', 'MK3'].forEach(c => { const d = BILDER[c] && BILDER[c].datei; if (d && !reihe.includes(d)) reihe.push(d); });   // V9.3e: Mia-Montage
-    // Testversion: erste 28 Bilder (Start/Prolog/K1) zügig, Rest gedrosselt nachladen
+    // Testversion v2: erste 28 Bilder (Start/Prolog/K1) zügig, Rest gedrosselt nachladen
     let i = 0; const naechstes = () => { if (i >= reihe.length) return; const idx = i++; const d = reihe[idx]; lade(d).then(() => setTimeout(naechstes, idx < 28 ? 15 : 70)); };
     for (let k = 0; k < 4; k++) naechstes();
   }
@@ -8470,7 +8477,7 @@ const Spiel = (() => {
   })();
   let bildNr = 0;
   async function zeigeBild(code, modus = '') {
-    // Testversion: identisches Bild direkt nacheinander nicht unnötig neu aufbauen (verhindert kurzes Textbox-Flackern)
+    // Testversion v2: identisches Bild direkt nacheinander nicht unnötig neu aufbauen (verhindert kurzes Textbox-Flackern)
     const ausSchwarzPre = $('#schwarz').classList.contains('an');
     if (aktBild && aktBild.code === code && !ausSchwarzPre && !gesichtFest && aktBild.modus !== 'dunkel'
       && (!modus || modus === 'gesicht' || modus === 'sanft' || modus === 'geste' || modus === 'pose')
@@ -8545,11 +8552,17 @@ const Spiel = (() => {
     return alle.map(k => { const [x, y, w, h] = OVERLAYS[k].box; return `<img src="img/${k}.webp" alt="" draggable="false" class="ov-v${blink.includes(k) ? ' blink' : ''}" data-k="${k}" style="left:${x * 100}%;top:${y * 100}%;width:${w * 100}%;height:${h * 100}%">`; }).join('');
   }
   function ovEl(k) { return welt.querySelector(`.ebene.an .ov-v[data-k="${k}"]`); }
-  let gesichtFest = null;
+  let gesichtFest = null, ovZ = 2;
   function gesicht(k, an = true) {
-    const ks = k ? String(k).split(',') : [];   // V9.3g: mehrere Teile gleichzeitig (z. B. Mund zuerst, Augen danach)
-    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => { if (!ks.includes(e.dataset.k) || !an) e.classList.remove('fest'); });
-    gesichtFest = an ? k : null; if (an) ks.forEach(x => { const e = ovEl(x); if (e) e.classList.add('fest'); });
+    const ks = k ? String(k).split(',') : [];   // Testversion v2: neues Overlay immer oben, altes blendet sauber darunter weg (keine Doppel-Augen)
+    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => {
+      if (!ks.includes(e.dataset.k) || !an) {
+        e.classList.remove('fest');
+        if (an && ks.length) { e.classList.add('ov-raus'); setTimeout(() => e.classList.remove('ov-raus'), 350); }
+      }
+    });
+    gesichtFest = an ? k : null;
+    if (an) ks.forEach(x => { const e = ovEl(x); if (e) { e.classList.remove('ov-raus'); e.style.zIndex = ++ovZ; e.classList.add('fest'); } });
   }
   // Mimik zwischendurch (kleines Lächeln o. ä.), nur wenn gerade niemand spricht
   setInterval(() => {
@@ -8823,40 +8836,62 @@ const Spiel = (() => {
   const MIA_TEIL1_BIS = 28, MIA_TEIL2_AB = 38;   // Schlag-Nummern
   async function montage(arg = '') {
     const g = gen; const teil = arg === '2' ? 2 : 1;
+    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // Testversion v2: ruhiges Wippen im Aufbau VOR dem Refrain
+    if (!schnell && Ton.bereitFuer) { await Ton.bereitFuer('mia'); pruef(g); }
     if (teil === 1 && !schnell) {
-      // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
-      const pos = Ton.miaPos(); if (pos < 0 || pos > 34 || pos < 26) Ton.miaSpring(29.2);
-      Ton.crescendo(6.2, 'laut');
-      $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 5s ease'; $('#schwarz').classList.remove('an');
-      await zeigeBild('MM04', 'schnitt'); kamera.style.transition = 'transform 6s ease-in'; kamera.style.transform = 'scale(1.12)';
-      while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .03) { await new Promise(r => setTimeout(r, 15)); pruef(g); }
+      // Song an den Aufbau vor dem Refrain setzen (auch beim Direktsprung ins Kapitel)
+      const pos = Ton.miaPos();
+      if (pos < 0) { Ton.musik('mia', '29.2'); Ton.musikStufe('dumpf'); }
+      else if (pos > 31.5 || pos < 27.5) Ton.miaSpring(29.2);
+      Ton.crescendo(6.8, 'laut');
+      $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 1.6s ease'; $('#schwarz').classList.remove('an');
+      await zeigeBild(DK[0], 'schnitt');
+      kamera.style.transition = 'transform .65s ease'; kamera.style.transform = 'scale(1.02)';
+      // Daumenkino im Aufbau (ca. 29,9 s bis kurz vor dem Drop bei 36,97 s)
+      let f = 1;
+      for (let t = 29.9; t < MIA_BEATS[0] - .35; t += .675) {
+        if (Ton.miaPos() >= 0 && Ton.miaPos() > t + .25) continue;
+        while (Ton.miaPos() >= 0 && Ton.miaPos() < t - .02) { await new Promise(r => setTimeout(r, 12)); pruef(g); }
+        if (Ton.miaPos() < 0) break;
+        pruef(g);
+        const fortschritt = Math.max(0, Math.min(1, (t - 29.2) / (MIA_BEATS[0] - 29.2)));
+        await zeigeBild(DK[f % DK.length], 'weich');
+        kamera.style.transition = 'transform .62s ease';
+        kamera.style.transform = `scale(${(1.02 + fortschritt * .07 + (f % 2) * .015).toFixed(3)})`;
+        f++;
+      }
+      while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .025) { await new Promise(r => setTimeout(r, 8)); pruef(g); }
       $('#schwarz').style.transition = '';
     }
-    if (teil === 2 && !schnell) Ton.crescendo(.8, 'laut');   // nach dem Schwarzbild wieder voll
+    if (teil === 2 && !schnell) {
+      if (Ton.miaPos() < 0) Ton.musik('mia', String(Math.max(0, MIA_BEATS[MIA_TEIL2_AB] - .4)));
+      Ton.crescendo(.8, 'laut');   // nach dem Schwarzbild wieder voll
+    }
     const von = teil === 1 ? 0 : MIA_TEIL2_AB, bis = teil === 1 ? MIA_TEIL1_BIS : MIA_BEATS.length;
-    if (schnell) vz += (teil === 1 ? 6.2 : 0) + (MIA_BEATS[Math.min(bis, MIA_BEATS.length) - 1] - MIA_BEATS[von]);
+    if (schnell) vz += (teil === 1 ? 6.8 : 0) + (MIA_BEATS[Math.min(bis, MIA_BEATS.length) - 1] - MIA_BEATS[von]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
-    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // erst lässig wippen (Daumenkino), dann wild
-    const schritte = []; let i = von, f = 0;
-    while (i < bis) { const doppel = !(i >= 16 && i < 24) && !(i >= 40);
-      const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));   // V9.0: kein Bild zweimal in den letzten 5 Schritten
-      schritte.push([MIA_BEATS[i], teil === 1 && i < 12 ? DK[f++ % DK.length] : frei[Math.random() * frei.length | 0]]); i += teil === 2 ? 1 : doppel ? 2 : 1; }   // Teil 2: jeder Schlag ein Bild
+    const schritte = []; let i = von;
+    // Testversion v2: ab Schlag 0 (Refrain-Drop) sofort Ausraster; ab Schlag 8 jeder einzelne Schlag
+    while (i < bis) {
+      const doppel = teil === 1 && i < 8;
+      const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
+      schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]);
+      i += doppel ? 2 : 1;
+    }
     const weiss = $('#weiss'); const strobo = $('#strobo');
-    let n = 0; const jetzt = teil === 2 && !schnell ? Ton.miaPos() : -1;
+    const jetzt = teil === 2 && !schnell ? Ton.miaPos() : -1;
     for (const [zeit, code] of schritte) {
       if (jetzt >= 0 && zeit < jetzt) continue;   // V9.3g: wer beim Gedanken länger gebraucht hat, überspringt schon vergangene Schläge
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
-      pruef(g); n++;
-      const dk = code.startsWith('MD');
-      await zeigeBild(code, dk || (teil === 1 && n % 3 === 0) ? 'weich' : 'schnitt');   // jedes dritte Bild weich überblenden
-      if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (n % 2) * .015) + ')'; continue; }
-      const z = 1.04 + Math.random() * (teil === 2 ? .34 : .22), x = (Math.random() - .5) * (teil === 2 ? 12 : 8), y = (Math.random() - .5) * 6, r = (Math.random() - .5) * (teil === 2 ? 7 : 4);
+      pruef(g);
+      await zeigeBild(code, 'schnitt');
+      const z = 1.06 + Math.random() * (teil === 2 ? .34 : .26), x = (Math.random() - .5) * (teil === 2 ? 12 : 9), y = (Math.random() - .5) * 6, r = (Math.random() - .5) * (teil === 2 ? 7 : 5);
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
-      kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
+      kamera.style.transition = 'transform .32s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
       welt.classList.remove('spiegel');   // V9.0: Mia nicht mehr spiegeln (wirkte wie Doppelbild)
-      if (Math.random() < (teil === 2 ? .9 : .6)) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
+      if (Math.random() < (teil === 2 ? .9 : .7)) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
       // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze (im letzten Teil öfter)
-      if (!schnell && Math.random() < (teil === 2 ? .75 : .42)) { const m = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= m; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
+      if (!schnell && Math.random() < (teil === 2 ? .75 : .5)) { const m = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= m; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
       B.style.setProperty('--farbe', ['#ff3fa4', '#7a5cff', '#00d1ff', '#ffb000'][Math.random() * 4 | 0]);
       if (schnell) await warte(.05);
     }
@@ -9222,9 +9257,9 @@ const Spiel = (() => {
             if (Ton.vorladen) {
               if (ins.name === 'KAP2_A' || ins.name === 'KAP2_B') Ton.vorladen('M1_party', 'lernflow', 'party_fern');
               else if (ins.name === 'L3' || ins.name === 'AUFBRUCH') Ton.vorladen('M1_party', 'lied', 'party_fern', 'gemurmel', 'gemurmel2', 'frauen');
-              else if (ins.name === 'PARTY_ANKUNFT') Ton.vorladen('M1_party', 'lied', 'mia', 'lofi_melancholy', 'party_club2', 'tim_party');
-              else if (ins.name === 'TANZ') Ton.vorladen('mia');
-              else if (ins.name === 'BALKON' || ins.name === 'GM_START') Ton.vorladen('lofi_melancholy', 'restaurant_lofi', 'ende_warm');
+              else if (ins.name === 'PARTY_ANKUNFT' || ins.name === 'KUECHE') Ton.vorladen('M1_party', 'lied', 'mia', 'lofi_melancholy', 'party_club2', 'tim_party');
+              else if (ins.name === 'TANZ' || ins.name === 'TANZ_SHOW') Ton.vorladen('M1_party', 'mia', 'gemurmel', 'gemurmel2', 'frauen');
+              else if (ins.name === 'BALKON' || ins.name === 'GM_START' || ins.name === 'GM_UHR') Ton.vorladen('M1_party', 'lofi_melancholy', 'restaurant_lofi', 'ende_warm');
               else if (ins.name === 'BAD' || ins.name === 'AFTERPARTY') Ton.vorladen('party_club2', 'tim_party');
             }
             if (TESTMODUS) try { szeneStart = { name: ins.name, V: JSON.stringify(V), stack: stack.slice() }; } catch (e) { }
