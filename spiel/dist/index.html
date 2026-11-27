@@ -113,7 +113,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .lichterbox .p.g1{animation-duration:4.45s}.lichterbox .p.g2{animation-duration:3.9s}
 .lichterbox .p b{position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,180,.95) 0,rgba(255,206,130,.4) 30%,transparent 68%);opacity:0}
 .lichterbox .p b.auf{animation:aufleuchten 1.5s linear forwards}
-@keyframes schimmern{0%{opacity:.22}100%{opacity:.5}}
+@keyframes schimmern{0%{opacity:.16}100%{opacity:.6}}   /* Patrick 27.11.: Lichter wieder lebhafter */
 @keyframes aufleuchten{0%{opacity:0}25%{opacity:var(--st,.9)}100%{opacity:0}}
 @property --hr{syntax:'<number>';inherits:true;initial-value:110}@property --hg{syntax:'<number>';inherits:true;initial-value:165}@property --hb{syntax:'<number>';inherits:true;initial-value:255}
 #handylicht{opacity:0;transition:opacity .5s,--hr .9s ease,--hg .9s ease,--hb .9s ease}
@@ -667,6 +667,13 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #klausur .kl-haken path{fill:none;stroke:#2a3f9e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:90;stroke-dashoffset:90}
 #klausur .kl-haken.an path{transition:stroke-dashoffset .35s ease-out;stroke-dashoffset:0}
 #sprungmenue .kopf .neu{background:#2a6df4;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
+
+/* Patrick 27.11.: Lynn auf dem Balkon – langsames Reinzoomen wie in der alten Demo; kleines Wackeln beim Lachen / wenn Mia näher kommt */
+.drift.balkonfigur{animation:drift2 16s ease-in-out infinite alternate}
+@keyframes drift2{0%{transform:scale(1.04) translate(-6px,3px)}100%{transform:scale(1.10) translate(8px,-5px)}}
+#kamera.lachwackeln{animation:lachwackeln .6s ease-out}
+@keyframes lachwackeln{15%{transform:translate(3px,-2px)}35%{transform:translate(-3px,2px)}55%{transform:translate(2px,1px)}75%{transform:translate(-1px,-1px)}}
+.einfrieren .balkonfigur{animation-play-state:paused!important}
 
 /* ---------- Handy (Samsung / One UI, Dunkelmodus) ---------- */
 /* V8.9 (Patrick 24.11., Animation 3): Handy kommt leicht schräg aus der Hand unten rechts, richtet sich auf, liegt ruhig in der Hand (minimales Wackeln);
@@ -6144,16 +6151,16 @@ const BILDER = {
   N14gr: { datei: "img/N14gr.webp", text: "Lynn, leichtes Grinsen, Kopf geneigt", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14ru: { datei: "img/N14ru.webp", text: "Lynn schaut kurz runter, leises Lächeln", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14dw: { datei: "img/N14dw.webp", text: "Lynn fängt an, sich wegzudrehen (vor N14g)", stimmung: "balkon", figur: true, lichterVon: "N14" },
-  N14zg: { datei: "img/N14zg.webp", text: "Lynn mit zwei Bechern, leichtes Grinsen", stimmung: "balkon", figur: true },
-  N14zs: { datei: "img/N14zs.webp", text: "Lynn mit zwei Bechern, nippt", stimmung: "balkon", figur: true },
+  N14zg: { datei: "img/N14zg.webp", text: "Lynn mit zwei Bechern, leichtes Grinsen", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14zs: { datei: "img/N14zs.webp", text: "Lynn mit zwei Bechern, nippt", stimmung: "balkon", figur: true, lichterVon: "N14" },
   MIA_GR: { datei: "img/MIA_GR.webp", text: "Mia grinst (Ausschnitt wie N35n)", stimmung: "party", figur: true },
   MIA_SM: { datei: "img/MIA_SM.webp", text: "Mia, verschmitztes Lächeln (Ausschnitt wie N35n)", stimmung: "party", figur: true },
   MIA_SM2: { datei: "img/MIA_SM2.webp", text: "Mia, verschmitzt, Kopf leicht geneigt", stimmung: "party", figur: true },
   MIA_TILT: { datei: "img/MIA_TILT.webp", text: "Mia neigt den Kopf, verspielt", stimmung: "party", figur: true },
   MIA_HAND: { datei: "img/MIA_HAND.webp", text: "Mia hebt die Hand (vor den drei Fingern N35d)", stimmung: "party", figur: true },
-  N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true },
-  N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true },
-  N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true },
+  N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   BALKON_AUSSEN: { datei: "img/BALKON_AUSSEN.webp", text: "Balkon-Totale von außen: er mit Kapuze am Geländer, Lynn mit Becher an der Tür", stimmung: "balkon" },
   N19sk: { datei: "img/N19sk.webp", text: "Flur: Lynn skeptisch („Dann schau halt.“)", stimmung: "flur", figur: true },
   TIM_SCHLAEFT: { datei: "img/TIM_SCHLAEFT.webp", imHandy: "img/TIM_SCHLAEFT_h.webp", text: "Afterparty: Tim schläft mit Sonnenbrille auf dem Sofa, alle filmen", stimmung: "party" },
@@ -8640,7 +8647,7 @@ const Spiel = (() => {
     // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)
     if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
-    if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
+    if (e.figur) { huelle.classList.add('drift'); if (e.stimmung === 'balkon') huelle.classList.add('balkonfigur'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');
     // V9.0 (Patrick 25.11.): langsame Kamerafahrt über ein Standbild (Bildfolge auf dem Balkon); Zielpunkt aus bilder.js „fahrtZiel“
     if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
@@ -8656,6 +8663,8 @@ const Spiel = (() => {
     if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
     if (modus === 'ran') alt.forEach(a => { const h = a.querySelector('.innen'); if (h) { h.style.transition = 'transform .7s ease-in'; h.style.transform = 'scale(1.1)'; } });
     umgebung(e);
+    // Patrick 27.11.: kleines Wackeln beim Lachen und wenn Mia näher rankommt
+    if (!schnell && (/^(N14b|N14lb|N14la|N14rz|MIA_GRINST)/.test(code) || (/^(MIA|N35)/.test(code) && (modus === 'ran' || modus === 'ruck')))) { kamera.classList.remove('lachwackeln'); void kamera.offsetWidth; kamera.classList.add('lachwackeln'); setTimeout(() => kamera.classList.remove('lachwackeln'), 700); }
     B.classList.toggle('tanzflaeche', /^(N35|MM|MK|N32b|MIA_(?!HANDY_LEER))/.test(code));
     // Patrick 26.11.: beim Überblenden wurde es zwischen zwei Bildern kurz dunkler (beide halb durchsichtig über Schwarz).
     // Jetzt bleibt das alte Bild voll stehen, das neue blendet darüber ein, danach wird das alte entfernt.
@@ -8701,14 +8710,16 @@ const Spiel = (() => {
   // Blinzeln – 25.11. abends: nur EIN Zeitgeber (vorher zwei auf derselben Ebene → 3x Blinzeln in 1 s), Mindestabstand 2,5 s, hart umschalten (keine halben Augen)
   let letztesBlinzeln = 0;
   function blinzle() {
-    const naechst = () => setTimeout(blinzle, 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
+    const lynn = aktBild && aktBild.stimmung === 'balkon' && aktBild.figur;   // Patrick 27.11.: Lynn auf dem Balkon blinzelt wie in der alten Demo öfter (2–6 s, manchmal doppelt)
+    const naechst = () => setTimeout(blinzle, lynn ? 2000 + Math.random() * 4000 : 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
     if (B.classList.contains('einfrieren')) return naechst();
     const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink, .ebene.an img.blink')].filter(b => !b.classList.contains('fest'));
     const jetzt = performance.now();
-    if (bls.length && jetzt - letztesBlinzeln > 3000) {
+    if (bls.length && jetzt - letztesBlinzeln > (lynn ? 1800 : 3000)) {
       letztesBlinzeln = jetzt;
       const bl = bls[Math.random() * bls.length | 0];
       bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140);
+      if (lynn && Math.random() < .2) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 330);
     }
     naechst();
   }

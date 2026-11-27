@@ -104,7 +104,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .lichterbox .p.g1{animation-duration:4.45s}.lichterbox .p.g2{animation-duration:3.9s}
 .lichterbox .p b{position:absolute;inset:-14px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,180,.95) 0,rgba(255,206,130,.4) 30%,transparent 68%);opacity:0}
 .lichterbox .p b.auf{animation:aufleuchten 1.5s linear forwards}
-@keyframes schimmern{0%{opacity:.22}100%{opacity:.5}}
+@keyframes schimmern{0%{opacity:.16}100%{opacity:.6}}   /* Patrick 27.11.: Lichter wieder lebhafter */
 @keyframes aufleuchten{0%{opacity:0}25%{opacity:var(--st,.9)}100%{opacity:0}}
 @property --hr{syntax:'<number>';inherits:true;initial-value:110}@property --hg{syntax:'<number>';inherits:true;initial-value:165}@property --hb{syntax:'<number>';inherits:true;initial-value:255}
 #handylicht{opacity:0;transition:opacity .5s,--hr .9s ease,--hg .9s ease,--hb .9s ease}
@@ -658,3 +658,10 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #klausur .kl-haken path{fill:none;stroke:#2a3f9e;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:90;stroke-dashoffset:90}
 #klausur .kl-haken.an path{transition:stroke-dashoffset .35s ease-out;stroke-dashoffset:0}
 #sprungmenue .kopf .neu{background:#2a6df4;color:#fff;border:0;border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer}
+
+/* Patrick 27.11.: Lynn auf dem Balkon – langsames Reinzoomen wie in der alten Demo; kleines Wackeln beim Lachen / wenn Mia näher kommt */
+.drift.balkonfigur{animation:drift2 16s ease-in-out infinite alternate}
+@keyframes drift2{0%{transform:scale(1.04) translate(-6px,3px)}100%{transform:scale(1.10) translate(8px,-5px)}}
+#kamera.lachwackeln{animation:lachwackeln .6s ease-out}
+@keyframes lachwackeln{15%{transform:translate(3px,-2px)}35%{transform:translate(-3px,2px)}55%{transform:translate(2px,1px)}75%{transform:translate(-1px,-1px)}}
+.einfrieren .balkonfigur{animation-play-state:paused!important}

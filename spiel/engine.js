@@ -427,7 +427,7 @@ const Spiel = (() => {
     // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)
     if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
-    if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
+    if (e.figur) { huelle.classList.add('drift'); if (e.stimmung === 'balkon') huelle.classList.add('balkonfigur'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
     if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');
     // V9.0 (Patrick 25.11.): langsame Kamerafahrt über ein Standbild (Bildfolge auf dem Balkon); Zielpunkt aus bilder.js „fahrtZiel“
     if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
@@ -443,6 +443,8 @@ const Spiel = (() => {
     if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
     if (modus === 'ran') alt.forEach(a => { const h = a.querySelector('.innen'); if (h) { h.style.transition = 'transform .7s ease-in'; h.style.transform = 'scale(1.1)'; } });
     umgebung(e);
+    // Patrick 27.11.: kleines Wackeln beim Lachen und wenn Mia näher rankommt
+    if (!schnell && (/^(N14b|N14lb|N14la|N14rz|MIA_GRINST)/.test(code) || (/^(MIA|N35)/.test(code) && (modus === 'ran' || modus === 'ruck')))) { kamera.classList.remove('lachwackeln'); void kamera.offsetWidth; kamera.classList.add('lachwackeln'); setTimeout(() => kamera.classList.remove('lachwackeln'), 700); }
     B.classList.toggle('tanzflaeche', /^(N35|MM|MK|N32b|MIA_(?!HANDY_LEER))/.test(code));
     // Patrick 26.11.: beim Überblenden wurde es zwischen zwei Bildern kurz dunkler (beide halb durchsichtig über Schwarz).
     // Jetzt bleibt das alte Bild voll stehen, das neue blendet darüber ein, danach wird das alte entfernt.
@@ -488,14 +490,16 @@ const Spiel = (() => {
   // Blinzeln – 25.11. abends: nur EIN Zeitgeber (vorher zwei auf derselben Ebene → 3x Blinzeln in 1 s), Mindestabstand 2,5 s, hart umschalten (keine halben Augen)
   let letztesBlinzeln = 0;
   function blinzle() {
-    const naechst = () => setTimeout(blinzle, 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
+    const lynn = aktBild && aktBild.stimmung === 'balkon' && aktBild.figur;   // Patrick 27.11.: Lynn auf dem Balkon blinzelt wie in der alten Demo öfter (2–6 s, manchmal doppelt)
+    const naechst = () => setTimeout(blinzle, lynn ? 2000 + Math.random() * 4000 : 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
     if (B.classList.contains('einfrieren')) return naechst();
     const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink, .ebene.an img.blink')].filter(b => !b.classList.contains('fest'));
     const jetzt = performance.now();
-    if (bls.length && jetzt - letztesBlinzeln > 3000) {
+    if (bls.length && jetzt - letztesBlinzeln > (lynn ? 1800 : 3000)) {
       letztesBlinzeln = jetzt;
       const bl = bls[Math.random() * bls.length | 0];
       bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140);
+      if (lynn && Math.random() < .2) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 330);
     }
     naechst();
   }
