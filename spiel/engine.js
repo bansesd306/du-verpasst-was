@@ -569,6 +569,8 @@ const Spiel = (() => {
       // V9.0 (Patrick 25.11.): Vorstellung – Bild bleibt dunkel (Abendstimmung), nur der Rand leuchtet sehr hell
       case 'vorstellung': if (arg.startsWith('aus')) { B.classList.remove('vorstellung'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .8 }); } else { B.classList.add('vorstellung'); Ton.spiele('flashback', { vol: .5 }); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
+      // Patrick 27.11.: Farben langsam verlieren / zurückholen: @effekt farbe 0.7 4 (Sättigung, Sekunden); 1 = normal
+      case 'farbe': { const [s, z] = String(arg).split(/\s+/); const sat = parseFloat(s); welt.style.transition = `filter ${schnell ? 0 : (parseFloat(z) || 2)}s ease`; welt.style.filter = !isFinite(sat) || sat >= 1 ? '' : `saturate(${sat})`; break; }
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
       case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
@@ -766,10 +768,12 @@ const Spiel = (() => {
       schritte.push([MIA_BEATS[i], teil === 1 && i < 12 ? DK[f++ % DK.length] : frei[Math.random() * frei.length | 0]]); i += teil === 2 ? 1 : doppel ? 2 : 1; }   // Teil 2: jeder Schlag ein Bild
     const weiss = $('#weiss'); const strobo = $('#strobo');
     let n = 0; const jetzt = teil === 2 && !schnell ? Ton.miaPos() : -1;
+    let grauZahl = 0;   // Patrick 27.11.: in der schnellen Montage zwei bis drei Bilder kurz ganz grau
     for (const [zeit, code] of schritte) {
       if (jetzt >= 0 && zeit < jetzt) continue;   // V9.3g: wer beim Gedanken länger gebraucht hat, überspringt schon vergangene Schläge
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
       pruef(g); n++;
+      { const grau = !schnell && teil === 1 && n >= 4 && grauZahl < 3 && Math.random() < .16; if (grau) grauZahl++; welt.style.transition = 'none'; welt.style.filter = grau ? 'saturate(.2)' : ''; }
       const dk = code.startsWith('MD');
       await zeigeBild(code, dk || (teil === 1 && n % 3 === 0) ? 'weich' : 'schnitt');   // jedes dritte Bild weich überblenden
       if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (n % 2) * .015) + ')'; continue; }
@@ -783,6 +787,7 @@ const Spiel = (() => {
       B.style.setProperty('--farbe', ['#ff3fa4', '#7a5cff', '#00d1ff', '#ffb000'][Math.random() * 4 | 0]);
       if (schnell) await warte(.05);
     }
+    welt.style.transition = ''; welt.style.filter = '';   // Montage zu Ende: Farben normal
     if (teil === 2) { welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = ''; }
   }
 

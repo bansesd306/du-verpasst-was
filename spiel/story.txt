@@ -1787,21 +1787,26 @@ Mia: „Denkst du, ich mach sowas?“
 @warte .55
 @bild MIA_GEN schnitt
 … !1.5
+@effekt farbe .88 5
 @bild MIA_SM2 gesicht
 Mia: „Ich geh halt immer zuerst.“
 # stiller Moment (Philip: nur ein Mini-Moment, Musik nur leicht leiser)
+# Patrick 27.11.: Farben verblassen langsam – erst leicht, wenn die Leute verschwinden etwas mehr, bleibt blass; beim Song kommen sie sofort zurück
 @leer
 @musik party mittel langsam
+@effekt farbe .7 3
 @bild MIA_HANDY gesicht
-@warte 1.8
+@warte 2.2
+@effekt farbe .52 2.5
 @bild MIA_HANDY_LEER schnitt
-@warte .7
-@bild MIA_HANDY schnitt
 @warte 1.2
+@bild MIA_HANDY schnitt
+@warte 1.8
 Ich: „Alles okay?“
 @bild MIA_GRINST_b gesicht
 Mia: „Klar.“
-@warte .8
+@warte 1.8
+@effekt farbe 1 .12
 @musik party laut langsam
 # V9.1 (Patrick 26.11., A12): erst Mia, dann der Ruf
 @bild MIA_GRINST_c schnitt

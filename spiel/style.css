@@ -73,7 +73,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .vorstellung #traumrand{opacity:1;mix-blend-mode:screen;background:radial-gradient(ellipse at 50% 48%,transparent 45%,rgba(255,226,185,.22) 62%,rgba(255,236,205,.5) 82%,rgba(255,244,222,.68) 98%)}
 .vorstellung #welt{filter:brightness(.92) saturate(1.05)}
 .vorstellung #vignette{opacity:0;transition:opacity 1.6s}
-.traum #welt{filter:sepia(.35) saturate(1.25) brightness(1.1) blur(.6px)}
+.traum #welt{filter:sepia(.3) saturate(1.42) brightness(1.08) blur(.6px)}   /* Patrick 27.11.: etwas satter, nicht wärmer */
 .einfrieren #welt{filter:grayscale(.75) brightness(.78) contrast(.95)!important}
 .handyoffen.einfrieren #welt{filter:grayscale(.75) brightness(.55) blur(2.5px)!important}
 .einfrieren .atmen,.einfrieren .drift,.einfrieren .schwenk,.einfrieren #licht,.einfrieren #koernung{animation-play-state:paused!important}
