@@ -42,3 +42,8 @@ p = '/home/claude/game/bilder.js'; s = open(p, encoding='utf-8').read()
 m = re.search(r'const OVERLAYS = (\{.*?\});\n', s, re.S); ovs = json.loads(m.group(1)); ovs.update(neu)
 s = s.replace(m.group(0), 'const OVERLAYS = ' + json.dumps(ovs, ensure_ascii=False) + ';\n')
 open(p, 'w', encoding='utf-8').write(s)
+
+# V9.3e: Mia-Daumenkino MD1–MD4 (Gemini, Patrick 27.11.): alle auf MD1 ausgerichtet, 1920x1080
+mb = fertig(cv2.imread(U + 'MD1.jpg'), 1920, 1080); webp('MD1', mb)
+for c in ['MD2', 'MD3', 'MD4']:
+    v2, M = ausrichten(mb, fertig(cv2.imread(U + c + '.jpg'), 1920, 1080)); print(c, np.round(M, 3).tolist()); webp(c, v2)

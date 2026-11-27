@@ -6207,6 +6207,10 @@ const BILDER = {
   MM07: { datei: "img/MM07.webp", text: "Mia-Montage 7", stimmung: "party" },
   MM08: { datei: "img/MM08.webp", text: "Mia-Montage 8", stimmung: "party" },
   MM09: { datei: "img/MM09.webp", text: "Mia-Montage 9", stimmung: "party" },
+  MD1: { datei: "img/MD1.webp", text: "Mia-Daumenkino 1 (Gemini, Patrick 27.11.)", stimmung: "party" },
+  MD2: { datei: "img/MD2.webp", text: "Mia-Daumenkino 2 (Gemini, Patrick 27.11.)", stimmung: "party" },
+  MD3: { datei: "img/MD3.webp", text: "Mia-Daumenkino 3 (Gemini, Patrick 27.11.)", stimmung: "party" },
+  MD4: { datei: "img/MD4.webp", text: "Mia-Daumenkino 4 (Gemini, Patrick 27.11.)", stimmung: "party" },
   MK1: { datei: "img/MK1.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK2: { datei: "img/MK2.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK3: { datei: "img/MK3.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
@@ -8429,6 +8433,7 @@ const Spiel = (() => {
     Object.keys(BILDER).forEach(k => { const e = eintrag(k); if (e.datei && !reihe.includes(e.datei) && new RegExp('(^|[\\s|])' + k + '($|[\\s|])', 'm').test(roh)) reihe.push(e.datei); });
     // V8.9: Gesichts-Overlays (blinzeln, sprechen, Mimik) mitladen – sonst poppen sie erst nach dem Bild auf
     if (typeof OVERLAYS !== 'undefined') Object.keys(OVERLAYS).forEach(k => { const d = 'img/' + k + '.webp'; if (!reihe.includes(d)) reihe.push(d); });
+    ['MD1', 'MD2', 'MD3', 'MD4', 'MM01', 'MM02', 'MM03', 'MM04', 'MM05', 'MM06', 'MM07', 'MM08', 'MM09', 'MK1', 'MK2', 'MK3'].forEach(c => { const d = BILDER[c] && BILDER[c].datei; if (d && !reihe.includes(d)) reihe.push(d); });   // V9.3e: Mia-Montage
     let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 10)); };
     for (let k = 0; k < 6; k++) naechstes();
   }
@@ -8481,7 +8486,7 @@ const Spiel = (() => {
     if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .45 : modus === 'weich' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
+    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .45 : modus === 'weich' ? .3 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'zoom' || modus === 'schock') { neu.style.transform = 'scale(1.05)'; neu.style.transition += ', transform .4s cubic-bezier(.2,.9,.3,1)'; }   // V9.3c: Schnitt + kleiner Zoom (dynamisch) / + Lichtblitz (Schock)
@@ -8798,15 +8803,18 @@ const Spiel = (() => {
     }
     if (schnell) vz += 3.2 + (MIA_BEATS[44] - MIA_BEATS[0]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
+    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];   // V9.3e (Patrick 27.11.): erst lässig wippen (Daumenkino), dann wild
     const schritte = []; let i = 0, f = 0;
     while (i < 44) { /* V9.3d: ohne die letzten 7 Schläge */ const doppel = !(i >= 16 && i < 24) && !(i >= 40); { // V9.0: kein Bild zweimal in den letzten 5 Schritten (wirkte wie Doppelbild); Reihenfolge zufällig, aber ohne Wiederholung
         const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
-        schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); f++; } i += doppel ? 2 : 1; }
+        if (i < 12) { schritte.push([MIA_BEATS[i], DK[f % DK.length]]); f++; } else schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]); } i += doppel ? 2 : 1; }
     const weiss = $('#weiss'); const strobo = $('#strobo');
     for (const [zeit, code] of schritte) {
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
       pruef(g);
-      await zeigeBild(code, schritte.indexOf(schritte.find(x => x[0] === zeit)) % 3 === 2 ? 'weich' : 'schnitt');   // V9.3d: jedes dritte Bild weich überblenden
+      const dk = code.startsWith('MD');
+      await zeigeBild(code, dk || schritte.indexOf(schritte.find(x => x[0] === zeit)) % 3 === 2 ? 'weich' : 'schnitt');
+      if (dk) { kamera.style.transition = 'transform .6s ease'; kamera.style.transform = 'scale(' + (1.02 + (schritte.findIndex(x => x[0] === zeit) % 2) * .015) + ')'; continue; }   // V9.3d: jedes dritte Bild weich überblenden
       const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
       kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
