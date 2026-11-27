@@ -1779,9 +1779,13 @@ Mia: „Zumindest nicht für mich.“
 Ich: „Und die drei ghostest du dann alle?“
 @bild N35n gesicht
 @warte .9
-# V9.2: Kopf neigen statt Sprung in die Mitte
-@bild MIA_TILT langsam
+# Patrick 27.11.: ehrlich genervt, leicht beleidigt – kurzer Ruck, dann kurzer Einschub Nahaufnahme und zurück
+@bild MIA_GEN ruck
 Mia: „Denkst du, ich mach sowas?“
+@warte .5
+@bild MIA_GENn schnitt
+@warte .55
+@bild MIA_GEN schnitt
 … !1.5
 @bild MIA_SM2 gesicht
 Mia: „Ich geh halt immer zuerst.“
