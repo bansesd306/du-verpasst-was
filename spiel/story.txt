@@ -4525,6 +4525,8 @@ Lynn: „Traust du dich nächstes Mal?“
 @bild N34ZA sehrlangsam
 @warte 3.5
 Ich: „Ja.“
+# Patrick 28.11.: der warme Endsong geht nach dem Ja ganz leise an und trägt bis zurück ins Restaurant, am Ende wird er lauter
+@endsong leise
 @warte 2
 @bild N34ZB sehrlangsam
 @warte 4

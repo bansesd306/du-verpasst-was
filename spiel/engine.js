@@ -1056,6 +1056,7 @@ const Spiel = (() => {
           console.warn('@zurueck ohne @rufe'); return 'stopp'; }
         pc = stack.pop(); return 'sprung';
       case 'titel': await titel(a); break;
+      case 'endsong': if (a === 'leise') Ton.outroLeise(); else if (a === 'aus') Ton.outroAus(); break;   // 28.11.: leiser Endsong schon im Tagtraum
       case 'laehmung': await laehmung(a.split('|').map(x => x.trim().replace(/^„|“$/g, ''))); break;
       case 'ende_spiel': await endeSpiel(); return 'stopp';
       default: console.warn('Befehl?', ins.name);
@@ -1163,7 +1164,7 @@ const Spiel = (() => {
       sp.style.transition = 'opacity 1.6s ease'; sp.style.opacity = 1;   // Patrick 26.11.: gleich schwarz, kein Bildspringen vor dem Text
       await warte(2.4);
       sp.classList.add('zieh'); Ton.spiele('haken', { vol: 1.1 }); await warte(.9);   // Patrick 26.11.: Check-Ton statt Schreiben
-      await warte(2); Ton.outro('warm');
+      await warte(2); if (!Ton.outroLauter(.57, 4)) Ton.outro('warm');
       await warte(4); await tipp(); sp.style.transition = 'opacity 1.2s ease'; sp.style.opacity = 0; await warte(1.4); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;

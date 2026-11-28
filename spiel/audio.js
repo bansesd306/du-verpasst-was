@@ -259,6 +259,13 @@ const Ton = (() => {
       const go = () => { if (nr !== outroNr || outroNode) return; outroNode = welche === 'warm' ? quelle('ende_warm', master, { vol: .57, einblenden: 4, loop: true }) : quelle('Outro', master, { vol: .85, ab: eintrag('Outro').endeAb || 65, einblenden: 1.5, loop: true }); };
       if (P[k]) go(); else lade(k).then(go);   // V8.8 (G6): Datei noch nicht geladen → nach dem Laden starten
     },
+    // 28.11. (Patrick): der warme Endsong setzt nach dem „Ja.“ ganz leise ein und wird am Ende lauter
+    outroLeise() {
+      if (!ctx || outroNode) return; const nr = ++outroNr;
+      const go = () => { if (nr !== outroNr || outroNode) return; outroNode = quelle('ende_warm', master, { vol: .1, einblenden: 6, loop: true }); };
+      if (P.ende_warm) go(); else lade('ende_warm').then(go);
+    },
+    outroLauter(vol = .57, sek = 4) { if (!ctx || !outroNode) return false; const g = outroNode.g, t = now(); g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t); g.gain.linearRampToValueAtTime((eintrag('ende_warm').vol || 1) * vol, t + sek); return true; },
     outroAus() { outroNr++; if (outroNode) { outroNode.stop(3); outroNode = null; } },
     get outroLaeuft() { return !!outroNode; },
   };
