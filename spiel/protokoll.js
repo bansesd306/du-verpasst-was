@@ -50,7 +50,7 @@
     wickel(Handy, 'karussell', 'handy', m => 'karussell ' + m);
   }
   addEventListener('error', e => log('js-fehler', String(e.message || e)));
-  addEventListener('unhandledrejection', e => log('js-fehler', String(e.reason && e.reason.message || e.reason)));
+  addEventListener('unhandledrejection', e => { if (e.reason && String(e.reason) === 'Symbol(abbruch)') return; log('js-fehler', String(e.reason && e.reason.message || e.reason)); });
   log('start', { sitzung, ua: navigator.userAgent.slice(0, 160), bildschirm: `${screen.width}x${screen.height}` });
 
   // ---- Oberfläche: Knopf ⚑ + Eingabe ----
@@ -92,3 +92,4 @@
     catch (e) { const ta = box.querySelector('textarea'); ta.value = t; ta.select(); box.querySelector('.st').textContent = 'Kopieren blockiert – Text ist markiert, bitte selbst kopieren.'; }
   });
 })();
+

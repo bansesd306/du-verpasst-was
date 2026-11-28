@@ -490,7 +490,8 @@ const Rahmen = (() => {
       await bilanzZeigen();
       $('g-frage').textContent = T('gefuehl_frage', 'Wie hast du dich gerade gefühlt?');
       const liste = $('g-liste'); liste.innerHTML = '';
-      await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; b.textContent = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.onclick = ev => { ev.stopPropagation(); r(i); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
+      const gAntwort = await new Promise(r => [1, 2, 3].forEach(i => { const b = document.createElement('button'); b.className = 'knopf'; b.type = 'button'; const txt = T('gefuehl_' + i, '[Antwort ' + i + ' – offen]'); b.textContent = txt; b.onclick = ev => { ev.stopPropagation(); r({ i, txt }); }; liste.appendChild(b); }) || zeige('s-gefuehl'));
+      if (gAntwort) { S().gefuehle = S().gefuehle || []; S().gefuehle.push({ ende: name, nr: gAntwort.i, text: gAntwort.txt, t: new Date().toISOString() }); sichern(); if (window.Protokoll) try { Protokoll.log('gefuehl', name + ': ' + gAntwort.txt); } catch (e) { } }
       endeKarte(name, .9);
       await new Promise(r => weiterWarter = r);
       if (nachKarte) { zeige(null); await nachKarte(); }
@@ -498,3 +499,4 @@ const Rahmen = (() => {
     },
   };
 })();
+

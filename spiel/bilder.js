@@ -37,7 +37,7 @@ const BILDER = {
   N31d: { datei: "img/N31d.webp", text: "Abend, er am Schreibtisch, Lampe an", stimmung: "zimmer", tisch: true },
   N06:  { datei: "img/N06.webp", text: "Kleiderschrank offen (Gemini, KI-Hinweis übermalt, V8.5)", stimmung: "zimmer" },
   N07:  { datei: "img/N07.webp", text: "Ich-Sicht auf dem Bett, angezogen mit Jacke und Schuhen – Heimkommen (Gemini, V8.5)", stimmung: "nacht" },
-  L7: { datei: "img/L7.webp", text: "Schreibtisch, Lampe aus, Handy leuchtet auf dem Buch (Gemini, V8.5)", stimmung: "nacht", tisch: true },
+  L7: { datei: "img/L7.webp", text: "Schreibtisch, Lampe aus, Handy leuchtet auf dem Buch (Gemini, V8.5)", stimmung: "nacht", tisch: true, handy: [0.54, 0.68, 0.14, 0.12] },
   MO_KAFFEE: { datei: "img/MO_KAFFEE.webp", text: "Montag früh: Küchentisch, Kaffee, Toast, Handy, Jacke (Gemini, V8.5)", stimmung: "morgen" },
   SO1a: { datei: "img/SO1a.webp", text: "Sonntag: Morgen, er am Schreibtisch", stimmung: "morgen", tisch: true },
   SO1b: { datei: "img/SO1b.webp", text: "Sonntag: Mittag, er am Schreibtisch", stimmung: "tag", tisch: true },
@@ -247,7 +247,7 @@ const BILDER = {
   MK1: { datei: "img/MK1.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK2: { datei: "img/MK2.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
   MK3: { datei: "img/MK3.webp", text: "Mia-Montage gespiegelt", stimmung: "party" },
-  K10P: { datei: "img/K10P.webp", text: "Wie K10H, Handy liegt umgedreht rechts auf dem Tisch (Gemini, V8.8)", stimmung: "zimmer", tisch: true, ohneHaende: "K10O" },
+  K10P: { datei: "img/K10P.webp", text: "Wie K10H, Handy liegt umgedreht rechts auf dem Tisch (Gemini, V8.8)", stimmung: "zimmer", tisch: true, ohneHaende: "K10O", handy: [0.84, 0.71, 0.14, 0.16] },
   K10H: { datei: "img/K10H.webp", text: "Ich-Sicht am Schreibtisch nachts, Hände auf dem Tisch, Lynns Stift auf dem Buch (V8)", stimmung: "zimmer", tisch: true, ohneHaende: "K10O" },
   K10O: { datei: "img/K10O.webp", text: "Wie K10H, aber ohne Hände auf dem Tisch (er hält das Handy) (V8.2)", stimmung: "zimmer", tisch: true, mitHaenden: "K10H" },
   N38c: { datei: "img/N38c.webp", text: "Rückblende Seminar: Lynn grinst spöttisch rüber (nah) (V8)", stimmung: "traum", figur: true },
@@ -443,3 +443,4 @@ const ZWISCHEN = {
   // Patrick 27.11.: Lynns Lachen wechselt auf einmal wie in der Demo (Zwischenbilder N14lb/N14la raus – Ton kam verzögert)
   'N35s>N35n': 'N35sn', 'N35n>N35s': 'N35sn',
 };
+

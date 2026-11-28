@@ -89,9 +89,15 @@ const Handy = (() => {
   const istGruppe = n => n === 'gruppe' || !!(meta[n] && meta[n].gruppe);
   function vorschauVon(m) { const t = m.typ === 'foto' ? '📷 Foto' : m.typ === 'video' ? '🎥 Video' : m.typ === 'umfrage' ? '📊 ' + m.text : String(m.text).replace(/^↪ [^:]+: .+? ⏎ /, ''); return (m.von === 'Ich' ? (istGruppe(aktChat) ? '✓✓ Du: ' : '✓✓ ') : (istGruppe(aktChat) ? m.von + ': ' : '')) + t; }
   let gruppe = { name: 'Gruppe', mitglieder: 'Jonas, Lena, Tim' };
-  let offen = false, app = null, aktChat = null, notifs = [], callTimer = null, klingelt = false;
+  let offen = false, app = null, aktChat = null, notifs = [], callTimer = null, klingelt = false, hGen = 0, tippKnoten = null;
   const warteZ = (f, r) => { if (!Spiel.schnell) return warte(r); Spiel._debug && Spiel._debug.vzPlus((r - f) / 1000); return warte(f); };
-  const warte = ms => { Spiel._debug && Spiel._debug.vzPlus(ms / 1000); return new Promise(r => setTimeout(r, ms * (Spiel.schnell ? .15 : 1))).then(() => Spiel.pause()); };
+  const warte = ms => {
+    const g = hGen;
+    Spiel._debug && Spiel._debug.vzPlus(ms / 1000);
+    return new Promise(r => setTimeout(r, ms * (Spiel.schnell ? .15 : 1)))
+      .then(() => Spiel.pause())
+      .then(() => { if (g !== hGen && window.Spiel && Spiel.ABBRUCH) throw Spiel.ABBRUCH; });
+  };
   // gemessene Abstände zwischen zwei Anschlägen (WhatsApp-Aufnahme), Sekunden
   const TAKT = [.33, .26, .23, .15, .19, .10, .18, .35, .18, .16, .11, .18, .22, .18, .14, .10, .13, .13, .15, .17, .14, .24, .22, .22, .14, .16, .12, .14, .16, .20, .27];
 
@@ -339,17 +345,22 @@ const Handy = (() => {
       for (const z of zeichen) { s += z; taste(z); eingabe(s); Ton.spiele('tipp'); let d = TAKT[Math.floor(Math.random() * TAKT.length)] * 1000; if (/[ .,!?]/.test(z)) d += 60; await warte(d); }
     } else {
       // Abschnitte der echten Aufnahme: jeder Anschlag = ein Zeichen, Pausen kommen aus der Aufnahme
-      let i = 0;
+      const g = hGen; let i = 0;
       while (i < zeichen.length) {
+        if (g !== hGen && window.Spiel && Spiel.ABBRUCH) throw Spiel.ABBRUCH;
         const k = Math.floor(Math.random() * (A.length - 8)); const n = Math.min(zeichen.length - i, A.length - k);
-        const ab = Math.max(0, A[k] - .03); const knoten = Ton.tippLauf(ab, A[k + n - 1] - ab + .16);
+        const ab = Math.max(0, A[k] - .03); if (tippKnoten) { tippKnoten.stop(); tippKnoten = null; }
+        tippKnoten = Ton.tippLauf(ab, A[k + n - 1] - ab + .16);
         const t0 = performance.now();
         for (let j = 0; j < n; j++) {
-          const soll = (A[k + j] - ab) * 1000; const ist = performance.now() - t0; if (soll > ist) await new Promise(r => setTimeout(r, soll - ist));
+          const soll = (A[k + j] - ab) * 1000; const ist = performance.now() - t0;
+          if (soll > ist) await new Promise(r => setTimeout(r, soll - ist));
+          if (g !== hGen) { if (tippKnoten) { tippKnoten.stop(); tippKnoten = null; } if (window.Spiel && Spiel.ABBRUCH) throw Spiel.ABBRUCH; return; }
           s += zeichen[i + j]; taste(zeichen[i + j]); eingabe(s);
         }
         i += n; if (i < zeichen.length) await warte(200);
       }
+      tippKnoten = null;
     }
     await warte(800);
   }
@@ -393,9 +404,11 @@ const Handy = (() => {
     get app() { return app; },
     setGruppe(name, mitgl) { gruppe = { name, mitglieder: mitgl }; },
     aktualisiereZeit,
+    appIcon(name) { return APPICON[name] || APPICON.WhatsApp; },
     zu() {
-      offen = false; el.classList.remove('an', 'weg'); document.getElementById('buehne').classList.remove('handyoffen');
-      notifs = []; $('.sp-notifs').innerHTML = ''; $('.hhinweis').classList.remove('an'); tastatur(false); eingabe('');
+      offen = false; if (tippKnoten) { tippKnoten.stop(); tippKnoten = null; }
+      el.classList.remove('an', 'weg'); document.getElementById('buehne').classList.remove('handyoffen');
+      notifs = []; $('.sp-notifs').innerHTML = ''; $('.hhinweis').classList.remove('an'); clearTimeout($('.hhinweis').t); tastatur(false); eingabe('');
       this.klingelAus(); $('.stummtoast').classList.remove('an'); this.fotozoomWeg();
       uebergang.forEach(clearTimeout); uebergang = []; el.querySelectorAll('.app').forEach(a => a.classList.remove('wartet', 'waechst', 'schrumpft', 'drunter', 'kommt', 'weiter'));
     },
@@ -473,7 +486,7 @@ const Handy = (() => {
           await warte(600); zeile = $(`.l-zeile[data-n="${name}"]`);
         }
         if (zeile) { zeile.classList.add('druck'); await warte(260); }
-        const s2 = $('.l-suche'); s2.classList.remove('aktiv'); s2.textContent = '🔍  Fragen Sie Meta AI oder suchen Sie';
+        const s2 = $('.l-suche'); s2.classList.remove('aktiv'); s2.innerHTML = '<svg viewBox="0 0 24 24" class="ico o lupe"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg><span class="l-st">Meta AI fragen oder suchen</span>';
       }
       aktChat = name; if (meta[name]) meta[name].ungelesen = 0;
       zeige('chat'); setzeKopf(); renderChat(); eingabe(''); tastatur(false);
@@ -680,6 +693,9 @@ const Handy = (() => {
     },
     post(code, text) {
       oeffne(); zeige('story'); const s = $('[data-app=story]'); s.classList.add('post'); s.classList.remove('aufrufe'); s.querySelector('.st-bild').classList.remove('ganz');
+      const h = s.querySelector('.st-fuss span'); if (h) { h.textContent = '♡'; h.classList.remove('rot'); }
+      const b = s.querySelector('.st-balken i'); if (b) { b.style.transition = 'none'; b.style.width = '100%'; }
+      s.querySelector('.av').outerHTML = '<span class="av" style="background:#3a4660;font-size:21px">Du</span>';
       s.querySelector('.st-name').textContent = 'Deine Story'; s.querySelector('.st-zeit').textContent = 'Gerade eben';
       s.querySelector('.st-bild').innerHTML = Spiel.bildHTML(code, true) + `<div class="st-text">${esc(text)}</div>`;
       s.querySelector('.st-views b').textContent = '0'; displayFarbe();
@@ -764,7 +780,7 @@ const Handy = (() => {
     laut() { $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); },   // V8.8 (G19)
     // V8.8 (G29): beim Selbst-Nachschauen zeigt der Sperrbildschirm die ungelesenen Chats (außer stummen)
     // V8.9: stille Meldung einer anderen App (zählt am Knopf, erscheint beim Nachschauen auf dem Sperrbildschirm)
-    meldung(app, titel, text, zeit) { const z = zeit || uhrText(); if (sonst.some(x => x.app === app && x.titel === titel && x.text === (text || '') && x.zeit === z)) return; sonst.push({ app, titel, text: text || '', zeit: z, n: ++zaehler, min: (Spiel.V && Spiel.V.uhr) || 0 }); },
+    meldung(app, titel, text, zeit, gesehen) { const z = zeit || uhrText(); if (sonst.some(x => x.app === app && x.titel === titel && x.text === (text || '') && x.zeit === z)) return; sonst.push({ app, titel, text: text || '', zeit: z, n: ++zaehler, min: (Spiel.V && Spiel.V.uhr) || 0, gesehen: !!gesehen }); },
     // V8.9 (Patrick 24.11.): gesehene Meldungen zählen nicht mehr, bleiben aber auf dem Sperrbildschirm (bis die App geöffnet wird oder sie alt sind)
     meldungenGelesen() { sonst.forEach(x => x.gesehen = true); },
     appGeoeffnet(appName, titel) { sonst = sonst.filter(x => !(x.app === appName && (!titel || x.titel === titel))); },
@@ -811,8 +827,11 @@ const Handy = (() => {
     },
     _dbg() { return { meta: Object.fromEntries(Object.entries(meta).map(([k, m]) => [k, { u: m.ungelesen, v: m.vorschau, st: !!m.stumm }])), sonst: sonst.slice() }; },
     reset() {
+      hGen++; if (tippKnoten) { tippKnoten.stop(); tippKnoten = null; }
       for (const k in chats) delete chats[k];
+      aktChat = null; this._lesenAlt = undefined; this._umfrage = null; this._pdf = null; this._live = null; clearTimeout(this._sofortT);
       $('.sp-stumm').classList.remove('an'); el.classList.remove('handy-stumm'); $('[data-app=chat]').classList.remove('chatstumm', 'menue', 'dialog'); for (const k in meta) delete meta[k]; sonst = []; warteAuf = null; $('.n-titel').innerHTML = 'Lernplan <span class="n-tag">Samstag</span><i class="cursor"></i>'; $('.n-liste').innerHTML = '<div>☐ 9:00 Schuldrecht AT</div><div>☐ 10:00 BGB AT</div><div>☐ 14:00 Fälle 1–5</div>'; this.fotozoomWeg(); this.zu();
     },
   };
 })();
+

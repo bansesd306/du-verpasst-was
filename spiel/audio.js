@@ -7,7 +7,7 @@ const Ton = (() => {
   const P = {};           // Name -> AudioBuffer
   const R = {};           // rückwärts
   const loops = {}, loopGain = {};
-  let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false, outroNr = 0;
+  let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false, outroNr = 0, musikNr = 0, liedNr = 0;
 
   let analyser = null, fftDaten = null, pegelSchnitt = 0; const gemerkt = {}; let introSoll = false;
   function init() {
@@ -22,10 +22,9 @@ const Ton = (() => {
     musikGain = ctx.createGain(); musikGain.gain.value = 0;
     musikBus = ctx.createGain(); musikBus.connect(musikFilter); musikFilter.connect(musikGain); musikGain.connect(master);
     analyser = ctx.createAnalyser(); analyser.fftSize = 512; analyser.smoothingTimeConstant = .55; musikGain.connect(analyser); fftDaten = new Uint8Array(analyser.frequencyBinCount);
-    // kurze Töne zuerst, Musik danach
-    const MUSIK = /^M\d|^mia$|Outro|lofi|lernflow|restaurant|club2|ende_warm|tippen_laptop|lied/;
-    const namen = Object.keys(TOENE).filter(k => eintrag(k).datei).sort((a, b) => (b === 'muffled_party') - (a === 'muffled_party') || MUSIK.test(a) - MUSIK.test(b));
-    // V8.8 (G47): nicht alle ~45 Dateien gleichzeitig – Warteschlange mit 3 gleichzeitig
+    // v5: leichte Geräusche + Start/Prolog sofort laden; große Musikstücke gezielt nachladen
+    const SPAET_MUSIK = /^M\d|^mia$|lofi|lernflow|restaurant|club2|ende_warm|lied|tim_party|party_fern/;
+    const namen = Object.keys(TOENE).filter(k => eintrag(k).datei && !SPAET_MUSIK.test(k)).sort((a, b) => (b === 'muffled_party') - (a === 'muffled_party') || (b === 'Outro') - (a === 'Outro'));
     let i = 0; const naechste = () => { if (i >= namen.length) return; lade(namen[i++]).then(naechste); };
     for (let k = 0; k < 3; k++) naechste();
     // V8.8 (G67): App-Wechsel/Bildschirmsperre – Ton anhalten und danach weiter
@@ -34,8 +33,9 @@ const Ton = (() => {
   function eintrag(k) { const e = TOENE[k]; return typeof e === 'string' ? { datei: e } : (e || {}); }
   const ladend = {};
   function lade(k) {
+    if (P[k]) return Promise.resolve(P[k]);
     if (ladend[k]) return ladend[k];
-    return ladend[k] = fetch(eintrag(k).datei).then(r => r.arrayBuffer()).then(b => new Promise((ok, f) => ctx.decodeAudioData(b, ok, f))).then(buf => { P[k] = buf; return buf; }).catch(() => null);
+    return ladend[k] = fetch(eintrag(k).datei).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }).then(b => new Promise((ok, f) => ctx.decodeAudioData(b, ok, f))).then(buf => { P[k] = buf; return buf; }).catch(() => { delete ladend[k]; return null; });
   }
   const now = () => ctx.currentTime;
   function quelle(k, ziel, o = {}) {
@@ -100,6 +100,8 @@ const Ton = (() => {
   let ausklingNr = 0;
   function loop(name, an) {
     if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume().catch(() => { });
+    if (an && loops[name]) return;
     if (loops[name]) { loops[name](); delete loops[name]; }
     if (!an || gesperrt) return;
     const g = ctx.createGain(); g.connect(loopsBus); g.gain.setValueAtTime(0, now()); g.gain.linearRampToValueAtTime(1, now() + .4);
@@ -125,44 +127,54 @@ const Ton = (() => {
     still: [0, 18000], strasse2: [.32, 420], strasse3: [.48, 650], strasse4: [.7, 1100], aufnahme: [.8, 18000]
   };
   function stelle(art, langsam) {
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume().catch(() => { });
     const p = STUFEN[art] || STUFEN.laut; const t = now();
     musikGain.gain.cancelScheduledValues(t); musikGain.gain.setTargetAtTime(p[0] * .7, t, langsam ? 1.2 : .25);
     musikFilter.frequency.cancelScheduledValues(t); musikFilter.frequency.setTargetAtTime(p[1], t, .3);
   }
   let miaAb = 21;
+  function spurDazu(m, nr, k, o) {
+    const starte = () => { if (nr !== musikNr || !musik || musik !== m || gesperrt) return; const q = quelle(k, musikBus, o); if (q) m.qs.push(q); };
+    if (P[k]) starte(); else lade(k).then(starte);
+  }
   function musikStart(welche) {
     if (musik && musik.art === welche) return;
     musikStopp(true);
-    const qs = [];
-    if (welche === 'party') { const a = quelle('M1_party', musikBus, { loop: true }); if (a) qs.push(a); [['gemurmel', .62], ['gemurmel2', .3], ['frauen', .34]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); if (!a) lade('M1_party').then(() => { if (musik && musik.art === 'party' && !musik.qs.length) { const q = quelle('M1_party', musikBus, { loop: true }); q && musik.qs.push(q); } }); }
-    if (welche === 'spaet') { const a = quelle('tim_party', musikBus, { loop: true, vol: .4 });   // V8.9: neue Musik für Tims Afterparty (11 dB lauter als M3_spaet)
-      if (a) qs.push(a); }
-    if (welche === 'club') { const a = quelle('party_club2', musikBus, { loop: true, vol: 1 }); if (a) qs.push(a); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => { const q = quelle(k, musikBus, { loop: true, vol: v, ab: Math.random() * 8 }); if (q) qs.push(q); }); }
-    if (welche === 'flow') { const a = quelle('lernflow', musikBus, { loop: true, vol: .5, einblenden: 7 });   // Patrick 26.11.: kommt langsam, nachdem die Party im Kopf verstummt ist
-      if (a) qs.push(a); }   // Patrick 26.11.: eigenes Lied für den Lern-Flow
-    if (welche === 'lofi') { const a = quelle('lofi_melancholy', musikBus, { loop: true, vol: 1.25, einblenden: 2.5 }); if (a) qs.push(a); }
-    if (welche === 'fern') { const a = quelle('party_fern', musikBus, { loop: true }); if (a) qs.push(a); }
-    musik = { art: welche, qs };
-    if (welche === 'mia') { const a = quelle('mia', musikBus, { ab: miaAb }); if (a) qs.push(a); musik.t0 = now() - miaAb; }
+    const nr = ++musikNr; const m = { art: welche, qs: [], nr, gesprungen: false }; musik = m;
+    if (welche === 'party') { spurDazu(m, nr, 'M1_party', { loop: true }); [['gemurmel', .62], ['gemurmel2', .3], ['frauen', .34]].forEach(([k, v]) => spurDazu(m, nr, k, { loop: true, vol: v, ab: Math.random() * 8 })); }
+    if (welche === 'spaet') { spurDazu(m, nr, 'tim_party', { loop: true, vol: .4 }); }
+    if (welche === 'club') { spurDazu(m, nr, 'party_club2', { loop: true, vol: 1 }); [['gemurmel', .55], ['frauen', .3]].forEach(([k, v]) => spurDazu(m, nr, k, { loop: true, vol: v, ab: Math.random() * 8 })); }
+    if (welche === 'flow') { spurDazu(m, nr, 'lernflow', { loop: true, vol: .5, einblenden: 7 }); }
+    if (welche === 'lofi') { spurDazu(m, nr, 'lofi_melancholy', { loop: true, vol: 1.25, einblenden: 2.5 }); }
+    if (welche === 'fern') { spurDazu(m, nr, 'party_fern', { loop: true }); }
+    if (welche === 'mia') {
+      const goMia = () => { if (nr !== musikNr || musik !== m || m.gesprungen || gesperrt) return; const a = quelle('mia', musikBus, { ab: miaAb }); if (a) { m.qs.push(a); m.t0 = now() - miaAb; } };
+      if (P.mia) goMia(); else { m.t0 = now() - miaAb; lade('mia').then(goMia); }
+    }
   }
   function musikStopp(sofort) {
+    musikNr++;
     if (!musik) return; const m = musik; musik = null;
     if (sofort) { m.qs.forEach(q => q.stop()); return; }
-    m.qs.forEach(q => q.stop(m.art === 'flow' ? 3.5 : 1.2));   // Flow-Lied weicher ausblenden   // V8.8 (G33): jede alte Spur einzeln ausblenden (neue Musik dreht den Bus sonst wieder hoch)
+    m.qs.forEach(q => q.stop(m.art === 'flow' ? 3.5 : 1.2));
   }
   function lied(modus) {
     liedStopp();
+    const nr = ++liedNr;
     const lp = modus === 'dumpf' ? 700 : modus === 'telefon' ? 1500 : 0;
     const vol = modus === 'dumpf' ? .55 : modus === 'telefon' ? .3 : 1;
-    const q = quelle('lied', master, { lp: lp || undefined, vol, ab: (eintrag('lied').start || 0), einblenden: .4 });
-    liedNode = q;
+    const go = () => { if (nr !== liedNr || gesperrt) return; liedNode = quelle('lied', master, { lp: lp || undefined, vol, ab: (eintrag('lied').start || 0), einblenden: .4 }); };
+    if (P.lied) go(); else lade('lied').then(go);
   }
-  function liedStopp() { if (liedNode) { liedNode.stop(1.2); liedNode = null; } }
+  function liedStopp() { liedNr++; if (liedNode) { liedNode.stop(1.2); liedNode = null; } }
 
   function vibriere(m) { try { if (m.length && navigator.vibrate) navigator.vibrate(m); } catch (e) { } }
 
   return {
     init,
+    vorladen(...namen) { if (!ctx) return; namen.forEach(k => { if (TOENE[k] && eintrag(k).datei && !P[k]) lade(k); }); },
+    bereitFuer(k) { if (!ctx || !TOENE[k] || !eintrag(k).datei) return Promise.resolve(); return P[k] ? Promise.resolve(P[k]) : lade(k); },
     get bereit() { return !!ctx; },
     // V8.5: ist ein Ton schon geladen und dekodiert? (Startbild: Web-Audio-Partymusik übernimmt vom Audio-Element)
     hat(k) { return !!P[k]; },
@@ -203,6 +215,7 @@ const Ton = (() => {
     miaPos() { return musik && musik.art === 'mia' && ctx ? now() - musik.t0 : -1; },
     miaSpring(ab) {
       if (!ctx || !musik || musik.art !== 'mia') return;
+      musik.gesprungen = true;
       const alt = musik.qs.slice(); const a = quelle('mia', musikBus, { ab, einblenden: .25 });
       if (a) { musik.qs = [a]; musik.t0 = now() - ab; } alt.forEach(q => q.stop(.3));
     },
@@ -211,16 +224,16 @@ const Ton = (() => {
       musikGain.gain.cancelScheduledValues(t); musikGain.gain.setValueAtTime(musikGain.gain.value, t); musikGain.gain.linearRampToValueAtTime(p[0] * .7, t + dauer);
       musikFilter.frequency.cancelScheduledValues(t); musikFilter.frequency.setValueAtTime(musikFilter.frequency.value, t); musikFilter.frequency.exponentialRampToValueAtTime(p[1], t + dauer);
     },
-    stille() { if (!ctx) return; Object.keys(loops).forEach(k => loop(k, false)); musikStopp(true); liedStopp(); musikGain.gain.setValueAtTime(0, now()); },
+    stille() { if (!ctx) return; const t = now(); Object.keys(loops).forEach(k => loop(k, false)); musikStopp(true); liedStopp(); musikGain.gain.cancelScheduledValues(t); musikGain.gain.setValueAtTime(0, t); musikFilter.frequency.cancelScheduledValues(t); musikFilter.frequency.setValueAtTime(18000, t); },
     sperre(an) { gesperrt = an; if (an && ctx) this.stille(); },
-    klangZurueck() { if (!ctx) return; ausklingNr++; const t = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(1, t); }); },
+    klangZurueck() { gesperrt = false; if (!ctx) return; if (ctx.state === 'suspended') ctx.resume().catch(() => { }); ausklingNr++; const t = now(); master.gain.cancelScheduledValues(t); master.gain.setValueAtTime(.9, t); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(1, t); }); },
     // V8.9 (Patrick 24.11.): am Ende Raumton, Vögel & Co. langsam ausblenden, bis alles weg ist (Musik bleibt Sache von outro/outroAus)
     ausklingen(sek = 5) {
       if (!ctx) return; const t = now(); const nr = ++ausklingNr;
       [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t); b.gain.setValueAtTime(b.gain.value, t); b.gain.linearRampToValueAtTime(0.0001, t + sek); });
       setTimeout(() => { if (nr !== ausklingNr) return; Object.keys(loops).forEach(k => loop(k, false)); setTimeout(() => { if (nr !== ausklingNr) return; const t2 = now(); [loopsBus, sfx].forEach(b => { b.gain.cancelScheduledValues(t2); b.gain.setValueAtTime(1, t2); }); }, 2500); }, sek * 1000 + 100);
     },
-    lautMaster(v, zeit = .3) { if (ctx) master.gain.setTargetAtTime(v, now(), zeit); },
+    lautMaster(v, zeit = .3) { if (!ctx) return; const t = now(); master.gain.cancelScheduledValues(t); master.gain.setTargetAtTime(v, t, zeit); },
     vibriere,
     // Vibration je nach Ort: tisch (scheppert), bett (nah, voll), tasche (gedämpft), sonst normal
     vibration(ort, o = {}) {
@@ -249,3 +262,4 @@ const Ton = (() => {
     get outroLaeuft() { return !!outroNode; },
   };
 })();
+

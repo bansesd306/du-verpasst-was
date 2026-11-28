@@ -288,6 +288,7 @@ Lynn.
 @musik aus
 @warte 1.8
 == SEMINAR_FLASHBACK
+@loop lampe aus
 @bild N38a traum
 @raum tag
 @loop seminar an
@@ -301,11 +302,10 @@ Lynn.
 @gesicht N38bl
 @ton lynn_lacht1 leise
 … !1.2
-@gesicht aus
-@bild N38n schnitt
+@bild N38n weich
 … !1.2
 # Patrick 26.11.: Gesichter weich abfallend: kichern (N38b, N38n) → lachend (LP2) → Stift (N38, leichtes Lächeln) → LP11 → neutral (LP3)
-@bild LP2 schnitt
+@bild LP2 gesicht
 @warte 1.2
 @bild N38 pose
 @ton stift leise
@@ -347,6 +347,7 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 @loop seminar aus
 @effekt traum aus
 @raum nacht
+@loop lampe an
 @bild N02 schnitt
 @warte .8
 @handy her
@@ -1169,7 +1170,8 @@ Sie verschwindet ja nicht. !3
 == L8_HANDYWEG
 @handy zu
 @ton handy_ablegen
-@bild K10H
+# Etappe 2: Lampe wurde in L5 ausgeschaltet – Zimmer bleibt dunkel vor „Licht aus.“
+@bild K10H dunkel
 @setze handyweg
 @setze handyweit = 1
 @warte 1
@@ -1194,6 +1196,7 @@ Wenn ich jetzt losgehe, bin ich kurz vor zwölf da. !3
 == L9_LICHTAUS
 @loop bass_leiser aus
 @loop bass_fern aus
+@loop lampe aus
 @handy zu
 @ton! lichtschalter
 @schwarz schnitt
@@ -1426,6 +1429,7 @@ Die Bässe gehen bis auf die Treppe.
 ? „Aufs Bett.“ -> ZURUECK_B
 
 == UMDREHEN_SPAET
+@loop lampe aus
 @ton! lichtschalter
 @schwarz schnitt
 @warte 1
@@ -1580,6 +1584,8 @@ Ich steck es wieder ein.
 @pfad+ Küche
 @setze kueche
 @uhr +5
+@party an
+@musik party laut
 @bild N13
 # V9.1 (E1): nur über den Handy-Knopf zu sehen
 @handy meldung Instagram | tim_k97 | tim_k97 ist jetzt live 🔴
@@ -1702,6 +1708,8 @@ Lena: „Jetzt bleibst du aber auch.“
 @pfad+ Tanzfläche
 @setze tanz
 @uhr +5
+@party an
+@musik party laut
 @bild N35M1 langsam
 @warte 1.6
 @bild N35M2 langsam
@@ -1795,13 +1803,15 @@ Mia: „Ich geh halt immer zuerst.“
 @leer
 @musik party mittel langsam
 @effekt farbe .7 3
-@bild MIA_HANDY gesicht
-@warte 2.2
+@bild MIA_HANDY sanft
+@warte 1.5
 @effekt farbe .52 2.5
-@bild MIA_HANDY_LEER schnitt
-@warte 1.2
+@musik party dumpf langsam
+@bild MIA_HANDY_LEER sanft
+@warte 1.3
+@musik party mittel
 @bild MIA_HANDY schnitt
-@warte 1.8
+@warte 1.1
 Ich: „Alles okay?“
 @bild MIA_GRINST_b gesicht
 Mia: „Klar.“
@@ -1848,16 +1858,15 @@ Alle Hände oben. Meine nicht.
 @montage 2
 ~ Hm.
 … !1.5
-@bild N35f schnitt
-# V9.3g (Patrick 27.11.): Mund zuerst, Augen/Brauen kurz danach – nicht alles auf einmal
-@gesicht N35flm .45
-@gesicht N35flm,N35fla 1
-@gesicht N35fg .6
-@gesicht aus
+@bild N35f weich
+# v5: langsames, sauberes Überblenden ohne Augen-Sprung; Grinsen & Zwinkern länger halten
+@gesicht N35fl 1.25
+@gesicht N35fg 1.15 langsam
 Mia: „So.“
 … !1
 Mia: „Party Nummer vieeer.“
-@gesicht N35fgz .5
+@warte .4
+@gesicht N35fgz .95 langsam
 @bild N35w langsam
 @musik mia leise
 @uhr +15
@@ -2086,6 +2095,8 @@ Bzzz. Nochmal.
 Ich lass es.
 == GM_UHR
 @setze knopfB = knopf
+@loop wind an
+@musik party tuer
 # V8.9 (Philip 24.11.): Uhr einmal groß zeigen, dann verschwindet sie
 @uhr verstecken
 # Storycheck 3 (Z4): nie rückwärts – ist es schon später als 23:25, zeigt sie die echte Zeit
@@ -2206,17 +2217,22 @@ Irgendwann sitzen wir auf dem Boden.
 @warte 4.5
 @bild N34Z3 langsam
 @warte 5
+# Patrick 28.11.: beim Warten verblasst die Farbe leise (ca. ein Drittel weniger), kommt mit dem Handy-Moment zurück
+@effekt farbe .86 8
 # V9.0 (Patrick 25.11.): er will den Arm um sie legen, traut sich nicht – kurz, dann zurück und länger bleiben, bis sich die Party leert
 @bild N34Z3a
 @warte 1.8
 @bild N34Z3
 @warte 4
 @bild N34Z4 langsam
+@effekt farbe .74 6
 @warte 3.5
 @bild N34Z5 langsam
+@effekt farbe .66 5
 @warte 4
 @bild N34v sehrlangsam
 @warte 3
+@effekt farbe 1 1.2
 @uhr Sa 00:20
 …
 @ton bzzz
@@ -2485,11 +2501,11 @@ Ich: „Ich … eigentlich wollt ich grad …“
 -> AFTERPARTY
 
 == A_HEIM
-@bild N19
-@gesicht N19t
+# Etappe 1: N19t sofort aktiv beim Einblenden (kein strahlendes N19-Aufblitzen), danach ruhig N19n
+@bild N19 sanft +gesicht=N19t
 Lynn: „Schade.“
 … !1.5
-@gesicht aus
+@bild N19n sanft
 Lynn: „Viel Glück am Montag.“
 … !2
 @bild N20 langsam
@@ -2534,6 +2550,10 @@ Na gut …
 
 # ---- Abschied ohne Lynn (wer nie auf dem Balkon war) ----
 == ABSCHIED_O
+# Etappe 2: kurze Verschnaufpause nach dem Feuerlöscher (wie ABSCHIED_A)
+@schwarz
+@musik party dumpf
+@warte 1.8
 @party an
 @musik party laut
 @bild A1
@@ -3069,17 +3089,17 @@ Ich bin auf keinem Foto. !3
 @handy laut
 # M1
 @schwarz
-# V8.9: Vögel blenden leise ein (wie Samstag 14:20)
+# V8.9: Vögel blenden leise ein – Etappe 2: sanft ins Morgenlicht statt 0-ms-Schnitt
 @ton voegel ein4
 @warte 3
-@bild SO schnitt
+@bild SO langsam
 @raum tag
 @handy sperr
 @ton display_klick
 …
 # V8.7 (Philip): Mias letzte Story, 05:12 – nur Text, 2 Aufrufe, kein Gedanke
 @wenn tanz
-  @handy story x.mia.x MIA_STORY 5 Std.
+  @handy story x.mia.x MIA_STORY 5 Std. | 2
   @warte 3.5
 @ende
 # V8.8 (L): Lenas Story von der Nacht (01:20), alle Wege
@@ -3814,6 +3834,7 @@ Ich krieg das hin.
 @karte Sonntag. 22:40. Noch 10 Stunden.
 @uhr So 22:40
 @raum nacht
+@effekt farbe .94 0 kuehl
 @bild K10P schnitt
 @loop lampe an
 # V9.1 (Patrick 26.11., B7): er schaut nach, scrollt, wartet – nichts. Dann legt er es weg.
@@ -4045,7 +4066,8 @@ Ich schau nur, wie spät es ist.
 -> EN2
 
 == MO_MORGEN
-@bild MO_KAFFEE schnitt
+# Etappe 2: weiches Einblenden aus dem Schwarzbild
+@bild MO_KAFFEE
 @raum tag
 # V9.1 (C16): Meldung, er reagiert nicht
 @ton bzzz leise
@@ -4079,6 +4101,7 @@ Ich schau nur, wie spät es ist.
 
 # ---- Montag ----
 == MONTAG
+@effekt farbe 1 0.1
 @stille
 @karte Montag. 08:40. Noch 20 Minuten.
 @uhr Mo 08:40
@@ -4141,7 +4164,7 @@ Der Prüfungsraum ist still. Nur Papier und Stifte. !3
 Aufgabe 1.
 @raum aus
 @loop pruefung an
-@bild N25B schnitt
+@bild N25B weich
 @ton! stift
 Blau.
 @wenn typ=="gluecklich"
@@ -4161,7 +4184,7 @@ Blau.
   @schema 5
 @ende
 @schema aus
-@bild N25 schnitt
+@bild N25 weich
 @wenn typ=="party" || typ=="afterparty"
   Ich denk an den Feuerlöscher.
 @ende
@@ -4421,18 +4444,18 @@ Ich: „Weiß ich in sechs Wochen.“
 Lynn: „Und gefühlt?“
 Ich: „Gefühlt hab ich an zwei Uhr gedacht.“
 Lynn: „Das kam bestimmt nicht dran.“
-@gesicht LD2
+@gesicht LD2 langsam
 @ton lynn_lacht1 leise
 … !2
-@gesicht LD3
+@gesicht LD3 langsam
 @ton tasse leise
 @warte .8
 … !2
-@gesicht aus
+@gesicht aus langsam
 Ich: „Worauf hattest du eigentlich gewettet? Freitag.“
 Lynn: „Dass du kommst.“
 Ich: „Und gegen wen?“
-@gesicht LDa
+@gesicht LDa langsam
 Lynn: „Jonas.“
 … !1.5
 # Storycheck 3 (Patrick 24.11.): kurzer Rückgriff – Jonas hat so gedrängt, weil er wollte, dass er kommt
@@ -4440,12 +4463,12 @@ Lynn: „Ich glaub, der wollte verlieren.“
 # Patrick 26.11. (C28)
 Ich: „Du nicht.“
 … !1.5
-@gesicht LDh
+@gesicht LDh langsam
 Lynn: „Ich wollt dir übrigens schreiben. Zweimal.“
 Ich: „Und?“
-@gesicht LDw
+@gesicht LDw langsam
 Lynn: „Hab’s wieder gelöscht.“
-@gesicht aus
+@gesicht aus langsam
 Ich: „… Kenn ich.“
 # V9.0 (Patrick 25.11.): Rückblende aufs Zögern. Date-Musik aus, Bild dunkelt ab, Flashback-Ton genau mit dem Bild
 Lynn: „Und Freitag.“
@@ -4482,7 +4505,8 @@ Ich: „Ja.“
 @warte 4
 @effekt vorstellung aus weich
 @schwarz langsam
-@bild LD1 schnitt
+# Etappe 1: weich aus dem Tagtraum zurück ins Restaurant
+@bild LD1 langsam
 @loop restaurant an
 … !2.5
 @ton bzzz

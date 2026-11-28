@@ -96,7 +96,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @keyframes puls{0%{opacity:.3}100%{opacity:.08}}
 #blitz{background:#fff;opacity:0}
 #blitz.an{animation:blitz .35s ease-out}
-@keyframes blitz{0%{opacity:.8}100%{opacity:0}}
+@keyframes blitz{0%{opacity:.18}100%{opacity:0}}
 #rufe .ruf{position:absolute;font:800 64px/1 system-ui,sans-serif;color:#fff;text-shadow:0 0 18px rgba(255,80,180,.9),0 3px 0 rgba(0,0,0,.4);animation:ruf 2.6s ease-out forwards;white-space:nowrap}
 @keyframes ruf{0%{opacity:0;transform:translateY(30px) scale(.8)}15%{opacity:1}100%{opacity:0;transform:translateY(-120px) scale(1.1)}}
 /* 25.11. (Patrick): Lichterkette ruhiger – drei Gruppen schimmern langsam (ein Viertel langsamer als die Demo), einzelne Birnen leuchten kurz auf */
@@ -371,9 +371,10 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #weiss{background:#fff;opacity:0}
 #strobo{background:#fff;opacity:0;z-index:6}
 #strobo.an{animation:strobo .05s steps(1)}
-@keyframes strobo{0%{opacity:.96}100%{opacity:0}}
+@keyframes strobo{0%{opacity:.26}100%{opacity:0}}
 #weiss.an{animation:weissblitz .7s ease-out}
-@keyframes weissblitz{0%{opacity:.95}100%{opacity:0}}
+@keyframes weissblitz{0%{opacity:.42}100%{opacity:0}}
+@keyframes tanzblitz{0%{opacity:.34}100%{opacity:0}}
 #zuruf{position:absolute;left:0;right:0;top:300px;text-align:center;pointer-events:none;opacity:0;font:800 170px/1 'Bricolage Grotesque',system-ui;font-stretch:75%;font-variation-settings:'opsz' 96,'wdth' 75;color:#fff;text-shadow:0 0 40px rgba(255,80,160,.8),0 0 90px rgba(255,160,60,.6);letter-spacing:4px}
 #zuruf.an{animation:zuruf 1.4s cubic-bezier(.2,.9,.3,1)}
 @keyframes zuruf{0%{opacity:0;transform:scale(.6) rotate(-4deg)}12%{opacity:1;transform:scale(1.08) rotate(2deg)}60%{opacity:.9;transform:scale(1) rotate(-1deg)}100%{opacity:0;transform:scale(1.25)}}
@@ -503,6 +504,8 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .ebene .innen img.ov-v.zu,.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.fest{opacity:1}
 .ebene .innen img.ov-v.mimik{opacity:1;transition:opacity .9s ease}
 .ebene .innen img.ov-v.fest{transition:opacity .45s ease}
+.ebene .innen img.ov-v.ov-langsam{transition:opacity 1.05s ease!important}
+.ebene .innen img.ov-v.ov-halt{opacity:1!important}
 .ebene .innen img.wechsel{opacity:0;transition:opacity 3.2s ease-in-out}
 .ebene .innen img.wechsel.an{opacity:1}
 /* Tanzfläche: Lichtkegel, Farbe im Takt, dunkle Gestalten vorne */
@@ -516,6 +519,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 #welt.spiegel .ebene.an{transform:scaleX(-1)}
 #weiss.kurz.an{animation:weissblitz .22s ease-out}
 #buehne.tanzflaeche #weiss{background:var(--farbe,#fff);mix-blend-mode:screen}
+#buehne.tanzflaeche #weiss.kurz.an{animation:tanzblitz .26s ease-out}
 .kl-p{font:400 30px 'Caveat',cursive;font-style:normal}
 
 /* Klausur neben dem Lernplan (Sonntag): nach links rücken, damit nichts verdeckt ist */
@@ -534,8 +538,9 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 @media (orientation:portrait){#vollbildknopf{display:none}}
 
 /* Sprungmenü (nur Testversion) */
-#sprungknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 48px);right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:0;border:none;border-radius:12px;
-  background:rgba(10,14,24,.45);color:rgba(255,255,255,.7);font:600 18px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+#sprungknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 48px);right:max(8px,env(safe-area-inset-right));z-index:98;width:36px;height:36px;padding:0;border:none;border-radius:10px;
+  background:rgba(10,14,24,.35);color:rgba(255,255,255,.65);opacity:.6;transition:opacity .2s;font:600 17px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+#sprungknopf:hover,#sprungknopf:focus-visible{opacity:1}
 @media (orientation:portrait){#sprungknopf{display:none}}
 #sprungmenue{position:fixed;top:0;right:0;bottom:0;width:min(520px,94vw);z-index:99;background:rgba(8,11,20,.97);color:#e9edf7;font:400 15px/1.35 system-ui,sans-serif;
   display:none;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.6)}
@@ -616,8 +621,9 @@ button:focus-visible{outline:3px solid rgba(127,176,255,.95);outline-offset:4px}
 #schema{width:820px;padding-left:112px}
 
 /* V8.8 (H): Test-Protokoll – Knopf ⚑ und Eingabe (nur Testversion) */
-#fehlerknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 96px);right:max(8px,env(safe-area-inset-right));z-index:98;width:40px;height:40px;padding:0;border:none;border-radius:12px;
-  background:rgba(120,20,30,.55);color:rgba(255,220,220,.9);font:600 20px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+#fehlerknopf{position:fixed;top:calc(max(8px,env(safe-area-inset-top)) + 90px);right:max(8px,env(safe-area-inset-right));z-index:98;width:36px;height:36px;padding:0;border:none;border-radius:10px;
+  background:rgba(120,20,30,.42);color:rgba(255,220,220,.85);opacity:.6;transition:opacity .2s;font:600 18px system-ui,sans-serif;cursor:pointer;touch-action:manipulation}
+#fehlerknopf:hover,#fehlerknopf:focus-visible{opacity:1}
 @media (orientation:portrait){#fehlerknopf{display:none}}
 #fehlerbox{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55)}
 #fehlerbox.an{display:flex}
