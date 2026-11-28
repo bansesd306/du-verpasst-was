@@ -123,7 +123,8 @@ const BILDER = {
   MIA_GENh: { datei: "img/MIA_GENh.webp", text: "Mia genervt mit Handy in der Hand (Reserve)", stimmung: "party", figur: true },
   MIA_TILT: { datei: "img/MIA_TILT.webp", text: "Mia neigt den Kopf, verspielt", stimmung: "party", figur: true },
   MIA_HAND: { datei: "img/MIA_HAND.webp", text: "Mia hebt die Hand (vor den drei Fingern N35d)", stimmung: "party", figur: true },
-  N14w: { datei: "img/N14w.webp", text: "Lynn am Geländer winkt („Geht schon mal.“)", stimmung: "balkon", figur: true, lichterVon: "N14" },
+  N14w: { datei: "img/N14w2.webp", text: "Lynn winkt ab („Geht schon mal.“), gleiche Position wie N14d (Gemini, Patrick 28.11.)", stimmung: "balkon", figur: true, hell: 1.07 },
+  N14wz: { datei: "img/N14wz.webp", text: "Zwischenbild: Lynn dreht den Kopf nach links (Gemini, Patrick 28.11.)", stimmung: "balkon", figur: true, hell: 1.07 },
   N14be: { datei: "img/N14be.webp", text: "Lynn am Geländer mit rotem Becher, lächelt (Augen-zu-Overlay N14bez)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14zb: { datei: "img/N14zb.webp", text: "Lynn kommt zurück, zwei rote Becher, hält ihm einen hin (Weg Warten)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   BALKON_AUSSEN: { datei: "img/BALKON_AUSSEN.webp", text: "Balkon-Totale von außen: er mit Kapuze am Geländer, Lynn mit Becher an der Tür", stimmung: "balkon" },
@@ -177,7 +178,8 @@ const BILDER = {
   LNSl2: { datei: "img/LNSl2.webp", text: "Lynn nah, kleines Schmunzeln (Gemini, Patrick 28.11., für Jokes)", stimmung: "balkon", figur: true, hell: 1.09 },
   LNSn: { datei: "img/LNSn.webp", text: "Lynn nah, ruhig neutral (Gemini, Patrick 28.11.)", stimmung: "balkon", figur: true, hell: 1.09 },
   LNSe: { datei: "img/LNSe.webp", text: "Lynn nah, ernst (Gemini, Patrick 27.11., zweite Fassung in richtiger Größe)", stimmung: "balkon", figur: true, hell: 1.09 },
-  N34Ll: { datei: "img/N34Ll.webp", text: "Wie N34L, lächelt dezent (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true, blinzeln: "N34Llz" },
+  N34Ll: { datei: "img/N34Ll2.webp", text: "Lynn lächelt, Becher unten, gleiche Position wie N34Lt (Gemini, Patrick 28.11.)", stimmung: "balkon", figur: true },
+  N34Lm: { datei: "img/N34Lm.webp", text: "Zwischenbild: Becher halb unten (Gemini, Patrick 28.11.)", stimmung: "balkon", figur: true },
   N34Llz: { datei: "img/N34Llz.webp", text: "N34Ll mit geschlossenen Augen", stimmung: "balkon", figur: true },
   N14lb: { datei: "img/N14lb.webp", text: "Zwischenbild: Lynns Lachen beginnt (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true, lichterVon: "N14" },
   N14la: { datei: "img/N14la.webp", text: "Zwischenbild: Lynns Lachen klingt aus (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true, lichterVon: "N14" },
@@ -445,5 +447,7 @@ const FILME = { weg: 'vid/weg.mp4' };
 const ZWISCHEN = {
   // Patrick 27.11.: Lynns Lachen wechselt auf einmal wie in der Demo (Zwischenbilder N14lb/N14la raus – Ton kam verzögert)
   'N35s>N35n': 'N35sn', 'N35n>N35s': 'N35sn',
+  // Patrick 28.11.: Lynn winkt ab / Becher runter ohne Positionssprung
+  'N14d>N14w': 'N14wz', 'N34Lt>N34Ll': 'N34Lm',
 };
 

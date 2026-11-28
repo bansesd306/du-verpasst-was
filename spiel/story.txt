@@ -2284,7 +2284,7 @@ Ich: „Hm?“
 Lynn: „Schon was vor?“
 … !2
 Ich: „Kommt drauf an, wer fragt.“
-@bild N34Ll
+@bild N34Ll sanft
 Lynn: „Ich frag.“
 … !1.5
 Lynn: „Montagabend?“
