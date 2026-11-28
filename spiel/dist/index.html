@@ -3527,9 +3527,9 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 Lynn: „Ich geh mal wieder rein. Bin gleich wieder da.“
 @handy zu
 # V9.2: erst halb wegdrehen
-@bild N14dw pose
-@bild N14g pose
-@warte 1.2
+@bild N14dw geste
+@bild N14g sanft
+@warte .5
 @ton tuer_auf leise
 @bild N15 langsam
 …
@@ -3697,24 +3697,31 @@ Lynn: „Oh.“
 … !2
 Lynn: „Und dann stehst du hier. Auf einem Balkon.“
 Ich: „Sieht so aus.“
+@bild LNSl1 gesicht
 Lynn: „Bereust du’s?“
 … !2
+@bild LNSe gesicht
 Ich: „Frag mich Montag.“
 … !3
+@bild LNSl2 gesicht
 Sie dreht ihren Becher in der Hand.
 Lynn: „Hm.“
 … !3
-@bild LNSt gesicht
+@bild LNSn gesicht
 Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
 Lynn: „Erste Beziehung. Drei Jahre.“
 Ich: „Shit.“
 … !2
+@bild LNSl2 gesicht
 Lynn: „Und ich hatte noch drei Kapitel.“
 … !2
+@bild LNSt gesicht
 Lynn: „Sie hat die ganze Nacht geheult.“
 Lynn: „Was hätte ich machen sollen.“
 … !2
+@bild LNSl2 gesicht
 Lynn: „Hättest sie hören müssen.“
+@bild LNSn gesicht
 … !3
 Ich: „Kann ich mir vorstellen.“
 Lynn: „Alle anderen waren an dem Abend am See.“
@@ -6251,6 +6258,9 @@ const BILDER = {
   N34v: { datei: "img/N34.webp", video: "vid/N34v.mp4", text: "Wie N34, als bewegter Hintergrund (Veo-Video, 4-s-Schleife, V8.8)", stimmung: "balkon" },
   LNS:  { datei: "img/LNS.webp",  text: "Lynn nah, lächelt (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true },
   LNSt: { datei: "img/LNSt.webp", text: "Lynn nah, traurig, Blick gesenkt (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true },
+  LNSl1: { datei: "img/LNSl1.webp", text: "Lynn nah, lächelt (Gemini, Patrick 28.11., für Jokes)", stimmung: "balkon", figur: true },
+  LNSl2: { datei: "img/LNSl2.webp", text: "Lynn nah, kleines Schmunzeln (Gemini, Patrick 28.11., für Jokes)", stimmung: "balkon", figur: true },
+  LNSn: { datei: "img/LNSn.webp", text: "Lynn nah, ruhig neutral (Gemini, Patrick 28.11.)", stimmung: "balkon", figur: true },
   LNSe: { datei: "img/LNSe.webp", text: "Lynn nah, ernst (Gemini, Patrick 27.11., zweite Fassung in richtiger Größe)", stimmung: "balkon", figur: true },
   N34Ll: { datei: "img/N34Ll.webp", text: "Wie N34L, lächelt dezent (Gemini, Patrick 27.11.)", stimmung: "balkon", figur: true, blinzeln: "N34Llz" },
   N34Llz: { datei: "img/N34Llz.webp", text: "N34Ll mit geschlossenen Augen", stimmung: "balkon", figur: true },
@@ -6765,7 +6775,7 @@ const Ton = (() => {
   const LOOPS = {
     wind: [['wind', { vol: .55 }]],
     raum_nacht: [['wind', { vol: .16, lp: 600 }]],
-    raum_tag: [['raum_tag', { vol: .3, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
+    raum_tag: [['raum_tag', { vol: .36, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
     uhr: [['uhr', { vol: .32 }]],   // Patrick 26.11.: Uhrticken allgemein leiser
     herzschlag: [['herzschlag', { vol: .5 }]],   // Gemini-Prüfung 26.11.: −5 dB
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
@@ -6795,7 +6805,7 @@ const Ton = (() => {
     loopGain[name] = g;
     let stops = [];
     if (def === 'pruefung') {
-      const r = quelle('raum_tag', g, { loop: true, vol: .18, lp: 2200 }); if (r) stops.push(() => r.stop());
+      const r = quelle('raum_tag', g, { loop: true, vol: .22, lp: 2200 }); if (r) stops.push(() => r.stop());
       let aktiv = true, q = null, t = null;
       const schub = () => { if (!aktiv) return; const d = .5 + Math.random() * 2.4; q = quelle('PR3_stift', g, { ab: Math.random() * 3.2, dauer: d, vol: .2 + Math.random() * .08 }); t = setTimeout(() => { t = setTimeout(schub, 350 + Math.random() * (Math.random() < .3 ? 3800 : 1400)); }, d * 1000); };
       schub(); stops.push(() => { aktiv = false; clearTimeout(t); try { q && q.stop(); } catch (e) { } });

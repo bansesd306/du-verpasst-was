@@ -1983,9 +1983,9 @@ Lynn: „Naja … wenn du lang genug mit deinem Finger schreibst …“
 Lynn: „Ich geh mal wieder rein. Bin gleich wieder da.“
 @handy zu
 # V9.2: erst halb wegdrehen
-@bild N14dw pose
-@bild N14g pose
-@warte 1.2
+@bild N14dw geste
+@bild N14g sanft
+@warte .5
 @ton tuer_auf leise
 @bild N15 langsam
 …
@@ -2153,24 +2153,31 @@ Lynn: „Oh.“
 … !2
 Lynn: „Und dann stehst du hier. Auf einem Balkon.“
 Ich: „Sieht so aus.“
+@bild LNSl1 gesicht
 Lynn: „Bereust du’s?“
 … !2
+@bild LNSe gesicht
 Ich: „Frag mich Montag.“
 … !3
+@bild LNSl2 gesicht
 Sie dreht ihren Becher in der Hand.
 Lynn: „Hm.“
 … !3
-@bild LNSt gesicht
+@bild LNSn gesicht
 Lynn: „Vor meiner Zwischenprüfung hat meine Schwester Schluss gemacht.“
 Lynn: „Erste Beziehung. Drei Jahre.“
 Ich: „Shit.“
 … !2
+@bild LNSl2 gesicht
 Lynn: „Und ich hatte noch drei Kapitel.“
 … !2
+@bild LNSt gesicht
 Lynn: „Sie hat die ganze Nacht geheult.“
 Lynn: „Was hätte ich machen sollen.“
 … !2
+@bild LNSl2 gesicht
 Lynn: „Hättest sie hören müssen.“
+@bild LNSn gesicht
 … !3
 Ich: „Kann ich mir vorstellen.“
 Lynn: „Alle anderen waren an dem Abend am See.“

@@ -79,7 +79,7 @@ const Ton = (() => {
   const LOOPS = {
     wind: [['wind', { vol: .55 }]],
     raum_nacht: [['wind', { vol: .16, lp: 600 }]],
-    raum_tag: [['raum_tag', { vol: .3, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
+    raum_tag: [['raum_tag', { vol: .36, lp: 2200 }]],   // Patrick 25.11.: rauschte zu laut (vorher .6 ohne Filter)
     uhr: [['uhr', { vol: .32 }]],   // Patrick 26.11.: Uhrticken allgemein leiser
     herzschlag: [['herzschlag', { vol: .5 }]],   // Gemini-Prüfung 26.11.: −5 dB
     gemurmel: [['gemurmel', { vol: .45, lp: 900 }]],
@@ -109,7 +109,7 @@ const Ton = (() => {
     loopGain[name] = g;
     let stops = [];
     if (def === 'pruefung') {
-      const r = quelle('raum_tag', g, { loop: true, vol: .18, lp: 2200 }); if (r) stops.push(() => r.stop());
+      const r = quelle('raum_tag', g, { loop: true, vol: .22, lp: 2200 }); if (r) stops.push(() => r.stop());
       let aktiv = true, q = null, t = null;
       const schub = () => { if (!aktiv) return; const d = .5 + Math.random() * 2.4; q = quelle('PR3_stift', g, { ab: Math.random() * 3.2, dauer: d, vol: .2 + Math.random() * .08 }); t = setTimeout(() => { t = setTimeout(schub, 350 + Math.random() * (Math.random() < .3 ? 3800 : 1400)); }, d * 1000); };
       schub(); stops.push(() => { aktiv = false; clearTimeout(t); try { q && q.stop(); } catch (e) { } });
