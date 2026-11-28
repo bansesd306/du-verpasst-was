@@ -2237,12 +2237,11 @@ Irgendwann sitzen wir auf dem Boden.
 @warte 1.8
 @bild N34Z3
 @warte 4
-@bild N34Z4 langsam
+# Patrick 28.11.: Haus nicht zu früh leer – N34Z4/Z5 raus, sie bleiben auf Z3, nur die Farbe verblasst weiter
 @effekt farbe .74 6
 @warte 3.5
-@bild N34Z5 langsam
 @effekt farbe .66 5
-@warte 4
+@warte 3
 @bild N34v sehrlangsam
 @warte 3
 @effekt farbe 1 1.2
@@ -4525,14 +4524,15 @@ Lynn: „Traust du dich nächstes Mal?“
 @bild N34ZA sehrlangsam
 @warte 3.5
 Ich: „Ja.“
-# Patrick 28.11.: der warme Endsong geht nach dem Ja ganz leise an und trägt bis zurück ins Restaurant, am Ende wird er lauter
+# Patrick 28.11.: der warme Endsong nur ganz, ganz leise im Flashback; zurück im Restaurant aus, beim Endbildschirm wieder richtig
 @endsong leise
 @warte 2
 @bild N34ZB sehrlangsam
 @warte 4
 @effekt vorstellung aus weich
+@endsong aus
 @schwarz langsam
-# Etappe 1: weich aus dem Tagtraum zurück ins Restaurant
+# Etappe 1: weich aus dem Tagtraum zurück ins Restaurant (Patrick 28.11.: Endsong hier ganz aus, Moment ohne Musik)
 @bild LD1 langsam
 @loop restaurant an
 … !2.5
