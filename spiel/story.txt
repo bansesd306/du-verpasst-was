@@ -3893,7 +3893,7 @@ Ich krieg das hin.
 # V9.1 (Patrick 26.11., B3)
 @nachricht Ben: ayrton senner 🏎
 @nachricht Paul: ↪ Ben: ayrton senner 🏎 ⏎ leider nicht. der ist wenigstens tot
-@nachricht Mara: broo
+@nachricht Mara: broo übertreib nicht 😭
 # Patrick 26.11. (Flagge): als Antwort auf Mara, nicht auf den Witz
 @nachricht Paul: ↪ Mara: senner fragt angeblich IMMER bereicherungsrecht ⏎ woher weißt du das
 @nachricht Mara: hat einer aus dem letzten durchgang gesagt

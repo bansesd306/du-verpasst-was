@@ -416,7 +416,7 @@ const Spiel = (() => {
     const alt = [...welt.querySelectorAll('.ebene')];
     const neu = document.createElement('div'); neu.className = 'ebene';
     const innen = document.createElement('div'); innen.className = 'innen';
-    let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
+    let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}"${e.hell ? ` style="filter:saturate(.94) contrast(1.03) brightness(${e.hell})"` : ''} draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
     if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"${e.videoKasten ? ` style="inset:auto;object-fit:fill;left:${e.videoKasten[0] * 100}%;top:${e.videoKasten[1] * 100}%;width:${e.videoKasten[2] * 100}%;height:${e.videoKasten[3] * 100}%"` : ''}></video>`;   // 25.11.: videoKasten = Video nur über einem Ausschnitt (Lynns Haare)   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
     // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
@@ -440,7 +440,7 @@ const Spiel = (() => {
     if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
     if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'sanft' ? 1.25 : modus === 'gesicht' ? .45 : modus === 'weich' ? .3 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
+    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'sanft' ? 1.25 : modus === 'gesicht' ? (aktBild && aktBild.stimmung === 'balkon' && BILDER[code] && BILDER[code].stimmung === 'balkon' ? .85 : .45) : modus === 'weich' ? .3 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
     if (modus === 'zoom' || modus === 'schock') { neu.style.transform = 'scale(1.05)'; neu.style.transition += ', transform .4s cubic-bezier(.2,.9,.3,1)'; }   // V9.3c: Schnitt + kleiner Zoom (dynamisch) / + Lichtblitz (Schock)
@@ -820,7 +820,7 @@ const Spiel = (() => {
       if (jetzt >= 0 && zeit < jetzt) continue;
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
       pruef(g); n++;
-      { const grau = !schnell && teil === 1 && n >= 4 && grauZahl < 3 && Math.random() < .16; if (grau) grauZahl++; welt.style.transition = 'none'; welt.style.filter = grau ? 'saturate(.2)' : ''; }
+      { const grau = !schnell && teil === 1 && n >= 4 && grauZahl < 3 && Math.random() < .16; if (grau) grauZahl++; welt.style.transition = 'none'; const bunt = !schnell && teil === 2 && Math.random() < .45; welt.style.filter = grau ? 'saturate(.2)' : bunt ? `hue-rotate(${[35, 110, 190, 270, 320][Math.random() * 5 | 0]}deg) saturate(1.8) brightness(1.12)` : ''; }   // Patrick 28.11.: Lichtshow – kräftige Farben zwischen den Bildern
       await zeigeBild(code, 'schnitt');
       const z = 1.06 + Math.random() * (teil === 2 ? .34 : .26), x = (Math.random() - .5) * (teil === 2 ? 12 : 9), y = (Math.random() - .5) * 6, r = (Math.random() - .5) * (teil === 2 ? 7 : 5);
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
@@ -1156,8 +1156,11 @@ const Spiel = (() => {
     if (art === 'durch') {
       // Lynn-Ende: Titel blendet ein, ein Rotstift streicht ihn durch, 2 s Stille, dann erst die Musik
       sp.style.transform = 'none'; sp.style.opacity = 0; sp.classList.add('durch'); ti.classList.add('an'); void sp.offsetWidth;
-      zeigeTextbox(false); Ton.stille(); sp.style.transition = 'opacity 1.6s ease'; sp.style.opacity = 1;
-      { const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.style.transition = 'opacity .5s'; sw.classList.add('an'); const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); sw.style.transition = ''; }, 600); }   // Patrick 26.11.: gleich schwarz, kein Bildspringen vor dem Text
+      // Patrick 28.11.: das letzte Bild blendet ganz langsam ins Schwarz, erst dann kommt der Titel
+      zeigeTextbox(false); Ton.ausklingen && Ton.ausklingen(3);
+      { const sw = $('#schwarz'); sw.classList.add('langsam'); sw.style.transition = ''; sw.classList.add('an'); const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); }, 600); }
+      await warte(3.2); Ton.stille(); { const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.style.transition = ''; }
+      sp.style.transition = 'opacity 1.6s ease'; sp.style.opacity = 1;   // Patrick 26.11.: gleich schwarz, kein Bildspringen vor dem Text
       await warte(2.4);
       sp.classList.add('zieh'); Ton.spiele('haken', { vol: 1.1 }); await warte(.9);   // Patrick 26.11.: Check-Ton statt Schreiben
       await warte(2); Ton.outro('warm');
