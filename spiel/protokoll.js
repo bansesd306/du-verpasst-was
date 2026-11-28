@@ -7,7 +7,7 @@
 (() => {
   if (typeof TESTMODUS === 'undefined' || !TESTMODUS) return;
   const sitzung = new Date().toISOString().slice(0, 19).replace(/[-:T]/g, '') + '_' + Math.random().toString(36).slice(2, 6);
-  const alle = [], offen = []; let teil = 0, db = null, dbStatus = 'wartet', letzteSchreibung = 0;
+  const alle = [], offen = []; let teil = 0, db = null, dbStatus = 'wartet', letzteSchreibung = 0, fehlerText = '';
   const zwei = n => String(n).padStart(2, '0');
   const echt = () => { const d = new Date(); return `${zwei(d.getHours())}:${zwei(d.getMinutes())}:${zwei(d.getSeconds())}.${String(d.getMilliseconds()).padStart(3, '0')}`; };
   function log(typ, x) {
@@ -18,11 +18,20 @@
     if (typ === 'FEHLER' || offen.length >= 40) schreiben();
   }
   window.Protokoll = { log, get alle() { return alle; }, sitzung };
+  let einDok = false;   // 28.11.: Fallback für die Claude-App – immer dasselbe Dokument überschreiben statt neue anzulegen
   async function schreiben() {
     if (!db || !offen.length) return;
-    const stueck = offen.splice(0, offen.length); const id = `protokoll/${sitzung}_${String(++teil).padStart(3, '0')}`;
-    try { await db.doc(id).set({ sitzung, teil, start: stueck[0].t, geraet: navigator.userAgent.slice(0, 120), eintraege: stueck }); dbStatus = 'ok'; letzteSchreibung = Date.now(); }
-    catch (e) { dbStatus = 'fehler'; offen.unshift(...stueck); }
+    const stueck = offen.splice(0, offen.length); const kopf = { sitzung, geraet: navigator.userAgent.slice(0, 120) };
+    const ersteId = `protokoll/${sitzung}_001`;
+    try {
+      if (einDok) { await db.doc(ersteId).set(Object.assign({ teil: 1, start: alle[0] ? alle[0].t : '', eintraege: alle.slice(-250), vollstaendig: alle.length <= 250 }, kopf)); }
+      else { const id = `protokoll/${sitzung}_${String(++teil).padStart(3, '0')}`; await db.doc(id).set(Object.assign({ teil, start: stueck[0].t, eintraege: stueck }, kopf)); }
+      dbStatus = 'ok'; letzteSchreibung = Date.now();
+    } catch (e) {
+      fehlerText = String((e && (e.message || e.name)) || e).slice(0, 140);
+      if (!einDok && teil > 1) { einDok = true; offen.unshift(...stueck); dbStatus = 'ok'; letzteSchreibung = 0; return; }   // zweites neues Dokument klappt nicht → ein Dokument immer überschreiben
+      dbStatus = 'fehler'; offen.unshift(...stueck);
+    }
   }
   setInterval(() => { if (offen.length && Date.now() - letzteSchreibung > 12000) schreiben(); }, 4000);
   addEventListener('pagehide', () => schreiben());
@@ -50,14 +59,14 @@
     wickel(Handy, 'karussell', 'handy', m => 'karussell ' + m);
   }
   addEventListener('error', e => log('js-fehler', String(e.message || e)));
-  addEventListener('unhandledrejection', e => log('js-fehler', String(e.reason && e.reason.message || e.reason)));
+  addEventListener('unhandledrejection', e => { if (e.reason && String(e.reason) === 'Symbol(abbruch)') return; log('js-fehler', String(e.reason && e.reason.message || e.reason)); });
   log('start', { sitzung, ua: navigator.userAgent.slice(0, 160), bildschirm: `${screen.width}x${screen.height}` });
 
   // ---- Oberfläche: Knopf ⚑ + Eingabe ----
   const knopf = document.createElement('button'); knopf.id = 'fehlerknopf'; knopf.type = 'button'; knopf.textContent = '⚑'; knopf.title = 'Fehler markieren (Testversion)';
   const box = document.createElement('div'); box.id = 'fehlerbox';
   box.innerHTML = `<div class="fb-in"><b>Fehler markieren</b><small></small><textarea rows="3" placeholder="Was war falsch? (Tippen oder Mikrofon der Tastatur)"></textarea>
-    <div class="fb-k"><button type="button" class="ok">Speichern</button><button type="button" class="ab">Abbrechen</button><button type="button" class="kopie">Protokoll kopieren</button></div><small class="st"></small></div>`;
+    <div class="fb-k"><button type="button" class="ok">Speichern</button><button type="button" class="ab">Abbrechen</button><button type="button" class="mik">🎤 Sprechen</button><button type="button" class="kopie">Protokoll kopieren</button></div><small class="st"></small></div>`;
   document.body.appendChild(knopf); document.body.appendChild(box);
   const halt = e => e.stopPropagation();
   [knopf, box].forEach(el => ['pointerdown', 'pointerup', 'mousedown', 'touchend', 'click', 'keydown'].forEach(t => el.addEventListener(t, halt)));
@@ -66,15 +75,30 @@
     let s = '', z = '', txt = ''; try { s = Spiel.uhrText(); const a = Spiel._debug.aktuell; z = a ? a.nr + 1 : ''; txt = document.getElementById('text').textContent; } catch (e) { }
     markiert = { echt: echt(), s, z, text: txt }; try { Spiel._debug.pausieren(true); } catch (e) { }
     box.querySelector('small').textContent = `${markiert.echt} · Spieluhr ${s} · Zeile ${z}${txt ? ' · „' + txt.slice(0, 60) + '“' : ''}`;
-    box.querySelector('.st').textContent = dbStatus === 'ok' ? 'Wird in der Datenbank gespeichert.' : dbStatus === 'aus' ? 'Datenbank nicht erreichbar – bitte „Protokoll kopieren“ nutzen.' : '';
+    box.querySelector('.st').textContent = dbStatus === 'ok' ? 'Wird in der Datenbank gespeichert.' : dbStatus === 'aus' ? 'Datenbank nicht erreichbar – „Speichern“ kopiert dann das ganze Protokoll in die Zwischenablage.' : dbStatus === 'fehler' ? 'Speichern in der Datenbank klappt hier nicht (' + fehlerText + '). „Speichern“ kopiert das ganze Protokoll in die Zwischenablage – bitte danach in den Chat einfügen.' : '';
     box.classList.add('an'); const ta = box.querySelector('textarea'); ta.value = ''; setTimeout(() => ta.focus(), 50);
   });
   const zu = () => { box.classList.remove('an'); try { Spiel._debug.pausieren(false); } catch (e) { } };
-  box.querySelector('.ok').addEventListener('click', () => { log('FEHLER', Object.assign({ satz: box.querySelector('textarea').value.trim() }, markiert || {})); zu(); });
+  box.querySelector('.ok').addEventListener('click', async () => { log('FEHLER', Object.assign({ satz: box.querySelector('textarea').value.trim() }, markiert || {})); if (dbStatus !== 'ok') { try { await navigator.clipboard.writeText(alle.map(e => JSON.stringify(e)).join('\n')); } catch (e) { return box.querySelector('.kopie').click(); } } zu(); });
   box.querySelector('.ab').addEventListener('click', zu);
+  // V9.0: Spracheingabe (Web Speech API). Wo der Browser sie nicht erlaubt, bleibt das Mikrofon der Tastatur.
+  { const SR = window.SpeechRecognition || window.webkitSpeechRecognition; const mik = box.querySelector('.mik'); let rec = null, laeuft = false;
+    if (!SR) mik.style.display = 'none';
+    else mik.addEventListener('click', () => {
+      const ta = box.querySelector('textarea'), st = box.querySelector('.st');
+      if (laeuft && rec) { rec.stop(); return; }
+      try {
+        rec = new SR(); rec.lang = 'de-DE'; rec.interimResults = true; rec.continuous = true; const basis = ta.value ? ta.value.trim() + ' ' : '';
+        rec.onresult = e => { let t = ''; for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript; ta.value = basis + t; };
+        rec.onerror = e => { st.textContent = 'Spracheingabe nicht möglich (' + e.error + ') – bitte das Mikrofon der Tastatur nutzen.'; };
+        rec.onend = () => { laeuft = false; mik.textContent = '🎤 Sprechen'; mik.classList.remove('an'); };
+        rec.start(); laeuft = true; mik.textContent = '⏹ Fertig'; mik.classList.add('an'); st.textContent = 'Ich höre zu … zum Beenden „Fertig“ tippen.';
+      } catch (err) { st.textContent = 'Spracheingabe hier nicht verfügbar – bitte das Mikrofon der Tastatur nutzen.'; }
+    }); }
   box.querySelector('.kopie').addEventListener('click', async () => {
     const t = alle.map(e => JSON.stringify(e)).join('\n');
     try { await navigator.clipboard.writeText(t); box.querySelector('.st').textContent = `${alle.length} Einträge kopiert.`; }
     catch (e) { const ta = box.querySelector('textarea'); ta.value = t; ta.select(); box.querySelector('.st').textContent = 'Kopieren blockiert – Text ist markiert, bitte selbst kopieren.'; }
   });
 })();
+

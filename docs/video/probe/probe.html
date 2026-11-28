@@ -1,0 +1,199 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Caveat;src:url(caveat-bold.woff2)}
+@font-face{font-family:Hand;src:url(hand.woff2)}
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#f3eee3}
+.lay{position:absolute;inset:0}
+svg{width:1920px;height:1080px;display:block}
+#vign{background:radial-gradient(ellipse at 50% 55%,transparent 45%,rgba(20,24,40,.55) 100%);opacity:0}
+.ink{fill:none;stroke:#1f2430;stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+.thin{stroke-width:5}
+text{font-family:Caveat}
+</style></head><body>
+<!-- Papier -->
+<div class="lay"><svg viewBox="0 0 1920 1080">
+  <defs>
+    <filter id="papier"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="3"/><feColorMatrix values="0 0 0 0 .55  0 0 0 0 .5  0 0 0 0 .42  0 0 0 .07 0"/></filter>
+  </defs>
+  <rect width="1920" height="1080" fill="#f3eee3"/><rect width="1920" height="1080" filter="url(#papier)"/>
+</svg></div>
+
+<!-- Zimmer (wird entsättigt) -->
+<div class="lay" id="raum"><svg viewBox="0 0 1920 1080">
+  <defs>
+    <filter id="kochen" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence id="turb" type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+    <radialGradient id="glow"><stop offset="0" stop-color="#ffd76a" stop-opacity=".85"/><stop offset=".55" stop-color="#ffcf5a" stop-opacity=".35"/><stop offset="1" stop-color="#ffcf5a" stop-opacity="0"/></radialGradient>
+    <radialGradient id="screen"><stop offset="0" stop-color="#7fc4ff" stop-opacity=".9"/><stop offset="1" stop-color="#7fc4ff" stop-opacity="0"/></radialGradient>
+  </defs>
+  <!-- Wandfarbe -->
+  <rect x="0" y="0" width="1920" height="900" fill="#c9d6e8" opacity=".55"/>
+  <rect x="0" y="900" width="1920" height="180" fill="#d9c3a0" opacity=".7"/>
+  <!-- Fenster -->
+  <g id="fenster"><rect x="230" y="560" width="0" height="0"/></g>
+  <circle id="lampglow" cx="1430" cy="560" r="330" fill="url(#glow)"/>
+  <g filter="url(#kochen)">
+    <!-- Boden -->
+    <path class="ink d" d="M120 900 L1800 900"/>
+    <!-- Tisch -->
+    <path d="M1050 640 L1680 640 L1680 662 L1050 662 Z" fill="#e3bd86"/>
+    <path class="ink d" d="M1050 640 L1680 640 M1050 662 L1680 662 M1080 662 L1080 900 M1650 662 L1650 900"/>
+    <!-- Lampe -->
+    <path class="ink d" d="M1500 640 L1580 640 M1540 640 L1490 500 L1440 455"/>
+    <path d="M1385 470 L1470 420 L1500 480 Z" fill="#f2b84b"/>
+    <path class="ink d" d="M1385 470 L1470 420 L1500 480 Z"/>
+    <!-- Heft -->
+    <path d="M1130 632 L1300 632 L1290 640 L1120 640 Z" fill="#fff"/>
+    <path class="ink thin d" d="M1130 632 L1300 632 L1290 640 L1120 640 Z"/>
+    <g id="haken"></g>
+    <!-- Stuhl -->
+    <path d="M790 715 L960 715 L960 735 L790 735 Z" fill="#c9965a"/>
+    <path class="ink d" d="M790 715 L960 715 M800 735 L800 900 M950 735 L950 900 M790 715 L770 470"/>
+    <!-- Figur -->
+    <g id="figur">
+      <path class="ink d" id="beine" d="M880 705 L1030 712 L1040 895 M1040 895 L1080 897 M880 712 L1010 722 L1005 895 M1005 895 L1045 897"/>
+      <path class="ink d" id="koerper" d="M905 480 L880 705"/>
+      <path class="ink d" id="armruhe" d="M900 530 L960 610 L1100 628"/>
+      <path class="ink d" id="arm" d="M900 530 L1010 600 L1160 625"/>
+      <g id="kopf">
+        <circle class="ink d" cx="915" cy="415" r="62" fill="#f3eee3"/>
+        <circle id="a1" cx="940" cy="408" r="6" fill="#1f2430"/>
+        <circle id="a2" cx="968" cy="410" r="6" fill="#1f2430"/>
+        <path id="mund" class="ink thin" d="M945 448 Q958 452 970 446"/>
+        <path id="braue" class="ink thin" d="M930 390 L950 388 M960 391 L978 395" opacity="0"/>
+      </g>
+    </g>
+    <!-- Handy -->
+    <g id="handy">
+      <rect x="1370" y="622" width="95" height="18" rx="6" fill="#2a2f3a"/>
+      <rect x="1370" y="622" width="95" height="18" rx="6" class="ink thin"/>
+      <path id="vib" class="ink thin" d="M1352 600 L1340 588 M1352 625 L1336 625 M1483 600 L1495 588 M1483 625 L1499 625" opacity="0"/>
+    </g>
+  </g>
+</svg></div>
+
+<div class="lay" id="vign"></div>
+<div class="lay"><svg viewBox="0 0 1920 1080"><defs><radialGradient id="screen2"><stop offset="0" stop-color="#7fc4ff" stop-opacity=".9"/><stop offset="1" stop-color="#7fc4ff" stop-opacity="0"/></radialGradient></defs>
+  <circle id="handyglow" cx="1415" cy="625" r="0" fill="url(#screen2)"/>
+  <!-- rotes Abzeichen -->
+  <g id="badge" opacity="0">
+    <circle cx="1470" cy="600" r="30" fill="#e5322d" stroke="#fff" stroke-width="5"/>
+    <text id="badgezahl" x="1470" y="613" text-anchor="middle" font-size="40" fill="#fff" style="font-family:Hand;font-weight:700">1</text>
+  </g>
+</svg></div>
+
+<!-- Gedankenblase (bleibt bunt) -->
+<div class="lay" id="blase"><svg viewBox="0 0 1920 1080">
+  <defs>
+    <filter id="kochen2" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence id="turb2" type="fractalNoise" baseFrequency=".025" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+    <clipPath id="wolkeclip"><ellipse cx="575" cy="250" rx="305" ry="168"/></clipPath>
+  </defs>
+  <g id="spur">
+    <circle id="s1" cx="895" cy="338" r="0" fill="#fff" class="ink thin"/>
+    <circle id="s2" cx="862" cy="308" r="0" fill="#fff" class="ink thin"/>
+    <circle id="s3" cx="822" cy="280" r="0" fill="#fff" class="ink thin"/>
+  </g>
+  <g id="wolke" transform="translate(560 250) scale(0) translate(-560 -250)">
+    <g filter="url(#kochen2)">
+      <g class="ink" style="stroke-width:16">
+        <circle cx="330" cy="250" r="110"/><circle cx="430" cy="130" r="120"/><circle cx="590" cy="100" r="130"/><circle cx="750" cy="150" r="120"/><circle cx="820" cy="280" r="110"/><circle cx="700" cy="390" r="110"/><circle cx="500" cy="395" r="115"/>
+      </g>
+      <g fill="#fff">
+        <circle cx="330" cy="250" r="110"/><circle cx="430" cy="130" r="120"/><circle cx="590" cy="100" r="130"/><circle cx="750" cy="150" r="120"/><circle cx="820" cy="280" r="110"/><circle cx="700" cy="390" r="110"/><circle cx="500" cy="395" r="115"/><ellipse cx="575" cy="255" rx="330" ry="190"/>
+      </g>
+    </g>
+    <g clip-path="url(#wolkeclip)">
+      <image id="bild1" href="N26s.webp" preserveAspectRatio="none"/>
+      <image id="bild2" href="N36.webp" preserveAspectRatio="none" opacity="0"/>
+    </g>
+    <ellipse cx="575" cy="250" rx="305" ry="168" class="ink" style="stroke-width:5" opacity=".9" filter="url(#kochen2)"/>
+  </g>
+  <!-- Platzen -->
+  <g id="platz" class="ink" opacity="0"><path d="M560 40 L560 0 M820 90 L860 55 M300 90 L265 55 M900 250 L950 250 M220 250 L170 250 M820 410 L860 445 M300 410 L265 445 M560 460 L560 500"/></g>
+</svg></div>
+
+<!-- Schrift -->
+<div class="lay"><svg viewBox="0 0 1920 1080">
+  <defs><clipPath id="schreib"><rect id="schreibrect" x="0" y="0" width="0" height="1080"/></clipPath>
+  <filter id="kochen3"><feTurbulence id="turb3" type="fractalNoise" baseFrequency=".03" numOctaves="2" seed="1"/><feDisplacementMap in="SourceGraphic" scale="4"/></filter></defs>
+  <text id="karte" x="1540" y="140" text-anchor="middle" font-size="64" fill="#1f2430" opacity="0">Freitag, 20:04</text>
+  <g clip-path="url(#schreib)">
+    <text x="1000" y="235" font-size="104" fill="#1f2430">Fear of Missing Out</text>
+    <path class="ink" style="stroke:#e5322d;stroke-width:9" filter="url(#kochen3)" d="M1010 262 C1250 282, 1500 248, 1800 266"/>
+  </g>
+  <text id="schluss" x="960" y="1020" text-anchor="middle" font-size="62" fill="#1f2430" opacity="0" style="font-family:Hand">… du verpasst was.</text>
+</svg></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const ein = (t, a, b) => { const x = cl((t - a) / (b - a)); return x * x * (3 - 2 * x); };
+const back = (t, a, b) => { const x = cl((t - a) / (b - a)); const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+// Linien einzeichnen
+const dLinien = [...document.querySelectorAll('.d')];
+dLinien.forEach(p => { const L = p.getTotalLength ? p.getTotalLength() : 1000; p.dataset.L = L; p.style.strokeDasharray = L; });
+// Haken auf dem Heft
+const hakenPos = [[1150, 628], [1185, 628], [1220, 628], [1255, 628]];
+window.render = t => {
+  // Kochen (Strich zittert wie gezeichnet), 8 Mal pro Sekunde
+  const seed = Math.floor(t * 8) % 5 + 1;
+  ['turb', 'turb2', 'turb3'].forEach(i => $(i).setAttribute('seed', seed));
+  // Einzeichnen 0–1.4 s
+  dLinien.forEach((p, i) => { const L = +p.dataset.L; const s = 0.05 * i; p.style.strokeDashoffset = L * (1 - ein(t, s, s + 0.9)); });
+  $('karte').setAttribute('opacity', ein(t, .8, 1.4) * (1 - ein(t, 9.6, 10.2)));
+  // Schreiben 1.4–4.6
+  const schreibt = t > 1.4 && t < 4.6;
+  const hx = schreibt ? Math.sin(t * 9) * 18 + Math.sin(t * 2.3) * 22 : (t >= 4.6 ? 0 : -10);
+  const hy = schreibt ? Math.abs(Math.sin(t * 9)) * -6 : 0;
+  $('arm').setAttribute('d', `M900 530 L${1010 + hx * .3} ${600 + hy * .3} L${1160 + hx} ${625 + hy}`);
+  let h = ''; hakenPos.forEach(([x, y], i) => { const z = 1.9 + i * .7; if (t > z) { const k = ein(t, z, z + .25); h += `<path class="ink thin" d="M${x} ${y} l${8 * k} ${-0}${k > .4 ? ` l${6 * k} ${-14 * k}` : ''}" style="stroke:#2f7d3a;stroke-width:4"/>`; } });
+  $('haken').innerHTML = h;
+  // Kopf: dreht sich zum Handy (4.4), später zurück (13.6)
+  const dreh = ein(t, 4.4, 4.9) * (1 - ein(t, 13.6, 14.3));
+  const blick = ein(t, 5.6, 6.4) * (1 - ein(t, 12.8, 13.4)); // Blick nach oben in die Blase
+  $('kopf').setAttribute('transform', `rotate(${lerp(lerp(8, -6, dreh), -14, blick)} 915 470)`);
+  $('a1').setAttribute('cx', 940 + 14 * dreh - 26 * blick); $('a2').setAttribute('cx', 968 + 14 * dreh - 26 * blick);
+  $('a1').setAttribute('cy', 408 - 14 * blick); $('a2').setAttribute('cy', 410 - 14 * blick);
+  $('braue').setAttribute('opacity', blick);
+  $('mund').setAttribute('d', blick > .5 ? 'M940 452 Q955 442 968 452' : 'M945 448 Q958 452 970 446');
+  // Handy vibriert (4.0–4.6, 9.0, 10.0, 11.0)
+  const bz = [4.0, 4.25, 9.0, 10.0, 11.0].some(z => t > z && t < z + .22);
+  $('handy').setAttribute('transform', bz ? `translate(${Math.sin(t * 160) * 5} ${Math.cos(t * 130) * 2})` : '');
+  $('vib').setAttribute('opacity', bz ? 1 : 0);
+  $('handyglow').setAttribute('r', t > 4 ? 120 + (bz ? 40 : 0) : 0);
+  $('handyglow').setAttribute('opacity', t > 4 ? (1 - ein(t, 13.6, 14.4)) : 0);
+  // Abzeichen
+  const zahl = t < 9 ? 1 : t < 10 ? 3 : t < 11 ? 7 : 12;
+  $('badgezahl').textContent = zahl;
+  const pop = [4.0, 9.0, 10.0, 11.0].map(z => t > z && t < z + .35 ? 1 + .35 * Math.sin((t - z) / .35 * Math.PI) : 0).find(x => x) || 1;
+  $('badge').setAttribute('opacity', t > 4 ? 1 - ein(t, 13.6, 14.4) : 0);
+  $('badge').setAttribute('transform', `translate(1470 600) scale(${t > 4 ? pop * back(t, 4, 4.35) : 0}) translate(-1470 -600)`);
+  // Gedankenspur + Wolke (5.3–6.6), platzt 12.8
+  [['s1', 12, 5.3], ['s2', 18, 5.5], ['s3', 26, 5.7]].forEach(([i, r, z]) => $(i).setAttribute('r', r * back(t, z, z + .25) * (1 - ein(t, 12.8, 13.0))));
+  const ws = back(t, 5.9, 6.6) * (1 - ein(t, 12.75, 13.0)) * (1 + .03 * Math.sin(t * 2.2));
+  $('wolke').setAttribute('transform', `translate(500 300) scale(${ws * .85}) translate(-560 -250)`);
+  $('platz').setAttribute('opacity', t > 12.8 && t < 13.3 ? 1 - ein(t, 12.95, 13.3) : 0);
+  $('platz').setAttribute('transform', `translate(500 300) scale(${.85 * (1 + ein(t, 12.8, 13.3) * .25)}) translate(-560 -250)`);
+  // Bild in der Wolke: Ken Burns auf die Küchentür (Lynn), dann Party
+  const W = 660, H = W * 1072 / 1920, cx = 575, cy = 250;
+  const z1 = lerp(1, 2.1, ein(t, 6.6, 9.4)); const fx = .515, fy = .5;
+  const w1 = W * z1, h1 = H * z1;
+  const b1 = $('bild1'); b1.setAttribute('width', w1); b1.setAttribute('height', h1);
+  b1.setAttribute('x', cx - w1 * lerp(.5, fx, ein(t, 6.6, 9.4))); b1.setAttribute('y', cy - h1 * lerp(.5, fy, ein(t, 6.6, 9.4)));
+  const z2 = lerp(1.15, 1.0, ein(t, 9.6, 12.8)); const w2 = W * z2, h2 = H * z2;
+  const b2 = $('bild2'); b2.setAttribute('width', w2); b2.setAttribute('height', h2); b2.setAttribute('x', cx - w2 / 2); b2.setAttribute('y', cy - h2 / 2);
+  b2.setAttribute('opacity', ein(t, 9.5, 10.1));
+  // FoMO kickt: Zimmer verliert Farbe, Rand wird dunkler (6.4–9), kommt nach dem Platzen teilweise zurück
+  const fomo = ein(t, 6.4, 9.0) * (1 - .65 * ein(t, 13.0, 14.4));
+  $('raum').style.filter = `saturate(${1 - fomo}) brightness(${1 - .12 * fomo})`;
+  $('vign').style.opacity = fomo * .9;
+  // Titel schreibt sich (10.2–11.8)
+  $('schreibrect').setAttribute('width', 1000 + 880 * ein(t, 10.2, 11.8));
+  $('schreibrect').setAttribute('x', 0);
+  if (t < 10.2) $('schreibrect').setAttribute('width', 0);
+  $('schluss').setAttribute('opacity', ein(t, 13.4, 14.0));
+};
+render(0);
+</script>
+</body></html>

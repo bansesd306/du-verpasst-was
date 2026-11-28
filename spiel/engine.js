@@ -16,12 +16,14 @@ const Spiel = (() => {
   let aktBild = null, partyAn = false, partyZaehler = 0, poolAktiv = null, t0 = performance.now();
   const PR = (t, x) => { if (window.Protokoll) try { Protokoll.log(t, x); } catch (e) { } };   // V8.8 (H): Test-Protokoll
   const ABBRUCH = Symbol('abbruch'); const besuchtL = new Set(); const fehlerLog = [];
+  window.addEventListener('unhandledrejection', e => { if (e.reason === ABBRUCH) e.preventDefault(); });   // V9.0: abgebrochene Abläufe beim Springen sind kein Fehler
 
   // ---------------- Speicher ----------------
   const SPEICHER = 'duverpasstwas_v1';
   function lade() { try { return JSON.parse(localStorage.getItem(SPEICHER)) || {}; } catch (e) { return {}; } }
   function speichere(d) { try { localStorage.setItem(SPEICHER, JSON.stringify(d)); } catch (e) { } }
   let S = Object.assign({ abz: [], enden: [], entsch: {}, durchgaenge: 0 }, lade());
+  S.enden = (S.enden || []).filter(e => ['Leiser', 'Blaues Licht', 'Montagabend'].includes(e));   // V8.9: alte Namen („Hier oder da“) aus früheren Läufen nicht mitzählen
 
   // ---------------- Zeit ----------------
   const TAGE = ['Freitag', 'Samstag', 'Sonntag', 'Montag'], TAGK = ['Fr', 'Sa', 'So', 'Mo'];
@@ -33,8 +35,19 @@ const Spiel = (() => {
   }
   const zwei = n => String(n).padStart(2, '0');
   function uhrText(m = V.uhr) { m = ((Math.round(m) % 1440) + 1440) % 1440; return zwei(Math.floor(m / 60)) + ':' + zwei(m % 60); }
+  // V9.1 (Patrick 26.11., A16): Akku – Freitagabend 34 % beim Losgehen, nachts immer leerer, morgens (nach dem Laden) fast voll, über den Tag weniger
+  function akku(m = V.uhr) { m = m || 0; const d = Math.floor(m / 1440), t = m % 1440; let p;
+    if (d === 0 || (d === 1 && t < 540)) p = 41 - (m - 1204) / 17; else if (t >= 540) p = 98 - (t - 540) / 14; else p = 98 - (t + 900) / 14;
+    return Math.max(3, Math.min(100, Math.round(p))); }
   function datumText() { return DATUM[Math.max(0, Math.min(3, Math.floor((V.uhr || 0) / 1440)))]; }
-  function zeigeUhr() { uhrEl.textContent = uhrText(); uhrEl.classList.toggle('an', !!V.uhr_zeigen); Handy.aktualisiereZeit(); }
+  let uhrAnim = 0;
+  function zeigeUhr() {
+    uhrEl.textContent = uhrText();
+    const war = uhrEl.classList.contains('an'), jetzt = !!V.uhr_zeigen;
+    uhrEl.classList.toggle('an', jetzt);
+    if (jetzt && !war) { uhrEl.classList.remove('auftauchen'); void uhrEl.offsetWidth; uhrEl.classList.add('auftauchen'); }   // V8.9: Uhr leuchtet auf, wenn sie wiederkommt
+    Handy.aktualisiereZeit();
+  }
 
   // ---------------- Ausdrücke ----------------
   const RESERV = new Set(['true', 'false', 'null', 'undefined']);
@@ -161,6 +174,7 @@ const Spiel = (() => {
   // ---------------- Handy-Knopf (V8.4): selbst aufs Handy schauen, das Bild bleibt ----------------
   // Zählt, wie oft man von sich aus nachschaut und wie oft nichts Neues da war (Bilanz am Ende).
   const blick = { offen: false, zahl: 0, leer: 0, neu: 0 };
+  let bzzzMs = 0;   // V8.9: Zeitpunkt des letzten Vibrierens (erste Nachricht danach ist sofort da)
   const blickKnopf = $('#handyknopf');
   function blickMoeglich() {
     // V8.5: nur, wenn das Handy griffbereit ist (Skript setzt `handyweit`, wenn es weg/aus ist)
@@ -169,41 +183,64 @@ const Spiel = (() => {
       && !$('#schwarz').classList.contains('an') && !$('#karte').classList.contains('an');
   }
   function blickAuf() {
-    blick.offen = true; blick.zahl++; if (!blick.neu) blick.leer++; blick.neu = 0;
-    // V8.7 (D2): von sich aus nachschauen zählt mit – jeder zweite Blick = 1 Handy-Punkt (höchstens 3)
-    if (blick.zahl % 2 === 0 && blick.zahl <= 6) V.punkte = (V.punkte || 0) + 1;
-    Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
+    // V8.9: „Unruhe-Blick“ = Knopf ist grau (keine rote Zahl), bevor etwas als gelesen markiert wird
+    const unruhe = Handy.zahl() === 0;
+    blick.offen = true; blick.zahl++; blick.neu = 0; V.knopf = (V.knopf || 0) + 1;   // V9.1 (E2)
+    // Nur Unruhe-Blicke zählen (Bilanz „obwohl nichts Neues da war“ + Handy-Punkte): jeder zweite = 1 Punkt (höchstens 3).
+    // Blicke bei roter Zahl geben nie einen Punkt (Elhai 2016: problematische, nicht häufige Nutzung).
+    if (unruhe) { blick.leer++; if (blick.leer % 2 === 0 && blick.leer <= 6) V.punkte = (V.punkte || 0) + 1; }
+    blickSeit = Date.now(); Ton.spiele('display_klick'); pausiert = true;   // V8.8 (G29): während des Blicks läuft nichts weiter
     haendeTausch('sperr'); Handy.sperr(); Handy.sperrUngelesen();
     if (aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V') Handy.aus();   // Prüfung: Handy ist aus (V8.8 G39: im Flur noch an)
   }
-  function blickZu(still) { if (!blick.offen) return; blick.offen = false; if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
+  // V9.3 (Patrick 27.11., Frage 29): Zeit verschwindet am Handy – jeder Blick +2 Min., wer lange drauf bleibt, verliert mehr (+1 je 20 s)
+  let blickSeit = 0, blickPlus = 0;
+  function blickZeit() { const sek = (Date.now() - blickSeit) / 1000; const n = 2 + Math.min(8, Math.floor(Math.max(0, sek - 10) / 20)); V.uhr += n; blickPlus += n; zeigeUhr(); }
+  function blickZu(still) { if (!blick.offen) return; blick.offen = false; blickZeit(); Handy.meldungenGelesen(); if (rueckPos < 0) pausiert = false; Handy.lesenZu(); Handy.zu(); haendeTausch('zu'); if (!still) Ton.spiele('display_klick', { vol: .5 }); }
   ['pointerdown', 'pointerup', 'touchend', 'mousedown'].forEach(t => blickKnopf.addEventListener(t, e => e.stopPropagation()));
   blickKnopf.addEventListener('click', e => { e.stopPropagation(); if (blick.offen) blickZu(); else if (blickMoeglich()) blickAuf(); });
   // Solange man selbst nachschaut: Tippen aufs Handy blättert zu den Chats, Tippen daneben legt es weg (die Story läuft nicht weiter)
   B.addEventListener('pointerdown', e => {
     if (!blick.offen || e.target.closest('#handyknopf')) return;
     e.stopPropagation(); e.preventDefault();
-    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung')) {
-      if (Handy.app === 'sperr') { Handy.liste(); Ton.spiele('display_klick'); return; }
+    if (e.target.closest('#handy') && !(aktBild && aktBild.stimmung === 'pruefung' && aktBild.code !== 'N25V')) {
+      // V8.9 (Patrick 24.11.): Sperrbildschirm – wischen = Meldungen durchscrollen, Tippen auf einen Chat = lesen, sonst = WhatsApp
+      if (Handy.app === 'sperr') { blickDruck = { y: e.clientY, y0: e.clientY, ziel: e.target, zug: false }; return; }
       // V8.6: in der Liste einen Chat antippen = nur lesen; im Chat „←“ = zurück zur Liste
       if (Handy.app === 'liste') { const z = e.target.closest('.l-zeile'); if (z) { Handy.lesen(z.dataset.n); Ton.spiele('tipp', { vol: .5 }); } return; }
       if (Handy.app === 'chat') { if (e.target.closest('.c-kopf .zur')) { Handy.lesenZuListe(); Ton.spiele('tipp', { vol: .5 }); } return; }
+      if (Handy.app === 'home') { const h = e.target.closest('.hm-app'); if (h) { const id = h.dataset.h; Ton.spiele('tipp', { vol: .5 }); if (id === 'whatsapp') Handy.liste(); else if (id === 'instagram') Handy.feed(); else { h.classList.add('tipp'); setTimeout(() => h.classList.remove('tipp'), 160); } } return; }
+      if (['feed', 'story', 'liste'].includes(Handy.app)) return;
     }
     blickZu();
   }, true);
   B.addEventListener('click', e => { if (blick.offen && !e.target.closest('#handyknopf')) { e.stopPropagation(); e.preventDefault(); } }, true);
+  let blickDruck = null;
+  B.addEventListener('pointermove', e => { const d = blickDruck; if (!d || !blick.offen) return; e.stopPropagation(); const dy = e.clientY - d.y; d.y = e.clientY; if (Math.abs(e.clientY - d.y0) > 10) d.zug = true; if (d.zug) Handy.sperrScroll(-dy); }, true);
+  B.addEventListener('pointerup', e => {
+    const d = blickDruck; blickDruck = null; if (!d || !blick.offen) return; e.stopPropagation(); if (d.zug) return;
+    const nk = (d.ziel && d.ziel.closest && d.ziel.closest('.nk')) || document.elementsFromPoint(e.clientX, e.clientY).map(x => x.closest && x.closest('.nk')).find(Boolean);   // Patrick 27.11.: auch wenn etwas Unsichtbares darüber liegt
+    const n = nk && Handy.chatVonKarte(nk);
+    if (aktBild && aktBild.stimmung === 'pruefung') { if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } return; }   // vor der Prüfung: nur Sperrbildschirm
+    const ig = nk && !n && Handy.instaVonKarte(nk);
+    if (n) { Handy.lesen(n); Ton.spiele('tipp', { vol: .5 }); } else if (ig) { Handy.selbstInsta(ig); Ton.spiele('tipp', { vol: .5 }); } else if (nk) { nk.classList.remove('stups'); void nk.offsetWidth; nk.classList.add('stups'); } else { Handy.home(); Ton.spiele('display_klick'); }   // Patrick 27.11.: Insta-Meldung → Story/Feed, sonst Homescreen
+  }, true);
   // V8.5: auffälliger; beim allerersten Erscheinen pulsiert er kurz
-  let blickErstmals = true;
+  let blickErstmals = true, blickZahl = -1;
   setInterval(() => {
     const an = blick.offen || blickMoeglich();
     blickKnopf.classList.toggle('aus', !an);
+    // V8.9: Zahl = ungelesene Nachrichten + Meldungen; 0 = grau und still, mehr als vorher = kurz pulsieren
+    const z = Handy.zahl(); const ze = blickKnopf.querySelector('.zahl');
+    if (z !== blickZahl) { ze.textContent = z > 99 ? '99+' : z || ''; blickKnopf.classList.toggle('leer', !z); if (z > blickZahl && !blick.offen) { blickKnopf.classList.remove('puls'); void blickKnopf.offsetWidth; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); } blickZahl = z; }
     if (an && blickErstmals) { blickErstmals = false; blickKnopf.classList.add('puls'); setTimeout(() => blickKnopf.classList.remove('puls'), 4200); }
   }, 250);
 
   // ---------------- Text ----------------
   function zeigeTextbox(an) { textbox.classList.toggle('an', an); if (!an) { nameEl.classList.remove('an'); } }
   let lynnHand = 0, lynnHaende = -1;
-  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k'];
+  const LYNN_POSEN = ['N14', 'N14r', 'N14m', 'N14h', 'N14rz', 'N14t', 'N14s', 'N14k', 'N14gr', 'N14hh'];
+  const LYNN_HAENDE = ['N14r', 'N14h', 'N14rz'];
   let gesteGeskriptet = false;
   async function lynnGeste(ins) {
     if (gesteGeskriptet) { gesteGeskriptet = false; return; }
@@ -212,10 +249,12 @@ const Spiel = (() => {
     // V8.5: Zwischenposen aus Gemini: N14m (redet, ohne Hände), Hände wechseln zwischen N14r, N14h, N14rz
     // V8.8 (A3): mehr Gesichter (N14t, N14s, N14k) – Lynn wechselt flüssiger, Hände nur jede dritte Zeile
     let ziel = 'N14';
-    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14k', 'H'];
+    const FOLGE = ['N14m', 'N14t', 'H', 'N14s', 'N14gr', 'N14k', 'H'];   // V9.2: N14gr (leichtes Grinsen)
     if (ins.sprecher === 'Lynn') { lynnHand = (lynnHand + 1) % FOLGE.length; ziel = FOLGE[lynnHand]; if (ziel === 'H') { lynnHaende = (lynnHaende + 1) % 3; ziel = ['N14r', 'N14h', 'N14rz'][lynnHaende]; } }
-    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
+    else if (aktBild.code === 'N14s' || aktBild.code === 'N14k' || aktBild.code === 'N14gr') ziel = aktBild.code;   // nach dem Zuhören bleibt der Blick kurz
     if (BILDER[ziel] && !BILDER[ziel].datei) ziel = 'N14';
+    // V9.2 (Patrick 26.11.): Hände nicht plötzlich oben/unten – kurz das Zwischenbild „Hände halb oben“
+    if (ziel !== aktBild.code && !schnell && BILDER.N14hh && LYNN_HAENDE.includes(ziel) !== LYNN_HAENDE.includes(aktBild.code) && aktBild.code !== 'N14hh') await zeigeBild('N14hh', 'pose');
     if (ziel !== aktBild.code) await zeigeBild(ziel, 'geste');
   }
   let textZahl = 0;
@@ -239,7 +278,8 @@ const Spiel = (() => {
     if (spEl) spEl.classList.add('spricht');
     for (let i = 0; i < teile.length; i++) {
       const t = teile[i];
-      if (t.cue) { if (!ueberspringen) Ton.spiele(t.cue); continue; }
+      // V8.9 (Patrick 24.11.): {schreib} = Stift kratzt, bis der Haken kommt – Schreiben und „Check“ überlappen nicht
+      if (t.cue) { if (t.cue === 'haken') Ton.stoppe('PR3_stift', .05); if (!ueberspringen) { if (t.cue === 'schreib') Ton.spiele('PR3_stift', { merke: true, vol: .8 }); else Ton.spiele(t.cue); } continue; }
       s += t.ch; zeichenNr++;
       if (vtIdx >= 0 && !vtFertig && zeichenNr === vtIdx + ins.vertipp.length) {
         // V8.8 (K): er tippt den Namen, merkt es nach ~0,6 s, löscht „ynn“ und schreibt normal weiter
@@ -255,7 +295,7 @@ const Spiel = (() => {
     const endText = vtIdx >= 0 ? voll.slice(0, vtIdx) + voll.slice(vtIdx + ins.vertipp.length) : voll;
     textEl.textContent = endText; tippt = false;
     if (vtIdx >= 0) { const r = rueck[rueck.length - 1]; if (r) r.voll = endText; verlauf[verlauf.length - 1].t = endText; }
-    if (spEl) setTimeout(() => spEl.classList.remove('spricht'), 220);
+    if (spEl) setTimeout(() => { spEl.classList.add('kurz'); spEl.classList.remove('spricht'); setTimeout(() => spEl.classList.remove('kurz'), 300); }, 220);
     if (ins.sperre && schnell) vz += ins.sperre;
     if (ins.sperre && !schnell) { sperreEl.classList.add('an'); const i = sperreEl.querySelector('i'); i.style.transition = 'none'; i.style.width = '0'; void i.offsetWidth; i.style.transition = `width ${ins.sperre}s linear`; i.style.width = '100%'; await warte(ins.sperre); sperreEl.classList.remove('an'); }
     if (ins.auto) { await warte(.35); return; }
@@ -332,56 +372,97 @@ const Spiel = (() => {
   }
   function vorladenAlle() {
     // in Spielreihenfolge: die Bilder, die als Erstes kommen, zuerst
-    const reihe = []; prog.forEach(p => { if (p.t === 'cmd' && p.name === 'bild') { const c = p.arg.split(/\s+/)[0]; const e = eintrag(c); if (e.datei && !reihe.includes(e.datei)) reihe.push(e.datei); if (e.blinzeln && BILDER[e.blinzeln]) reihe.push(BILDER[e.blinzeln].datei); } });
+    const reihe = []; prog.forEach(p => { if (p.t === 'cmd' && p.name === 'bild') { const c = p.arg.split(/\s+/)[0]; const e = eintrag(c); if (e.datei && !reihe.includes(e.datei)) reihe.push(e.datei); if (e.blinzeln && BILDER[e.blinzeln]) reihe.push(BILDER[e.blinzeln].datei); } }); if (typeof ZWISCHEN !== 'undefined') Object.values(ZWISCHEN).forEach(c => { if (BILDER[c] && !reihe.includes(BILDER[c].datei)) reihe.push(BILDER[c].datei); });
     // V8.8 (G52): nur Bilder, die das Skript irgendwo nennt (auch im Handy), nicht die ganze Liste
     const roh = document.getElementById('story').textContent;
     Object.keys(BILDER).forEach(k => { const e = eintrag(k); if (e.datei && !reihe.includes(e.datei) && new RegExp('(^|[\\s|])' + k + '($|[\\s|])', 'm').test(roh)) reihe.push(e.datei); });
-    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const d = reihe[i++]; lade(d).then(() => setTimeout(naechstes, 30)); };
-    for (let k = 0; k < 3; k++) naechstes();
+    // V8.9: Gesichts-Overlays (blinzeln, sprechen, Mimik) mitladen – sonst poppen sie erst nach dem Bild auf
+    if (typeof OVERLAYS !== 'undefined') Object.keys(OVERLAYS).forEach(k => { const d = 'img/' + k + '.webp'; if (!reihe.includes(d)) reihe.push(d); });
+    ['MD1', 'MD2', 'MD3', 'MD4', 'MM01', 'MM02', 'MM03', 'MM04', 'MM05', 'MM06', 'MM07', 'MM08', 'MM09', 'MK1', 'MK2', 'MK3'].forEach(c => { const d = BILDER[c] && BILDER[c].datei; if (d && !reihe.includes(d)) reihe.push(d); });   // V9.3e: Mia-Montage
+    // v5: erste 28 Bilder (Start/Prolog/K1) zügig, Rest gedrosselt nachladen
+    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const idx = i++; const d = reihe[idx]; lade(d).then(() => setTimeout(naechstes, idx < 28 ? 15 : 70)); };
+    for (let k = 0; k < 4; k++) naechstes();
   }
+  // 25.11. (Patrick): einzelne Birnen der Lichterkette leuchten kurz auf (alle 0,45–1,5 s eine, Stärke zufällig)
+  (function birnenTakt() {
+    setTimeout(birnenTakt, 450 + Math.random() * 1050);
+    const boxen = [...document.querySelectorAll('.ebene.an .lichterbox')]; if (!boxen.length) return;
+    const bs = boxen[boxen.length - 1].querySelectorAll('.p b'); if (!bs.length) return;
+    const b = bs[Math.floor(Math.random() * bs.length)];
+    b.style.setProperty('--st', (.6 + Math.random() * .4).toFixed(2)); b.classList.remove('auf'); void b.offsetWidth; b.classList.add('auf');
+  })();
   let bildNr = 0;
-  async function zeigeBild(code, modus = '') {
-    const e = eintrag(code); aktCodeNeu = code; gesichtFest = null; const nr = ++bildNr;
-    if (e.datei) { const ok = lade(e.datei); await Promise.race([ok, new Promise(r => setTimeout(r, 2500))]); }
+  async function zeigeBild(code, modus = '', startGesicht = '') {
+    // v5: identisches Bild direkt nacheinander nicht unnötig neu aufbauen
+    const ausSchwarzPre = $('#schwarz').classList.contains('an');
+    if (aktBild && aktBild.code === code && !ausSchwarzPre && !gesichtFest && !startGesicht && aktBild.modus !== 'dunkel'
+      && (!modus || modus === 'gesicht' || modus === 'sanft' || modus === 'geste' || modus === 'pose')
+      && !(aktBild.el && aktBild.el.style.filter)) return;
+    // V9.3b: Zwischenbild bei Gesichtswechseln (z. B. Lächeln → Lachen), damit es nicht springt
+    const zw = (modus === 'gesicht' || modus === 'sanft') && !schnell && aktBild && typeof ZWISCHEN !== 'undefined' && ZWISCHEN[aktBild.code + '>' + code];
+    if (zw && BILDER[zw]) { await zeigeBild(zw, 'gesicht'); await warte(.32); }
+    const e = eintrag(code); aktCodeNeu = code; gesichtFest = startGesicht || null; const nr = ++bildNr;
+    if (e.datei) {   // V8.9: Bild und seine Gesichts-Overlays zusammen abwarten
+      const ovs = typeof OVERLAYS !== 'undefined' ? Object.keys(OVERLAYS).filter(k => OVERLAYS[k].basis === code).map(k => lade('img/' + k + '.webp')) : [];
+      if (e.fensterLichter) e.fensterLichter.forEach(k => ovs.push(lade('img/' + k + '.webp')));
+      await Promise.race([Promise.all([lade(e.datei), ...ovs]), new Promise(r => setTimeout(r, 9000))]);   // Patrick 26.11.: am Handy kamen Bilder zu spät → schwarz; das alte Bild bleibt stehen, bis das neue da ist
+    }
     if (nr !== bildNr) return;   // V8.8 (G63): inzwischen kam ein neueres Bild – dieses nicht mehr zeigen
     PR('bild', code + (modus ? ' ' + modus : ''));
+    const ausSchwarz = $('#schwarz').classList.contains('an');   // Patrick 26.11.: nach Schwarzbild nicht noch kurz das alte Bild
     $('#schwarz').classList.remove('an', 'langsam');
-    if (modus !== 'gesicht' && modus !== 'pool' && modus !== 'pose' && modus !== 'geste') { zeigeTextbox(false); kamera.classList.remove('zoomrein'); kamera.style.transform = ''; poolAktiv = null; }
+    if (modus !== 'gesicht' && modus !== 'sanft' && modus !== 'pool' && modus !== 'pose' && modus !== 'geste') { zeigeTextbox(false); kamera.classList.remove('zoomrein', 'kurz'); kamera.style.transform = ''; poolAktiv = null; }
     if (modus === 'traum') { B.classList.add('traum'); Ton.spiele('flashback'); }
     const alt = [...welt.querySelectorAll('.ebene')];
     const neu = document.createElement('div'); neu.className = 'ebene';
     const innen = document.createElement('div'); innen.className = 'innen';
-    let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}" draggable="false">` : phHTML(e.ersatzFuer || code, e);
+    let html = e.datei ? `<img src="${e.datei}" alt="" class="${e.filter ? 'f-' + e.filter : ''}"${e.hell ? ` style="filter:saturate(.94) contrast(1.03) brightness(${e.hell})"` : ''} draggable="false">` : phHTML(e.ersatzFuer || code, e);
     if (e.blinzeln && BILDER[e.blinzeln] && BILDER[e.blinzeln].datei) html += `<img src="${BILDER[e.blinzeln].datei}" class="blink" alt="">`;
-    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"></video>`;   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    if (e.video && !schnell) html += `<video class="bv" src="${e.video}" muted loop autoplay playsinline preload="auto"${e.videoKasten ? ` style="inset:auto;object-fit:fill;left:${e.videoKasten[0] * 100}%;top:${e.videoKasten[1] * 100}%;width:${e.videoKasten[2] * 100}%;height:${e.videoKasten[3] * 100}%"` : ''}></video>`;   // 25.11.: videoKasten = Video nur über einem Ausschnitt (Lynns Haare)   // V8.8 (7c): bewegter Hintergrund, Standbild darunter
+    // V8.9 (Patrick 24.11.): Fenster gegenüber – pro Fenster eine Ebene „Licht aus“, genau in Fensterform; einmal aus, bleibt aus
+    if (e.fensterLichter && e.datei) html += e.fensterLichter.map((k, i) => `<img src="img/${k}.webp" alt="" draggable="false" class="fw${modus === 'dunkel' || i < (V.fensterAus || 0) ? ' aus' : ''}${e.filter ? ' f-' + e.filter : ''}">`).join('');
     innen.innerHTML = html + overlayHTML(code);
+    // Patrick 27.11.: schwarze Zwischenbilder am Handy – erst zeigen, wenn das Bild fertig dekodiert ist (das alte bleibt so lange stehen)
+    { const gi = innen.querySelector('img'); if (gi && e.datei && gi.decode && !schnell) { await Promise.race([gi.decode().catch(() => {}), new Promise(r => setTimeout(r, 2500))]); if (nr !== bildNr) return; } }
+    if (startGesicht) startGesicht.split(',').forEach(sk => { const se = innen.querySelector(`.ov-v[data-k="${sk}"]`); if (se) { se.style.transition = 'none'; se.classList.add('fest'); se.style.zIndex = ++ovZ; } });
+    { const gi = innen.querySelector('img'); if (gi && e.datei && !gi.complete) { innen.classList.add('laedt'); const f = () => innen.classList.remove('laedt'); gi.addEventListener('load', f, { once: true }); gi.addEventListener('error', f, { once: true }); } }   // Patrick 26.11.: nie nur der Mund auf Schwarz
+    { const v = innen.querySelector('video.bv'); if (v && e.videoKasten) v.addEventListener('loadedmetadata', () => { try { v.currentTime = ((performance.now() - t0) / 1000) % v.duration; } catch (_) {} }, { once: true }); }   // Schleife läuft beim Posenwechsel weiter
     const lichter = e.lichter || (e.lichterVon && BILDER[e.lichterVon] && BILDER[e.lichterVon].lichter);
-    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map(p => `<i class="p" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((p[0] * 7.3 + p[1] * 3.1) % 2.4).toFixed(2)}s;animation-duration:${(1.6 + ((p[0] * 13.7 + p[1] * 5.9) % 1.8)).toFixed(2)}s"></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
+    if (lichter && e.datei) { const l = document.createElement('div'); l.className = 'ov'; l.id = ''; l.style.cssText = 'position:absolute;inset:0'; l.innerHTML = lichter.map((p, i) => `<i class="p g${(i * 7 + 3) % 3}" style="left:${p[0] * 100}%;top:${p[1] * 100}%;animation-delay:-${((performance.now() - t0) / 1000 % 8.9).toFixed(2)}s"><b></b></i>`).join(''); l.querySelectorAll('.p').forEach(p => p.style.position = 'absolute'); l.classList.add('lichterbox'); innen.appendChild(l); }
     if (e.funken && e.datei) { const f = document.createElement('div'); f.className = 'funken'; f.innerHTML = e.funken.map((q, i) => `<i style="left:${q[0] * 100}%;top:${q[1] * 100}%;animation-delay:${-i * .13}s"></i>`).join(''); innen.appendChild(f); }
     if (e.figur) { innen.classList.add('atmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 4.6) + 's'; }
     // Ich-Sicht aus dem Bett: Kamera kippt ganz leicht und hebt/senkt sich mit dem Atmen (ohne neue Bilder)
     if (e.bett) { innen.classList.add('bettatmen'); innen.style.animationDelay = -((performance.now() - t0) / 1000 % 5.8) + 's'; }
     const huelle = document.createElement('div'); huelle.className = 'innen';
-    if (e.figur) { huelle.classList.add('drift'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
-    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
-    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add('f-dunkel'));
+    if (e.figur) { huelle.classList.add('drift'); if (e.stimmung === 'balkon') huelle.classList.add('balkonfigur'); huelle.style.animationDelay = -((performance.now() - t0) / 1000 % 26) + 's'; }
+    if (partyAn && e.stimmung === 'party' && !e.figur) huelle.classList.add('schwenk');
+    // V9.0 (Patrick 25.11.): langsame Kamerafahrt über ein Standbild (Bildfolge auf dem Balkon); Zielpunkt aus bilder.js „fahrtZiel“
+    if (/^fahrt-(rein|raus|links|rechts)$/.test(modus)) { huelle.classList.add(modus); if (e.fahrtZiel) huelle.style.transformOrigin = e.fahrtZiel[0] * 100 + '% ' + e.fahrtZiel[1] * 100 + '%'; }   // V8.8 (G49): kein Schwenk auf Nahaufnahmen
+    if (modus === 'dunkel') innen.querySelectorAll('img,.ph').forEach(x => x.classList.add(e.fensterLichter ? 'f-nachtaus' : 'f-dunkel'));   // V8.9: Fensterblick nachts heller, Lichter gegenüber aus
     huelle.appendChild(innen); neu.appendChild(huelle);
-    const dauer = modus === 'schnitt' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'gesicht' ? .22 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : .7;
+    const dauer = modus === 'schnitt' || modus === 'zoom' || modus === 'schock' ? 0 : modus === 'ruck' ? .12 : modus === 'ran' ? .55 : modus === 'langsam' ? 2 : modus === 'sehrlangsam' ? 8 : modus === 'sanft' ? 1.25 : modus === 'gesicht' ? (aktBild && aktBild.stimmung === 'balkon' && BILDER[code] && BILDER[code].stimmung === 'balkon' ? .85 : .45) : modus === 'weich' ? .3 : modus === 'pose' ? .5 : modus === 'geste' ? .95 : modus === 'pool' ? .35 : modus === 'halb' ? 1.6 : /^fahrt/.test(modus) ? 1.8 : .7;
     neu.style.transition = `opacity ${dauer}s ease`;
     if (modus === 'ran') { neu.style.transform = 'scale(.9)'; neu.style.transition += ', transform .9s cubic-bezier(.2,.7,.2,1)'; }
+    if (modus === 'zoom' || modus === 'schock') { neu.style.transform = 'scale(1.05)'; neu.style.transition += ', transform .4s cubic-bezier(.2,.9,.3,1)'; }   // V9.3c: Schnitt + kleiner Zoom (dynamisch) / + Lichtblitz (Schock)
     if (modus === 'ruck') { neu.style.transform = 'scale(1.09)'; neu.style.transition += ', transform .32s cubic-bezier(.2,.9,.3,1)'; }
     welt.appendChild(neu); void neu.offsetWidth; neu.classList.add('an');
+    if (modus === 'zoom' || modus === 'schock') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'schock' && !schnell) { const w = $('#weiss'); w.classList.remove('an', 'kurz'); void w.offsetWidth; w.classList.add('an', 'kurz'); } }
     if (modus === 'ran' || modus === 'ruck') { requestAnimationFrame(() => { neu.style.transform = 'scale(1)'; }); if (modus === 'ruck') { kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); } }
     if (modus === 'ran') alt.forEach(a => { const h = a.querySelector('.innen'); if (h) { h.style.transition = 'transform .7s ease-in'; h.style.transform = 'scale(1.1)'; } });
     umgebung(e);
+    // Patrick 27.11.: kleines Wackeln beim Lachen und wenn Mia näher rankommt
+    if (!schnell && (/^(N14b|N14lb|N14la|N14rz|MIA_GRINST)/.test(code) || (/^(MIA|N35)/.test(code) && (modus === 'ran' || modus === 'ruck')))) { kamera.classList.remove('lachwackeln'); void kamera.offsetWidth; kamera.classList.add('lachwackeln'); setTimeout(() => kamera.classList.remove('lachwackeln'), 700); }
     B.classList.toggle('tanzflaeche', /^(N35|MM|MK|N32b|MIA_(?!HANDY_LEER))/.test(code));
-    alt.forEach(a => { a.style.transition = `opacity ${dauer}s ease`; if (modus === 'halb') { const h = a.querySelector('.innen'); h.style.transition = 'transform 1.6s ease-in'; h.style.transform = 'scale(1.18)'; } a.classList.remove('an'); setTimeout(() => a.remove(), dauer * 1000 + 80); });
-    aktBild = Object.assign({ code }, e, { el: neu });
+    // Patrick 26.11.: beim Überblenden wurde es zwischen zwei Bildern kurz dunkler (beide halb durchsichtig über Schwarz).
+    // Jetzt bleibt das alte Bild voll stehen, das neue blendet darüber ein, danach wird das alte entfernt.
+    alt.forEach((a, idx) => { if (ausSchwarz) { a.remove(); return; } const op = idx === 0 ? '1' : getComputedStyle(a).opacity; a.style.transition = 'none'; a.style.opacity = op; a.style.zIndex = 0; if (modus === 'halb') { const h = a.querySelector('.innen'); if (h) { h.style.transition = 'transform 1.6s ease-in'; h.style.transform = 'scale(1.18)'; } } a.classList.remove('an'); setTimeout(() => a.remove(), dauer * 1000 + 120); });
+    neu.style.zIndex = 1;
+    aktBild = Object.assign({ code, modus }, e, { el: neu });
     // Fenster-Overlay und Handylicht
     fensterOverlay(e.fenster);
     { const h = $('#handylicht'); if (e.fernLicht) { h.style.setProperty('--fx', e.fernLicht[0]); h.style.setProperty('--fy', e.fernLicht[1]); } else { h.style.removeProperty('--fx'); h.style.removeProperty('--fy'); } }
     const hl = $('#handylicht .g'); if (e.handy) { const [x, y, w, h] = e.handy; Object.assign(hl.style, { left: x * 1920 + 'px', top: y * 1080 + 'px', width: w * 1920 + 'px', height: h * 1080 + 'px' }); }
-    if (modus === 'schnitt') return;
+    if (modus === 'schnitt' || modus === 'zoom' || modus === 'schock') return;
     await warte(Math.min(dauer, .5));
   }
   // ---------------- Gesichts-Varianten (Overlays) ----------------
@@ -392,10 +473,29 @@ const Spiel = (() => {
     return alle.map(k => { const [x, y, w, h] = OVERLAYS[k].box; return `<img src="img/${k}.webp" alt="" draggable="false" class="ov-v${blink.includes(k) ? ' blink' : ''}" data-k="${k}" style="left:${x * 100}%;top:${y * 100}%;width:${w * 100}%;height:${h * 100}%">`; }).join('');
   }
   function ovEl(k) { return welt.querySelector(`.ebene.an .ov-v[data-k="${k}"]`); }
-  let gesichtFest = null;
-  function gesicht(k, an = true) {
-    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => { if (e.dataset.k !== k || !an) e.classList.remove('fest'); });
-    gesichtFest = an ? k : null; const e = k && ovEl(k); if (e && an) e.classList.add('fest');
+  let gesichtFest = null, ovZ = 2;
+  function gesicht(k, an = true, langsam = false) {
+    const ks = k ? String(k).split(',') : [];
+    welt.querySelectorAll('.ebene.an .ov-v.fest').forEach(e => {
+      if (!ks.includes(e.dataset.k) || !an) {
+        e.style.transition = '';
+        if (an && ks.length) {
+          e.classList.toggle('ov-langsam', langsam);
+          e.classList.remove('fest');
+          e.classList.add('ov-halt');
+          const verzoeg = langsam ? 520 : 220;
+          setTimeout(() => { e.classList.remove('ov-halt'); }, verzoeg);
+        } else {
+          e.classList.toggle('ov-langsam', langsam);
+          e.classList.remove('fest', 'ov-halt');
+        }
+      }
+    });
+    gesichtFest = an ? k : null;
+    if (an) ks.forEach(x => {
+      const e = ovEl(x);
+      if (e) { e.style.transition = ''; e.classList.remove('ov-halt'); e.classList.toggle('ov-langsam', langsam); e.style.zIndex = ++ovZ; e.classList.add('fest'); }
+    });
   }
   // Mimik zwischendurch (kleines Lächeln o. ä.), nur wenn gerade niemand spricht
   setInterval(() => {
@@ -412,22 +512,23 @@ const Spiel = (() => {
     e.classList.toggle('an');
   }, 3600);
 
-  // Blinzeln
-  setInterval(() => {
-    if (B.classList.contains('einfrieren')) return;
-    const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink')];
-    if (bls.length && Math.random() > .3) {
-      const bl = bls[Math.random() * bls.length | 0]; if (bl.classList.contains('fest')) return;
-      bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 150);
-      if (Math.random() < .18) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140); }, 360);
+  // Blinzeln – 25.11. abends: nur EIN Zeitgeber (vorher zwei auf derselben Ebene → 3x Blinzeln in 1 s), Mindestabstand 2,5 s, hart umschalten (keine halben Augen)
+  let letztesBlinzeln = 0;
+  function blinzle() {
+    const lynn = aktBild && aktBild.stimmung === 'balkon' && aktBild.figur;   // Patrick 27.11.: Lynn auf dem Balkon blinzelt wie in der alten Demo öfter (2–6 s, manchmal doppelt)
+    const naechst = () => setTimeout(blinzle, lynn ? 2000 + Math.random() * 4000 : 3200 + Math.pow(Math.random(), 1.4) * 6500);   // Patrick 26.11.: unregelmäßig (3,2–9,7 s), nie schnell
+    if (B.classList.contains('einfrieren')) return naechst();
+    const bls = [...welt.querySelectorAll('.ebene.an .ov-v.blink, .ebene.an img.blink')].filter(b => !b.classList.contains('fest'));
+    const jetzt = performance.now();
+    if (bls.length && jetzt - letztesBlinzeln > (lynn ? 1800 : 3000)) {
+      letztesBlinzeln = jetzt;
+      const bl = bls[Math.random() * bls.length | 0];
+      bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 200);
+      if (lynn && Math.random() < .15) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 170); }, 520);
     }
-  }, 2900);
-  setInterval(() => {
-    if (B.classList.contains('einfrieren')) return;
-    const bl = welt.querySelector('.ebene.an .blink'); if (!bl || Math.random() < .35) return;
-    bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 130);
-    if (Math.random() < .2) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 300);
-  }, 2600);
+    naechst();
+  }
+  setTimeout(blinzle, 2000);
 
   const FENSTER = [[.714, .211, .022, .07], [.772, .208, .023, .068], [.714, .331, .022, .065], [.812, .331, .02, .065], [.768, .448, .024, .07]];
   function fensterOverlay(an) { const f = $('#fenster'); f.innerHTML = an ? FENSTER.map(r => `<i class="w" style="left:${r[0] * 100}%;top:${r[1] * 100}%;width:${r[2] * 100}%;height:${r[3] * 100}%"></i>`).join('') : ''; }
@@ -441,8 +542,8 @@ const Spiel = (() => {
     welt.querySelectorAll('.ebene.an > .innen').forEach(h => h.classList.toggle('schwenk', an && aktBild && aktBild.stimmung === 'party'));
     if (!an) { if (poolAktiv) { const c = poolAktiv; poolAktiv = null; zeigeBild(c, 'pool'); } return; }
     const ruf = () => { if (!partyAn) return; partyGeraeusch(); if (false) { const r = document.createElement('div'); r.className = 'ruf'; r.textContent = RUFE[Math.random() * RUFE.length | 0]; r.style.left = (150 + Math.random() * 1400) + 'px'; r.style.top = (160 + Math.random() * 380) + 'px'; $('#rufe').appendChild(r); setTimeout(() => r.remove(), 2700); } partyTimer.push(setTimeout(ruf, 4000 + Math.random() * 5000)); };
-    const blitz = () => { if (!partyAn) return; const b = $('#blitz'); b.classList.remove('an'); void b.offsetWidth; b.classList.add('an'); partyTimer.push(setTimeout(blitz, 5000 + Math.random() * 6000)); };
-    partyTimer.push(setTimeout(ruf, 1500), setTimeout(blitz, 3000));
+    const blitz = () => { if (!partyAn) return; const b = $('#blitz'); b.classList.remove('an'); void b.offsetWidth; b.classList.add('an'); partyTimer.push(setTimeout(blitz, 12000 + Math.random() * 10000)); };
+    partyTimer.push(setTimeout(ruf, 1500), setTimeout(blitz, 7000));
   }
   function partyWechsel() {
     if (!aktBild || Handy.offen) return;
@@ -469,13 +570,15 @@ const Spiel = (() => {
   // ---------------- Uhr-Animationen ----------------
   async function uhrSpringe(ziel) {
     if (!(ziel > V.uhr)) return;   // V8.8 (G15): nie rückwärts
+    // Patrick 26.11. (B8): kurze Sprünge (bis 20 Min.) läuft die Uhr sichtbar Minute für Minute hoch
+    if (ziel - V.uhr <= 20 && V.uhr_zeigen) { const g = gen; while (V.uhr < ziel) { V.uhr++; zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 3 : 110)); pruef(g); } return; }
     const von = V.uhr; const g = gen; uhrEl.classList.add('springt');
     const n = 14; for (let i = 1; i <= n; i++) { V.uhr = Math.round(von + (ziel - von) * (1 - Math.pow(1 - i / n, 2))); zeigeUhr(); await new Promise(r => setTimeout(r, schnell ? 5 : 70)); pruef(g); }
     V.uhr = ziel; zeigeUhr(); uhrEl.classList.remove('springt');
   }
   async function uhrLaufen(ziel, schritt) {
     const g = gen; let d = 380;
-    while (V.uhr < ziel) { V.uhr++; zeigeUhr(); if (d > 120) Ton.spiele('tipp'); if (schritt) schritt(); await new Promise(r => setTimeout(r, schnell ? 3 : d)); pruef(g); d = Math.max(18, d * .86); }
+    while (V.uhr < ziel) { V.uhr++; zeigeUhr(); /* Patrick 26.11. (A2): kein Tick-Ton mehr beim Uhrlaufen */ if (schritt) schritt(); await new Promise(r => setTimeout(r, schnell ? 3 : d)); pruef(g); d = Math.max(18, d * .86); }
   }
 
   // ---------------- Effekte ----------------
@@ -488,11 +591,15 @@ const Spiel = (() => {
         else { B.classList.add('einfrieren'); Ton.lautMaster(.25); Ton.loop('rauschen', true); }
         break;
       case 'traum': if (arg.startsWith('aus')) { B.classList.remove('traum'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .5 }); } else { B.classList.add('traum'); Ton.spiele('flashback'); } break;
+      // V9.0 (Patrick 25.11.): Vorstellung – Bild bleibt dunkel (Abendstimmung), nur der Rand leuchtet sehr hell
+      case 'vorstellung': if (arg.startsWith('aus')) { B.classList.remove('vorstellung'); if (arg.includes('weich')) Ton.spiele('flashback', { rueckwaerts: true, vol: .8 }); } else { B.classList.add('vorstellung'); Ton.spiele('flashback', { vol: .5 }); } break;
       case 'waermer': B.classList.toggle('waermer', arg !== 'aus'); if (arg !== 'aus') Ton.musikStufe('leise'); break;
+      // Patrick 27.11.: Farben langsam verlieren / zurückholen: @effekt farbe 0.7 4 (Sättigung, Sekunden); 1 = normal
+      case 'farbe': { const [s, z, k] = String(arg).split(/\s+/); const sat = parseFloat(s); welt.style.transition = `filter ${schnell ? 0 : (parseFloat(z) || 2)}s ease`; const kuehl = k === 'kuehl' ? ' hue-rotate(9deg) brightness(.96)' : ''; welt.style.filter = ((!isFinite(sat) || sat >= 1 ? '' : `saturate(${sat})`) + kuehl).trim(); break; }   // 28.11.: dritter Wert „kuehl" = leicht kühler
       case 'heranzoomen': kamera.classList.toggle('kurz', !!arg); void kamera.offsetWidth; kamera.classList.add('zoomrein'); break;
       // V8.7: Fensterblick lebt – ein Fenster geht an, eins aus, einmal Scheinwerferlicht über die Straße
-      case 'lebendig': { fensterOverlay(true); const ws = [...document.querySelectorAll('#fenster .w')]; if (ws[1]) ws[1].classList.add('aus');
-        const al = $('#autolicht'); clearTimeout(autoT); setTimeout(() => { al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); }, 700);
+      case 'lebendig': { const ws = aktBild && aktBild.el ? [...aktBild.el.querySelectorAll('img.fw')] : []; if (ws[1]) ws[1].classList.add('aus');   // V8.9: echte Fensterebenen statt Kästen
+        clearTimeout(autoT);
         setTimeout(() => ws[3] && ws[3].classList.add('aus'), 2000); setTimeout(() => ws[1] && ws[1].classList.remove('aus'), 3400); break; }
       case 'wackeln': kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); break;
       case 'ruck': kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); Ton.spiele('schritte', { dauer: .6, vol: .7 }); await warte(.5); break;
@@ -524,28 +631,35 @@ const Spiel = (() => {
         zeigeTextbox(false); kamera.style.transition = 'transform .42s cubic-bezier(.55,0,.85,.35)'; kamera.style.transform = 'scale(1.85) translate(0,6%)';
         await warte(.3); const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.classList.add('an', 'schnell');
         Ton.spiele('umarmung'); Ton.musikStufe('dumpf'); if (navigator.vibrate) try { navigator.vibrate(60); } catch (e) { }
-        await warte(.25); kamera.style.transition = 'none'; kamera.style.transform = '';
+        await warte(.25); kamera.style.transition = 'none'; kamera.style.transform = ''; void kamera.offsetWidth; kamera.style.transition = '';
         await warte(1.5); Ton.musikStufe('laut'); sw.classList.remove('schnell');
         break;
       }
       case 'blitz': { const b = $('#weiss'); b.classList.remove('an'); void b.offsetWidth; b.classList.add('an'); break; }
       case 'schnittgewitter': await schnittgewitter(arg.split(/\s+/)); break;
-      case 'alles_aus': B.classList.remove('traum', 'waermer', 'einfrieren', 'tanzen'); welt.style.filter = ''; kamera.style.transform = ''; $('#tunnel').style.opacity = 0; $('#tasche').classList.remove('an'); $('#handylicht').classList.remove('an'); lider.classList.remove('zu', 'halb'); party(false); Ton.lautMaster(.9); break;
+      case 'alles_aus': B.classList.remove('traum', 'vorstellung', 'waermer', 'einfrieren', 'tanzen'); welt.style.filter = ''; kamera.classList.remove('zoomrein', 'kurz', 'wackeln', 'ruck', 'zittern'); kamera.style.transition = ''; kamera.style.transform = ''; $('#tunnel').style.opacity = 0; $('#tasche').classList.remove('an'); $('#handylicht').classList.remove('an'); lider.classList.remove('zu', 'halb'); party(false); Ton.lautMaster(.9); break;
       default: console.warn('Effekt?', name);
     }
   }
+  let aufbauEnde = 0;   // V8.9: wann der Woosh-Aufbau (aufbau_shutdown) zu Ende ist – genau dann wird es schwarz
   async function shutdown() {
+    const g = gen;
+    // V8.9 (Patrick 24.11.): erst der ganze Woosh mit steigendem Piepen, am Ende schwarz und Stille (kein Piepen mehr danach)
+    if (aufbauEnde && !schnell) { const rest = (aufbauEnde - performance.now()) / 1000; if (rest > 0 && rest < 10) await new Promise(r => setTimeout(r, rest * 1000)); pruef(g); }
+    const mitPiep = !aufbauEnde; aufbauEnde = 0;
     Handy.zu(); party(false); Ton.stille(); Ton.sperre(true); $('#tunnel').style.opacity = 0;
-    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); Ton.spiele('tinnitus');
+    $('#schwarz').classList.add('an'); zeigeTextbox(false); Ton.sperre(false); if (mitPiep) Ton.spiele('tinnitus');
   }
   async function fensterAus(ziel) {
-    const ws = [...document.querySelectorAll('#fenster .w')]; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
+    // V8.9 (Patrick 24.11.): die Fenster gehen genau an ihren Stellen aus und bleiben aus (auch beim Szenenwechsel kein Aufhellen)
+    const ebene = aktBild && aktBild.el; const ws = ebene ? [...ebene.querySelectorAll('img.fw:not(.aus)')] : []; const gesamt = ziel - V.uhr; const start = V.uhr; let n = 0;
     await uhrLaufen(ziel, () => {
       const anteil = (V.uhr - start) / gesamt; const soll = Math.floor(anteil * (ws.length + 1));
-      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); }
-      if (anteil > .85) welt.style.filter = 'brightness(.5)';
+      while (n < Math.min(soll, ws.length)) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+      if (anteil > .85 && ebene && !ebene.style.filter) { ebene.style.transition += ', filter 1.5s ease'; ebene.style.filter = 'brightness(.62)'; }
     });
-    ws.forEach(w => w.classList.add('aus')); await warte(1.2); welt.style.filter = '';
+    while (n < ws.length) { ws[n++].classList.add('aus'); V.fensterAus = (V.fensterAus || 0) + 1; }
+    await warte(1.2);
   }
 
   // ---------------- Vibration (Ton + Brummen + Zittern) ----------------
@@ -586,16 +700,28 @@ const Spiel = (() => {
   }
 
   // ---------------- Analoge Uhr in der Bildmitte ----------------
-  let auMin = null;
+  let auMin = null, auZuletzt = null, auNr = 0;
   async function analoguhr(arg) {
-    const el = $('#analoguhr');
-    if (arg === 'aus') { el.classList.remove('an'); auMin = null; return; }
-    const ziel = zeit(arg); V.uhr = ziel; zeigeUhr();
+    const el = $('#analoguhr'); const nr = ++auNr;
+    // V8.9 (Philip 24.11.): „ecke“ = kleine warme Uhr links oben (Balkon), „aus langsam“ = blendet langsam aus (4 s, ohne zu warten), „sanft“ = kommt weich wieder
+    if (/^aus\b/.test(arg)) { const ecke = el.classList.contains('ecke'); if (/langsam/.test(arg)) { el.classList.add('bleicht'); setTimeout(() => { if (nr !== auNr) return; el.classList.remove('bleicht'); if (ecke) el.classList.remove('ecke'); }, 4200); } else if (ecke) setTimeout(() => { if (nr !== auNr) return; el.classList.remove('ecke'); }, 1100); el.classList.remove('an', 'sanft'); auMin = null; return; }
+    el.classList.remove('bleicht');
+    const ecke = /\becke\b/.test(arg), sanft = /\bsanft\b/.test(arg), ploetzlich = /\bploetzlich\b/.test(arg); arg = arg.replace(/\s+(ecke|sanft|ploetzlich)\b/g, '').trim();
+    if (ecke) el.classList.add('ecke'); if (sanft) el.classList.add('sanft');
+    // „ploetzlich“ = Uhr ist auf einen Schlag da (kurzer warmer Blitz + Klick), Philip 24.11.
+    if (ploetzlich) { el.classList.remove('ploppt'); void el.offsetWidth; el.classList.add('ploppt'); Ton.spiele('uhr', { dauer: .3, vol: 1 }); setTimeout(() => el.classList.remove('ploppt'), 1200); }
+    // Storycheck 3 (Patrick 24.11., Uhr nie rückwärts): „mind ZEIT“ = nie früher als die Uhr schon ist, „zuletzt“ = dieselbe Zeit wie beim letzten Mal, „+N“ = N Minuten nach der zuletzt gezeigten Zeit
+    let ziel;
+    if (arg === 'zuletzt') ziel = auZuletzt != null ? auZuletzt : V.uhr;
+    else if (/^\+\d+$/.test(arg)) ziel = (auZuletzt != null ? auZuletzt : V.uhr) + +arg.slice(1);
+    else if (/^mind\s/.test(arg)) ziel = Math.max(V.uhr, zeit(arg.slice(5).trim()));
+    else ziel = zeit(arg);
+    auZuletzt = ziel; V.uhr = ziel; zeigeUhr();
     const tagMin = ziel % 1440; let gesamt = auMin == null ? tagMin : auMin + ((tagMin - auMin % 1440) + 1440) % 1440;
     const setz = (m, dauer) => { el.querySelectorAll('.zg').forEach(z => z.style.transition = `transform ${dauer}s cubic-bezier(.45,0,.2,1)`); el.querySelector('.zm').style.transform = `rotate(${m * 6}deg)`; el.querySelector('.zh').style.transform = `rotate(${m * .5}deg)`; el.querySelector('.ad').textContent = uhrText(); };
     zeigeTextbox(false);
-    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(.6); }
-    else { Ton.spiele('uhr', { dauer: 2.2, vol: .8 }); setz(gesamt, 2.2); await warte(2.4); }
+    if (auMin == null) { setz(gesamt, 0); el.classList.add('an'); await warte(el.classList.contains('sanft') ? 1.6 : ploetzlich ? 1 : .6); }
+    else { const ek = el.classList.contains('ecke'); Ton.spiele('uhr', { dauer: 2.2, vol: ek ? .4 : .8 }); setz(gesamt, 2.2); await warte(2.4); }
     auMin = gesamt;
   }
 
@@ -638,44 +764,75 @@ const Spiel = (() => {
     // V8.5: Stand zeigen, ohne neu zu schreiben: @lernplan stand ok1 ok2 durch3 … / @lernplan blick 4
     if (t[0] === 'stand') { el.querySelectorAll('li').forEach(l => l.classList.remove('ok', 'durch', 'blick')); t.slice(1).forEach(x => { const m = x.match(/^(ok|durch)(\d)$/); const li = m && el.querySelectorAll('li')[+m[2] - 1]; if (li) li.classList.add(m[1]); }); el.classList.add('an'); Ton.spiele('blaettern', { vol: .4 }); await warte(.6); return; }
     if (t[0] === 'blick') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) li.classList.add('blick'); await warte(.4); return; }
-    if (t[0] === 'an') return;
     if (t[0] === 'haken') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) { li.classList.add('ok'); Ton.spiele('stift', { vol: .7 }); Ton.spiele('haken', { vol: .8 }); } await warte(.5); }
     if (t[0] === 'streich') { const li = el.querySelectorAll('li')[(+t[1] || 1) - 1]; if (li) { li.classList.add('durch'); Ton.spiele('PR3_stift', { dauer: .5, vol: .9 }); } await warte(.9); }
   }
 
   // ---------------- Mias Lied: Lichtshow im Takt ----------------
   const MIA_BEATS = [36.966, 37.314, 37.64, 37.988, 38.313, 38.638, 38.986, 39.311, 39.636, 39.985, 40.31, 40.658, 40.983, 41.308, 41.657, 41.982, 42.307, 42.655, 42.98, 43.305, 43.654, 43.979, 44.327, 44.652, 44.977, 45.325, 45.65, 45.976, 46.301, 46.626, 46.974, 47.322, 47.647, 47.996, 48.321, 48.646, 48.971, 49.319, 49.644, 49.993, 50.318, 50.643, 50.968, 51.316, 51.641, 51.989, 52.315, 52.64, 52.988, 53.313, 53.638];
-  async function montage() {
-    const g = gen;
-    // Song an den Aufbau vor dem Refrain setzen (gedämpft, man hört den Sprung nicht), dann lauter werden
-    if (!schnell) {
-      const pos = Ton.miaPos(); if (pos < 0 || pos > 34 || pos < 26) Ton.miaSpring(29.2);
-      Ton.crescendo(6.2, 'laut');
-      $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 5s ease'; $('#schwarz').classList.remove('an');
-      await zeigeBild('MM04', 'schnitt'); kamera.style.transition = 'transform 6s ease-in'; kamera.style.transform = 'scale(1.12)';
-      while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .03) { await new Promise(r => setTimeout(r, 15)); pruef(g); }
+  // V9.3f (Patrick 27.11.): Montage in zwei Teilen – Teil 1: Daumenkino, dann der Ausraster; Schwarzbild (Musik gedimmt); Teil 2: letzte Eskalation. Der Song läuft durch, Anfang und Ende wie vorher.
+  const MIA_TEIL1_BIS = 28, MIA_TEIL2_AB = 38;   // Schlag-Nummern
+  async function montage(arg = '') {
+    const g = gen; const teil = arg === '2' ? 2 : 1;
+    const DK = ['MD2', 'MD1', 'MD2', 'MD3', 'MD2', 'MD4'];
+    if (!schnell && Ton.bereitFuer) { await Ton.bereitFuer('mia'); pruef(g); }
+    if (teil === 1 && !schnell) {
+      const pos = Ton.miaPos();
+      if (pos < 0) { Ton.musik('mia', '29.2'); Ton.musikStufe('dumpf'); }
+      else if (pos > 31.5 || pos < 27.5) Ton.miaSpring(29.2);
+      Ton.crescendo(6.8, 'laut');
+      $('#schwarz').classList.remove('langsam'); $('#schwarz').style.transition = 'opacity 1.6s ease'; $('#schwarz').classList.remove('an');
+      await zeigeBild(DK[0], 'schnitt');
+      kamera.style.transition = 'transform .65s ease'; kamera.style.transform = 'scale(1.02)';
+      let f = 1;
+      for (let t = 29.9; t < MIA_BEATS[0] - .35; t += .675) {
+        if (Ton.miaPos() >= 0 && Ton.miaPos() > t + .25) continue;
+        while (Ton.miaPos() >= 0 && Ton.miaPos() < t - .02) { await new Promise(r => setTimeout(r, 12)); pruef(g); }
+        if (Ton.miaPos() < 0) break;
+        pruef(g);
+        const fortschritt = Math.max(0, Math.min(1, (t - 29.2) / (MIA_BEATS[0] - 29.2)));
+        await zeigeBild(DK[f % DK.length], 'weich');
+        kamera.style.transition = 'transform .62s ease';
+        kamera.style.transform = `scale(${(1.02 + fortschritt * .07 + (f % 2) * .015).toFixed(3)})`;
+        f++;
+      }
+      while (Ton.miaPos() >= 0 && Ton.miaPos() < MIA_BEATS[0] - .025) { await new Promise(r => setTimeout(r, 8)); pruef(g); }
       $('#schwarz').style.transition = '';
     }
-    if (schnell) vz += 6.2 + (MIA_BEATS[MIA_BEATS.length - 1] - MIA_BEATS[0]);
+    if (teil === 2 && !schnell) {
+      if (Ton.miaPos() < 0) Ton.musik('mia', String(Math.max(0, MIA_BEATS[MIA_TEIL2_AB] - .4)));
+      Ton.crescendo(.8, 'laut');
+    }
+    const von = teil === 1 ? 0 : MIA_TEIL2_AB, bis = teil === 1 ? MIA_TEIL1_BIS : MIA_BEATS.length;
+    if (schnell) vz += (teil === 1 ? 6.8 : 0) + (MIA_BEATS[Math.min(bis, MIA_BEATS.length) - 1] - MIA_BEATS[von]);
     const folge = ['MM01', 'MK1', 'MM03', 'MM05', 'MK2', 'MM06', 'MM02', 'MM08', 'MK3', 'MM07', 'MM01', 'MM09', 'MM03', 'MK1', 'MM05', 'MM06', 'MK2', 'MM02', 'MM08', 'MM07', 'MK3', 'MM09', 'MM05', 'MM01'];
-    const schritte = []; let i = 0, f = 0;
-    while (i < MIA_BEATS.length) { const doppel = !(i >= 16 && i < 24) && !(i >= 40); schritte.push([MIA_BEATS[i], folge[f++ % folge.length]]); i += doppel ? 2 : 1; }
+    const schritte = []; let i = von;
+    while (i < bis) {
+      const doppel = teil === 1 && i < 8;
+      const alle = [...new Set(folge)]; const letzte = schritte.slice(-5).map(x => x[1]); const frei = alle.filter(c => !letzte.includes(c));
+      schritte.push([MIA_BEATS[i], frei[Math.random() * frei.length | 0]]);
+      i += doppel ? 2 : 1;
+    }
     const weiss = $('#weiss'); const strobo = $('#strobo');
+    let n = 0; const jetzt = teil === 2 && !schnell ? Ton.miaPos() : -1;
+    let grauZahl = 0;   // Patrick 27.11.: in der schnellen Montage zwei bis drei Bilder kurz ganz grau
     for (const [zeit, code] of schritte) {
+      if (jetzt >= 0 && zeit < jetzt) continue;
       if (!schnell) { while (Ton.miaPos() >= 0 && Ton.miaPos() < zeit - .025) { await new Promise(r => setTimeout(r, 8)); } }
-      pruef(g);
+      pruef(g); n++;
+      { const grau = !schnell && teil === 1 && n >= 4 && grauZahl < 3 && Math.random() < .16; if (grau) grauZahl++; welt.style.transition = 'none'; const bunt = !schnell && teil === 2 && Math.random() < .45; welt.style.filter = grau ? 'saturate(.2)' : bunt ? `hue-rotate(${[35, 110, 190, 270, 320][Math.random() * 5 | 0]}deg) saturate(1.8) brightness(1.12)` : ''; }   // Patrick 28.11.: Lichtshow – kräftige Farben zwischen den Bildern
       await zeigeBild(code, 'schnitt');
-      const z = 1.04 + Math.random() * .22, x = (Math.random() - .5) * 8, y = (Math.random() - .5) * 6, r = (Math.random() - .5) * 4;
+      const z = 1.06 + Math.random() * (teil === 2 ? .34 : .26), x = (Math.random() - .5) * (teil === 2 ? 12 : 9), y = (Math.random() - .5) * 6, r = (Math.random() - .5) * (teil === 2 ? 7 : 5);
       kamera.style.transition = 'none'; kamera.style.transform = `scale(${z + .06}) translate(${x}%,${y}%) rotate(${r}deg)`; void kamera.offsetWidth;
-      kamera.style.transition = 'transform .5s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
-      welt.classList.toggle('spiegel', Math.random() < .3 && !code.startsWith('MK'));
-      if (Math.random() < .6) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
-      // Stroboskop: immer wieder ganz kurze, ultrahelle weiße Blitze
-      if (!schnell && Math.random() < .42) { const n = 3 + (Math.random() * 3 | 0); for (let k = 1; k <= n; k++) setTimeout(() => { strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 70 + k * 62); }
+      kamera.style.transition = 'transform .32s cubic-bezier(.2,.8,.2,1)'; kamera.style.transform = `scale(${z}) translate(${x * .8}%,${y * .8}%) rotate(${r * .6}deg)`;
+      welt.classList.remove('spiegel');
+      if (Math.random() < (teil === 2 ? .55 : .42)) { weiss.classList.remove('an', 'kurz'); void weiss.offsetWidth; weiss.classList.add('an', 'kurz'); }
+      if (!schnell && Math.random() < (teil === 2 ? .32 : .18)) { const m = 1 + (Math.random() * 2 | 0); for (let k = 1; k <= m; k++) setTimeout(() => { if (g !== gen) return; strobo.classList.remove('an'); void strobo.offsetWidth; strobo.classList.add('an'); }, 80 + k * 95); }
       B.style.setProperty('--farbe', ['#ff3fa4', '#7a5cff', '#00d1ff', '#ffb000'][Math.random() * 4 | 0]);
       if (schnell) await warte(.05);
     }
-    welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = '';
+    welt.style.transition = ''; welt.style.filter = '';   // Montage zu Ende: Farben normal
+    if (teil === 2) { welt.classList.remove('spiegel'); kamera.style.transition = 'transform .6s ease'; kamera.style.transform = ''; }
   }
 
   // ---------------- Lebendige Umgebung ----------------
@@ -685,10 +842,28 @@ const Spiel = (() => {
   let aktCodeNeu = '';
   function umgebung(e) {
     const st = (e && e.stimmung) || '';
+    B.classList.toggle('nachtlicht', ['nacht', 'zimmer', 'balkon', 'strasse', 'flur', 'party', 'bad'].includes(st));   // V8.9: Handyschein im Dunkeln stärker
     pModus = st === 'strasse' ? 'regen' : st === 'pruefung' ? 'staub' : st === 'balkon' ? 'atem' : (e && /^(N35|MM|MK|MIA_)/.test(e.code || aktCodeNeu)) ? 'konfetti' : '';
     if (pModus && !pLauf) { pLauf = true; requestAnimationFrame(pSchritt); }
-    clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt');
-    if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; al.classList.remove('faehrt'); void al.offsetWidth; al.classList.add('faehrt'); autoT = setTimeout(f, 22000 + Math.random() * 26000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
+    clearTimeout(autoT); const al = $('#autolicht'); al.classList.remove('faehrt'); al.querySelectorAll('i').forEach(x => x.getAnimations().forEach(a => a.cancel()));
+    if (['zimmer', 'nacht'].includes(st) && e && e.datei) { const f = () => { if (!aktBild || !['zimmer', 'nacht'].includes(aktBild.stimmung)) return; lichtEreignis(aktBild.stimmung); autoT = setTimeout(f, 20000 + Math.random() * 30000); }; autoT = setTimeout(f, 7000 + Math.random() * 9000); }
+  }
+  // V8.9 (Patrick 24.11., Animation 8): Licht von draußen ist jedes Mal anders – Autos mit warmem oder kaltem Licht, mal schnell, mal langsam,
+  // von links oder rechts, manchmal zwei hintereinander; nachts zieht selten eine Wolke vor den Mond (Zimmer wird kurz minimal dunkler).
+  function autoFahrt(verz = 0) {
+    const al = $('#autolicht'); const i = document.createElement('i'); al.appendChild(i);
+    const r = Math.random, links = r() < .55, dauer = 2600 + r() * 3200, kalt = r() < .4, breite = 18 + r() * 22, schraeg = (links ? -1 : 1) * (12 + r() * 26);
+    const hell = .07 + r() * .07, oben = -25 + r() * 20, hoehe = 70 + r() * 40;
+    const farbe = kalt ? `rgba(225,235,255,${hell})` : `rgba(255,232,196,${hell})`;
+    Object.assign(i.style, { top: oben + '%', height: hoehe + '%', width: breite + '%', background: `linear-gradient(${links ? 100 : 80}deg,transparent,${farbe} 45%,${farbe} 55%,transparent)`, transform: `skewX(${schraeg}deg)`, opacity: 0, maskImage: 'linear-gradient(to bottom,transparent,#000 30%,#000 62%,transparent)', webkitMaskImage: 'linear-gradient(to bottom,transparent,#000 30%,#000 62%,transparent)' });
+    const a = links ? '-45%' : '125%', b = links ? '125%' : '-45%';
+    const ani = i.animate([{ left: a, opacity: 0 }, { opacity: 1, offset: .18 }, { opacity: .9, offset: .5 }, { opacity: 1, offset: .82 }, { left: b, opacity: 0 }], { duration: dauer, delay: verz, easing: r() < .5 ? 'ease-in-out' : 'linear' });
+    ani.onfinish = ani.oncancel = () => i.remove();
+  }
+  function lichtEreignis(st) {
+    const r = Math.random();
+    if (st === 'nacht' && r < .35) { welt.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(.9)', offset: .35 }, { filter: 'brightness(.92)', offset: .65 }, { filter: 'brightness(1)' }], { duration: 7000 + Math.random() * 4000, easing: 'ease-in-out' }); return; }
+    // Autolicht automatisch aus (Patrick 24.11.: ergibt im Bild keinen Sinn)
   }
   function pSchritt() {
     const W = 960, H = 540; pctx.clearRect(0, 0, W, H);
@@ -744,6 +919,11 @@ const Spiel = (() => {
     await warte(erste ? 2.2 : 1.2); await tipp(); Ton.introAus(erste ? 6 : 2.4); k.classList.remove('an', 'vorspann'); await warte(erste ? 1.6 : .8);
   }
   function abzeichen(name) { if (!S.abz.includes(name)) { S.abz.push(name); speichere(S); abzQueue.push(name); if (!abzNeu.includes(name)) abzNeu.push(name); } }
+  function abzeichenSofort(n, unter) {
+    const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f'];
+    t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}${unter ? `<br><i style="font-size:26px;color:#ddd">${unter}</i>` : ''}</div>`;
+    t.classList.add('an'); Ton.spiele('abzeichen'); clearTimeout(abzeichenSofort.t); abzeichenSofort.t = setTimeout(() => t.classList.remove('an'), (unter ? 3600 : 2400) * (schnell ? .08 : 1));
+  }
   async function abzeichenZeigen() {
     while (abzQueue.length) {
       const n = abzQueue.shift(); const t = $('#toast'); const st = (typeof ABZ_STIL !== 'undefined' && ABZ_STIL[n]) || ['★', '#ffcf4a', '#ff7a2f']; t.innerHTML = `<span class="ic bunt" style="background:linear-gradient(135deg,${st[1]},${st[2]})">${st[0]}</span><div><small style="color:#aaa;font-size:24px">Abzeichen freigeschaltet</small><br>${n}</div>`;
@@ -770,22 +950,34 @@ const Spiel = (() => {
       case 'pfad': pfad.push(a); pfadPlus = false; break;
       case 'pfad+': if (pfadPlus) pfad[pfad.length - 1] += ' + ' + a; else pfad.push(a); pfadPlus = true; break;
       case 'abzeichen': abzeichen(a); break;
+      // V9.1 (Patrick 26.11., A6): sofort zeigen (nicht erst bei der nächsten Kapitelkarte), optional mit Unterzeile: @abzeichen! Name | Unterzeile
+      case 'abzeichen!': { const [n, unter] = a.split('|').map(x => x.trim()); abzeichen(n); const i = abzQueue.indexOf(n); if (i >= 0) abzQueue.splice(i, 1); abzeichenSofort(n, unter); break; }
       case 'uhr': {
         if (a.startsWith('zeigen')) { if (a.includes('sofort')) { uhrEl.style.transition = 'none'; setTimeout(() => uhrEl.style.transition = '', 50); } V.uhr_zeigen = true; zeigeUhr(); break; }
         if (a === 'aus' || a === 'verstecken') { V.uhr_zeigen = false; zeigeUhr(); break; }
         if (teile[0] === 'mind') { V.uhr = Math.max(V.uhr, zeit(teile.slice(1).join(' '))); zeigeUhr(); break; }
         if (teile[0] === 'springe') { await uhrSpringe(zeit(teile.slice(1).join(' '))); break; }
         if (teile[0] === 'laufen') { await uhrLaufen(zeit(teile.slice(1).join(' '))); break; }
-        if (a.startsWith('+')) { V.uhr += +wert(a.slice(1)) || 0; zeigeUhr(); break; }
-        V.uhr = zeit(a); zeigeUhr(); break;
+        if (a.startsWith('+')) { const n = +wert(a.slice(1)) || 0; const von = V.uhr; V.uhr += n; zeigeUhr(); if (n > 0 && n <= 20 && V.uhr_zeigen && !schnell) { const g = gen, z = V.uhr; uhrAnim = g; uhrEl.textContent = uhrText(von); (async () => { for (let m = von + 1; m <= z && g === gen && uhrAnim === g && V.uhr === z; m++) { uhrEl.textContent = uhrText(m); await new Promise(r => setTimeout(r, 110)); } if (V.uhr === z) uhrEl.textContent = uhrText(); })(); } break; }   // Patrick 26.11. (B8): kurze Sprünge laufen sichtbar (im Hintergrund, hält nichts auf)
+        { const z = zeit(a); if (!(V.uhr > z && V.uhr - z <= blickPlus)) V.uhr = z; blickPlus = 0; } zeigeUhr(); break;   // V9.3: Handy-Minuten nicht wieder zurückdrehen
       }
       case 'karte': PR('karte', a); await karte(a); break;
-      case 'bild': if (teile[1] === 'geste' && LYNN_POSEN.includes(teile[0])) gesteGeskriptet = true; await zeigeBild(teile[0], teile[1] || ''); break;
+      case 'bild': { const gt = teile.find(x => x.startsWith('+gesicht=')); const m = teile.slice(1).find(x => !x.startsWith('+')) || ''; if (m === 'geste' && LYNN_POSEN.includes(teile[0])) gesteGeskriptet = true; await zeigeBild(teile[0], m, gt ? gt.slice(9) : ''); break; }
       case 'schwarz': zeigeTextbox(false); $('#schwarz').classList.toggle('langsam', a === 'langsam'); $('#schwarz').style.transition = a === 'schnitt' ? 'none' : ''; $('#schwarz').classList.add('an'); await warte(a === 'langsam' ? 1.8 : a === 'schnitt' ? .05 : .5); $('#schwarz').style.transition = ''; break;
       case 'zeitraffer': for (const c of teile) { Ton.spiele('whoosh_kurz', { vol: .7 }); await zeigeBild(c, 'schnitt'); Ton.spiele('uhr', { dauer: .5, vol: .5 }); await warte(.95); } break;
-      case 'gesicht': if (a === 'aus') gesicht(null, false); else gesicht(teile[0]); if (teile[1]) await warte(+teile[1]); break;
-      case 'montage': await montage(); break;
-      case 'klausur': $('#klausur').classList.toggle('an', a !== 'aus'); if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
+      case 'gesicht': { const lang = teile.includes('langsam'); const w = teile.find(x => /^\d*\.?\d+$/.test(x)); if (teile[0] === 'aus') gesicht(null, false, lang); else gesicht(teile[0], true, lang); if (w) await warte(+w); break; }
+      case 'montage': await montage(a); break;
+      case 'stempel': { // V8.9: 5,0 groß, rot, hässlich draufstempeln
+        // V8.9 (Patrick 24.11.): liegt die Klausur da, landet der Stempel unten rechts auf dem Blatt (statt der Rotstift-5,0) und bleibt, bis das Blatt weg ist
+        const kl = $('#klausur'); const aufBlatt = kl.classList.contains('an');
+        const st = document.createElement('div'); st.id = 'stempel'; st.textContent = a || '5,0'; if (aufBlatt) { st.classList.add('blatt'); kl.appendChild(st); } else B.appendChild(st);
+        void st.offsetWidth; st.classList.add('an'); await warte(.22); Ton.spiele('stempel', { vol: 1.6 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck');
+        await warte(1.4); if (!aufBlatt) setTimeout(() => st.remove(), 4000); break;
+      }
+      case 'klausur': if (a === 'haken') { // V9.3 (Patrick 27.11.): er hakt „Kausalität?!“ auf der alten Klausur ab
+          const kl = $('#klausur'); let h = kl.querySelector('.kl-haken'); if (!h) { h = document.createElement('div'); h.className = 'kl-haken'; h.innerHTML = '<svg viewBox="0 0 60 50"><path d="M5 27 L22 44 L56 5"/></svg>'; kl.appendChild(h); }
+          void h.offsetWidth; h.classList.add('an'); Ton.spiele('haken'); await warte(.6); break; }
+        $('#klausur').classList.toggle('an', a !== 'aus'); if (a === 'aus') { const h = $('#klausur .kl-haken'); if (h) setTimeout(() => h.remove(), 600); } if (a === 'aus') { const st = $('#klausur #stempel'); if (st) setTimeout(() => st.remove(), 600); } if (a !== 'aus') { Ton.spiele('blaettern', { vol: .6 }); await warte(.4); } break;
       case 'karteikarten': await karteikarten(a); break;
       case 'lernplan': await lernplan(teile); break;
       case 'zuruf': { Ton.spiele('jubel', { vol: .9 }); kamera.classList.remove('ruck'); void kamera.offsetWidth; kamera.classList.add('ruck'); await text({ t: 'text', text: a, sprecher: 'Alle', schrei: true, auto: true, stil: '' }); await warte(.5); break; }
@@ -807,16 +999,19 @@ const Spiel = (() => {
       case 'ton': case 'ton!': {
         let n = teile[0]; const o = { leise: teile.includes('leise'), dumpf: teile.includes('dumpf') };
         if (teile.includes('fenster')) { o.lp = 1100; o.vol = .8; }
-        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; });
+        teile.forEach(x => { let m = x.match(/^ab(\d+(?:\.\d+)?)$/); if (m) o.ab = +m[1]; m = x.match(/^lp(\d+)$/); if (m) o.lp = +m[1]; m = x.match(/^vol(\d+(?:\.\d+)?)$/); if (m) o.vol = +m[1]; m = x.match(/^rate(\d+(?:\.\d+)?)$/); if (m) o.rate = +m[1]; m = x.match(/^(\d+(?:\.\d+)?)s$/); if (m) o.dauer = +m[1]; m = x.match(/^ein(\d+(?:\.\d+)?)$/); if (m) o.einblenden = +m[1]; m = x.match(/^aus(\d+(?:\.\d+)?)$/); if (m) o.ausblenden = +m[1]; });   // V8.9: ein4 = 4 s einblenden
         if (n === 'bzzz_dumpf') { n = 'bzzz'; o.dumpf = true; o.phantom = true; }
         if (n === 'bzzz_doppel') { n = 'bzzz'; setTimeout(() => bzzz(Object.assign({}, o, { leise: true })), 520); }
+        if (n === 'bzzz' && !o.phantom) bzzzMs = performance.now();
+        if (n === 'wecker' || n === 'PR3_stift') o.merke = true;   // V8.9: der Haken beendet den Stift   // V8.9: Wecker hört auf, wenn er „Schlummern“ drückt
         const d = n === 'bzzz' ? bzzz(o) : Ton.spiele(n, o);
+        if (n === 'aufbau_shutdown') aufbauEnde = performance.now() + (d || 8) * 1000;
         if (ins.name === 'ton!' && schnell) vz += (d || 0) + .8;
         if (ins.name === 'ton!' && !schnell) { textbox.classList.contains('an') && zeigeTextbox(false); await warte(d + .8); }
         break;
       }
       case 'raum': Ton.loop('raum_nacht', a === 'nacht'); Ton.loop('raum_tag', a === 'tag'); break;
-      case 'loop': Ton.loop(teile[0], teile[1] !== 'aus'); break;
+      case 'loop': if (teile[1] === 'laut') { Ton.loopLaut && Ton.loopLaut(teile[0], +teile[2] || 1, +teile[3] || 1.5); break; } Ton.loop(teile[0], teile[1] !== 'aus'); break;   // @loop NAME laut 0.8 [SEK]
       case 'stille': Ton.stille(); break;
       case 'musik': {
         if (teile[0] === 'aus') { Ton.musik('aus', teile[1]); break; }
@@ -827,18 +1022,21 @@ const Spiel = (() => {
         const b = $('#banner'); if (a === 'aus') { b.classList.remove('an'); break; }
         const [app, t, x] = a.split('|').map(s => s.trim());
         if (app === 'WhatsApp') Handy.merkeNachricht(t, x || '');   // V8.8 (G65)
-        b.innerHTML = `<span class="nic" style="width:64px;height:64px;font-size:32px;background:${app === 'Instagram' ? 'linear-gradient(45deg,#f9a825,#e91e63,#7b1fa2)' : '#25d366'}">${app === 'Instagram' ? '◎' : '✆'}</span><div><div class="t">${t}</div><div class="x">${x || ''}</div></div>`;
+        const ic = Handy.appIcon ? Handy.appIcon(app) : ['#25d366', '✆', ''];
+        b.innerHTML = `<span class="nic${ic[2] ? ' ' + ic[2] : ''}" style="width:64px;height:64px;font-size:32px;background:${ic[0]}">${ic[1]}</span><div><div class="t">${t}</div><div class="x">${x || ''}</div></div>`;
         b.classList.add('an'); await warte(.5); break;
       }
       case 'anruf_unbemerkt': { const m = $('#anrufmini'); if (a === 'aus') { m.classList.remove('an'); Ton.loop('klingel', false); Ton.stoppe('anruf'); } else { m.innerHTML = `<span style="font-size:40px">✆</span><span>${a}<br><small style="opacity:.7;font-size:24px">Eingehender Anruf</small></span>`; m.classList.add('an'); Ton.spiele('anruf', { dumpf: true, leise: true, dauer: 5.5, merke: true }); } break; }
-      case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); effekt('handylicht', 'kurz'); kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
+      case 'vibrieren': { const n = +a || 4; let d = .7; for (let i = 0; i < n; i++) { bzzz(); if (aktBild && (aktBild.handy || aktBild.fernLicht) && !Handy.offen) effekt('handylicht', 'kurz');   /* V8.9: Leuchten nur, wenn das Handy im Bild liegt */ kamera.classList.remove('wackeln'); void kamera.offsetWidth; kamera.classList.add('wackeln'); await warte(d); d *= .7; } break; }
       case 'zettel_aus': break;
       // ---- Handy ----
       case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
-      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!')); break; }
+      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 90000;   // Patrick 28.11.: war schon ein Bzzz da, kommt nicht noch ein Nachrichtenton
+         bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
       case 'ich': await Handy.ich(a); await warte(.2); break;
+      case 'tippeweg': zeigeTextbox(false); await Handy.tippeUndLoesche(a); await warte(.4); break;
       case 'tippe': zeigeTextbox(false); await Handy.rein(); await Handy.tippeUndSende(a); await warte(.5); break;
       case 'schreibt': await Handy.schreibt(teile[0], +teile[1] || 2); break;
       case 'haken': Handy.haken(a); break;
@@ -848,8 +1046,17 @@ const Spiel = (() => {
       case 'aufrufe': Handy.aufrufe(a); Ton.spiele('tipp', { vol: .3, rate: 1.3 }); break;
       // ---- Ablauf ----
       case 'rufe': stack.push(pc + 1); springe(a.trim()); return 'sprung';
-      case 'zurueck': if (!stack.length) { console.warn('@zurueck ohne @rufe'); return 'stopp'; } pc = stack.pop(); return 'sprung';
+      case 'zurueck': if (!stack.length) {
+          // Patrick 26.11.: nach einem Sprung (Testmenü) mitten in ein Unterstück gab es kein Zurück → Spiel blieb stehen.
+          // Dann dort weitermachen, wo das Unterstück zum ersten Mal aufgerufen wird.
+          for (const lab of Object.keys(labels).filter(k => labels[k] <= pc).sort((x, y) => labels[y] - labels[x])) {
+            const ruf = prog.findIndex(p => p.t === 'cmd' && p.name === 'rufe' && p.arg.trim() === lab);
+            if (ruf >= 0) { pc = ruf + 1; return 'sprung'; }
+          }
+          console.warn('@zurueck ohne @rufe'); return 'stopp'; }
+        pc = stack.pop(); return 'sprung';
       case 'titel': await titel(a); break;
+      case 'endsong': if (a === 'leise') Ton.outroLeise(); else if (a === 'aus') Ton.outroAus(); break;   // 28.11.: leiser Endsong schon im Tagtraum
       case 'laehmung': await laehmung(a.split('|').map(x => x.trim().replace(/^„|“$/g, ''))); break;
       case 'ende_spiel': await endeSpiel(); return 'stopp';
       default: console.warn('Befehl?', ins.name);
@@ -867,11 +1074,14 @@ const Spiel = (() => {
   }
   async function handyBefehl(t, a) {
     const was = t[0];
+    // V8.9 (Patrick 24.11.): stille, unwichtige Meldung (Kleinanzeigen, Mail …) – kein Vibrieren, zählt nicht als „Neues“
+    if (was === 'meldung') { const [ap, ti, tx, ze] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.meldung(ap, ti, tx, ze); if (blick.offen) Handy.sperrUngelesen(); return; }
     if (blick.offen) blickZu(true);
     if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
-    if (!['fotozoom', 'notizen', 'kommentar'].includes(was)) haendeTausch(was);
+    if (['sperr', 'chat', 'gruppe', 'liste', 'story', 'post', 'anruf', 'feed', 'karussell', 'live', 'pdf', 'wecker', 'video', 'stumm', 'notizneu', 'her', 'zu', 'weg'].includes(was)) haendeTausch(was);
     switch (was) {
-      case 'sperr': Handy.sperr(); zeigeTextbox(false); await warte(.5); break;
+      case 'sperr': { if (bzzzMs && !schnell) { const rest = 2600 - (performance.now() - bzzzMs); if (rest > 0) await warte(rest / 1000); }   // Patrick 28.11.: erst Ton/Vibration, kurze Pause, dann nimmt er das Handy
+        Handy.sperr(); zeigeTextbox(false); await warte(.5); break; }
       case 'chat': zeigeTextbox(false); await Handy.vorChat(t.slice(1).join(' ')); await warte(.2); break;
       case 'zoegern': zeigeTextbox(false); await Handy.zoegern(t[1]); break;
       case 'umfrage': { zeigeTextbox(false); const [f, ...o] = t.slice(1).join(' ').split('|').map(x => x.trim()); await Handy.umfrage(f, o); break; }
@@ -883,6 +1093,7 @@ const Spiel = (() => {
       case 'liveloeschen': await Handy.liveLoeschen(); break;
       case 'gruppe': zeigeTextbox(false); await Handy.vorChat('gruppe'); await warte(.2); break;
       case 'liste': zeigeTextbox(false); Handy.liste(); await warte(.6); break;
+      case 'flut': await Handy.flut(+t[1] || 100); break;
       case 'ungelesen': { const [n, z, v] = t.slice(1).join(' ').split('|').map(x => x.trim()); Handy.ungelesen(n, +z, v); break; }
       case 'zu': Handy.zu(); Handy.fotozoomWeg(); await warte(.4); break;
       case 'weg': Handy.weg(); await warte(.5); break;
@@ -916,7 +1127,11 @@ const Spiel = (() => {
       case 'pdfweiter': await Handy.pdfWeiter(t[1]); break;
       case 'gruppestumm': zeigeTextbox(false); await Handy.gruppeStumm(t.slice(1).join(' ')); break;
       case 'aus': Handy.aus(); break;
+      case 'wecker': zeigeTextbox(false); Handy.wecker(); await warte(.3); break;
+      case 'schlummern': await Handy.weckerDruck('schlummern'); break;
+      case 'weckeraus': await Handy.weckerDruck('stopp'); break;
       case 'laut': Handy.laut(); break;
+      case 'herz': await Handy.storyHerz(); break;
       case 'hinweis': { const [app, tt, x] = a.slice(8).split('|').map(s => s.trim()); Handy.hinweis(app, tt, x); await warte(.8); break; }
       case 'wegwischen': await Handy.wegwischen(); break;
       default: console.warn('Handy?', was);
@@ -930,7 +1145,7 @@ const Spiel = (() => {
       labels.forEach((l, i) => { const b = document.createElement('button'); b.textContent = l; b.style.animationDelay = (i * .07) + 's';
         b.onclick = ev => { ev.stopPropagation(); if (g !== gen || b.classList.contains('grau')) return; Ton.spiele('klick'); b.classList.add('grau'); welt.style.transition = 'filter 1.2s ease'; welt.style.filter = `saturate(${1 - .35 * knoepfe.filter(x => x.classList.contains('grau')).length})`; pruefe(); };
         wahlEl.appendChild(b); knoepfe.push(b); });
-      setTimeout(() => { knoepfe.forEach(b => b.classList.add('grau')); pruefe(); }, schnell ? 300 : 10000);
+      setTimeout(() => { if (g !== gen) { res(); return; } knoepfe.forEach(b => b.classList.add('grau')); pruefe(); }, schnell ? 300 : 10000);
     });
     pruef(g); await warte(3); wahlEl.innerHTML = ''; welt.style.filter = ''; welt.style.transition = '';
   }
@@ -942,20 +1157,33 @@ const Spiel = (() => {
     if (art === 'durch') {
       // Lynn-Ende: Titel blendet ein, ein Rotstift streicht ihn durch, 2 s Stille, dann erst die Musik
       sp.style.transform = 'none'; sp.style.opacity = 0; sp.classList.add('durch'); ti.classList.add('an'); void sp.offsetWidth;
-      zeigeTextbox(false); Ton.stille(); sp.style.transition = 'opacity 1.6s ease'; sp.style.opacity = 1; await warte(2.4);
-      sp.classList.add('zieh'); Ton.spiele('PR3_stift', { dauer: .7, vol: 1.1 }); await warte(.9);
-      await warte(2); Ton.outro('warm');
-      { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 1600); }
-      await warte(4); await tipp(); return;
+      // Patrick 28.11.: das letzte Bild blendet ganz langsam ins Schwarz, erst dann kommt der Titel
+      zeigeTextbox(false); Ton.ausklingen && Ton.ausklingen(3);
+      { const sw = $('#schwarz'); sw.classList.add('langsam'); sw.style.transition = ''; sw.classList.add('an'); const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); }, 600); }
+      await warte(3.2); Ton.stille(); { const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.style.transition = ''; }
+      sp.style.transition = 'opacity 1.6s ease'; sp.style.opacity = 1;   // Patrick 26.11.: gleich schwarz, kein Bildspringen vor dem Text
+      await warte(2.4);
+      sp.classList.add('zieh'); Ton.spiele('haken', { vol: 1.1 }); await warte(.9);   // Patrick 26.11.: Check-Ton statt Schreiben
+      await warte(2); if (!Ton.outroLauter(.57, 4)) Ton.outro('warm');
+      await warte(4); await tipp(); sp.style.transition = 'opacity 1.2s ease'; sp.style.opacity = 0; await warte(1.4); return;
     }
     ti.classList.add('an'); void sp.offsetWidth;
-    zeigeTextbox(false); Ton.outro();
+    zeigeTextbox(false); Ton.outro(); Ton.ausklingen(5);
+    // V9.1 (Patrick 26.11., F): das Bild dahinter wird sofort schwarz, der Titel steht 3 s allein und blendet aus
+    { const sw = $('#schwarz'); sw.classList.remove('langsam'); sw.style.transition = 'opacity .5s'; sw.classList.add('an'); }
     await warte(.2); sp.style.transition = ''; sp.style.transform = 'none';
-    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').classList.add('an', 'langsam'); }, 600); }
-    await warte(4); await tipp();
+    { const g = gen; setTimeout(() => { if (g !== gen) return; Handy.zu(); $('#schwarz').style.transition = ''; }, 700); }
+    await warte(3.4); sp.style.transition = 'opacity 1.4s ease'; sp.style.opacity = 0; await warte(1.6);
   }
 
   // ---------------- Ablauf ----------------
+  // V9.3 (Patrick 27.11., Frage 28): Testversion – aktuelle Szene mit dem Stand von ihrem Anfang neu starten
+  let szeneStart = null;
+  function szeneNeu() {
+    if (!szeneStart) return null; const s = szeneStart;
+    neustart(s.name, V2 => { Object.keys(V2).forEach(k => delete V2[k]); Object.assign(V2, JSON.parse(s.V)); stack = s.stack.slice(); zeigeUhr(); });
+    return s.name;
+  }
   function springe(ziel) {
     if (labels[ziel] === undefined) { console.error('Sprungziel fehlt:', ziel); toast('Sprungziel fehlt: ' + ziel); pc = prog.length; return; }
     pc = labels[ziel];
@@ -967,7 +1195,19 @@ const Spiel = (() => {
         pruef(g); const ins = prog[pc];
         if (DEBUG) dbgInfo(ins);
         switch (ins.t) {
-          case 'label': besuchtL.add(ins.name); pc++; break;
+          case 'label':
+            besuchtL.add(ins.name);
+            if (Ton.vorladen) {
+              if (ins.name === 'KAP2_A' || ins.name === 'KAP2_B') Ton.vorladen('M1_party', 'lernflow', 'party_fern');
+              else if (ins.name === 'L3' || ins.name === 'AUFBRUCH') Ton.vorladen('M1_party', 'lied', 'party_fern', 'gemurmel', 'gemurmel2', 'frauen');
+              else if (ins.name === 'PARTY_ANKUNFT' || ins.name === 'KUECHE') Ton.vorladen('M1_party', 'lied', 'mia', 'lofi_melancholy', 'party_club2', 'tim_party');
+              else if (ins.name === 'TANZ' || ins.name === 'TANZ_SHOW') Ton.vorladen('M1_party', 'mia', 'gemurmel', 'gemurmel2', 'frauen');
+              else if (ins.name === 'BALKON' || ins.name === 'GM_START' || ins.name === 'GM_UHR') Ton.vorladen('M1_party', 'lofi_melancholy', 'restaurant_lofi', 'ende_warm');
+              else if (ins.name === 'BAD' || ins.name === 'AFTERPARTY') Ton.vorladen('party_club2', 'tim_party');
+              else if (ins.name === 'ENDE_LYNN') Ton.vorladen('restaurant_lofi', 'ende_warm');
+            }
+            if (TESTMODUS) try { szeneStart = { name: ins.name, V: JSON.stringify(V), stack: stack.slice() }; } catch (e) { }
+            pc++; break;
           case 'sprung': springe(ins.ziel); break;
           case 'text': await text(ins); pc++; break;
           case 'wahl': await wahl(ins); break;
@@ -986,9 +1226,11 @@ const Spiel = (() => {
   function grundzustand() {
     V = { punkte: 0, besucht: 0, lynn: '', weg: '', typ: '', ankunft: 0, aufbruch: 0, abmarsch: 0, uhr: zeit('20:04'), uhr_zeigen: false };
     verlauf = []; kapitelZeiten = []; pfad = []; pfadPlus = false; abzNeu = []; abzQueue = []; stack = [];
-    blick.offen = false; blick.zahl = 0; blick.leer = 0; blick.neu = 0;
+    blick.offen = false; blick.zahl = 0; blick.leer = 0; blick.neu = 0; blickPlus = 0; aufbauEnde = 0; haendeVon = null; kotzenSchon = false; schreiSchon = false; partyZaehler = 0;
     welt.innerHTML = ''; aktBild = null; party(false); effekt('alles_aus'); gesteGeskriptet = false; letzteStory = ''; storyMin = 0; pausiert = false; welt.style.filter = '';
-    B.classList.remove('tanzflaeche', 'handyoffen'); kamera.classList.remove('zittern', 'wackeln', 'ruck', 'zoomrein'); kamera.style.transform = ''; $('#titel').classList.remove('an'); $('#verlauf').classList.remove('an');
+    B.classList.remove('tanzflaeche', 'handyoffen'); kamera.classList.remove('zittern', 'wackeln', 'ruck', 'zoomrein', 'kurz'); kamera.style.transition = ''; kamera.style.transform = ''; $('#titel').classList.remove('an'); $('#verlauf').classList.remove('an');
+    document.querySelectorAll('#stempel, #klausur .kl-haken').forEach(x => x.remove());
+    $('#analoguhr').classList.remove('an', 'ecke', 'bleicht', 'sanft', 'ploppt'); auNr++; auMin = null; auZuletzt = null;
     ['#schwarz', '#karte', '#zettel', '#banner', '#anrufmini', '#grossuhr', '#titel', '#toast', '#klausur', '#karteikarten', '#lernplan', '#handylicht'].forEach(s => $(s).classList.remove('an'));
     $('#karte').classList.remove('vorspann', 'langsam'); ersteKarte = true; letzterCountdown = null; pModus = '';
     $('#schwarz').classList.add('an'); wahlEl.innerHTML = ''; zeigeTextbox(false); Handy.reset(); Ton.stille(); fensterOverlay(false); zeigeUhr();
@@ -996,7 +1238,7 @@ const Spiel = (() => {
   function neustart(label, vorab) {
     gen++; if (tippWarter) tippWarter(); tippt = false; Rahmen.weg();
     document.querySelectorAll('.schirm').forEach(s => s.classList.remove('an'));
-    Ton.outroAus(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null;
+    Ton.outroAus(); Ton.klangZurueck && Ton.klangZurueck(); grundzustand(); S.durchgaenge++; speichere(S); pc = 0; t0 = performance.now(); rueck = []; rueckZu(); lynnHand = 0; $('#schema').classList.remove('an'); $('#analoguhr').classList.remove('an'); auMin = null; auZuletzt = null;
     if (label) { // Einstellungen am Anfang trotzdem ausführen
       const ende = labels['PROLOG']; prog.slice(0, ende).forEach(p => { if (p.t === 'cmd' && ['setze', 'text', 'abzeichenliste', 'gruppe', 'verlauf'].includes(p.name)) befehl(p); });
       springe(label);
@@ -1007,7 +1249,7 @@ const Spiel = (() => {
 
   // ---------------- Ende ----------------
   async function endeSpiel() {
-    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Leiser' : p <= V.LEISER_BIS ? 'Leiser' : p <= V.HIER_ODER_DA_BIS ? 'Hier oder da' : 'Blaues Licht';   // V8.8 (G60)
+    const p = V.punkte || 0; const ende = V.typ === 'gluecklich' ? 'Montagabend' : p <= V.LEISER_BIS ? 'Leiser' : 'Blaues Licht';   // V8.9 (Storycheck 2B, E1): ein Name pro Schluss – Pizza / Jonas schreibt / Lynn
     kapitelZeiten.push({ n: 'Ende', t: performance.now() });
     pfad.push(ende); abzeichen(ende); PR('ende', ende + ' · Punkte ' + p + ' · Weg ' + pfad.join(' → ')); if (!S.enden.includes(ende)) S.enden.push(ende); speichere(S);
     abzQueue = [];   // die neuen Abzeichen zeigt der Rahmen selbst (gestempelt)
@@ -1136,6 +1378,11 @@ const Spiel = (() => {
     $('#drehen').classList.add('aktiv');
     Rahmen.init({
       TEXTE, S: () => S, speichere: () => speichere(S), abz: () => ABZ, blick: () => ({ zahl: blick.zahl, leer: blick.leer }),
+      // V8.9 (Patrick 24.11.): was man auf genau diesem Weg verpasst hat (Endbildschirm)
+      verpasst() { if (!V.typ) return []; const L = [], party = V.typ !== 'zuhause';
+        if (!party) L.push('geburtstag'); else if (!V.gesungen) L.push('lied');
+        L.push('feuerloescher'); if (!V.tanz) L.push('mia'); if (!V.kueche) L.push('tim');
+        if (V.typ !== 'afterparty') L.push('afterparty'); if (V.lynn !== 'gm') L.push('lynn'); return L; },
       entscheidungen() { const alle = prog.filter(p => p.t === 'wahl').reduce((n, p) => n + p.opts.filter(o => o.ziel !== '!wackeln').length, 0); return [Math.max(0, alle - Object.keys(S.entsch).length), alle]; },
       iosHinweis: ios ? 'iPhone: Safari erlaubt kein Vollbild für Webseiten. Am besten quer halten und die Adressleiste ausblenden.' : '',
       async ersterTipp() {
@@ -1146,12 +1393,13 @@ const Spiel = (() => {
     });
     grundzustand();
     Rahmen.start(false);
-    setTimeout(vorladenAlle, 800);
+    setTimeout(vorladenAlle, 200);
   }
 
   return {
-    init, uhrText, datumText, bildHTML, bzzz, pause, get schnell() { return schnell; },
+    ABBRUCH, init, uhrText, datumText, akku, bildHTML, bzzz, pause, get schnell() { return schnell; },
     get V() { return V; }, get pfad() { return pfad; }, get pc() { return pc; }, get prog() { return prog; }, get labels() { return labels; },
-    _debug: { zeit, zeigeUhr, get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
+    _debug: { zeit, zeigeUhr, autoFahrt: v => autoFahrt(v), lichtEreignis: s => lichtEreignis(s), get vz() { return vz; }, vzPlus: x => { vz += x; }, get textZahl() { return textZahl; }, nullTexte: () => { textZahl = 0; vz = 0; }, neustart, szeneNeu, besuchtL, fehlerLog, pruefeSkript, get aktuell() { return prog[pc]; }, tippen: () => { if (tippt) ueberspringen = true; else if (tippWarter) tippWarter(); }, setSchnell: v => schnell = v, pausieren: an => { pausiert = !!an || rueckPos >= 0 || blick.offen; } },
   };
 })();
+

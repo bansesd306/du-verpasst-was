@@ -5,7 +5,7 @@ LABEL=sys.argv[1]; V=json.loads(sys.argv[2]); MAX=int(sys.argv[3]); PRE=sys.argv
 WAHL=int(sys.argv[6]) if len(sys.argv)>6 else 0
 async def main():
     async with async_playwright() as p:
-        b=await p.chromium.launch(executable_path='/usr/bin/google-chrome', args=['--autoplay-policy=no-user-gesture-required'])
+        b=await p.chromium.launch(executable_path='/opt/pw-browsers/chromium', args=['--autoplay-policy=no-user-gesture-required'])
         pg=await b.new_page(viewport={'width':1280,'height':720}); errs=[]
         pg.on('pageerror', lambda e: errs.append(str(e)))
         pg.on('console', lambda m: errs.append(m.text) if m.type=='error' and '404' not in m.text else None)
