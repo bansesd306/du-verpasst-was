@@ -335,9 +335,10 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 # Patrick 25.11.: Ende ohne Lachen – Laser aus, sie bleibt genervt (LP4), dann neutral (LP3), zuletzt leichtes Lächeln (LP11). LP10 passt nicht hierher.
 @bild LP4 gesicht
 @warte 2.2
-@bild LP3 langsam
+# Patrick 28.11.: Gesicht wechselt ruhig an Ort und Stelle (langsam setzte die Kamera zurück → Schwanken)
+@bild LP3 gesicht
 @warte 1.6
-@bild LP11 langsam
+@bild LP11 gesicht
 … !2
 # Patrick 26.11. (Flagge): das Vibrieren reißt ihn aus der Erinnerung
 # Patrick 28.11.: Ton, Bild schnell schwarz, er liegt erst im Bett ohne Handy, kurze Pause, dann schaut er
