@@ -380,7 +380,10 @@ const Spiel = (() => {
     if (typeof OVERLAYS !== 'undefined') Object.keys(OVERLAYS).forEach(k => { const d = 'img/' + k + '.webp'; if (!reihe.includes(d)) reihe.push(d); });
     ['MD1', 'MD2', 'MD3', 'MD4', 'MM01', 'MM02', 'MM03', 'MM04', 'MM05', 'MM06', 'MM07', 'MM08', 'MM09', 'MK1', 'MK2', 'MK3'].forEach(c => { const d = BILDER[c] && BILDER[c].datei; if (d && !reihe.includes(d)) reihe.push(d); });   // V9.3e: Mia-Montage
     // v5: erste 28 Bilder (Start/Prolog/K1) zügig, Rest gedrosselt nachladen
-    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const idx = i++; const d = reihe[idx]; lade(d).then(() => setTimeout(naechstes, idx < 28 ? 15 : 70)); };
+    // iPhone: nur in den Browser-Zwischenspeicher holen, nicht dekodieren (sonst stürzt Safari wegen Speicher ab)
+    const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const hole = d => IOS ? fetch(d).then(r => r.blob()).catch(() => { }) : lade(d);
+    let i = 0; const naechstes = () => { if (i >= reihe.length) return; const idx = i++; const d = reihe[idx]; hole(d).then(() => setTimeout(naechstes, idx < 28 ? 15 : 70)); };
     for (let k = 0; k < 4; k++) naechstes();
   }
   // 25.11. (Patrick): einzelne Birnen der Lichterkette leuchten kurz auf (alle 0,45–1,5 s eine, Stärke zufällig)

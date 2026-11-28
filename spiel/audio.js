@@ -7,6 +7,9 @@ const Ton = (() => {
   const P = {};           // Name -> AudioBuffer
   const R = {};           // rückwärts
   const loops = {}, loopGain = {};
+  // iPhone/iPad: Safari stürzt bei zu viel dekodiertem Ton ab ("Problem aufgetreten") – nur Kleines vorladen, große Stücke wieder freigeben
+  const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const GROSSE = [];
   let musik = null, liedNode = null, introNode = null, outroNode = null, gesperrt = false, outroNr = 0, musikNr = 0, liedNr = 0;
 
   let analyser = null, fftDaten = null, pegelSchnitt = 0; const gemerkt = {}; let introSoll = false;
@@ -25,17 +28,17 @@ const Ton = (() => {
     // v5: leichte Geräusche + Start/Prolog sofort laden; große Musikstücke gezielt nachladen
     const SPAET_MUSIK = /^M\d|^mia$|lofi|lernflow|restaurant|club2|ende_warm|lied|tim_party|party_fern/;
     const namen = Object.keys(TOENE).filter(k => eintrag(k).datei && !SPAET_MUSIK.test(k)).sort((a, b) => (b === 'muffled_party') - (a === 'muffled_party') || (b === 'Outro') - (a === 'Outro'));
-    let i = 0; const naechste = () => { if (i >= namen.length) return; lade(namen[i++]).then(naechste); };
+    let i = 0; const naechste = () => { if (i >= namen.length) return; lade(namen[i++], true).then(naechste); };
     for (let k = 0; k < 3; k++) naechste();
     // V8.8 (G67): App-Wechsel/Bildschirmsperre – Ton anhalten und danach weiter
     document.addEventListener('visibilitychange', () => { if (!ctx) return; if (document.hidden) ctx.suspend().catch(() => { }); else ctx.resume().catch(() => { }); });
   }
   function eintrag(k) { const e = TOENE[k]; return typeof e === 'string' ? { datei: e } : (e || {}); }
   const ladend = {};
-  function lade(k) {
+  function lade(k, nurKlein) {
     if (P[k]) return Promise.resolve(P[k]);
     if (ladend[k]) return ladend[k];
-    return ladend[k] = fetch(eintrag(k).datei).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }).then(b => new Promise((ok, f) => ctx.decodeAudioData(b, ok, f))).then(buf => { P[k] = buf; return buf; }).catch(() => { delete ladend[k]; return null; });
+    return ladend[k] = fetch(eintrag(k).datei).then(r => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }).then(b => { if (IOS && nurKlein && b.byteLength > 300000) { const e = new Error('iOS: spaeter'); e.spaeter = true; throw e; } return new Promise((ok, f) => ctx.decodeAudioData(b, ok, f)); }).then(buf => { P[k] = buf; if (IOS && buf.length * buf.numberOfChannels * 4 > 20e6) { GROSSE.push(k); while (GROSSE.length > 3) { const alt = GROSSE.shift(); delete P[alt]; delete ladend[alt]; delete R[alt]; } } return buf; }).catch(() => { delete ladend[k]; return null; });
   }
   const now = () => ctx.currentTime;
   function quelle(k, ziel, o = {}) {
