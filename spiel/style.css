@@ -16,7 +16,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .ebene img,.ebene .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ebene img{filter:saturate(.94) contrast(1.03)}
 .ebene video.bv{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.94) contrast(1.03);pointer-events:none}
-.ebene .blink{opacity:0;transition:none}
+.ebene .blink{opacity:0;transition:opacity .12s ease-in-out}   /* Patrick 28.11.: Blinzeln weich statt Zuschnappen */
 .ebene .blink.zu{opacity:1}
 .f-dunkel{filter:brightness(.42) saturate(.6) hue-rotate(12deg) contrast(1.05)!important}
 .f-tag{filter:brightness(1.25) saturate(.8) hue-rotate(-8deg) contrast(.92) sepia(.12)!important}
@@ -500,7 +500,7 @@ html,body{width:100%;height:100%;background:#000;overflow:hidden;font-family:sys
 .ebene .innen img.ov-v{position:absolute;inset:auto;object-fit:fill;opacity:0;transition:opacity .7s ease;pointer-events:none}   /* Patrick 26.11.: Lächeln geht weich zurück statt schlagartig */
 .ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.kurz{transition:opacity .18s ease}
 .ebene .innen.laedt img.ov-v,.ebene .innen.laedt img.fw,.ebene .innen.laedt img.blink{visibility:hidden}   /* Patrick 26.11.: kein Mund auf Schwarz, solange das Bild lädt */
-.ebene .innen img.ov-v.blink{transition:none}   /* 25.11.: hart umschalten, sonst kurz Geisteraugen */
+.ebene .innen img.ov-v.blink{transition:opacity .08s linear}   /* 25.11.: hart umschalten, sonst kurz Geisteraugen */
 .ebene .innen img.ov-v.zu,.ebene .innen img.ov-v.spricht,.ebene .innen img.ov-v.fest{opacity:1}
 .ebene .innen img.ov-v.mimik{opacity:1;transition:opacity .9s ease}
 .ebene .innen img.ov-v.fest{transition:opacity .45s ease}

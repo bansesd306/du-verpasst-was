@@ -92,7 +92,8 @@ const Ton = (() => {
     pruefung: 'pruefung',   // Raumton + Stifte in Schüben (schreiben, Pause, schreiben)
     klingel: [['anruf', { vol: 1 }]],
     party_fern: [['muffled_party', { vol: .9 }]],   // Startbildschirm: Party hinter dem Fenster, gedämpft (Philips Datei)
-    seminar: [['tippen_laptop', { vol: 1.2 }], ['gemurmel', { vol: .25, lp: 700 }]],   // Gemini-Prüfung 26.11.: +10 dB   // Rückblende Seminar
+    seminar: [['tippen_laptop', { vol: .2 }], ['gemurmel', { vol: .12, lp: 700 }]],   // Patrick 28.11.: Laptop-Tippen viel leiser
+    // (vorher: tippen_laptop 1.2, gemurmel .25)   // Gemini-Prüfung 26.11.: +10 dB   // Rückblende Seminar
     restaurant: [['restaurant_lofi', { vol: .24, lp: 5200 }], ['gemurmel', { vol: .15, lp: 1500 }]],   // Gemini-Prüfung 26.11.: −5 dB (war lauter als die Party)   // Lynn-Ende
     lampe: 'lampe', rauschen: 'rauschen',
   };

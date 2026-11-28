@@ -291,16 +291,16 @@
 #s-abz .zaehler{display:inline-block;font:600 32px "Bricolage Grotesque",system-ui,sans-serif;color:var(--leise)}
 #s-abz .zaehler.hoch{animation:hoch .5s cubic-bezier(.3,1.6,.5,1)}
 @keyframes hoch{0%{transform:scale(1.25);color:#ffc08a}100%{transform:none;color:var(--leise)}}
-#raster{display:grid;grid-template-columns:repeat(3,314px);gap:10px;max-height:600px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:12px 8px 40px 2px;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 92%,transparent);mask-image:linear-gradient(180deg,#000 0,#000 92%,transparent);scrollbar-width:thin}   /* Patrick 26.11.: größeres Feld, Texte nicht abgeschnitten */
-.ab{position:relative;display:flex;gap:14px;align-items:center;min-height:96px;padding:11px 16px;border-radius:24px;
+#raster{display:grid;grid-template-columns:repeat(2,440px);grid-auto-rows:max-content;align-items:start;gap:14px;max-height:620px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;padding:12px 8px 40px 2px;-webkit-mask-image:linear-gradient(180deg,#000 0,#000 92%,transparent);mask-image:linear-gradient(180deg,#000 0,#000 92%,transparent);scrollbar-width:thin}   /* Patrick 26.11.: größeres Feld, Texte nicht abgeschnitten */
+.ab{position:relative;display:flex;gap:16px;align-items:center;min-height:118px;height:auto;flex-shrink:0;padding:16px 20px;border-radius:24px;
   background:rgba(22,28,42,.88);border:1px solid rgba(160,185,235,.12);box-shadow:0 10px 30px rgba(0,0,0,.4);
   opacity:0;transform:translateY(14px) scale(.97);transition:opacity .45s,transform .45s}
 .ab.da{opacity:1;transform:none}
-.ab .medaille{width:58px;height:58px;font-size:58px}
+.ab .medaille{width:68px;height:68px;font-size:68px;flex:none}
 .ab .medaille::after{inset:5%;border-width:1.5px}
 .ab .tx{min-width:0;display:flex;flex-direction:column;gap:3px}
-.ab .n{font:700 25px/1.08 "Bricolage Grotesque",system-ui,sans-serif;color:#fff}
-.ab .w{font:400 20px/1.22 "Bricolage Grotesque",system-ui,sans-serif;color:#aeb9d2}
+.ab .n{overflow-wrap:anywhere;font:700 30px/1.1 "Bricolage Grotesque",system-ui,sans-serif;color:#fff}
+.ab .w{overflow-wrap:anywhere;font:400 24px/1.25 "Bricolage Grotesque",system-ui,sans-serif;color:#aeb9d2}
 .ab .neu{position:absolute;right:12px;top:-10px;padding:3px 12px;border-radius:12px;font:700 15px system-ui,sans-serif;letter-spacing:1px;
   background:linear-gradient(90deg,#ff9a3c,#ff4fa3);color:#1a0d14;box-shadow:0 4px 14px rgba(255,79,163,.45)}
 .ab.frisch{border-color:rgba(255,175,110,.55);box-shadow:0 10px 40px rgba(255,120,80,.25)}

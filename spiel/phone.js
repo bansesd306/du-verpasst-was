@@ -18,7 +18,7 @@ const IG = {"herz": "<svg viewBox=\"0 0 24 24\" class=\"igi\"><path d=\"M12 20.3
 const IG_KOPF = `<div class="ig-kopf"><span class="ig-logo">Instagram</span><span class="ig-kic">${IG.plus}${IG.herz}<span class="ig-dm">${IG.senden}<i>2</i></span></span></div>`;
 const IG_NAV = `<div class="ig-nav">${IG.home}${IG.reels}${IG.senden}${IG.suche}<span class="ig-ich"></span></div>`;
 // Feed nach Uhrzeit: nur, was es zu dem Zeitpunkt schon gibt (Minuten ab Freitag 0:00), neueste oben
-const IG_FEED = [['tim_k97', 'N32c', 1305, 'vorglühen 🍻'], ['jonas.k', 'B12A', 1305, 'BIRTHDAY GIRL 🎂'], ['lena.xo', 'N13', 1320, 'meine lieblingsmenschen ❤️'], ['x.mia.x', 'N35M1', 1325, 'party nr. 3 🪩'],
+const IG_FEED = [['tim_k97', 'HAUS_WEIT', 1080, 'gleich geht’s los 🏠'], ['lena.xo', 'TREPPE_HELL', 1150, 'treppenhaus ist bereit 😂'], ['jonas.k', 'BALKON_AUSSEN', 1210, 'frische luft vor dem sturm 🌙'], ['x.mia.x', 'HAUS', 1250, 'lenas haus, wir kommen 🪩'], ['tim_k97', 'N32c', 1305, 'vorglühen 🍻'], ['jonas.k', 'B12A', 1305, 'BIRTHDAY GIRL 🎂'], ['lena.xo', 'N13', 1320, 'meine lieblingsmenschen ❤️'], ['x.mia.x', 'N35M1', 1325, 'party nr. 3 🪩'],
   ['nightcrew', 'N32a', 1350, 'friday mood'], ['x.mia.x', 'N32d', 1367, 'HAPPY BDAY LENAAA'], ['lena.xo', 'TORTE', 1372, 'die torte 😭🎂'], ['tim_k97', 'FEUER', 1402, 'ich sag nix 🧯'],
   ['x.mia.x', 'TIM_FEIER_4', 1470, 'nummer 4 🫶'], ['lena.xo', 'A1', 1480, 'noch nicht müde'], ['tim_k97', 'TIM_FEIER_1', 1500, 'afterparty 🔥']];
 const Handy = (() => {
@@ -526,6 +526,7 @@ const Handy = (() => {
     async vorChat(name) {
       if (offen && app === 'chat' && aktChat === name && !el.classList.contains('weg')) return;
       if (!chatListe(name).length) return this.chat(name);
+      if (offen && app === 'sperr') { await warte(380); return this.chat(name, true); }   // Patrick 28.11.: Meldung am Sperrbildschirm antippen → direkt in den Chat, nicht erst Liste/Homescreen
       oeffne(); $('.hhinweis').classList.remove('an');
       if (app === 'chat') { const z = $('.c-kopf .zur'); z.classList.add('druck'); await warte(180); z.classList.remove('druck'); }
       tastatur(false); renderListe(); zeige('liste'); warteAuf = name; await warte(300);
@@ -758,13 +759,14 @@ const Handy = (() => {
     },
     feed() {
       oeffne(); zeige('feed'); const r = $('.f-rolle'); this.appGeoeffnet('Instagram'); const jetzt = Spiel.V.uhr || 0;
+      const PROFIL = { 'lena.xo': 'LENA_SELFIE', 'x.mia.x': 'MIA_SELFIE', 'tim_k97': 'TIM2' }; const av = (n, cls, st) => `<span class="ig-av ${cls}" style="--c:${farbe(n)}">${PROFIL[n] ? '<i class="fo">' + Spiel.bildHTML(PROFIL[n], true) + '</i>' : '<b>' + n[0] + '</b>'}</span>`;
       const farbe = n => n.includes('lena') ? '#e0558e' : n.includes('mia') ? '#9b6ad8' : n.includes('tim') ? '#22a39a' : n.includes('jonas') ? '#e8833a' : '#5a6a8a';
       const posts = IG_FEED.filter(p => p[2] <= jetzt).reverse();
       const storys = ['lena.xo', 'x.mia.x', 'tim_k97', 'jonas.k', 'nightcrew', 'ben.r'];
       const zeitText = t => { const d = Math.max(1, jetzt - t); return d < 60 ? d + ' Min.' : Math.round(d / 60) + ' Std.'; };
-      let h = `<div class="ig-storys"><div class="ig-st ich"><span class="ig-av gross"><b>Du</b></span><small>Deine Story</small></div>${storys.map(n => `<div class="ig-st"><span class="ig-av gross ring" style="--c:${farbe(n)}"><b>${n[0]}</b></span><small>${n}</small></div>`).join('')}</div>`;
+      let h = `<div class="ig-storys"><div class="ig-st ich"><span class="ig-av gross"><b>Du</b></span><small>Deine Story</small></div>${storys.map(n => `<div class="ig-st">${av(n, 'gross ring')}<small>${n}</small></div>`).join('')}</div>`;
       posts.forEach((p, i) => { const likes = 37 + ((p[1].length * 97 + i * 53) % 260);
-        h += `<div class="ig-post"><div class="ig-pk"><span class="ig-av ring" style="--c:${farbe(p[0])}"><b>${p[0][0]}</b></span><div class="ig-pn"><b>${p[0]}</b></div>${IG.punkte}</div><div class="ig-bild">${Spiel.bildHTML(p[1], true)}</div>
+        h += `<div class="ig-post"><div class="ig-pk">${av(p[0], 'ring')}<div class="ig-pn"><b>${p[0]}</b></div>${IG.punkte}</div><div class="ig-bild">${Spiel.bildHTML(p[1], true)}</div>
         <div class="ig-ak"><span>${IG.herz}${IG.sprech}${IG.senden}</span>${IG.merken}</div><div class="ig-tx"><b>Gefällt ${likes} Mal</b></div><div class="ig-tx"><b>${p[0]}</b> ${esc(p[3])}</div><div class="ig-tx grau">Vor ${zeitText(p[2])}</div></div>`; });
       r.innerHTML = h + h.replace('ig-storys', 'ig-storys nb'); r.classList.remove('rollt'); void r.offsetWidth; r.classList.add('rollt');
     },
@@ -792,7 +794,7 @@ const Handy = (() => {
       // alles Ungelesene, neueste oben: Meldungen anderer Apps (gleiche App + Absender in einer Karte) und Chats mit ungelesenen Nachrichten
       const gruppen = {}; sonst.forEach(x => { const key = x.app + '|' + x.titel; const g = gruppen[key] || (gruppen[key] = { app: x.app, titel: x.titel, texte: [], zeit: x.zeit, n: 0 }); if (x.text && !g.texte.includes(x.text)) g.texte.push(x.text); g.zeit = x.zeit; g.n = Math.max(g.n, x.n || 0); });
       const karten = Object.values(gruppen).map(g => ({ n: g.n, el: this._karte(g.app, g.titel, g.texte.slice(-3), g.zeit, null, g.texte.length) }));
-      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).forEach(n => { const m = meta[n]; karten.push({ n: m.n || 0, el: this._karte('WhatsApp', anzeige(n), [m.vorschau], m.zeit || '', n) }); });
+      Object.keys(meta).filter(n => meta[n].ungelesen && !meta[n].stumm && meta[n].vorschau).forEach(n => { const m = meta[n]; const gl = gruppen['WhatsApp|' + anzeige(n)]; if (gl) { const kk = karten.find(q => q.el.dataset.k === 'WhatsApp|' + anzeige(n)); if (kk) { if (!kk.el.querySelector('.nt') || ![...kk.el.querySelectorAll('.nt')].some(t => t.textContent === m.vorschau)) { const d2 = document.createElement('div'); d2.className = 'nt'; d2.textContent = m.vorschau; kk.el.querySelector('.ntx').appendChild(d2); } kk.el.dataset.n = m.ungelesen; this._zahlKarte(kk.el, n, Math.max(m.ungelesen || 0, gl.texte.length)); return; } } karten.push({ n: m.n || 0, el: this._karte('WhatsApp', anzeige(n), [m.vorschau], m.zeit || '', n) }); });
       karten.sort((x, y) => y.n - x.n).slice(0, 12).forEach(x => { x.el.style.animation = 'none'; box.appendChild(x.el); });
       box.scrollTop = 0;
     },

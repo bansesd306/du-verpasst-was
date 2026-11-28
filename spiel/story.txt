@@ -214,9 +214,7 @@ Na gut. Zehn Minuten.
 @ton decke2
 @warte .4
 @ton schritte_holz leise
-@warte 1.2
-@ton schritte_holz leise
-@warte .6
+@warte 1.8
 @ton decke1
 @warte 1
 -> K1
@@ -320,10 +318,9 @@ Die Frau muss wirklich viel von mir halten.
 @bild LP3 gesicht
 @warte 1
 @ton display_klick
+# Patrick 28.11.: LP6 (Nahbild) raus – sie sitzt ein Stück entfernt, kein plötzliches Heranrücken
 @bild LP5 schnitt
-… !2
-@bild LP6 langsam
-… !1.5
+… !3.5
 @bild LP7 gesicht
 Lynn: „Pass auf. Gleich isser wieder weg.“
 Ich: „Schenkung ist Schenkung.“
@@ -343,13 +340,16 @@ Lynn: „Kannst gleich mit deinem Finger weiterschreiben.“
 @bild LP11 langsam
 … !2
 # Patrick 26.11. (Flagge): das Vibrieren reißt ihn aus der Erinnerung
+# Patrick 28.11.: Ton, Bild schnell schwarz, er liegt erst im Bett ohne Handy, kurze Pause, dann schaut er
 @ton bzzz
+@schwarz
 @loop seminar aus
 @effekt traum aus
 @raum nacht
 @loop lampe an
-@bild N02 schnitt
-@warte .8
+@warte .6
+@bild N02 weich
+@warte 2.8
 @handy her
 @handy chat Jonas
 @nachricht! Jonas: hallo?? 😄
@@ -1137,10 +1137,10 @@ Wieder auf ein dummes Gefühl hören?
 @loop uhr an
 Sie verschwindet ja nicht. !3
 … Aber sie hat heute gefragt. !3
+# Patrick 28.11.: Uhr klingt schon vor dem Flashback aus, nicht erst direkt davor
+@loop uhr aus
 # V9.1 (Patrick 26.11., B2)
 … Nicht morgen. !2
-# Patrick 26.11. (Flagge): Uhr klingt vor dem Flashback aus
-@loop uhr aus
 @bild N34 traum
 @musik party fern
 ~ Was, wenn …
@@ -1350,6 +1350,9 @@ Alter, singt der schief.
   @ton bzzz
   @handy sperr
   @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+  # Patrick 28.11.: Nachricht zwei kommt erst später, mit eigenem Ton
+  @warte 2.6
+  @ton bzzz
   @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
   # Patrick 25.11. (Flagge): ungelesen bleibt sichtbar – im Chat-Verzeichnis steht Mama danach mit 2 ungelesenen
   @handy ungelesen Mama | 2 | Papa sagt auch toi toi toi 🍀
@@ -1664,6 +1667,9 @@ Jonas: „Der ist so dicht, der kann nix dafür.“
     @ton bzzz
     @handy sperr
     @benachrichtigung WhatsApp | Mama | Viel Erfolg am Montag, mein Schatz. Du schaffst das ❤️
+    # Patrick 28.11.: Nachricht zwei kommt erst später, mit eigenem Ton
+    @warte 2.6
+    @ton bzzz
     @benachrichtigung WhatsApp | Mama | Papa sagt auch toi toi toi 🍀
     # Patrick 25.11. (Flagge): ungelesen bleibt sichtbar – im Chat-Verzeichnis steht Mama danach mit 2 ungelesenen
     @handy ungelesen Mama | 2 | Papa sagt auch toi toi toi 🍀
@@ -2719,7 +2725,8 @@ Hm.
 # V8.9: jeder Ausgang führt erst durch das Treppenhaus (nicht direkt auf die Straße); nur einmal
 @wenn !treppe
   @setze treppe
-  @bild TREPPE schnitt
+  # Patrick 28.11.: Übergang zur Treppe nicht mehr hart
+  @bild TREPPE langsam
   @ton treppe 4s
   … !2
   @bild HAUS langsam
@@ -2939,7 +2946,12 @@ Ich schlafe nicht. Ich warte.
 @karte auto Sa 01:14
 @raum nacht
 @bild N02D
+# Patrick 28.11.: erst Sachen ausziehen, ins Bett, Licht aus (nur Geräusche, kein neuer Text), dann erst das Handy
+@warte 1.2
+@ton reissverschluss leise
+@warte 1.8
 @ton decke1
+@warte 2.2
 @handy gruppe
 @foto N32c Mia
 @warte 1.2
@@ -3097,7 +3109,7 @@ Ich bin auf keinem Foto. !3
 # M1
 @schwarz
 # V8.9: Vögel blenden leise ein – Etappe 2: sanft ins Morgenlicht statt 0-ms-Schnitt
-@ton voegel ein4
+@ton voegel ein4 lp4500 vol.55
 @warte 3
 @bild SO langsam
 @raum tag
@@ -3282,7 +3294,7 @@ Ich bin auf keinem Foto. !3
 # V8.6 (Philip): Kater – erst das Pfeifen im Ohr, dann der Gedanke
 @ton tinnitus
 # V8.9 (Fehlerprotokoll): Vögel leise parallel zum Pfeifen einblenden
-@ton voegel ein4
+@ton voegel ein4 lp4500 vol.55
 @warte 5
 @bild SO schnitt
 @raum tag
@@ -3955,9 +3967,12 @@ Ich krieg das hin.
 -> SN_BETT
 
 == SN_BETT
+# Patrick 28.11.: Tisch → Bett nicht schlagartig: Licht aus, kurz schwarz, dann langsam das Bett
+@schwarz
 @loop lampe aus
 @ton! lichtschalter
-@bild N02D schnitt
+@warte .7
+@bild N02D langsam
 @wenn typ=="zuhause" && weg=="A"
   # Weg A: ruhiger – Stummschalten fühlt sich richtig an, er schläft eher ein
   @uhr Mo 00:04
@@ -4139,14 +4154,17 @@ Hinter mir: „Kommt bestimmt Bereicherungsrecht.“
 @warte .9
 @handy sperr
 @benachrichtigung WhatsApp | Mama | Viel Erfolg heute, mein Schatz ❤️
+# Patrick 28.11.: erst Mamas Nachricht im Chat lesen, Handy wegstecken, Pause – dann vibriert es noch einmal
+@tipp
+@handy zu
+@warte 3
+@ton bzzz
+@warte 1.6
+@handy sperr
 # Patrick 25.11. (Flagge): mehr Pause zwischen den Nachrichten
 @wenn typ=="gluecklich"
-  @warte 2.6
-  @ton bzzz
   @benachrichtigung WhatsApp | Lynn | viel glück 🍀
 @sonst
-  @warte 2.6
-  @ton bzzz
   @benachrichtigung WhatsApp | Jonas | scheiß nicht zu sehr rein 😂
   @warte 1.2
   @benachrichtigung WhatsApp | Jonas | 4,0 🐐

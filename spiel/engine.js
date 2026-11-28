@@ -523,8 +523,8 @@ const Spiel = (() => {
     if (bls.length && jetzt - letztesBlinzeln > (lynn ? 1800 : 3000)) {
       letztesBlinzeln = jetzt;
       const bl = bls[Math.random() * bls.length | 0];
-      bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 140);
-      if (lynn && Math.random() < .2) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 120); }, 330);
+      bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 200);
+      if (lynn && Math.random() < .15) setTimeout(() => { bl.classList.add('zu'); setTimeout(() => bl.classList.remove('zu'), 170); }, 520);
     }
     naechst();
   }
@@ -1033,7 +1033,8 @@ const Spiel = (() => {
       case 'handy': if (teile[0] !== 'story') { letzteStory = ''; storyMin = 0; } await handyBefehl(teile, a); break;
       case 'benachrichtigung': { const [app, t, x, z] = a.split('|').map(s => s.trim()); Handy.benachrichtigung(app, t, x, z); await warte(.35); break; }
       case 'wohlbefinden': Handy.benachrichtigung('Wohlbefinden', 'Digitales Wohlbefinden', a); bzzz({ leise: true }); await warte(.4); break;
-      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 9000; bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
+      case 'nachricht': case 'nachricht!': { const m = a.match(/^([^:]+):\s*(.*)$/); const nb = bzzzMs && performance.now() - bzzzMs < 90000;   // Patrick 28.11.: war schon ein Bzzz da, kommt nicht noch ein Nachrichtenton
+         bzzzMs = 0; await Handy.nachricht(m[1].trim(), m[2], ins.name.endsWith('!'), nb); break; }
       case 'ich': await Handy.ich(a); await warte(.2); break;
       case 'tippeweg': zeigeTextbox(false); await Handy.tippeUndLoesche(a); await warte(.4); break;
       case 'tippe': zeigeTextbox(false); await Handy.rein(); await Handy.tippeUndSende(a); await warte(.5); break;
@@ -1078,7 +1079,8 @@ const Spiel = (() => {
     if (was === 'zu' || was === 'weg') blick.neu = 0; else blick.neu++;
     if (['sperr', 'chat', 'gruppe', 'liste', 'story', 'post', 'anruf', 'feed', 'karussell', 'live', 'pdf', 'wecker', 'video', 'stumm', 'notizneu', 'her', 'zu', 'weg'].includes(was)) haendeTausch(was);
     switch (was) {
-      case 'sperr': Handy.sperr(); zeigeTextbox(false); await warte(.5); break;
+      case 'sperr': { if (bzzzMs && !schnell) { const rest = 2600 - (performance.now() - bzzzMs); if (rest > 0) await warte(rest / 1000); }   // Patrick 28.11.: erst Ton/Vibration, kurze Pause, dann nimmt er das Handy
+        Handy.sperr(); zeigeTextbox(false); await warte(.5); break; }
       case 'chat': zeigeTextbox(false); await Handy.vorChat(t.slice(1).join(' ')); await warte(.2); break;
       case 'zoegern': zeigeTextbox(false); await Handy.zoegern(t[1]); break;
       case 'umfrage': { zeigeTextbox(false); const [f, ...o] = t.slice(1).join(' ').split('|').map(x => x.trim()); await Handy.umfrage(f, o); break; }
